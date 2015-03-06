@@ -43,14 +43,14 @@
 KineticStatus KineticCallbacks_Basic(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     return status;
 }
 
 KineticStatus KineticCallbacks_Put(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     KINETIC_ASSERT(operation->entry != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
@@ -80,7 +80,7 @@ KineticStatus KineticCallbacks_Put(KineticOperation* const operation, KineticSta
 KineticStatus KineticCallbacks_Get(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     KINETIC_ASSERT(operation->entry != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
@@ -110,7 +110,7 @@ KineticStatus KineticCallbacks_Get(KineticOperation* const operation, KineticSta
 KineticStatus KineticCallbacks_Delete(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     KINETIC_ASSERT(operation->entry != NULL);
     return status;
 }
@@ -118,7 +118,7 @@ KineticStatus KineticCallbacks_Delete(KineticOperation* const operation, Kinetic
 KineticStatus KineticCallbacks_GetKeyRange(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     KINETIC_ASSERT(operation->buffers != NULL);
     KINETIC_ASSERT(operation->buffers->count > 0);
 
@@ -167,6 +167,8 @@ static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, KineticPro
 
 KineticStatus KineticCallbacks_P2POperation(KineticOperation* const operation, KineticStatus const status)
 {
+    KINETIC_ASSERT(operation != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     KineticP2P_Operation* const p2pOp = operation->p2pOp;
 
     if (status == KINETIC_STATUS_SUCCESS)
@@ -192,7 +194,7 @@ KineticStatus KineticCallbacks_P2POperation(KineticOperation* const operation, K
 KineticStatus KineticCallbacks_GetLog(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     KINETIC_ASSERT(operation->deviceInfo != NULL);
 
     if (status == KINETIC_STATUS_SUCCESS)
@@ -213,7 +215,7 @@ KineticStatus KineticCallbacks_GetLog(KineticOperation* const operation, Kinetic
 KineticStatus KineticCallbacks_SetClusterVersion(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     if (status == KINETIC_STATUS_SUCCESS) {
         KineticSession_SetClusterVersion(operation->session, operation->pendingClusterVersion);
         operation->pendingClusterVersion = -1; // Invalidate
@@ -224,7 +226,7 @@ KineticStatus KineticCallbacks_SetClusterVersion(KineticOperation* const operati
 KineticStatus KineticCallbacks_SetACL(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     if (operation->request != NULL &&
         operation->request->command != NULL &&
         operation->request->command->body != NULL &&
@@ -242,7 +244,7 @@ KineticStatus KineticCallbacks_SetACL(KineticOperation* const operation, Kinetic
 KineticStatus KineticCallbacks_UpdateFirmware(KineticOperation* const operation, KineticStatus const status)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
 
     if (operation->value.data != NULL) {
         free(operation->value.data);

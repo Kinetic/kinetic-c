@@ -41,3 +41,8 @@ void tearDown(void)
 {
     KineticLogger_Close();
 }
+
+void test_KineticController_needs_tests(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Add tests for KineticController");
+}

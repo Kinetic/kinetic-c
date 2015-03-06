@@ -53,28 +53,15 @@
 
 #define NUM_ELEMENTS(ARRAY) (sizeof(ARRAY)/sizeof((ARRAY)[0]))
 
-typedef struct _KineticRequest KineticRequest;
-typedef struct _KineticOperation KineticOperation;
-typedef struct _KineticConnection KineticConnection;
-
 struct _KineticClient {
     struct bus *bus;
 };
 
-/**
- * @brief An instance of a session with a Kinetic device.
- */
-struct _KineticSession {
-    // Session configuration structure which must be configured 
-    KineticSessionConfig config;
-
-    // Connection instance which is dynamically allocated upon call to KineticClient_CreateSession.
-    // Client must call KineticAdminClient_DestroySession when finished with a session to shutdown
-    // a session cleanly and free the `connection`.
-    struct _KineticConnection* connection;
-
-    // Default timeout.
-    uint16_t timeoutSeconds;
+enum unpack_error {
+    UNPACK_ERROR_UNDEFINED,
+    UNPACK_ERROR_SUCCESS,
+    UNPACK_ERROR_INVALID_HEADER,
+    UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
 };
 
 // #TODO remove packed attribute and replace uses of sizeof(KineticPDUHeader)
@@ -91,13 +78,6 @@ enum socket_state {
     STATE_AWAITING_BODY,
 };
 
-enum unpack_error {
-    UNPACK_ERROR_UNDEFINED,
-    UNPACK_ERROR_SUCCESS,
-    UNPACK_ERROR_INVALID_HEADER,
-    UNPACK_ERROR_PAYLOAD_MALLOC_FAIL,
-};
-
 #define KINETIC_SEQUENCE_NOT_YET_BOUND ((int64_t)-2)
 
 typedef struct {
@@ -108,18 +88,21 @@ typedef struct {
     uint8_t buf[];
 } socket_info;
 
-// Kinetic Device Client Connection
-struct _KineticConnection {
-    bool            connected;      // state of connection
-    int             socket;         // socket file descriptor
-    int64_t         connectionID;   // initialized to seconds since epoch
-    int64_t         sequence;       // increments for each request in a session
-    KineticSession* pSession;       // session configuration
-    struct bus *    messageBus;
-    socket_info *   si;
-    pthread_mutex_t sendMutex;      // mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
-    KineticResourceWaiter connectionReady;
-    KineticCountingSemaphore * outstandingOperations;
+/**
+ * @brief An instance of a session with a Kinetic device.
+ */
+struct _KineticSession {
+    KineticSessionConfig config;                        ///> session configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession
+    bool            connected;                          ///> state of connection
+    int             socket;                             ///> socket file descriptor
+    int64_t         connectionID;                       ///> initialized to seconds since epoch
+    int64_t         sequence;                           ///> increments for each request in a session
+    struct bus *    messageBus;                         ///> pointer to message bus instance
+    socket_info *   si;                                 ///> pointer to socket information
+    pthread_mutex_t sendMutex;                          ///> mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
+    KineticResourceWaiter connectionReady;              ///> connection ready status (set to true once connectionID recieved)
+    KineticCountingSemaphore * outstandingOperations;   ///> counting semaphore to only allows the configured number of outstanding operation at a given time
+    uint16_t timeoutSeconds;                            ///> Default response timeout
 };
 
 // Kinetic Message HMAC
@@ -171,7 +154,6 @@ typedef enum {
 } KineticPDUType;
 
 
-// Kinetic PDU
 struct _KineticRequest {
     KineticMessage message;
     KineticProto_Command* command;
@@ -186,12 +168,14 @@ typedef struct _KineticResponse
     uint8_t value[];
 } KineticResponse;
 
+typedef struct _KineticRequest KineticRequest;
+typedef struct _KineticOperation KineticOperation;
+
 typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operation, KineticStatus const status);
 
 // Kinetic Operation
 struct _KineticOperation {
     KineticSession* session;
-    KineticConnection* connection;
     KineticRequest* request;
     KineticResponse* response;
     uint16_t timeoutSeconds;
@@ -237,10 +221,7 @@ KineticProto_Command_GetLog_Type KineticLogInfo_Type_to_KineticProto_Command_Get
 
 KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type);
 
-void KineticConnection_Init(KineticConnection* const con);
-void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
 void KineticMessage_Init(KineticMessage* const message);
-void KineticOperation_Init(KineticOperation* op, KineticSession * const session);
-void KineticRequest_Init(KineticRequest* pdu, KineticSession const * const session);
+void KineticRequest_Init(KineticRequest* reqeust, KineticSession const * const session);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

@@ -78,7 +78,6 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -100,7 +99,6 @@ KineticStatus KineticAdminClient_InstantErase(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -143,7 +141,6 @@ KineticStatus KineticAdminClient_LockDevice(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -165,7 +162,6 @@ KineticStatus KineticAdminClient_UnlockDevice(KineticSession * const session,
     ByteArray pin)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -189,7 +185,6 @@ KineticStatus KineticAdminClient_GetLog(KineticSession * const session,
                                    KineticCompletionClosure* closure)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
     assert(info != NULL);
 
     KineticProto_Command_GetLog_Type protoType =
@@ -214,7 +209,6 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession * const ses
                                    KineticCompletionClosure* closure)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
     assert(info != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
@@ -242,7 +236,6 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession * const sessio
     int64_t version)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -254,7 +247,6 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession * const sessio
 KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
         const char *ACLPath) {
     assert(session != NULL);
-    assert(session->connection != NULL);
     if (ACLPath == NULL) {
         return KINETIC_STATUS_INVALID_REQUEST;
     }
@@ -286,7 +278,6 @@ KineticStatus KineticAdminClient_UpdateFirmware(KineticSession * const session,
     char const * const fw_path)
 {
     assert(session != NULL);
-    assert(session->connection != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}

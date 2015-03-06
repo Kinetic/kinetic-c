@@ -51,9 +51,8 @@ void tearDown(void)
 
 void test_KineticClient_flush_should_get_success_if_no_writes_are_in_progress(void)
 {
-    KineticConnection connection;
     KineticOperation operation;
-    KineticSession session = {.connection = &connection};
+    KineticSession session;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
     KineticBuilder_BuildFlush_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
@@ -66,8 +65,7 @@ void test_KineticClient_flush_should_get_success_if_no_writes_are_in_progress(vo
 
 void test_KineticClient_flush_should_expose_memory_error_from_CreateOperation(void)
 {
-    KineticConnection connection;
-    KineticSession session = {.connection = &connection};
+    KineticSession session;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&session, NULL);
     

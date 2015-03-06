@@ -108,11 +108,6 @@ typedef struct _KineticClient KineticClient;
 
 
 /**
- * @brief Kinetic connection instance
- */
-struct _KineticConnection;
-
-/**
  * @brief Structure used to specify the configuration for a session.
  */
 typedef struct _KineticSessionConfig {

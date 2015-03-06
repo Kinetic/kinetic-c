@@ -14,15 +14,14 @@
 #include "mock_kinetic_message.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 static KineticRequest Request;
 static KineticOperation Operation;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 1);
-    Session = (KineticSession) {.connection = &Connection};
-    KineticOperation_Init(&Operation, &Session);
+    Session = (KineticSession) {.connected = true};
+    Operation = (KineticOperation) {.session = &Session};
     KineticRequest_Init(&Request, &Session);
     Operation.request = &Request;
 }
@@ -845,7 +844,7 @@ void test_KineticBuilder_BuildSetACL_should_build_a_SECURITY_operation(void)
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetACL, Operation.timeoutSeconds);
 }
 
-void test_KineticBuilder_BuildFirmwareUpdate_should_build_a_FIRMWARE_DOWNLOAD_operation(void)
+void test_KineticBuilder_BuildUpdateFirmware_should_build_a_FIRMWARE_DOWNLOAD_operation(void)
 {
     const char* path = "test/support/data/dummy_fw.slod";
     const char* fwBytes = "firmware\nupdate\ncontents\n";
@@ -877,7 +876,7 @@ void test_KineticBuilder_BuildFirmwareUpdate_should_build_a_FIRMWARE_DOWNLOAD_op
     TEST_ASSERT_EQUAL_STRING(fwBytes, (char*)Operation.value.data);
 }
 
-void test_KineticBuilder_BuildFirmwareUpdate_should_return_INVALID_FILE_if_does_not_exist(void)
+void test_KineticBuilder_BuildUpdateFirmware_should_return_INVALID_FILE_if_does_not_exist(void)
 {
     const char* path = "test/support/data/none.slod";
 

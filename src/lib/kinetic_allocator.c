@@ -38,13 +38,15 @@ KineticSession* KineticAllocator_NewSession(struct bus * b, KineticSessionConfig
         return NULL;
     }
 
-    // Copy the supplied config into the session config
+    // Deep copy the supplied config internally
     session->config = *config;
     memcpy(session->config.keyData, config->hmacKey.data, config->hmacKey.len);
-    // Update pointer to copy of key data
     session->config.hmacKey.data = session->config.keyData;
     strncpy(session->config.host, config->host, sizeof(session->config.host));
-    session->timeoutSeconds = config->timeoutSeconds;
+    session->timeoutSeconds = config->timeoutSeconds; // TODO: Eliminate this, since already in config?
+    KineticResourceWaiter_Init(&session->connectionReady);
+    session->messageBus = b;
+    session->socket = -1;  // start with an invalid file descriptor
 
     return session;
 }
@@ -52,29 +54,9 @@ KineticSession* KineticAllocator_NewSession(struct bus * b, KineticSessionConfig
 void KineticAllocator_FreeSession(KineticSession* session)
 {
     if (session != NULL) {
+        KineticResourceWaiter_Destroy(&session->connectionReady);
         KineticFree(session);
     }
-}
-
-KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session)
-{
-    KineticConnection* connection = KineticCalloc(1, sizeof(KineticConnection));
-    if (connection == NULL) {
-        LOG0("Failed allocating new Connection!");
-        return NULL;
-    }
-    KineticResourceWaiter_Init(&connection->connectionReady);
-    connection->pSession = session;
-    connection->messageBus = b;
-    connection->socket = -1;  // start with an invalid file descriptor
-    return connection;
-}
-
-void KineticAllocator_FreeConnection(KineticConnection* connection)
-{
-    KINETIC_ASSERT(connection != NULL);
-    KineticResourceWaiter_Destroy(&connection->connectionReady);
-    KineticFree(connection);
 }
 
 KineticResponse * KineticAllocator_NewKineticResponse(size_t const valueLength)
@@ -111,7 +93,8 @@ KineticOperation* KineticAllocator_NewOperation(KineticSession* const session)
         LOGF0("Failed allocating new operation on session %p", (void*)session);
         return NULL;
     }
-    KineticOperation_Init(newOperation, session);
+    newOperation->session = session;
+    newOperation->timeoutSeconds = session->timeoutSeconds; // TODO: use timeout in config throughput
     newOperation->request = (KineticRequest*)KineticCalloc(1, sizeof(KineticRequest));
     if (newOperation->request == NULL) {
         LOGF0("Failed allocating new PDU on session %p", (void*)session);

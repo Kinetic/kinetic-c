@@ -44,7 +44,6 @@
 #include <stdlib.h>
 
 static uint32_t ClusterVersion = 7;
-static KineticConnection Connection;
 static KineticResponse Response;
 static KineticSession Session;
 static uint8_t ValueBuffer[KINETIC_OBJ_SIZE];
@@ -55,16 +54,17 @@ void setUp(void)
     KineticLogger_Init("stdout", 3);
 
     // Create and configure a new Kinetic protocol instance
-    KineticSessionConfig config = {
-        .port = 1234,
-        .host = "valid-host.com",
-        .hmacKey = ByteArray_CreateWithCString("some valid HMAC key..."),
-        .clusterVersion = ClusterVersion,
+;
+    Session = (KineticSession) {
+        .connected = true,
+        .socket = 456,
+        .config = (KineticSessionConfig) {
+            .port = 1234,
+            .host = "valid-host.com",
+            .hmacKey = ByteArray_CreateWithCString("some valid HMAC key..."),
+            .clusterVersion = ClusterVersion,
+        }
     };
-    KineticSession_Init(&Session, &config, &Connection);
-    Connection.connected = true;
-    Connection.socket = 456;
-    Connection.pSession = &Session;
     ByteArray_FillWithDummyData(Value);
 }
 
@@ -98,8 +98,6 @@ void test_KineticResponse_GetKeyValue_should_return_NULL_if_message_has_no_KeyVa
 
 void test_KineticResponse_GetKeyRange_should_return_the_KineticProto_Command_Range_from_the_message_if_avaliable(void)
 {
-    Connection.pSession = &Session;
-    Session.connection = &Connection;
     KineticProto_Command_Range* range = NULL;
 
     range = KineticResponse_GetKeyRange(NULL);

@@ -64,9 +64,7 @@ void test_KineticPDU_KINETIC_OBJ_SIZE_should_be_the_sum_of_header_protobuf_and_v
 void test_KineticRequest_Init_should_initialize_Request(void)
 {
     KineticRequest request;
-    KineticConnection connection;
     KineticSession session;
-    session.connection = &connection;
 
     KineticRequest_Init(&request, &session);
 }
@@ -74,21 +72,16 @@ void test_KineticRequest_Init_should_initialize_Request(void)
 void test_KineticRequest_Init_should_set_the_exchange_fields_in_the_embedded_protobuf_header(void)
 {
     KineticRequest request;
-    KineticConnection connection;
     KineticSession session;
-    session.connection = &connection;
-    
-    KineticConnection_Init(&connection);
-    connection.sequence = 24;
-    connection.connectionID = 8765432;
+
     session = (KineticSession) {
         .config = (KineticSessionConfig) {
             .clusterVersion = 1122334455667788,
             .identity = 37,
-        }
+        },
+        .sequence = 24,
+        .connectionID = 8765432,
     };
-    connection.pSession = &session;
-    session.connection = &connection;
     KineticRequest_Init(&request, &session);
 
     TEST_ASSERT_TRUE(request.message.header.has_clusterVersion);

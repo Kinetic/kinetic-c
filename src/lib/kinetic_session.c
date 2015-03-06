@@ -46,25 +46,19 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
         return KINETIC_STATUS_SESSION_EMPTY;
     }
 
-    KINETIC_ASSERT(session->connection == NULL);
-    session->connection = KineticAllocator_NewConnection(client->bus, session);
-    if (session->connection == NULL) {
-        LOG0("Failed allocating a new connection instance");
-        return KINETIC_STATUS_MEMORY_ERROR;
-    }
+    session->connected = false;
+    session->socket = -1;
     
-    // init connection send mutex
-    if (pthread_mutex_init(&session->connection->sendMutex, NULL) != 0) {
-        LOG0("Failed initializing connection send mutex!");
-        KineticAllocator_FreeConnection(session->connection);
+    // initialize session send mutex
+    if (pthread_mutex_init(&session->sendMutex, NULL) != 0) {
+        LOG0("Failed initializing session send mutex!");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 
-    session->connection->outstandingOperations =
+    session->outstandingOperations =
         KineticCountingSemaphore_Create(KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION);
-    if (session->connection->outstandingOperations == NULL) {
-        LOG0("Failed initializing session counting semaphore!");
-        KineticAllocator_FreeConnection(session->connection);
+    if (session->outstandingOperations == NULL) {
+        LOG0("Failed creating session counting semaphore!");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
 
@@ -76,13 +70,7 @@ KineticStatus KineticSession_Destroy(KineticSession * const session)
     if (session == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
     }
-    if (session->connection == NULL) {
-        return KINETIC_STATUS_SESSION_INVALID;
-    }
-    KineticCountingSemaphore_Destroy(session->connection->outstandingOperations);
-    KineticAllocator_FreeConnection(session->connection);
-    session->connection = NULL;
-
+    KineticCountingSemaphore_Destroy(session->outstandingOperations);
     KineticAllocator_FreeSession(session);
 
     return KINETIC_STATUS_SUCCESS;
@@ -93,88 +81,79 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
     if (session == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
     }
-    KineticConnection* connection = session->connection;
-    if (connection == NULL) {
-        return KINETIC_STATUS_CONNECTION_ERROR;
-    }
 
     // Establish the connection
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
     KINETIC_ASSERT(strlen(session->config.host) > 0);
-    connection->socket = KineticSocket_Connect(
+    session->socket = KineticSocket_Connect(
         session->config.host, session->config.port);
-    if (connection->socket == KINETIC_SOCKET_DESCRIPTOR_INVALID) {
+    if (session->socket == KINETIC_SOCKET_DESCRIPTOR_INVALID) {
         LOG0("Session connection failed!");
-        connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
-        connection->connected = false;
+        session->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
+        session->connected = false;
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
-    connection->connected = true;
+    session->connected = true;
 
     bus_socket_t socket_type = session->config.useSsl ? BUS_SOCKET_SSL : BUS_SOCKET_PLAIN;
-    connection->si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
-    if (connection->si == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
-    bool success = bus_register_socket(connection->messageBus, socket_type, connection->socket, connection);
+    session->si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
+    if (session->si == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
+    bool success = bus_register_socket(session->messageBus, socket_type, session->socket, session);
     if (!success) {
         LOG0("Failed registering connection with client!");
         goto connection_error_cleanup;
     }
 
     // Wait for initial unsolicited status to be received in order to obtain connection ID
-    success = KineticResourceWaiter_WaitTilAvailable(&connection->connectionReady, KINETIC_CONNECTION_TIMEOUT_SECS);
+    success = KineticResourceWaiter_WaitTilAvailable(&session->connectionReady, KINETIC_CONNECTION_TIMEOUT_SECS);
     if (!success) {
         LOG0("Timed out waiting for connection ID from device!");
         goto connection_error_cleanup;
     }
-    // nanosleep(&sleepDuration, NULL);
     LOGF1("Received connection ID %lld for session %p",
-        (long long)connection->connectionID, (void*)session);
-    // nanosleep(&sleepDuration, NULL);
+        (long long)session->connectionID, (void*)session);
 
     return KINETIC_STATUS_SUCCESS;
 
 connection_error_cleanup:
 
-    if (connection->si != NULL) {
-        free(connection->si);
-        connection->si = NULL;
+    if (session->si != NULL) {
+        free(session->si);
+        session->si = NULL;
     }
-    if (connection->socket != KINETIC_SOCKET_DESCRIPTOR_INVALID) {
-        KineticSocket_Close(connection->socket);
-        connection->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
+    if (session->socket != KINETIC_SOCKET_DESCRIPTOR_INVALID) {
+        KineticSocket_Close(session->socket);
+        session->socket = KINETIC_SOCKET_DESCRIPTOR_INVALID;
     }
-    connection->connected = false;
+    session->connected = false;
     return KINETIC_STATUS_CONNECTION_ERROR;
 }
 
-KineticStatus KineticSession_Disconnect(KineticSession const * const session)
+KineticStatus KineticSession_Disconnect(KineticSession * const session)
 {
     if (session == NULL) {
         return KINETIC_STATUS_SESSION_EMPTY;
     }
-    KineticConnection* connection = session->connection;
-    if (connection == NULL || !session->connection->connected || connection->socket < 0) {
+    if (!session->connected || session->socket < 0) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
     
     // Close the connection
-    bus_release_socket(connection->messageBus, connection->socket, NULL);
-    free(connection->si);
-    connection->si = NULL;
-    connection->socket = KINETIC_HANDLE_INVALID;
-    connection->connected = false;
-    pthread_mutex_destroy(&connection->sendMutex);
+    bus_release_socket(session->messageBus, session->socket, NULL);
+    free(session->si);
+    session->si = NULL;
+    session->socket = KINETIC_HANDLE_INVALID;
+    session->connected = false;
+    pthread_mutex_destroy(&session->sendMutex);
 
     return KINETIC_STATUS_SUCCESS;
 }
 
 #define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
 
-int64_t KineticSession_GetNextSequenceCount(KineticSession const * const session)
+int64_t KineticSession_GetNextSequenceCount(KineticSession * const session)
 {
     assert(session);
-    int64_t seq_cnt = ATOMIC_FETCH_AND_INCREMENT(&session->connection->sequence);
+    int64_t seq_cnt = ATOMIC_FETCH_AND_INCREMENT(&session->sequence);
     return seq_cnt;
 }
 

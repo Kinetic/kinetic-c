@@ -38,11 +38,6 @@ KineticOperation* KineticController_CreateOperation(KineticSession * const sessi
         return NULL;
     }
 
-    if (session->connection == NULL) {
-        LOG0("Specified session is not associated with a connection");
-        return NULL;
-    }
-
     LOGF3("--------------------------------------------------\n"
          "Building new operation on session @ 0x%llX", session);
 
@@ -82,7 +77,6 @@ static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* const closure)
 {
     KINETIC_ASSERT(operation != NULL);
-    KINETIC_ASSERT(operation->connection != NULL);
     KINETIC_ASSERT(operation->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
 
@@ -194,7 +188,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
                                                 void *socket_udata)
 {
     KineticResponse * response = msg;
-    KineticConnection* connection = socket_udata;
+    KineticSession* session = socket_udata;
     bool connetionInfoReceived = false;
     char const * statusTag = "[PDU RX STATUS]";
     char const * unexpectedTag = "[PDU RX UNEXPECTED]";
@@ -210,9 +204,9 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             response->command->header->has_connectionID)
         {
             // Extract connectionID from unsolicited status message
-            connection->connectionID = response->command->header->connectionID;
+            session->connectionID = response->command->header->connectionID;
             LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
-                connection->connectionID);
+                session->connectionID);
             connetionInfoReceived = true;
             logTag = statusTag;
             logAtLevel = 2;
@@ -236,16 +230,16 @@ void KineticController_HandleUnexpectedResponse(void *msg,
     KineticLogger_LogPrintf(logAtLevel, "%s pdu: %p, session: %p, bus: %p, "
         "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u",
         logTag,
-        (void*)response, (void*)connection->pSession,
-        (void*)connection->messageBus,
-        connection->socket, (long long)seq_id,
+        (void*)response, (void*)session,
+        (void*)session->messageBus,
+        session->socket, (long long)seq_id,
         response->header.protobufLength, response->header.valueLength);
     KineticLogger_LogProtobuf(protoLogAtLevel, response->proto);
 
     KineticAllocator_FreeKineticResponse(response);
 
     if (connetionInfoReceived) {
-        KineticResourceWaiter_SetAvailable(&connection->connectionReady);
+        KineticResourceWaiter_SetAvailable(&session->connectionReady);
     }
 }
 
@@ -253,7 +247,7 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
 {
     KineticOperation* op = udata;
     KINETIC_ASSERT(op);
-    KINETIC_ASSERT(op->connection);
+    KINETIC_ASSERT(op->session);
 
     KineticStatus status = bus_to_kinetic_status(res->status);
 
@@ -277,8 +271,8 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
         LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
             "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
             (void*)response,
-            (void*)op->session, (void*)op->connection->messageBus,
-            op->connection->socket, response->command->header->ackSequence,
+            (void*)op->session, (void*)op->session->messageBus,
+            op->session->socket, response->command->header->ackSequence,
             response->header.protobufLength, response->header.valueLength,
             (void*)op,
             Kinetic_GetStatusDescription(status));

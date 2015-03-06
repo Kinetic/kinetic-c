@@ -36,7 +36,6 @@
 #include "unity_helper.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 
 void setUp(void)
 {
@@ -50,12 +49,10 @@ void tearDown(void)
 
 void test_KineticClient_Put_should_execute_PUT_operation(void)
 {
-    Session.connection = &Connection;
-    Connection.pSession = &Session;
     ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
-    operation.connection = &Connection;
+    operation.session = &Session;
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
@@ -66,18 +63,13 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH, status);
 }
 
+
 void test_KineticClient_Put_should_allow_NULL_pointer_to_value_data_if_length_is_zero(void)
 {
-    Session.connection = &Connection;
-    Connection.pSession = &Session;
-    ByteArray value = {
-        .data = NULL,
-        .len = 0,
-    };
-
+    ByteArray value = {.data = NULL, .len = 0};
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
-    operation.connection = &Connection;
+    operation.session = &Session;
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
@@ -90,12 +82,10 @@ void test_KineticClient_Put_should_allow_NULL_pointer_to_value_data_if_length_is
 
 void test_KineticClient_Put_should_return_BUFFER_OVERRUN_if_object_value_too_long(void)
 {
-    Session.connection = &Connection;
-    Connection.pSession = &Session;
     ByteArray value = ByteArray_CreateWithCString("Four score, and seven years ago");
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
-    operation.connection = &Connection;
+    operation.session = &Session;
     
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
 

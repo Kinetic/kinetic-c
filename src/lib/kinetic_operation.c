@@ -42,11 +42,11 @@ size_t msgSize = 0;
 
 void KineticOperation_ValidateOperation(KineticOperation* op)
 {
-    KINETIC_ASSERT(op != NULL);
-    KINETIC_ASSERT(op->connection != NULL);
-    KINETIC_ASSERT(op->request != NULL);
-    KINETIC_ASSERT(op->request->command != NULL);
-    KINETIC_ASSERT(op->request->command->header != NULL);
+    KINETIC_ASSERT(op);
+    KINETIC_ASSERT(op->session);
+    KINETIC_ASSERT(op->request);
+    KINETIC_ASSERT(op->request->command);
+    KINETIC_ASSERT(op->request->command->header);
     KINETIC_ASSERT(op->request->command->header->has_sequence);
 }
 
@@ -56,12 +56,11 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const op)
 {
     KineticOperation_ValidateOperation(op);
     
-    KineticConnection *connection = op->connection;
-    if (!KineticRequest_LockConnection(connection)) {
+    if (!KineticRequest_LockConnection(op->session)) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
     KineticStatus status = send_request_in_lock(op);
-    KineticRequest_UnlockConnection(connection);
+    KineticRequest_UnlockConnection(op->session);
     return status;
 }
 
@@ -86,10 +85,10 @@ static void log_request_seq_id(int fd, int64_t seq_id, KineticMessageType mt)
 }
 
 /* Send request.
- * Note: This whole function operates with op->connection->sendMutex locked. */
+ * Note: This whole function operates with op->session->sendMutex locked. */
 static KineticStatus send_request_in_lock(KineticOperation* const op)
 {
-    LOGF3("\nSending PDU via fd=%d", op->connection->socket);
+    LOGF3("\nSending PDU via fd=%d", op->session->socket);
     KineticRequest* request = op->request;
 
     int64_t seq_id = KineticSession_GetNextSequenceCount(op->session);
@@ -102,7 +101,7 @@ static KineticStatus send_request_in_lock(KineticOperation* const op)
     }
     uint8_t * commandData = request->message.message.commandBytes.data;
 
-    log_request_seq_id(op->connection->socket, seq_id, request->message.header.messageType);
+    log_request_seq_id(op->session->socket, seq_id, request->message.header.messageType);
 
     KineticSession *session = op->session;
     KineticStatus status = KineticRequest_PopulateAuthentication(&session->config,
@@ -123,12 +122,12 @@ static KineticStatus send_request_in_lock(KineticOperation* const op)
     }
 
     if (commandData) { free(commandData); }
-    KineticCountingSemaphore * const sem = op->connection->outstandingOperations;
+    KineticCountingSemaphore * const sem = op->session->outstandingOperations;
     KineticCountingSemaphore_Take(sem);  // limit total concurrent requests
 
     if (!KineticRequest_SendRequest(op, msg, msgSize)) {
         LOGF0("Failed queuing request %p for transmit on fd=%d w/seq=%lld",
-            (void*)request, op->connection->socket, (long long)seq_id);
+            (void*)request, op->session->socket, (long long)seq_id);
         /* A false result from bus_send_request means that the request was
          * rejected outright, so the usual asynchronous, callback-based
          * error handling for errors during the request or response will
@@ -154,12 +153,14 @@ KineticStatus KineticOperation_GetStatus(const KineticOperation* const op)
 
 void KineticOperation_Complete(KineticOperation* op, KineticStatus status)
 {
-    KINETIC_ASSERT(op != NULL);
+    KINETIC_ASSERT(op);
+    KINETIC_ASSERT(op->session);
+
     // ExecuteOperation should ensure a callback exists (either a user supplied one, or the a default)
     KineticCompletionData completionData = {.status = status};
 
     // Release this request so that others can be unblocked if at max (request PDUs throttled)
-    KineticCountingSemaphore_Give(op->connection->outstandingOperations);
+    KineticCountingSemaphore_Give(op->session->outstandingOperations);
 
     if(op->closure.callback != NULL) {
         op->closure.callback(&completionData, op->closure.clientData);

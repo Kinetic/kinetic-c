@@ -89,29 +89,22 @@ void test_KineticAdminClient_CreateSession_should_delegate_to_base_client(void)
 
 void test_KineticAdminClient_DestroySession_should_delegate_to_base_client(void)
 {
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection,
     };
 
     KineticClient_DestroySession_ExpectAndReturn(&session, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_DestroySession(&session);
 
-    TEST_ASSERT_EQUAL_KineticStatus(
-        KINETIC_STATUS_SUCCESS,
-        status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 }
-
 
 
 void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_the_device(void)
 {
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticLogInfo* info;
     KineticOperation operation;
@@ -129,10 +122,8 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
 void test_KineticAdminClient_SecureErase_should_build_and_execute_a_SECURE_ERASE_operation(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticOperation operation;
 
@@ -149,10 +140,8 @@ void test_KineticAdminClient_SecureErase_should_build_and_execute_a_SECURE_ERASE
 void test_KineticAdminClient_SecureErase_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
@@ -168,10 +157,8 @@ void test_KineticAdminClient_SecureErase_should_forward_erroneous_status_if_SSL_
 void test_KineticAdminClient_InstantErase_should_build_and_execute_an_INSTANT_SECURE_ERASE_operation(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticOperation operation;
 
@@ -188,10 +175,8 @@ void test_KineticAdminClient_InstantErase_should_build_and_execute_an_INSTANT_SE
 void test_KineticAdminClient_InstantErase_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
@@ -206,10 +191,8 @@ void test_KineticAdminClient_InstantErase_should_forward_erroneous_status_if_SSL
 void test_KineticAdminClient_LockDevice_should_build_and_execute_an_LOCK_with_PIN_operation(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticOperation operation;
 
@@ -226,10 +209,8 @@ void test_KineticAdminClient_LockDevice_should_build_and_execute_an_LOCK_with_PI
 void test_KineticAdminClient_LockDevice_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
@@ -244,10 +225,8 @@ void test_KineticAdminClient_LockDevice_should_forward_erroneous_status_if_SSL_e
 void test_KineticAdminClient_UnlockDevice_should_build_and_execute_an_LOCK_with_PIN_operation(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticOperation operation;
 
@@ -264,10 +243,8 @@ void test_KineticAdminClient_UnlockDevice_should_build_and_execute_an_LOCK_with_
 void test_KineticAdminClient_UnlockDevice_should_forward_erroneous_status_if_SSL_enabled_validation_failed(void)
 {
     ByteArray pin = ByteArray_CreateWithCString("abc123");
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SSL_REQUIRED);
@@ -279,10 +256,8 @@ void test_KineticAdminClient_UnlockDevice_should_forward_erroneous_status_if_SSL
 
 void test_KineticAdminClient_SetClusterVersion_should_build_and_execute_operation(void)
 {
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticOperation operation;
 
@@ -297,10 +272,8 @@ void test_KineticAdminClient_SetClusterVersion_should_build_and_execute_operatio
 
 void test_KineticAdminClient_UpdateFirmware_should_build_and_execute_operation(void)
 {
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticOperation operation;
     const char* path = "some/firmware/update.file";
@@ -316,10 +289,8 @@ void test_KineticAdminClient_UpdateFirmware_should_build_and_execute_operation(v
 
 void test_KineticAdminClient_UpdateFirmware_should_report_failure_if_failed_to_build(void)
 {
-    KineticConnection connection;
     KineticSession session = {
         .config = (KineticSessionConfig) {.port = 4321},
-        .connection = &connection
     };
     KineticOperation operation;
     const char* path = "some/firmware/update.file";

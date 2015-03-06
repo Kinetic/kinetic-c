@@ -39,7 +39,6 @@
 #include "unity_helper.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 
 void setUp(void)
 {
@@ -53,7 +52,6 @@ void tearDown(void)
 
 void test_KineticClient_Delete_should_execute_DELETE_operation(void)
 {
-    Session.connection = &Connection;
     KineticEntry entry;
     KineticOperation operation;
 

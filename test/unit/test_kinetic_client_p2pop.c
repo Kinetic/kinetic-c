@@ -48,8 +48,6 @@ void tearDown(void)
 void test_KineticClient_P2POperation_should_execute_a_p2p_operation(void)
 {
     KineticSession session;
-    KineticConnection connection;
-    session.connection = &connection;
     KineticOperation operation;
     KineticP2P_Operation p2pOp;
 

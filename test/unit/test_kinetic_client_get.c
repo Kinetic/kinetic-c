@@ -39,12 +39,10 @@
 #include "unity_helper.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-    Session.connection = &Connection;
 }
 
 void tearDown(void)
