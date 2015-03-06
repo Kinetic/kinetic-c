@@ -22,6 +22,7 @@
 #include "send_internal.h"
 #include "atomic.h"
 
+#include <stdlib.h>
 #include <errno.h>
 
 #include "mock_bus.h"
