@@ -387,7 +387,6 @@ bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *udata) 
     *(bus_socket_t *)&ci->type = type;
     ci->ssl = ssl;
     ci->udata = udata;
-    ci->largest_rd_seq_id_seen = BUS_NO_SEQ_ID;
     ci->largest_wr_seq_id_seen = BUS_NO_SEQ_ID;
 
     #ifndef TEST

@@ -126,3 +126,48 @@ rx_info_t *listener_helper_get_hold_rx_info(listener *l, int fd, int64_t seq_id)
     }
     return NULL;
 }
+
+rx_info_t *listener_helper_find_info_by_sequence_id(listener *l,
+        int fd, int64_t seq_id) {
+    struct bus *b = l->bus;    
+    for (int i = 0; i <= l->rx_info_max_used; i++) {
+        rx_info_t *info = &l->rx_info[i];
+
+        switch (info->state) {
+        case RIS_INACTIVE:
+            break;            /* skip */
+        case RIS_HOLD:
+            BUS_LOG_SNPRINTF(b, 4, LOG_MEMORY, b->udata, 128,
+                "find_info_by_sequence_id: info (%p) at +%d: <fd:%d, seq_id:%lld>",
+                (void*)info, info->id, fd, (long long)seq_id);
+            if (info->u.hold.fd == fd && info->u.hold.seq_id == seq_id) {
+                return info;
+            }
+            break;
+        case RIS_EXPECT:
+        {
+            struct boxed_msg *box = info->u.expect.box;
+            BUS_LOG_SNPRINTF(b, 4, LOG_MEMORY, b->udata, 128,
+                "find_info_by_sequence_id: info (%p) at +%d [s %d]: box is %p",
+                (void*)info, info->id, info->u.expect.error, (void*)box);
+            if (box != NULL && box->out_seq_id == seq_id && box->fd == fd) {
+                return info;
+            }
+            break;
+        }
+        default:
+            BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
+                "match fail %d on line %d", info->state, __LINE__);
+            BUS_ASSERT(b, b->udata, false);
+        }
+    }
+
+    if (b->log_level > 5 || 0) {
+        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
+            "==== Could not find <fd:%d, seq_id:%lld>, dumping table ====\n", 
+            fd, (long long)seq_id);
+        ListenerTask_DumpRXInfoTable(l);
+    }
+    /* Not found. Probably an unsolicited status message. */
+    return NULL;
+}

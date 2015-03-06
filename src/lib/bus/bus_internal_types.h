@@ -124,7 +124,6 @@ typedef struct {
     /* Set by listener thread */
     rx_error_t error;
     size_t to_read_size;
-    int64_t largest_rd_seq_id_seen;
 } connection_info;
 
 /* Arbitrary byte used to tag writes from the listener. */

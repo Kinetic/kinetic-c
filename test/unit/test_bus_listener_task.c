@@ -17,20 +17,44 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#ifndef LISTENER_IO_INTERNAL_H
-#define LISTENER_IO_INTERNAL_H
+#include "unity.h"
+#include "listener_cmd.h"
+#include "listener_internal.h"
+#include "atomic.h"
 
-static bool socket_read_plain(struct bus *b,
-    listener *l, int pfd_i, connection_info *ci);
-static bool socket_read_ssl(struct bus *b,
-    listener *l, int pfd_i, connection_info *ci);
-static bool sink_socket_read(struct bus *b,
-    listener *l, connection_info *ci, ssize_t size);
-static void print_SSL_error(struct bus *b,
-    connection_info *ci, int lvl, const char *prefix);
-static void set_error_for_socket(listener *l, int id,
-    int fd, rx_error_t err);
-static void process_unpacked_message(listener *l,
-    connection_info *ci, bus_unpack_cb_res_t result);
+#include <errno.h>
 
-#endif
+#include "mock_bus.h"
+#include "mock_bus_inward.h"
+#include "mock_syscall.h"
+#include "mock_util.h"
+#include "mock_listener.h"
+#include "mock_listener_helper.h"
+#include "mock_listener_io.h"
+#include "mock_listener_task.h"
+
+struct bus *b = NULL;
+boxed_msg *box = NULL;
+struct listener *l = NULL;
+
+static struct bus B = {
+    .log_level = 0,
+};
+static struct listener Listener = {
+    .bus = &B,
+};
+static boxed_msg Box = {
+    .fd = 1,
+    .out_seq_id = 12345,
+    .timeout_sec = 11,
+};
+
+void setUp(void) {
+    b = &B;
+    l = &Listener;
+    box = &Box;
+}
+
+void tearDown(void) {}
+
+/* void test_listener_add_socket_should_handle_msg_exhaustion(void) { */
