@@ -31,7 +31,7 @@
 
 #include <openssl/sha.h>
 
-static void do_put_and_getkeyrange(KineticSession *session) {
+static void do_put_and_getkeyrange(KineticSession * const session) {
     for (int i = 0; i < 5; i++) {
         char key[] = "keyX";
         key[3] = '0' + i;

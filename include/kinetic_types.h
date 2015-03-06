@@ -195,6 +195,8 @@ typedef enum {
     KINETIC_STATUS_NOT_AUTHORIZED,          ///< Authorization failure
     KINETIC_STATUS_INVALID_FILE,            ///< Specified file does not exist or could not be read/writtten
     KINETIC_STATUS_REQUEST_REJECTED,        ///< No request was attempted.
+    KINETIC_STATUS_DEVICE_NAME_REQUIRED,    ///< A device name is required, but was empty
+    KINETIC_STATUS_INVALID_LOG_TYPE,        ///< The device log type specified was invalid
     KINETIC_STATUS_COUNT                    ///< Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 
@@ -296,8 +298,7 @@ typedef enum {
     KINETIC_DEVICE_INFO_TYPE_CONFIGURATION,
     KINETIC_DEVICE_INFO_TYPE_STATISTICS,
     KINETIC_DEVICE_INFO_TYPE_MESSAGES,
-    KINETIC_DEVICE_INFO_TYPE_LIMITS,
-    KINETIC_DEVICE_INFO_TYPE_DEVICE,
+    KINETIC_DEVICE_INFO_TYPE_LIMITS
 } KineticLogInfo_Type;
 typedef struct {
     char* name;

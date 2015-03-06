@@ -35,7 +35,7 @@ STATIC const char* KineticStatusDescriptor[] = {
     "INVALID_REQUEST",
     "OPERATION_INVALID",
     "OPERATION_FAILED",
-    "OPERATION_TIMEOUT",
+    "OPERATION_TIMEDOUT",
     "CLUSTER_MISMATCH",
     "VERSION_MISMATCH",
     "DATA_ERROR",
@@ -51,8 +51,10 @@ STATIC const char* KineticStatusDescriptor[] = {
     "DEVICE_LOCKED",
     "ACL_ERROR",
     "NOT_AUTHORIZED",
-    "KINETIC_STATUS_INVALID_FILE",
+    "INVALID_FILE",
     "REQUEST_REJECTED",
+    "DEVICE_NAME_REQUIRED",
+    "INVALID_LOG_TYPE",
 };
 
 #ifdef TEST

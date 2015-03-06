@@ -25,6 +25,7 @@
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
@@ -56,8 +57,8 @@ void test_KineticClient_Delete_should_execute_DELETE_operation(void)
     KineticEntry entry;
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&Connection, &operation);
-    KineticOperation_BuildDelete_Expect(&operation, &entry);
+    KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
+    KineticBuilder_BuildDelete_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_Delete(&Session, &entry, NULL);

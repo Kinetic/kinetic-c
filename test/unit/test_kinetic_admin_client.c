@@ -28,14 +28,15 @@
 #include "kinetic_device_info.h"
 #include "byte_array.h"
 #include "mock_kinetic_client.h"
+#include "mock_kinetic_builder.h"
+#include "mock_kinetic_operation.h"
 #include "mock_kinetic_auth.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
 #include "mock_kinetic_message.h"
 #include "mock_kinetic_bus.h"
-#include "mock_kinetic_operation.h"
-#include "mock_acl.h"
+#include "mock_kinetic_acl.h"
 #include "protobuf-c/protobuf-c.h"
 #include <stdio.h>
 
@@ -115,8 +116,8 @@ void test_KineticAdminClient_GetLog_should_request_the_specified_log_data_from_t
     KineticLogInfo* info;
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildGetLog_Expect(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, BYTE_ARRAY_NONE, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_GetLog(&session, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, &info, NULL);
@@ -136,8 +137,8 @@ void test_KineticAdminClient_SecureErase_should_build_and_execute_a_SECURE_ERASE
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildErase_Expect(&operation, true, &pin);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildErase_ExpectAndReturn(&operation, true, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_SecureErase(&session, pin);
@@ -175,8 +176,8 @@ void test_KineticAdminClient_InstantErase_should_build_and_execute_an_INSTANT_SE
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildErase_Expect(&operation, false, &pin);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildErase_ExpectAndReturn(&operation, false, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_InstantErase(&session, pin);
@@ -213,8 +214,8 @@ void test_KineticAdminClient_LockDevice_should_build_and_execute_an_LOCK_with_PI
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildLockUnlock_Expect(&operation, true, &pin);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildLockUnlock_ExpectAndReturn(&operation, true, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_LockDevice(&session, pin);
@@ -251,8 +252,8 @@ void test_KineticAdminClient_UnlockDevice_should_build_and_execute_an_LOCK_with_
     KineticOperation operation;
 
     KineticAuth_EnsureSslEnabled_ExpectAndReturn(&session.config, KINETIC_STATUS_SUCCESS);
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildLockUnlock_Expect(&operation, false, &pin);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildLockUnlock_ExpectAndReturn(&operation, false, &pin, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_UnlockDevice(&session, pin);
@@ -285,8 +286,8 @@ void test_KineticAdminClient_SetClusterVersion_should_build_and_execute_operatio
     };
     KineticOperation operation;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildSetClusterVersion_Expect(&operation, 1402);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildSetClusterVersion_ExpectAndReturn(&operation, 1402, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_SetClusterVersion(&session, 1402);
@@ -304,8 +305,8 @@ void test_KineticAdminClient_UpdateFirmware_should_build_and_execute_operation(v
     KineticOperation operation;
     const char* path = "some/firmware/update.file";
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_UpdateFirmware(&session, path);
@@ -323,8 +324,8 @@ void test_KineticAdminClient_UpdateFirmware_should_report_failure_if_failed_to_b
     KineticOperation operation;
     const char* path = "some/firmware/update.file";
 
-    KineticAllocator_NewOperation_ExpectAndReturn(session.connection, &operation);
-    KineticOperation_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_INVALID_REQUEST);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildUpdateFirmware_ExpectAndReturn(&operation, path, KINETIC_STATUS_INVALID_REQUEST);
 
     KineticStatus status = KineticAdminClient_UpdateFirmware(&session, path);
 

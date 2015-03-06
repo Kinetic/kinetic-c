@@ -1,5 +1,5 @@
-#ifndef ACL_TYPES_H
-#define ACL_TYPES_H
+#ifndef KINETIC_ACL_TYPES_H
+#define KINETIC_ACL_TYPES_H
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -35,6 +35,6 @@ typedef enum {
     ACL_ERROR_BAD_JSON = -4,
     ACL_ERROR_MISSING_FIELD = -5,
     ACL_ERROR_INVALID_FIELD = -6,
-} acl_of_file_res;
+} KineticACLLoadResult;
 
-#endif
+#endif // KINETIC_ACL_TYPES_H

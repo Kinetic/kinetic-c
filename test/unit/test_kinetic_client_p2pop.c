@@ -23,6 +23,7 @@
 #include "kinetic_types_internal.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_controller.h"
+#include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_bus.h"
 #include "mock_kinetic_memory.h"
@@ -52,8 +53,8 @@ void test_KineticClient_P2POperation_should_execute_a_p2p_operation(void)
     KineticOperation operation;
     KineticP2P_Operation p2pOp;
 
-    KineticAllocator_NewOperation_ExpectAndReturn(&connection, &operation);
-    KineticOperation_BuildP2POperation_ExpectAndReturn(&operation, &p2pOp, KINETIC_STATUS_SUCCESS);
+    KineticAllocator_NewOperation_ExpectAndReturn(&session, &operation);
+    KineticBuilder_BuildP2POperation_ExpectAndReturn(&operation, &p2pOp, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticClient_P2POperation(&session, &p2pOp, NULL);

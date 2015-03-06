@@ -31,7 +31,7 @@
 #include <pthread.h>
 #include "bus.h"
 
-KineticOperation* KineticController_CreateOperation(KineticSession const * const session)
+KineticOperation* KineticController_CreateOperation(KineticSession * const session)
 {
     if (session == NULL) {
         LOG0("Specified session is NULL");
@@ -46,7 +46,7 @@ KineticOperation* KineticController_CreateOperation(KineticSession const * const
     LOGF3("--------------------------------------------------\n"
          "Building new operation on session @ 0x%llX", session);
 
-    KineticOperation* operation = KineticAllocator_NewOperation(session->connection);
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL || operation->request == NULL) {
         return NULL;
     }
@@ -83,7 +83,7 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 {
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->connection != NULL);
-    KINETIC_ASSERT(operation->connection->pSession != NULL);
+    KINETIC_ASSERT(operation->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
 
     if (closure != NULL)
@@ -216,7 +216,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             connetionInfoReceived = true;
             logTag = statusTag;
             logAtLevel = 2;
-            protoLogAtLevel = 2;
+            protoLogAtLevel = 3;
         }
         else {
             LOG0("WARNING: Unsolicited status received. Connection being terminated by remote!");
@@ -277,7 +277,7 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
         LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
             "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
             (void*)response,
-            (void*)op->connection->pSession, (void*)op->connection->messageBus,
+            (void*)op->session, (void*)op->connection->messageBus,
             op->connection->socket, response->command->header->ackSequence,
             response->header.protobufLength, response->header.valueLength,
             (void*)op,

@@ -26,7 +26,7 @@
 #include "kinetic_countingsemaphore.h"
 #include "kinetic_resourcewaiter_types.h"
 #include "kinetic_resourcewaiter.h"
-#include "acl.h"
+#include "kinetic_acl.h"
 #include <netinet/in.h>
 #include <ifaddrs.h>
 #include <openssl/sha.h>
@@ -152,6 +152,7 @@ typedef struct _KineticMessage {
     KineticProto_Command_Setup          setup;
     KineticProto_Command_GetLog         getLog;
     KineticProto_Command_GetLog_Type    getLogType;
+    KineticProto_Command_GetLog_Device  getLogDevice;
     KineticProto_Command_PinOperation   pinOp;
 } KineticMessage;
 
@@ -189,6 +190,7 @@ typedef KineticStatus (*KineticOperationCallback)(KineticOperation* const operat
 
 // Kinetic Operation
 struct _KineticOperation {
+    KineticSession* session;
     KineticConnection* connection;
     KineticRequest* request;
     KineticResponse* response;
@@ -238,7 +240,7 @@ KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(Kineti
 void KineticConnection_Init(KineticConnection* const con);
 void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con);
 void KineticMessage_Init(KineticMessage* const message);
-void KineticOperation_Init(KineticOperation* op, KineticSession const * const session);
+void KineticOperation_Init(KineticOperation* op, KineticSession * const session);
 void KineticRequest_Init(KineticRequest* pdu, KineticSession const * const session);
 
 #endif // _KINETIC_TYPES_INTERNAL_H

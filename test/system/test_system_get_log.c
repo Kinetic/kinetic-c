@@ -172,9 +172,15 @@ void test_GetLog_should_retrieve_limits_from_device(void)
     LOGF0("  maxPinSize: %u",                  Info->limits->maxPinSize);
 }
 
-void test_GetLog_should_retrieve_device_info_from_device(void)
+void test_GetDeviceLog_should_retrieve_device_info_from_device(void)
 {
-    Status = KineticAdminClient_GetLog(Fixture.session, KINETIC_DEVICE_INFO_TYPE_DEVICE, &Info, NULL);
+    char nameData[] = "com.Seagate";
+    ByteArray name = {
+        .data = (uint8_t*)nameData,
+        .len = strlen(nameData),
+    };
+
+    Status = KineticAdminClient_GetDeviceSpecificLog(Fixture.session, name, &Info, NULL);
 
     if (Status == KINETIC_STATUS_NOT_FOUND) {
         TEST_IGNORE_MESSAGE("Simulator/Drive returned NOT_FOUND for GetLog request for Device info.");
@@ -185,8 +191,6 @@ void test_GetLog_should_retrieve_device_info_from_device(void)
     TEST_ASSERT_NOT_NULL(Info->device->name.data);
     TEST_ASSERT_TRUE(Info->device->name.len > 0);
     LOG0("Device Data:");
-    BYTES_TO_CSTRING(Buffer, Info->device->name, 0, Info->device->name.len);
-    LOGF0("  hex:   %s", Buffer);
     char* dev = calloc(1, Info->device->name.len + 1);
     TEST_ASSERT_NOT_NULL(dev);
     memcpy(dev, Info->device->name.data, Info->device->name.len);

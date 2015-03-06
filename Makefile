@@ -58,6 +58,8 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_allocator.o \
 	$(OUT_DIR)/kinetic_nbo.o \
 	$(OUT_DIR)/kinetic_operation.o \
+	$(OUT_DIR)/kinetic_callbacks.o \
+	$(OUT_DIR)/kinetic_builder.o \
 	$(OUT_DIR)/kinetic_request.o \
 	$(OUT_DIR)/kinetic_response.o \
 	$(OUT_DIR)/kinetic_bus.o \
@@ -77,7 +79,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_semaphore.o \
 	$(OUT_DIR)/kinetic_countingsemaphore.o \
 	$(OUT_DIR)/kinetic_resourcewaiter.o \
-	$(OUT_DIR)/acl.o \
+	$(OUT_DIR)/kinetic_acl.o \
 	$(OUT_DIR)/byte_array.o \
 	$(OUT_DIR)/kinetic_client.o \
 	$(OUT_DIR)/kinetic_admin_client.o \
@@ -182,7 +184,7 @@ ci: stop_sims start_sims all stop_sims
 
 json: ${OUT_DIR}/libjson-c.a
 
-$(OUT_DIR)/acl.o: json
+$(OUT_DIR)/kinetic_acl.o: json
 
 json_install: json
 	cd ${JSONC} && \
@@ -455,11 +457,17 @@ run: $(UTIL_EXEC)
 	@echo
 	exec $(UTIL_EXEC) --put --host $(KINETIC_HOST1)
 	@echo
+	exec $(UTIL_EXEC) --put --key goo --value Goodbye! --host $(KINETIC_HOST1)
+	@echo
 	exec $(UTIL_EXEC) --get --host $(KINETIC_HOST1)
 	@echo
-	exec $(UTIL_EXEC) --getnext --key "A" --host $(KINETIC_HOST1)
+	exec $(UTIL_EXEC) --getnext --key A --host $(KINETIC_HOST1)
 	@echo
-	exec $(UTIL_EXEC) --getprevious --key "zzzzzzzzzzzzzzzzz" --host $(KINETIC_HOST1)
+	exec $(UTIL_EXEC) --getnext --key foo --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getprevious --key zoo --host $(KINETIC_HOST1)
+	@echo
+	exec $(UTIL_EXEC) --getprevious --key goo --host $(KINETIC_HOST1)
 	@echo
 	exec $(UTIL_EXEC) --delete --host $(KINETIC_HOST1)
 	@echo
@@ -479,7 +487,7 @@ run: $(UTIL_EXEC)
 	@echo
 	exec $(UTIL_EXEC) --getlog --logtype limits --host $(KINETIC_HOST1)
 	@echo
-	exec $(UTIL_EXEC) --getlog --logtype device --host $(KINETIC_HOST1)
+	exec $(UTIL_EXEC) --getdevicespecificlog --devicelogname com.Seagate --host $(KINETIC_HOST1)
 	@echo
 	@echo Test Utility integration tests w/ kinetic-c lib passed!
 	@echo

@@ -18,6 +18,8 @@
 *
 */
 
+#include "unity.h"
+#include "unity_helper.h"
 #include "kinetic_allocator.h"
 #include "kinetic_resourcewaiter_types.h"
 #include "mock_kinetic_resourcewaiter.h"
@@ -26,8 +28,6 @@
 #include "kinetic_proto.h"
 #include "byte_array.h"
 #include "mock_protobuf-c.h"
-#include "unity.h"
-#include "unity_helper.h"
 #include "mock_kinetic_memory.h"
 #include <stdlib.h>
 #include <pthread.h>
@@ -150,7 +150,7 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_and_command
 void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_null_for_operation(void)
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), NULL);
-    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Session);
     TEST_ASSERT_NULL(operation);
 }
 
@@ -166,7 +166,7 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), NULL);
     KineticFree_Expect(&op);
 
-    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Session);
 
     TEST_ASSERT_NULL(operation);
 }
@@ -183,7 +183,7 @@ void test_KineticAllocator_NewOperation_should_initialize_operation_and_request(
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), &request);
 
     KineticRequest_Init_Expect(&request, &Session);
-    KineticOperation * operation = KineticAllocator_NewOperation(&Connection);
+    KineticOperation * operation = KineticAllocator_NewOperation(&Session);
 
     TEST_ASSERT_NOT_NULL(operation);
 }
@@ -212,4 +212,9 @@ void test_KineticAllocator_FreeOperation_should_free_response_if_its_not_null(vo
     KineticFree_Expect(&op);
 
     KineticAllocator_FreeOperation(&op);
+}
+
+void test_KineticAllocator_FreeP2PProtobuf_should_free_protobuf_message_P2P_operation_tree(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Need to test P2P protobuf free");
 }
