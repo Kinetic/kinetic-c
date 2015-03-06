@@ -225,13 +225,10 @@ JAVA_BIN = $(JAVA_HOME)/bin/java
 
 .PHONY: test
 
-test_internals: test_threadpool test_bus
+test_internals: test_threadpool
 
 test_threadpool:
 	cd ${LIB_DIR}/threadpool && make test
-
-test_bus: test_threadpool ${OUT_DIR}/libsocket99.a ${OUT_DIR}/libthreadpool.a
-	cd ${LIB_DIR}/bus && make test
 
 #-------------------------------------------------------------------------------
 # Internal Libraries
