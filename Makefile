@@ -177,6 +177,8 @@ ci: stop_sims start_sims all stop_sims
 	@echo $(PROJECT) v$(VERSION) is in working order!
 	@echo
 
+apply_license:
+	scripts/apply_license.sh
 
 #-------------------------------------------------------------------------------
 # json-c

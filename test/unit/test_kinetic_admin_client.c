@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -59,7 +59,6 @@ void test_KineticAdminClient_Init_should_delegate_to_base_client(void)
     KineticClient* returnedClient;
 
     KineticClientConfig config = {
-        .logFile = "./some_file.log",
         .logLevel = 3,
     };
     KineticClient_Init_ExpectAndReturn(&config, &testClient);

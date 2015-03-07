@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
 {
     KineticClient client;
     KineticClientConfig config = {
-        .logFile = "./some_file.log",
+        .logFile = "stdout",
         .logLevel = 3,
     };
 
@@ -75,7 +75,7 @@ void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_
 void test_KineticClient_Init_should_return_null_if_calloc_returns_null(void)
 {
     KineticClientConfig config = {
-        .logFile = "./some_file.log",
+        .logFile = "stdout",
         .logLevel = 3,
     };
 
@@ -91,7 +91,7 @@ void test_KineticClient_Init_should_free_client_if_bus_init_fails(void)
     KineticClient client;
 
     KineticClientConfig config = {
-        .logFile = "./some_file.log",
+        .logFile = "stdout",
         .logLevel = 3,
     };
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticClient), &client);
