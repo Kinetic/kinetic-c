@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
 bool KineticRequest_SendRequest(KineticOperation *operation,
     uint8_t *msg, size_t msgSize);
 
-bool KineticRequest_LockConnection(KineticConnection *connection);
-bool KineticRequest_UnlockConnection(KineticConnection *connection);
+bool KineticRequest_LockConnection(KineticSession* session);
+bool KineticRequest_UnlockConnection(KineticSession* session);
 
 #endif

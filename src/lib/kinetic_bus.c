@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -86,11 +86,11 @@ STATIC bool unpack_header(uint8_t const * const read_buf, size_t const read_size
 }
 
 STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
-        size_t read_size, void *socket_udata) {
-
-    KineticConnection * connection = (KineticConnection *)socket_udata;
-    KINETIC_ASSERT(connection);
-    socket_info *si = connection->si;
+        size_t read_size, void *socket_udata)
+{
+    KineticSession * session = (KineticSession*)socket_udata;
+    KINETIC_ASSERT(session);
+    socket_info *si = session->si;
     KINETIC_ASSERT(si);
 
     switch (si->state) {
@@ -179,8 +179,8 @@ static void log_response_seq_id(int fd, int64_t seq_id) {
 }
 
 STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
-    KineticConnection * connection = (KineticConnection *)socket_udata;
-    KINETIC_ASSERT(connection);
+    KineticSession * session = (KineticSession*)socket_udata;
+    KINETIC_ASSERT(session);
     
     /* just got .full_msg_buffer from sink_cb -- pass it along as-is */
     socket_info *si = (socket_info *)msg;
@@ -226,14 +226,14 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         {
             if (response->proto->has_authType &&
                 response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS
-                && connection->connectionID == 0)
+                && session->connectionID == 0)
             {
                 /* Ignore the unsolicited status message on connect. */
                 seq_id = BUS_NO_SEQ_ID;
             } else {
                 seq_id = response->command->header->ackSequence;
             }
-            log_response_seq_id(connection->socket, seq_id);
+            log_response_seq_id(session->socket, seq_id);
         }
 
         bus_unpack_cb_res_t res = {

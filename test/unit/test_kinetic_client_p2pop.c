@@ -1,7 +1,7 @@
 
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -48,8 +48,6 @@ void tearDown(void)
 void test_KineticClient_P2POperation_should_execute_a_p2p_operation(void)
 {
     KineticSession session;
-    KineticConnection connection;
-    session.connection = &connection;
     KineticOperation operation;
     KineticP2P_Operation p2pOp;
 

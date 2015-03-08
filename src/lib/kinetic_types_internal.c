@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -393,32 +393,6 @@ void KineticSessionConfig_Copy(KineticSessionConfig* dest, KineticSessionConfig*
     }
 }
 
-void KineticSession_Init(KineticSession* const session, KineticSessionConfig* const config, KineticConnection* const con)
-{
-    KINETIC_ASSERT(session != NULL);
-    KineticSessionConfig destConfig = {.host = "google.com"};
-    if (config != NULL) {
-        KineticSessionConfig_Copy(&destConfig, config);
-    }
-    if (con != NULL) {
-        KineticConnection_Init(con);
-    }
-    *session = (KineticSession) {
-        .config = destConfig,
-        .connection = con,
-    };
-    con->pSession = session;
-}
-
-void KineticConnection_Init(KineticConnection* const con)
-{
-    KINETIC_ASSERT(con != NULL);
-    *con = (KineticConnection) {
-        .connected = false, // Just to clarify
-        .socket = -1,
-    };
-}
-
 void KineticMessage_Init(KineticMessage* const message)
 {
     KINETIC_ASSERT(message != NULL);
@@ -443,27 +417,14 @@ static void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticS
 {
     KINETIC_ASSERT(hdr != NULL);
     KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
     *hdr = (KineticProto_Command_Header) {
         .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor),
         .has_clusterVersion = true,
         .clusterVersion = session->config.clusterVersion,
         .has_connectionID = true,
-        .connectionID = session->connection->connectionID,
+        .connectionID = session->connectionID,
         .has_sequence = true,
         .sequence = KINETIC_SEQUENCE_NOT_YET_BOUND,
-    };
-}
-
-void KineticOperation_Init(KineticOperation* op, KineticSession * const session)
-{
-    KINETIC_ASSERT(op != NULL);
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-    *op = (KineticOperation) {
-        .session = session,
-        .connection = session->connection,
-        .timeoutSeconds = session->timeoutSeconds,
     };
 }
 
@@ -471,7 +432,6 @@ void KineticRequest_Init(KineticRequest* request, KineticSession const * const s
 {
     KINETIC_ASSERT(request != NULL);
     KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
     memset(request, 0, sizeof(KineticRequest));
     KineticMessage_Init(&(request->message));
     KineticMessage_HeaderInit(&(request->message.header), session);

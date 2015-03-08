@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -36,7 +36,6 @@
 #include "unity_helper.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 
 void setUp(void)
 {
@@ -50,7 +49,6 @@ void tearDown(void)
 
 void test_KineticClient_NoOp_should_execute_NOOP_operation_in_asynchronous_mode(void)
 {
-    Session.connection = &Connection;
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);

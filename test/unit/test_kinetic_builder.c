@@ -1,3 +1,22 @@
+/*
+* kinetic-c
+* Copyright (C) 2015 Seagate Technology.
+*
+* This program is free software; you can redistribute it and/or
+* modify it under the terms of the GNU General Public License
+* as published by the Free Software Foundation; either version 2
+* of the License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+*
+*/
 #include "unity_helper.h"
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
@@ -14,15 +33,14 @@
 #include "mock_kinetic_message.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 static KineticRequest Request;
 static KineticOperation Operation;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 1);
-    Session = (KineticSession) {.connection = &Connection};
-    KineticOperation_Init(&Operation, &Session);
+    Session = (KineticSession) {.connected = true};
+    Operation = (KineticOperation) {.session = &Session};
     KineticRequest_Init(&Request, &Session);
     Operation.request = &Request;
 }
@@ -845,7 +863,7 @@ void test_KineticBuilder_BuildSetACL_should_build_a_SECURITY_operation(void)
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetACL, Operation.timeoutSeconds);
 }
 
-void test_KineticBuilder_BuildFirmwareUpdate_should_build_a_FIRMWARE_DOWNLOAD_operation(void)
+void test_KineticBuilder_BuildUpdateFirmware_should_build_a_FIRMWARE_DOWNLOAD_operation(void)
 {
     const char* path = "test/support/data/dummy_fw.slod";
     const char* fwBytes = "firmware\nupdate\ncontents\n";
@@ -877,7 +895,7 @@ void test_KineticBuilder_BuildFirmwareUpdate_should_build_a_FIRMWARE_DOWNLOAD_op
     TEST_ASSERT_EQUAL_STRING(fwBytes, (char*)Operation.value.data);
 }
 
-void test_KineticBuilder_BuildFirmwareUpdate_should_return_INVALID_FILE_if_does_not_exist(void)
+void test_KineticBuilder_BuildUpdateFirmware_should_return_INVALID_FILE_if_does_not_exist(void)
 {
     const char* path = "test/support/data/none.slod";
 

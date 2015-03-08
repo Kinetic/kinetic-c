@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -33,13 +33,13 @@
 #include <pthread.h>
 
 KineticSessionConfig Config;
-KineticConnection Connection;
 KineticSession Session;
 struct bus MessageBus;
 
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
+    Session = (KineticSession) {.connected = false};
 }
 
 void tearDown(void)
@@ -47,59 +47,48 @@ void tearDown(void)
     KineticLogger_Close();
 }
 
-void test_KineticAllocator_NewConnection_should_return_null_if_calloc_returns_null(void)
+void test_KineticAllocator_NewSession_should_return_null_if_calloc_returns_null(void)
 {
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), NULL);
-    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
-    TEST_ASSERT_NULL(connection);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticSession), NULL);
+    KineticSession * session =  KineticAllocator_NewSession(&MessageBus, &Config);
+    TEST_ASSERT_NULL(session);
 }
 
-void test_KineticAllocator_NewConnection_should_return_a_connection_with_connected_flag_set_to_false(void)
+void test_KineticAllocator_NewSession_should_return_a_session_with_connected_flag_set_to_false(void)
 {
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
-    KineticResourceWaiter_Init_Expect(&Connection.connectionReady);
-    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
-    TEST_ASSERT_EQUAL_PTR(&Connection, connection);
-    TEST_ASSERT_FALSE(connection->connected);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticSession), &Session);
+    KineticResourceWaiter_Init_Expect(&Session.connectionReady);
+    KineticSession* session =  KineticAllocator_NewSession(&MessageBus, &Config);
+    TEST_ASSERT_FALSE(session->connected);
 }
 
-void test_KineticAllocator_NewConnection_should_return_a_connection_with_a_minus1_fd(void)
+void test_KineticAllocator_NewSession_should_return_a_session_with_a_minus1_fd(void)
 {
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
-    KineticResourceWaiter_Init_Expect(&Connection.connectionReady);
-    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
-    TEST_ASSERT_NOT_NULL(connection);
-    TEST_ASSERT_EQUAL(-1, connection->socket);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticSession), &Session);
+    KineticResourceWaiter_Init_Expect(&Session.connectionReady);
+    KineticSession* session =  KineticAllocator_NewSession(&MessageBus, &Config);
+    TEST_ASSERT_NOT_NULL(session);
+    TEST_ASSERT_EQUAL(-1, session->socket);
 }
 
-void test_KineticAllocator_NewConnection_should_return_a_connection_pointing_to_passed_bus(void)
+void test_KineticAllocator_NewSession_should_return_a_session_pointing_to_passed_bus(void)
 {
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
-    KineticResourceWaiter_Init_Expect(&Connection.connectionReady);
-    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
-    TEST_ASSERT_NOT_NULL(connection);
-    TEST_ASSERT_EQUAL_PTR(&MessageBus, connection->messageBus);
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticSession), &Session);
+    KineticResourceWaiter_Init_Expect(&Session.connectionReady);
+    KineticSession* session =  KineticAllocator_NewSession(&MessageBus, &Config);
+    TEST_ASSERT_NOT_NULL(session);
+    TEST_ASSERT_EQUAL_PTR(&MessageBus, session->messageBus);
 }
 
-void test_KineticAllocator_NewConnection_should_return_a_connection_pointing_to_passed_session(void)
+void test_KineticAllocator_FreeSession_should_destroy_waiter_and_free_session(void)
 {
-    KineticCalloc_ExpectAndReturn(1, sizeof(KineticConnection), &Connection);
-    KineticResourceWaiter_Init_Expect(&Connection.connectionReady);
-    KineticConnection* connection =  KineticAllocator_NewConnection(&MessageBus, &Session);
-    TEST_ASSERT_NOT_NULL(connection);
-    TEST_ASSERT_EQUAL_PTR(&Session, connection->pSession);
-}
-
-void test_KineticAllocator_FreeConnection_should_destroy_waiter_and_free_connection(void)
-{
-    KineticResourceWaiter_Destroy_Expect(&Connection.connectionReady);
-    KineticFree_Expect(&Connection);
-    KineticAllocator_FreeConnection(&Connection);
+    KineticResourceWaiter_Destroy_Expect(&Session.connectionReady);
+    KineticFree_Expect(&Session);
+    KineticAllocator_FreeSession(&Session);
 }
 
 void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_return_null(void)
 {
-    Connection.pSession = &Session;
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticResponse) + 1234, NULL);
     KineticResponse * response = KineticAllocator_NewKineticResponse(1234);
     TEST_ASSERT_NULL(response);
@@ -146,7 +135,6 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_and_command
     KineticAllocator_FreeKineticResponse(&rsp);
 }
 
-
 void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_null_for_operation(void)
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), NULL);
@@ -157,12 +145,10 @@ void test_KineticAllocator_NewOperation_should_return_null_if_calloc_returns_nul
 
 void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if_calloc_returns_null_for_request(void)
 {
-    Session.connection = &Connection;
-    Connection.pSession = &Session;
     KineticOperation op;
+    op.session = &Session;
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
-    KineticOperation_Init_Expect(&op, &Session);
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), NULL);
     KineticFree_Expect(&op);
 
@@ -173,19 +159,21 @@ void test_KineticAllocator_NewOperation_should_return_null_and_free_operation_if
 
 void test_KineticAllocator_NewOperation_should_initialize_operation_and_request(void)
 {
-    Session.connection = &Connection;
-    Connection.pSession = &Session;
-    KineticOperation op;
+    Session.timeoutSeconds = 423;
+    KineticOperation op = {.session = NULL};
     KineticRequest request;
 
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticOperation), &op);
-    KineticOperation_Init_Expect(&op, &Session);
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticRequest), &request);
 
     KineticRequest_Init_Expect(&request, &Session);
     KineticOperation * operation = KineticAllocator_NewOperation(&Session);
 
-    TEST_ASSERT_NOT_NULL(operation);
+    TEST_ASSERT_EQUAL_PTR(operation, &op);
+    TEST_ASSERT_EQUAL_PTR(&Session, operation->session);
+    TEST_ASSERT_EQUAL_PTR(&request, operation->request);
+    TEST_ASSERT_NULL(operation->response);
+    TEST_ASSERT_EQUAL(423, operation->timeoutSeconds);
 }
 
 void test_KineticAllocator_FreeOperation_should_free_request_if_it_is_not_NULL(void)

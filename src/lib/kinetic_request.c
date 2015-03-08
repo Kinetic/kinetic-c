@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -109,8 +109,8 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
     LOGF2("[PDU TX] pdu: %p, session: %p, bus: %p, "
         "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, msgType: %02x",
         (void*)operation->request,
-        (void*)operation->session, (void*)operation->connection->messageBus,
-        operation->connection->socket, (long long)request->message.header.sequence,
+        (void*)operation->session, (void*)operation->session->messageBus,
+        operation->session->socket, (long long)request->message.header.sequence,
         header.protobufLength, header.valueLength,
         (void*)operation, request->message.header.messageType);
     KineticLogger_LogHeader(3, &header);
@@ -135,7 +135,7 @@ bool KineticRequest_SendRequest(KineticOperation *operation,
     KINETIC_ASSERT(msg);
     KINETIC_ASSERT(msgSize > 0);
     bus_user_msg bus_msg = {
-        .fd       = operation->connection->socket,
+        .fd       = operation->session->socket,
         .type     = BUS_SOCKET_PLAIN,  // FIXME: no SSL?
         .seq_id   = operation->request->message.header.sequence,
         .msg      = msg,
@@ -144,15 +144,18 @@ bool KineticRequest_SendRequest(KineticOperation *operation,
         .udata    = operation,
         .timeout_sec = operation->timeoutSeconds,
     };
-    return bus_send_request(operation->connection->messageBus, &bus_msg);
+    return bus_send_request(operation->session->messageBus, &bus_msg);
 }
 
-bool KineticRequest_LockConnection(KineticConnection *connection)
+bool KineticRequest_LockConnection(KineticSession* session)
 {
-    return 0 == pthread_mutex_lock(&connection->sendMutex);
+    KINETIC_ASSERT(session);
+    return 0 == pthread_mutex_lock(&session->sendMutex);
 }
 
-bool KineticRequest_UnlockConnection(KineticConnection *connection)
+bool KineticRequest_UnlockConnection(KineticSession* session)
 {
-    return 0 == pthread_mutex_unlock(&connection->sendMutex);
+    KINETIC_ASSERT(session);
+    KINETIC_ASSERT(session);
+    return 0 == pthread_mutex_unlock(&session->sendMutex);
 }

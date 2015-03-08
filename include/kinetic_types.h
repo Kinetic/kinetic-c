@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -106,11 +106,6 @@ struct _KineticClient;
  */
 typedef struct _KineticClient KineticClient;
 
-
-/**
- * @brief Kinetic connection instance
- */
-struct _KineticConnection;
 
 /**
  * @brief Structure used to specify the configuration for a session.

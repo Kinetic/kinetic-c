@@ -93,9 +93,9 @@ void test_send_do_blocking_send_should_reject_message_if_listener_notify_fails(v
 }
 
 static void expect_handle_failure(void) {
-    backpressure = random();
+    backpressure = 54321;
     bus_process_boxed_message_ExpectAndReturn(b, box, &backpressure, true);
-    bus_backpressure_delay_Expect(b, backpressure, LISTENER_EXPECT_BACKPRESSURE_SHIFT);
+    bus_backpressure_delay_Expect(b, 54321, LISTENER_EXPECT_BACKPRESSURE_SHIFT);
 }
 
 void test_send_do_blocking_send_should_set_TX_FAILURE_if_second_timestamp_failure(void) {

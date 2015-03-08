@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -40,4 +40,9 @@ void setUp(void)
 void tearDown(void)
 {
     KineticLogger_Close();
+}
+
+void test_KineticController_needs_tests(void)
+{
+    TEST_IGNORE_MESSAGE("TODO: Add tests for KineticController");
 }

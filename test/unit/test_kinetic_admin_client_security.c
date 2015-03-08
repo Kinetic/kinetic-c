@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -43,7 +43,6 @@
 #include "unity_helper.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 
 extern struct ACL *ACLs;
 
@@ -52,7 +51,6 @@ extern struct ACL *ACLs;
 void setUp(void)
 {
     KineticLogger_Init("stdout", 2);
-    Session.connection = &Connection;
 }
 
 void tearDown(void)
@@ -62,15 +60,12 @@ void tearDown(void)
 
 void test_KineticAdminClient_SetACL_should_reject_an_invalid_ACL_path(void)
 {
-    Session.connection = &Connection;
-
     KineticStatus status = KineticAdminClient_SetACL(&Session, NULL);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_INVALID_REQUEST, status);
 }
 
 void test_KineticAdminClient_SetACL_should_set_an_ACL(void)
 {
-    Session.connection = &Connection;
     KineticOperation operation;
 
     const char *ACL_path = TEST_DIR("ex1.json");
@@ -86,8 +81,6 @@ void test_KineticAdminClient_SetACL_should_set_an_ACL(void)
 
 void test_KineticAdminClient_SetACL_should_fail_with_KINETIC_STATUS_ACL_ERROR_if_ACL_load_fails(void)
 {
-    Session.connection = &Connection;
-
     const char *ACL_path = TEST_DIR("ex1.json");
 
     KineticACL_LoadFromFile_ExpectAndReturn(ACL_path, &ACLs, ACL_ERROR_JSON_FILE);

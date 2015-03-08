@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -44,7 +44,6 @@
 
 static uint32_t ClusterVersion = 7;
 static KineticRequest Request;
-static KineticConnection Connection;
 static KineticResponse Response;
 static KineticSession Session;
 static uint8_t ValueBuffer[KINETIC_OBJ_SIZE];
@@ -56,18 +55,16 @@ static uint8_t si_buf[SI_BUF_SIZE];
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-
-    // Create and configure a new Kinetic protocol instance
-    KineticSessionConfig config = {
-        .port = 1234,
-        .host = "valid-host.com",
-        .hmacKey = ByteArray_CreateWithCString("some valid HMAC key..."),
-        .clusterVersion = ClusterVersion,
+    Session = (KineticSession) {
+        .connected = true,
+        .socket = 456,
+        .config = (KineticSessionConfig) {
+            .port = 1234,
+            .host = "valid-host.com",
+            .hmacKey = ByteArray_CreateWithCString("some valid HMAC key..."),
+            .clusterVersion = ClusterVersion,
+        }
     };
-    KineticSession_Init(&Session, &config, &Connection);
-    Connection.connected = true;
-    Connection.socket = 456;
-    Connection.pSession = &Session;
     KineticRequest_Init(&Request, &Session);
     ByteArray_FillWithDummyData(Value);
 
@@ -129,9 +126,9 @@ void test_sink_cb_should_reset_uninitialized_socket_state(void)
         .state = STATE_UNINIT,
         .accumulated = 0xFFFFFFFF,
     };
-    KineticConnection connection = { .si = si };
+    Session.si = si;
     
-    bus_sink_cb_res_t res = sink_cb(NULL, 0, &connection);
+    bus_sink_cb_res_t res = sink_cb(NULL, 0, &Session);
 
     TEST_ASSERT_EQUAL(0, si->accumulated);
     TEST_ASSERT_EQUAL(UNPACK_ERROR_UNDEFINED, si->unpack_status);
@@ -149,11 +146,11 @@ void test_sink_cb_should_expose_invalid_header_error(void)
         .state = STATE_AWAITING_HEADER,
         .accumulated = 0,
     };
-    KineticConnection connection = { .si = si };
+    Session.si = si;
     KineticPDUHeader bad_header;
     memset(&bad_header, 0xFF, sizeof(bad_header));
 
-    bus_sink_cb_res_t res = sink_cb((uint8_t *)&bad_header, sizeof(bad_header), &connection);
+    bus_sink_cb_res_t res = sink_cb((uint8_t *)&bad_header, sizeof(bad_header), &Session);
     TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
     TEST_ASSERT_EQUAL(UNPACK_ERROR_INVALID_HEADER, si->unpack_status);
     TEST_ASSERT_EQUAL(si, res.full_msg_buffer);
@@ -169,14 +166,14 @@ void test_sink_cb_should_transition_to_awaiting_body_state_with_good_header(void
         .state = STATE_AWAITING_HEADER,
         .accumulated = 0,
     };
-    KineticConnection connection = { .si = si };
+    Session.si = si;
     uint8_t read_buf[] = {
         0xa0,                       // version prefix
         0x00, 0x00, 0x00, 0x7b,     // protobuf length
         0x00, 0x00, 0x01, 0xc8,     // value length
     };
 
-    bus_sink_cb_res_t res = sink_cb(read_buf, sizeof(read_buf), &connection);
+    bus_sink_cb_res_t res = sink_cb(read_buf, sizeof(read_buf), &Session);
     TEST_ASSERT_EQUAL(123 + 456, res.next_read);
     TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
     TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
@@ -191,7 +188,7 @@ void test_sink_cb_should_accumulate_partially_recieved_header(void)
         .state = STATE_AWAITING_HEADER,
         .accumulated = 0,
     };
-    KineticConnection connection = { .si = si };
+    Session.si = si;
     uint8_t read_buf1[] = {
         0xa0,                       // version prefix
         0x00, 0x00, 0x00, 0x7b,     // protobuf length
@@ -200,11 +197,13 @@ void test_sink_cb_should_accumulate_partially_recieved_header(void)
         0x00, 0x00, 0x01, 0xc8,     // value length
     };
 
-    bus_sink_cb_res_t res = sink_cb(read_buf1, sizeof(read_buf1), &connection);
+    bus_sink_cb_res_t res = sink_cb(read_buf1, sizeof(read_buf1), &Session);
     TEST_ASSERT_EQUAL(4, res.next_read);
     TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
     TEST_ASSERT_EQUAL(5, si->accumulated);
-    res = sink_cb(read_buf2, sizeof(read_buf2), &connection);
+
+    res = sink_cb(read_buf2, sizeof(read_buf2), &Session);
+    
     TEST_ASSERT_EQUAL(123 + 456, res.next_read);
     TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
     TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
@@ -220,11 +219,11 @@ void test_sink_cb_should_accumulate_partially_received_body(void)
     si->state = STATE_AWAITING_BODY;
     si->header.protobufLength = 0x01;
     si->header.valueLength = 0x02;
-
-    KineticConnection connection = { .si = si };
+    Session.si = si;
     uint8_t buf[] = {0xaa, 0xbb};
 
-    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &connection);
+    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &Session);
+
     TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
     TEST_ASSERT_EQUAL(2, si->accumulated);
     TEST_ASSERT_EQUAL(1, res.next_read);
@@ -237,11 +236,10 @@ void test_sink_cb_should_yield_fully_received_body(void)
     si->state = STATE_AWAITING_BODY;
     si->header.protobufLength = 0x01;
     si->header.valueLength = 0x02;
-
-    KineticConnection connection = { .si = si };
+    Session.si = si;
     uint8_t buf[] = {0xaa, 0xbb, 0xcc};
 
-    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &connection);
+    bus_sink_cb_res_t res = sink_cb((uint8_t *)&buf, sizeof(buf), &Session);
     TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
     TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
     TEST_ASSERT_EQUAL(si, res.full_msg_buffer);
@@ -251,7 +249,7 @@ bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata);
 
 void test_unpack_cb_should_expose_error_codes(void)
 {
-    KineticConnection con = {.socket = 123};
+    Session.socket = 123;
     socket_info *si = (socket_info *)si_buf;
     *si = (socket_info){
         .state = STATE_AWAITING_HEADER,
@@ -267,7 +265,7 @@ void test_unpack_cb_should_expose_error_codes(void)
 
     for (size_t i = 0; i < sizeof(error_states) / sizeof(error_states[0]); i++) {
         si->unpack_status = error_states[i];
-        bus_unpack_cb_res_t res = unpack_cb((void *)si, &con);
+        bus_unpack_cb_res_t res = unpack_cb((void *)si, &Session);
         TEST_ASSERT_FALSE(res.ok);
         TEST_ASSERT_EQUAL(error_states[i], res.u.error.opaque_error_id);
     }
@@ -275,7 +273,7 @@ void test_unpack_cb_should_expose_error_codes(void)
 
 void test_unpack_cb_should_expose_alloc_failure(void)
 {
-    KineticConnection con = {.socket = 123};
+    Session.socket = 123;
     socket_info si = {
         .state = STATE_AWAITING_HEADER,
         .accumulated = 0,
@@ -286,7 +284,7 @@ void test_unpack_cb_should_expose_alloc_failure(void)
     };
     
     KineticAllocator_NewKineticResponse_ExpectAndReturn(8, NULL);
-    bus_unpack_cb_res_t res = unpack_cb((void*)&si, &con);
+    bus_unpack_cb_res_t res = unpack_cb((void*)&si, &Session);
     TEST_ASSERT_FALSE(res.ok);
     TEST_ASSERT_EQUAL(UNPACK_ERROR_PAYLOAD_MALLOC_FAIL, res.u.error.opaque_error_id);
 }
@@ -294,7 +292,7 @@ void test_unpack_cb_should_expose_alloc_failure(void)
 void test_unpack_cb_should_skip_empty_commands(void)
 {
     /* Include trailing memory for si's .buf[]. */
-    KineticConnection con = {.socket = 123};
+    Session.socket = 123;
     socket_info *si = (socket_info *)si_buf;
     si->state = STATE_AWAITING_HEADER;
     si->unpack_status = UNPACK_ERROR_SUCCESS,
@@ -317,7 +315,7 @@ void test_unpack_cb_should_skip_empty_commands(void)
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
 
-    bus_unpack_cb_res_t res = unpack_cb(si, &con);
+    bus_unpack_cb_res_t res = unpack_cb(si, &Session);
 
     TEST_ASSERT_EQUAL(0xee, response->value[0]);
 
@@ -327,7 +325,7 @@ void test_unpack_cb_should_skip_empty_commands(void)
 
 void test_unpack_cb_should_unpack_command_bytes(void)
 {
-    KineticConnection con = {.socket = 123};
+    Session.socket = 123;
     socket_info *si = (socket_info *)si_buf;
     si->state = STATE_AWAITING_HEADER;
     si->unpack_status = UNPACK_ERROR_SUCCESS,
@@ -364,7 +362,7 @@ void test_unpack_cb_should_unpack_command_bytes(void)
     KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandBytes.len,
         Proto.commandBytes.data, &Command);
 
-    bus_unpack_cb_res_t res = unpack_cb(si, &con);
+    bus_unpack_cb_res_t res = unpack_cb(si, &Session);
 
     TEST_ASSERT_EQUAL(0xee, response->value[0]);
 

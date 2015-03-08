@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -25,12 +25,6 @@
 
 KineticSession* KineticAllocator_NewSession(struct bus * b, KineticSessionConfig* config);
 void KineticAllocator_FreeSession(KineticSession* session);
-
-KineticConnection* KineticAllocator_NewConnection(struct bus * b, KineticSession* const session);
-void KineticAllocator_FreeConnection(KineticConnection* connection);
-
-KineticRequest* KineticAllocator_NewPDU(KineticConnection* connection);
-void KineticAllocator_FreePDU(KineticRequest* pdu);
 
 KineticOperation* KineticAllocator_NewOperation(KineticSession* const session);
 void KineticAllocator_FreeOperation(KineticOperation* operation);

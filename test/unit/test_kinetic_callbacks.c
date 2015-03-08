@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -32,11 +32,9 @@ void test_kinetic_callbacks_needs_testing(void)
 
 // void test_KineticBuilder_GetLogCallback_should_copy_returned_device_info_into_dynamically_allocated_info_structure(void)
 // {
-//     // KineticConnection con;
 //     // KineticRequest response;
 //     // KineticLogInfo* info;
 //     // KineticOperation op = {
-//     //     .connection = &con,
 //     //     .response = &response,
 //     //     .deviceInfo = &info,
 //     // };

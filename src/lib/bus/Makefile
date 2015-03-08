@@ -27,19 +27,13 @@ ECHOSRV_OBJS = \
 	echosrv.o \
 	util.o \
 
-all: bus.png test_yacht echosrv bus_example
-
-test: test_yacht
-	./test_yacht
+all: bus.png echosrv bus_example
 
 %.png: %.dot
 	dot -Tpng -o $@ $^
 
 libbus.a: ${BUS_OBJS}
 	ar -rcs $@ $^
-
-test_yacht: test_yacht.o yacht.o
-	${CC} -o $@ $^ ${LDFLAGS}
 
 echosrv: ${ECHOSRV_OBJS}
 	${CC} -o $@ $^ ${LDFLAGS}

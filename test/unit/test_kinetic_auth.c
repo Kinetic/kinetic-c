@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -30,14 +30,14 @@
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 
-KineticConnection Connection;
 KineticSession Session;
 KineticRequest Request;
 
 void setUp(void)
 {
-    KineticSessionConfig config = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT};
-    KineticSession_Init(&Session, &config, &Connection);
+    Session = (KineticSession) {
+        .config = (KineticSessionConfig) {.host = "anyhost", .port = KINETIC_PORT}
+    };
     KineticLogger_Init("stdout", 3);
     KineticRequest_Init(&Request, &Session);
 }
@@ -46,8 +46,6 @@ void tearDown(void)
 {
     KineticLogger_Close();
 }
-
-
 
 void test_KineticAuth_EnsureSslEnabled_should_return_SUCCESS_if_SSL_is_enabled(void)
 {

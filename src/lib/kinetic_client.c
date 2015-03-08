@@ -1,6 +1,6 @@
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -91,18 +91,17 @@ KineticStatus KineticClient_CreateSession(KineticSessionConfig* const config,
         LOG0("Failed to create session instance!");
         return KINETIC_STATUS_MEMORY_ERROR;
     }
-    KineticSession_Create(s, client);
-    if (s->connection == NULL) {
-        LOG0("Failed to create connection instance!");
+    KineticStatus status = KineticSession_Create(s, client);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        LOG0("Failed to create session instance!");
         KineticAllocator_FreeSession(s);
-        return KINETIC_STATUS_CONNECTION_ERROR;
+        return status;
     }
 
     // Establish the connection
-    KineticStatus status = KineticSession_Connect(s);
+    status = KineticSession_Connect(s);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOGF0("Failed creating connection to %s:%d", config->host, config->port);
-        s->connection = NULL;
         KineticSession_Destroy(s);
         KineticAllocator_FreeSession(s);
         return status;
@@ -120,11 +119,6 @@ KineticStatus KineticClient_DestroySession(KineticSession* const session)
         return KINETIC_STATUS_SESSION_INVALID;
     }
 
-    if (session->connection == NULL) {
-        LOG0("Connection instance is NULL!");
-        return KINETIC_STATUS_CONNECTION_ERROR;
-    }
-
     KineticStatus status = KineticSession_Disconnect(session);
     if (status != KINETIC_STATUS_SUCCESS) {LOG0("Disconnection failed!");}
     KineticSession_Destroy(session);
@@ -134,8 +128,7 @@ KineticStatus KineticClient_DestroySession(KineticSession* const session)
 
 KineticStatus KineticClient_NoOp(KineticSession* const session)
 {
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(session);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -148,17 +141,17 @@ KineticStatus KineticClient_Put(KineticSession* const session,
                                 KineticEntry* const entry,
                                 KineticCompletionClosure* closure)
 {
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-    KINETIC_ASSERT(entry != NULL);
+    KINETIC_ASSERT(session);
+    KINETIC_ASSERT(entry);
 
     // Assert non-NULL value upon non-zero length
     if (entry->value.array.len > 0) {
-        KINETIC_ASSERT(entry->value.array.data != NULL);
+        KINETIC_ASSERT(entry->value.array.data);
     }
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+    KINETIC_ASSERT(operation->session == session);
 
     // Initialize request
     KineticStatus status = KineticBuilder_BuildPut(operation, entry);
@@ -168,7 +161,6 @@ KineticStatus KineticClient_Put(KineticSession* const session,
     }
 
     // Execute the operation
-    KINETIC_ASSERT(operation->connection == session->connection);
     KineticStatus res = KineticController_ExecuteOperation(operation, closure);
     return res;
 }
@@ -176,8 +168,7 @@ KineticStatus KineticClient_Put(KineticSession* const session,
 KineticStatus KineticClient_Flush(KineticSession* const session,
                                   KineticCompletionClosure* closure)
 {
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
+    KINETIC_ASSERT(session);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
@@ -210,9 +201,8 @@ static KineticStatus handle_get_command(GET_COMMAND cmd,
                                         KineticEntry* const entry,
                                         KineticCompletionClosure* closure)
 {
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-    KINETIC_ASSERT(entry != NULL);
+    KINETIC_ASSERT(session);
+    KINETIC_ASSERT(entry);
 
     if (!has_key(entry)) {return KINETIC_STATUS_MISSING_KEY;}
     if (!has_value_buffer(entry) && !entry->metadataOnly) {
@@ -269,9 +259,8 @@ KineticStatus KineticClient_Delete(KineticSession* const session,
                                    KineticEntry* const entry,
                                    KineticCompletionClosure* closure)
 {
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-    KINETIC_ASSERT(entry != NULL);
+    KINETIC_ASSERT(session);
+    KINETIC_ASSERT(entry);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -288,11 +277,10 @@ KineticStatus KineticClient_GetKeyRange(KineticSession* const session,
                                         ByteBufferArray* keys,
                                         KineticCompletionClosure* closure)
 {
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-    KINETIC_ASSERT(range != NULL);
-    KINETIC_ASSERT(keys != NULL);
-    KINETIC_ASSERT(keys->buffers != NULL);
+    KINETIC_ASSERT(session);
+    KINETIC_ASSERT(range);
+    KINETIC_ASSERT(keys);
+    KINETIC_ASSERT(keys->buffers);
     KINETIC_ASSERT(keys->count > 0);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
@@ -309,9 +297,8 @@ KineticStatus KineticClient_P2POperation(KineticSession* const session,
                                          KineticP2P_Operation* const p2pOp,
                                          KineticCompletionClosure* closure)
 {
-    KINETIC_ASSERT(session != NULL);
-    KINETIC_ASSERT(session->connection != NULL);
-    KINETIC_ASSERT(p2pOp != NULL);
+    KINETIC_ASSERT(session);
+    KINETIC_ASSERT(p2pOp);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}

@@ -1,7 +1,7 @@
 
 /*
 * kinetic-c
-* Copyright (C) 2014 Seagate Technology.
+* Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -40,7 +40,6 @@
 #include "unity_helper.h"
 
 static KineticSession Session;
-static KineticConnection Connection;
 static const char* StartKeyData[KINETIC_DEFAULT_KEY_LEN];
 static const char* EndKeyData[KINETIC_DEFAULT_KEY_LEN];
 static ByteBuffer StartKey, EndKey;
@@ -51,8 +50,6 @@ static ByteBuffer Keys[MAX_KEYS_RETRIEVED];
 void setUp(void)
 {
     KineticLogger_Init("stdout", 3);
-
-    Session.connection = &Connection;
 
     // Configure start and end key buffers
     StartKey = ByteBuffer_Create(StartKeyData, sizeof(StartKeyData), sizeof(StartKeyData));
