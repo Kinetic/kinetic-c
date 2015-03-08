@@ -77,6 +77,7 @@ bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *re
         } else {
             if (errno == EINTR) { /* signal interrupted; retry */
                 errno = 0;
+                continue;
             } else {
                 BUS_LOG_SNPRINTF(b, 10, LOG_LISTENER, b->udata, 64,
                     "write_commit error, errno %d", errno);

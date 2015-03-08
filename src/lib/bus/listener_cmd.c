@@ -54,6 +54,7 @@ void ListenerCmd_NotifyCaller(int fd) {
         if (wres == -1) {
             if (errno == EINTR) {
                 errno = 0;
+                continue;
             } else {
                 err(1, "write");
             }

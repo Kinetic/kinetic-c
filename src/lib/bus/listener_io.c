@@ -92,6 +92,7 @@ static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_
                     "read: socket error reading, %d", errno);
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
                 errno = 0;
+                return false;
             }
         }
         
@@ -134,19 +135,21 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
                 
             case SSL_ERROR_WANT_WRITE:
                 BUS_ASSERT(b, b->udata, false);
-                
+
             case SSL_ERROR_SYSCALL:
             {
                 if (errno == 0) {
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL errno 0");
                     BUS_ASSERT(b, b->udata, false);
                 } else if (util_is_resumable_io_error(errno)) {
-                errno = 0;
+                    errno = 0;
+                    continue;
                 } else {
                     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                         "SSL_read fd %d: errno %d\n", ci->fd, errno);
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL");
                     set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
+                    return false;
                 }
                 break;
             }
@@ -155,7 +158,7 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                     "SSL_read fd %d: ZERO_RETURN (HUP)\n", ci->fd);
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_POLLHUP);
-                break;
+                return false;
             }
             
             default:
