@@ -68,9 +68,21 @@ void tearDown(void) {}
 
 void test_listener_ListenerCmd_NotifyCaller_should_write_tag_to_caller_fd(void) {
     int fd = 5;
+    ListenerTask_GetBackpressure_ExpectAndReturn(l, 0);
     syscall_write_ExpectAndReturn(fd, reply_buf, sizeof(reply_buf), 3);
-    ListenerCmd_NotifyCaller(fd);
+    ListenerCmd_NotifyCaller(l, fd);
     TEST_ASSERT_EQUAL(LISTENER_MSG_TAG, reply_buf[0]);
+    TEST_ASSERT_EQUAL(0, reply_buf[1]);
+    TEST_ASSERT_EQUAL(0, reply_buf[2]);
+}
+
+void test_listener_ListenerCmd_NotifyCaller_should_write_backpressure_to_reply_buffer(void) {
+    int fd = 5;
+    ListenerTask_GetBackpressure_ExpectAndReturn(l, 0x1234);
+    syscall_write_ExpectAndReturn(fd, reply_buf, sizeof(reply_buf), 3);
+    ListenerCmd_NotifyCaller(l, fd);
+    TEST_ASSERT_EQUAL(0x34, reply_buf[1]);
+    TEST_ASSERT_EQUAL(0x12, reply_buf[2]);
 }
 
 void test_listener_ListenerCmd_CheckIncomingMessages_should_return_on_error(void) {
@@ -88,7 +100,8 @@ bus_sink_cb_res_t test_sink_cb(uint8_t *read_buf,
     return (bus_sink_cb_res_t) { .next_read = 31, };
 }
 
-static void expect_notify_caller(int fd) {
+static void expect_notify_caller(listener *l, int fd) {
+    ListenerTask_GetBackpressure_ExpectAndReturn(l, 0);
     syscall_write_ExpectAndReturn(fd, reply_buf, sizeof(reply_buf), 3);
 }
 
@@ -111,7 +124,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_redundant_ADD
     cmd_buf[0] = 0;
     syscall_read_ExpectAndReturn(l->fds[INCOMING_MSG_PIPE_ID].fd, cmd_buf, sizeof(cmd_buf), 1);
 
-    expect_notify_caller(18);
+    expect_notify_caller(l, 18);
     int res = 1;
 
     ListenerTask_ReleaseMsg_Expect(l, msg);
@@ -158,7 +171,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_ADD_
     int res = 1;
 
     l->tracked_fds = 3;
-    expect_notify_caller(7);
+    expect_notify_caller(l, 7);
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
 
@@ -180,7 +193,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_REMO
         },
     };
     setup_command(&msg, NULL);
-    expect_notify_caller(100);
+    expect_notify_caller(l, 100);
 
     connection_info *ci = calloc(1, sizeof(*ci));
     l->tracked_fds = 2;

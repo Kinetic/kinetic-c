@@ -203,9 +203,9 @@ void test_listener_free_should_unblock_pending_callers_and_close_file_handles(vo
     /* test cleanup */
     for (int i = 0; i < MAX_QUEUE_MESSAGES; i++) {
         if (i == 4) {
-            ListenerCmd_NotifyCaller_Expect(1234);
+            ListenerCmd_NotifyCaller_Expect(nl, 1234);
         } else if (i == 7) {
-            ListenerCmd_NotifyCaller_Expect(1237);
+            ListenerCmd_NotifyCaller_Expect(nl, 1237);
         }
 
         syscall_close_ExpectAndReturn(i, 0);

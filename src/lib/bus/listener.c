@@ -212,10 +212,10 @@ void listener_free(struct listener *l) {
             listener_msg *msg = &l->msgs[i];
             switch (msg->type) {
             case MSG_ADD_SOCKET:
-                ListenerCmd_NotifyCaller(msg->u.add_socket.notify_fd);
+                ListenerCmd_NotifyCaller(l, msg->u.add_socket.notify_fd);
                 break;
             case MSG_REMOVE_SOCKET:
-                ListenerCmd_NotifyCaller(msg->u.remove_socket.notify_fd);
+                ListenerCmd_NotifyCaller(l, msg->u.remove_socket.notify_fd);
                 break;
             case MSG_EXPECT_RESPONSE:
                 if (msg->u.expect.box) { free(msg->u.expect.box); }

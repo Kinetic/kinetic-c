@@ -88,7 +88,7 @@ void *ListenerTask_MainLoop(void *arg) {
             "%d connections still open!", self->tracked_fds);
     }
 
-    ListenerCmd_NotifyCaller(self->shutdown_notify_fd);
+    ListenerCmd_NotifyCaller(self, self->shutdown_notify_fd);
     self->shutdown_notify_fd = LISTENER_SHUTDOWN_COMPLETE_FD;
     return NULL;
 }
