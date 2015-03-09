@@ -53,5 +53,5 @@ void test_Put_with_invalid_HMAC_should_cause_hangup(void)
 
     KineticStatus status = KineticClient_Put(Fixture.session, &putEntry, NULL);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINTEIC_STATUS_SESSION_TERMINATED, status);
 }
