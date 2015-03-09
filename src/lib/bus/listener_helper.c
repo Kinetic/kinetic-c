@@ -24,6 +24,10 @@
 
 #include <assert.h>
 
+#ifdef TEST
+uint8_t msg_buf[sizeof(uint8_t)];
+#endif
+
 listener_msg *listener_helper_get_free_msg(listener *l) {
     struct bus *b = l->bus;
 
@@ -65,7 +69,9 @@ bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *re
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, msg);
   
-    uint8_t msg_buf[sizeof(msg->id)];
+    #ifndef TEST
+    uint8_t msg_buf[sizeof(uint8_t)];
+    #endif
     msg_buf[0] = msg->id;
 
     if (reply_fd) { *reply_fd = msg->pipes[0]; }
@@ -114,18 +120,6 @@ rx_info_t *listener_helper_get_free_rx_info(struct listener *l) {
         BUS_ASSERT(b, b->udata, head == &l->rx_info[head->id]);
         return head;
     }
-}
-
-rx_info_t *listener_helper_get_hold_rx_info(listener *l, int fd, int64_t seq_id) {
-    for (int i = 0; i <= l->rx_info_max_used; i++) {
-        rx_info_t *info = &l->rx_info[i];
-        if (info->state == RIS_HOLD &&
-            info->u.hold.fd == fd &&
-            info->u.hold.seq_id == seq_id) {
-            return info;
-        }
-    }
-    return NULL;
 }
 
 rx_info_t *listener_helper_find_info_by_sequence_id(listener *l,
