@@ -170,7 +170,6 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
         result = the_result;
     }
     size_t next_read = pi->to_read - pi->read;
-    fprintf(stderr, "next read: %zd\n", next_read);
     bus_sink_cb_res_t res = {
         .next_read = next_read,
         .full_msg_buffer = result,
@@ -290,8 +289,6 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 }
 
 void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack_message_in_multiple_pieces(void) {
-    fprintf(stderr, "\n\ntest_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack_message_in_multiple_pieces\n");
-
     l->fds[0 + INCOMING_MSG_PIPE].fd = 5;
     l->fds[0 + INCOMING_MSG_PIPE].events = POLLIN;
     l->fds[0 + INCOMING_MSG_PIPE].revents = POLLIN;
@@ -461,9 +458,6 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 }
 
 void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack_message_in_multiple_pieces_over_SSL(void) {
-    TEST_IGNORE_MESSAGE("work in progress");
-    fprintf(stderr, "\n\ntest_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack_message_in_multiple_pieces\n");
-
     l->fds[0 + INCOMING_MSG_PIPE].fd = 5;
     l->fds[0 + INCOMING_MSG_PIPE].events = POLLIN;
     l->fds[0 + INCOMING_MSG_PIPE].revents = POLLIN;
@@ -491,7 +485,6 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     info->u.expect.box = box;
 
     syscall_SSL_read_ExpectAndReturn(ci.ssl, l->read_buf, ci.to_read_size, ci.to_read_size - 1);
-    ListenerIO_AttemptRecv(l, 1);
 
     syscall_SSL_read_ExpectAndReturn(ci.ssl, l->read_buf, 1, 1);
 
