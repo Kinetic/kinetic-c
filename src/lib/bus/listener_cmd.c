@@ -234,8 +234,8 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         (void *)box, box->fd, (long long)box->out_seq_id);
 
     /* If there's a pending HOLD message, convert it. */
-    rx_info_t *info = listener_helper_get_hold_rx_info(l, box->fd, box->out_seq_id);
-    if (info) {
+    rx_info_t *info = listener_helper_find_info_by_sequence_id(l, box->fd, box->out_seq_id);
+    if (info && info->state == RIS_HOLD) {
         BUS_ASSERT(b, b->udata, info->state == RIS_HOLD);
         if (info->u.hold.has_result) {
             bus_unpack_cb_res_t result = info->u.hold.result;

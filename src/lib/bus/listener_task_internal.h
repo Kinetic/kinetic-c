@@ -24,9 +24,13 @@
 #include "bus_internal_types.h"
 #include "listener_internal_types.h"
 
-static void tick_handler(listener *l);
-static void clean_up_completed_info(listener *l, rx_info_t *info);
-static void retry_delivery(listener *l, rx_info_t *info);
-static void observe_backpressure(listener *l, size_t backpressure);
+/* Coefficients for backpressure based on certain conditions. */
+#define MSG_BP_1QTR       (0.25)
+#define MSG_BP_HALF       (0.5)
+#define MSG_BP_3QTR       (2.0)
+#define RX_INFO_BP_1QTR   (0.5)
+#define RX_INFO_BP_HALF   (0.5)
+#define RX_INFO_BP_3QTR   (2.0)
+#define THREADPOOL_BP     (1.0)
 
 #endif

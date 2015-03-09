@@ -28,7 +28,6 @@ listener_msg *listener_helper_get_free_msg(listener *l);
 bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *reply_fd);
 
 rx_info_t *listener_helper_get_free_rx_info(listener *l);
-rx_info_t *listener_helper_get_hold_rx_info(listener *l, int fd, int64_t seq_id);
 rx_info_t *listener_helper_find_info_by_sequence_id(listener *l,
     int fd, int64_t seq_id);
 

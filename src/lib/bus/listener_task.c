@@ -27,20 +27,31 @@
 #include "listener_io.h"
 #include "atomic.h"
 
-#define TIMEOUT_DELAY 100
+#ifdef TEST
+struct timeval now;
+struct timeval cur;
+size_t backpressure = 0;
+int poll_res = 0;
+
+#define WHILE if
+#else
+#define WHILE while
+#endif
+
+static void tick_handler(listener *l);
+static void clean_up_completed_info(listener *l, rx_info_t *info);
+static void retry_delivery(listener *l, rx_info_t *info);
+static void observe_backpressure(listener *l, size_t backpressure);
 
 void *ListenerTask_MainLoop(void *arg) {
     listener *self = (listener *)arg;
     assert(self);
     struct bus *b = self->bus;
-    struct timeval tv;
-    
-    if (!util_timestamp(&tv, true)) {
-        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
-            "timestamp failure: %d", errno);
-    }
 
-    time_t last_sec = tv.tv_sec;
+    #ifndef TEST
+    struct timeval now;
+    #endif
+    time_t last_sec = (time_t)-1;  // always trigger first time
 
     /* The listener thread has full control over its execution -- the
      * only thing other threads can do is reserve messages from l->msgs,
@@ -49,23 +60,26 @@ void *ListenerTask_MainLoop(void *arg) {
      * communication is managed at the command interface, so it doesn't
      * need any internal locking. */
 
-    while (self->shutdown_notify_fd == LISTENER_NO_FD) {
-        if (!util_timestamp(&tv, true)) {
+    WHILE (self->shutdown_notify_fd == LISTENER_NO_FD) {
+        if (!util_timestamp(&now, true)) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "timestamp failure: %d", errno);
         }
-        time_t cur_sec = tv.tv_sec;
+        time_t cur_sec = now.tv_sec;
         if (cur_sec != last_sec) {
             tick_handler(self);
             last_sec = cur_sec;
         }
 
-        int delay = (self->is_idle ? -1 : TIMEOUT_DELAY);
-        int res = syscall_poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, delay);
-        BUS_LOG_SNPRINTF(b, (res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
-            "poll res %d", res);
+        int delay = (self->is_idle ? -1 : LISTENER_TASK_TIMEOUT_DELAY);
+        #ifndef TEST
+        int poll_res = 0;
+        #endif
+        poll_res = syscall_poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, delay);
+        BUS_LOG_SNPRINTF(b, (poll_res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
+            "poll res %d", poll_res);
 
-        if (res < 0) {
+        if (poll_res < 0) {
             if (util_is_resumable_io_error(errno)) {
                 errno = 0;
             } else {
@@ -73,23 +87,26 @@ void *ListenerTask_MainLoop(void *arg) {
                  * or FDS is a bad pointer. */
                 BUS_ASSERT(b, b->udata, false);
             }
-        } else if (res > 0) {
-            ListenerCmd_CheckIncomingMessages(self, &res);
-            ListenerIO_AttemptRecv(self, res);
+        } else if (poll_res > 0) {
+            ListenerCmd_CheckIncomingMessages(self, &poll_res);
+            ListenerIO_AttemptRecv(self, poll_res);
         } else {
             /* nothing to do */
         }
     }
 
-    BUS_LOG(b, 3, LOG_LISTENER, "shutting down", b->udata);
-
-    if (self->tracked_fds > 0) {
-        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
-            "%d connections still open!", self->tracked_fds);
+    /* (This will always be true, except when testing.) */
+    if (self->shutdown_notify_fd != LISTENER_NO_FD) {
+        BUS_LOG(b, 3, LOG_LISTENER, "shutting down", b->udata);
+        
+        if (self->tracked_fds > 0) {
+            BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
+                "%d connections still open!", self->tracked_fds);
+        }
+        
+        ListenerCmd_NotifyCaller(self, self->shutdown_notify_fd);
+        self->shutdown_notify_fd = LISTENER_SHUTDOWN_COMPLETE_FD;
     }
-
-    ListenerCmd_NotifyCaller(self, self->shutdown_notify_fd);
-    self->shutdown_notify_fd = LISTENER_SHUTDOWN_COMPLETE_FD;
     return NULL;
 }
 
@@ -120,8 +137,10 @@ static void tick_handler(listener *l) {
             any_work = true;
             /* Check timeout */
             if (info->timeout_sec == 1) {
-                struct timeval tv;
-                if (!util_timestamp(&tv, false)) {
+                #ifndef TEST
+                struct timeval cur;
+                #endif
+                if (!util_timestamp(&cur, false)) {
                     BUS_LOG(b, 0, LOG_LISTENER,
                         "gettimeofday failure in tick_handler!", b->udata);
                     continue;
@@ -132,7 +151,7 @@ static void tick_handler(listener *l) {
                 BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                     "timing out hold info %p -- <fd:%d, seq_id:%lld> at (%ld.%ld)",
                     (void*)info, info->u.hold.fd, (long long)info->u.hold.seq_id,
-                    (long)tv.tv_sec, (long)tv.tv_usec);
+                    (long)cur.tv_sec, (long)cur.tv_usec);
 
                 ListenerTask_ReleaseRXInfo(l, info);
             } else {
@@ -158,8 +177,10 @@ static void tick_handler(listener *l) {
                     info->u.expect.error, (void*)info);
                 ListenerTask_NotifyMessageFailure(l, info, BUS_SEND_RX_FAILURE);
             } else if (info->timeout_sec == 1) {
-                struct timeval tv;
-                if (!util_timestamp(&tv, false)) {
+                #ifndef TEST
+                struct timeval cur;
+                #endif
+                if (!util_timestamp(&cur, false)) {
                     BUS_LOG(b, 0, LOG_LISTENER,
                         "gettimeofday failure in tick_handler!", b->udata);
                     continue;
@@ -171,7 +192,8 @@ static void tick_handler(listener *l) {
                     (void*)info, box->fd, (long long)box->out_seq_id,
                     (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec, 
                     (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec, 
-                    (long)tv.tv_sec, (long)tv.tv_usec);
+                    (long)cur.tv_sec, (long)cur.tv_usec);
+                (void)box;
 
                 ListenerTask_NotifyMessageFailure(l, info, BUS_SEND_RX_TIMEOUT);
             } else {
@@ -228,7 +250,9 @@ static void retry_delivery(listener *l, rx_info_t *info) {
         "releasing box %p at line %d", (void*)box, __LINE__);
     BUS_ASSERT(b, b->udata, box->result.status == BUS_SEND_SUCCESS);
 
+    #ifndef TEST
     size_t backpressure = 0;
+    #endif
     if (bus_process_boxed_message(l->bus, box, &backpressure)) {
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
             "successfully delivered box %p (seq_id %lld) from info %d at line %d (retry)",
@@ -251,7 +275,10 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
         "info %p, box is %p at line %d", (void*)info,
         (void*)info->u.expect.box, __LINE__);
+
+    #ifndef TEST
     size_t backpressure = 0;
+    #endif
     if (info->u.expect.box) {
         struct boxed_msg *box = info->u.expect.box;
         if (box->result.status != BUS_SEND_SUCCESS) {
@@ -285,7 +312,9 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
 
 void ListenerTask_NotifyMessageFailure(listener *l,
         rx_info_t *info, bus_send_status_t status) {
+    #ifndef TEST
     size_t backpressure = 0;
+    #endif
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, info->state == RIS_EXPECT);
     BUS_ASSERT(b, b->udata, info->u.expect.box);
@@ -463,7 +492,9 @@ void ListenerTask_AttemptDelivery(listener *l, struct rx_info_t *info) {
     result->u.response.seq_id = seq_id;
     result->u.response.opaque_msg = opaque_msg;
 
+    #ifndef TEST
     size_t backpressure = 0;
+    #endif
     if (bus_process_boxed_message(b, box, &backpressure)) {
         /* success */
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
@@ -487,14 +518,6 @@ static void observe_backpressure(listener *l, size_t backpressure) {
     l->upstream_backpressure = (cur + backpressure) / 2;
 }
 
-/* Coefficients for backpressure based on certain conditions. */
-#define MSG_BP_1QTR       (0.25)
-#define MSG_BP_HALF       (0.5)
-#define MSG_BP_3QTR       (2.0)
-#define RX_INFO_BP_1QTR   (0.5)
-#define RX_INFO_BP_HALF   (0.5)
-#define RX_INFO_BP_3QTR   (2.0)
-#define THREADPOOL_BP     (1.0)
 
 uint16_t ListenerTask_GetBackpressure(struct listener *l) {
     uint16_t msg_fill_pressure = 0;

@@ -68,6 +68,9 @@ typedef struct listener_msg {
     } u;
 } listener_msg;
 
+/* How long the listener should wait for responses before blocking. */
+#define LISTENER_TASK_TIMEOUT_DELAY 100
+
 typedef enum {
     RIS_HOLD = 1,
     RIS_EXPECT = 2,
