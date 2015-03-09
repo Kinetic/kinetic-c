@@ -54,10 +54,6 @@
   :enforce_strict_ordering: true
   :plugins:
     - :ignore
-    # - :ignore_args
-    # - :array
-    # - :cexception
-    # - :callback
     - :return_thru_ptr
   :unity_helper_path: test/support/unity_helper.h
   :includes_h_post_orig_header:
@@ -84,6 +80,8 @@
       - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
       - -D"$": DEFINES_TEST_PREPROCESS
       - -DGNU_COMPILER
+      - -D_POSIX_C_SOURCE=199309L
+      - -D_C99_SOURCE=1
       - -std=c99
       - -g
       - -Wall
@@ -91,13 +89,7 @@
       - -Werror
       - -pedantic
       - -Wstrict-prototypes
-      # - -Werror=strict-prototypes
       - -Werror=implicit-function-declaration
-      # - -Wincompatible-pointer-types
-      # - -Werror=incompatible-pointer-types
-      # - -Wcast-align
-      - -D_POSIX_C_SOURCE=199309L
-      - -D_C99_SOURCE=1
       - ${1}
   :test_compiler:
     :executable: "#{ENV.fetch('CC', 'gcc')}"
@@ -106,21 +98,15 @@
       - -I"$": COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE
       - -D"$": COLLECTION_DEFINES_TEST_AND_VENDOR
       - -DGNU_COMPILER
+      - -D_POSIX_C_SOURCE=199309L
+      - -D_C99_SOURCE=1
       - -std=c99
       - -g
       - -Wall
       - -Wextra
-      #- -Werror
       - -Wno-pragmas
-      # - -pedantic
       - -Wstrict-prototypes
-      # - -Werror=strict-prototypes
       - -Werror=implicit-function-declaration
-      # - -Wincompatible-pointer-types
-      # - -Werror=incompatible-pointer-types
-      # - -Wcast-align
-      - -D_POSIX_C_SOURCE=199309L
-      - -D_C99_SOURCE=1
       - -Wno-nonnull
       - -Wno-address
       - -Wno-missing-field-initializers
@@ -142,5 +128,4 @@
     - "#{Ceedling.load_path}"
   :enabled:
     - stdout_ide_tests_report
-    - module_generator
 ...

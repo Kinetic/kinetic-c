@@ -4,15 +4,6 @@ compiler_info = `#{compiler} --version 2>&1`.strip
 
 SYSTEM_TEST_HOST = ENV.fetch('SYSTEM_TEST_HOST', "localhost")
 
-task :report_toolchain do
-  report_banner("Toolchain Configuration")
-  report "" +
-    "  compiler:\n" +
-    "    location: #{compiler_location}\n" +
-    "    info:\n" +
-    "      " + compiler_info.gsub(/\n/, "\n      ") + "\n"
-end
-
 require 'ceedling'
 Ceedling.load_project(config: './config/project.yml')
 
@@ -58,9 +49,38 @@ CLOBBER.include PROTO_OUT
 directory TEST_TEMP
 CLOBBER.include TEST_TEMP
 
-task :clobber
+task :report_toolchain do
+  report_banner("Toolchain Configuration")
+  report "" +
+    "compiler:\n" +
+    "  location: #{compiler_location}\n" +
+    "  info:\n" +
+    "    " + compiler_info.gsub(/\n/, "\n    ")
+end
 
-task :test => ['test:delta']
+task :test => ['report_toolchain', 'test:delta']
+
+namespace :tests do
+
+  desc "Run unit tests"
+  task :unit => ['report_toolchain'] do
+    report_banner "Running Unit Tests"
+    Rake::Task['test:path'].reenable
+    Rake::Task['test:path'].invoke('test/unit')
+  end
+
+  desc "Run integration tests"
+  task :integration => ['report_toolchain'] do
+    report_banner "Running Integration Tests"
+    Rake::Task['test:path'].reenable
+    Rake::Task['test:path'].invoke('test/integration')
+  end
+
+end
+
+task :test_all => ['report_toolchain', 'tests:unit', 'tests:integration']
+
+task :default => ['report_toolchain', 'test:delta']
 
 desc "Generate protocol buffers"
 task :proto => [PROTO_OUT] do
@@ -128,32 +148,3 @@ namespace :doxygen do
   end
 
 end
-
-desc "Prepend license to source files"
-task :apply_license do
-  Dir['include/**/*.h', 'src/**/*.h', 'src/**/*.c', 'test/**/*.h', 'test/**/*.c'].each do |f|
-    sh "config/apply_license.sh #{f}"
-  end
-end
-
-namespace :tests do
-
-  desc "Run unit tests"
-  task :unit do
-    report_banner "Running Unit Tests"
-    Rake::Task['test:path'].reenable
-    Rake::Task['test:path'].invoke('test/unit')
-  end
-
-  desc "Run integration tests"
-  task :integration do
-    report_banner "Running Integration Tests"
-    Rake::Task['test:path'].reenable
-    Rake::Task['test:path'].invoke('test/integration')
-  end
-
-end
-
-task :test_all => ['report_toolchain', 'tests:unit', 'tests:integration']
-
-task :default => ['test:delta']
