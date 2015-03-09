@@ -22,10 +22,11 @@
 
 KineticClient * client;
 KineticSession * session;
+const char hmacKey[] = "bad_key"; // Purposely bad hmac key to cause HMAC validation faliure on device end
 
 void setUp(void)
 {
-    SystemTestSetup(3);
+    SystemTestSetupWithIdentity(3, 1, (const uint8_t*)hmacKey, strlen(hmacKey));
 }
 
 void tearDown(void)

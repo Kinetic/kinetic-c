@@ -55,7 +55,7 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     KINETIC_ASSERT(operation->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
  
-    if (operation->session->terminationStatus != KINETIC_STATUS_SUCCESS) {
+    if (KineticSession_GetTerminationStatus(operation->session) != KINETIC_STATUS_SUCCESS) {
         return KINTEIC_STATUS_SESSION_TERMINATED;
     }
 
