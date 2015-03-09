@@ -46,3 +46,81 @@ void test_KineticController_needs_tests(void)
 {
     TEST_IGNORE_MESSAGE("TODO: Add tests for KineticController");
 }
+
+void test_KineticController_ExecuteOperation_should_carry_out_an_operation_with_closure_specified_as_asynchronous(void)
+{
+    KineticSession session = {
+        .connected = false,
+        .terminationStatus = KINETIC_STATUS_SUCCESS,
+    };
+    KineticRequest request;
+    KineticOperation operation = {
+        .session = &session,
+        .request = &request,
+    };
+    KineticCompletionClosure closure;
+
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticController_ExecuteOperation(&operation, &closure);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticController_ExecuteOperation_should_carry_out_an_operation_with_no_closure_specified_as_synchronous(void)
+{
+    KineticSession session = {
+        .connected = false,
+        .terminationStatus = KINETIC_STATUS_SUCCESS,
+    };
+    KineticRequest request;
+    KineticOperation operation = {
+        .session = &session,
+        .request = &request,
+    };
+    KineticCompletionClosure closure;
+
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_SUCCESS);
+
+    KineticStatus status = KineticController_ExecuteOperation(&operation, &closure);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+}
+
+void test_KineticController_ExecuteOperation_should_report_session_terminated_if_detected(void)
+{
+    KineticSession session = {
+        .connected = false,
+        .terminationStatus = KINETIC_STATUS_HMAC_FAILURE,
+    };
+    KineticRequest request;
+    KineticOperation operation = {
+        .session = &session,
+        .request = &request,
+    };
+    KineticCompletionClosure closure;
+
+    KineticStatus status = KineticController_ExecuteOperation(&operation, &closure);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINTEIC_STATUS_SESSION_TERMINATED, status);
+}
+
+void test_KineticController_ExecuteOperation_should_carry_out_an_operation_with_closure_supplied_and_report_failure_to_send(void)
+{
+    KineticSession session = {
+        .connected = false,
+        .terminationStatus = KINETIC_STATUS_SUCCESS,
+    };
+    KineticRequest request;
+    KineticOperation operation = {
+        .session = &session,
+        .request = &request,
+    };
+    KineticCompletionClosure closure;
+
+    KineticOperation_SendRequest_ExpectAndReturn(&operation, KINETIC_STATUS_OPERATION_INVALID);
+
+    KineticStatus status = KineticController_ExecuteOperation(&operation, &closure);
+
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_INVALID, status);
+}

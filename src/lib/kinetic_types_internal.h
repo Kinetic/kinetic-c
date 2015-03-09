@@ -94,6 +94,7 @@ typedef struct {
 struct _KineticSession {
     KineticSessionConfig config;                        ///> session configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession
     bool            connected;                          ///> state of connection
+    KineticStatus   terminationStatus;                  ///> reported status upon device termination (SUCCESS if not terminated)
     int             socket;                             ///> socket file descriptor
     int64_t         connectionID;                       ///> initialized to seconds since epoch
     int64_t         sequence;                           ///> increments for each request in a session

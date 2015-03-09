@@ -31,32 +31,7 @@
 #include <pthread.h>
 #include "bus.h"
 
-KineticOperation* KineticController_CreateOperation(KineticSession * const session)
-{
-    if (session == NULL) {
-        LOG0("Specified session is NULL");
-        return NULL;
-    }
-
-    LOGF3("--------------------------------------------------\n"
-         "Building new operation on session @ 0x%llX", session);
-
-    KineticOperation* operation = KineticAllocator_NewOperation(session);
-    if (operation == NULL || operation->request == NULL) {
-        return NULL;
-    }
-
-    return operation;
-}
-
-typedef struct {
-    pthread_mutex_t receiveCompleteMutex;
-    pthread_cond_t receiveComplete;
-    bool completed;
-    KineticStatus status;
-} DefaultCallbackData;
-
-static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
+STATIC void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
 {
     DefaultCallbackData * data = client_data;
     pthread_mutex_lock(&data->receiveCompleteMutex);
@@ -66,7 +41,7 @@ static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_da
     pthread_mutex_unlock(&data->receiveCompleteMutex);
 }
 
-static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
+STATIC KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
 {
     return (KineticCompletionClosure) {
         .callback = DefaultCallback,
@@ -79,14 +54,16 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
+ 
+    if (operation->session->terminationStatus != KINETIC_STATUS_SUCCESS) {
+        return KINTEIC_STATUS_SESSION_TERMINATED;
+    }
 
-    if (closure != NULL)
-    {
+    if (closure != NULL) {
         operation->closure = *closure;
         return KineticOperation_SendRequest(operation);
     }
-    else
-    {
+    else {
         DefaultCallbackData data;
         pthread_mutex_init(&data.receiveCompleteMutex, NULL);
         pthread_cond_init(&data.receiveComplete, NULL);
@@ -100,8 +77,9 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 
         if (status == KINETIC_STATUS_SUCCESS) {
             pthread_mutex_lock(&data.receiveCompleteMutex);
-            while(data.completed == false)
-            { pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex); }
+            while(data.completed == false) {
+                pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex);
+            }
             status = data.status;
             pthread_mutex_unlock(&data.receiveCompleteMutex);
         }
@@ -117,8 +95,7 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
 {
     KineticStatus res = KINETIC_STATUS_INVALID;
 
-    switch(status)
-    {
+    switch(status) {
         // TODO scrutinize all these mappings
         case BUS_SEND_SUCCESS:
             res = KINETIC_STATUS_SUCCESS;
@@ -217,10 +194,17 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             logTag = statusTag;
             logAtLevel = 0; 
             protoLogAtLevel = 0;
+            if (response && response->command &&
+                response->command->status &&
+                response->command->status->has_code)
+            {
+                session->terminationStatus =
+                    KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
+                KineticSession_Disconnect(session);
+            }
         }
     }
-    else
-    {
+    else {
         KineticLogger_LogTimestamp(0, "WARNING: Received unexpected response!");
         logTag = unexpectedTag;
         logAtLevel = 0;
@@ -279,8 +263,7 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
         KineticLogger_LogHeader(3, &response->header);
         KineticLogger_LogProtobuf(3, response->proto);
     }
-    else
-    {
+    else {
         // pull out bus error?
         LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
         if (res->status == BUS_SEND_RX_TIMEOUT) {

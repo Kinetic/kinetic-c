@@ -55,6 +55,8 @@ STATIC const char* KineticStatusDescriptor[] = {
     "REQUEST_REJECTED",
     "DEVICE_NAME_REQUIRED",
     "INVALID_LOG_TYPE",
+    "HMAC_FAILURE",
+    "SESSION_TERMINATED",
 };
 
 #ifdef TEST

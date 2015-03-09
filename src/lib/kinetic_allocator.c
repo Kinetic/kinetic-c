@@ -47,6 +47,7 @@ KineticSession* KineticAllocator_NewSession(struct bus * b, KineticSessionConfig
     KineticResourceWaiter_Init(&session->connectionReady);
     session->messageBus = b;
     session->socket = -1;  // start with an invalid file descriptor
+    session->terminationStatus = KINETIC_STATUS_SUCCESS;
 
     return session;
 }

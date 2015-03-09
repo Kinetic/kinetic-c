@@ -148,6 +148,14 @@ KineticStatus KineticSession_Disconnect(KineticSession * const session)
     return KINETIC_STATUS_SUCCESS;
 }
 
+KineticStatus KineticSession_GetTerminationStatus(KineticSession const * const session)
+{
+    if (session == NULL) {
+        return KINETIC_STATUS_SESSION_INVALID;
+    }
+    return session->terminationStatus;
+}
+
 #define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
 
 int64_t KineticSession_GetNextSequenceCount(KineticSession * const session)

@@ -126,6 +126,11 @@ KineticStatus KineticClient_DestroySession(KineticSession* const session)
     return status;
 }
 
+KineticStatus KineticClient_GetTerminationStatus(KineticSession * const session)
+{
+    return KineticSession_GetTerminationStatus(session);
+}
+
 KineticStatus KineticClient_NoOp(KineticSession* const session)
 {
     KINETIC_ASSERT(session);

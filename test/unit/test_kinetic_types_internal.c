@@ -94,14 +94,23 @@ void test_KineticRequest_Init_should_set_the_exchange_fields_in_the_embedded_pro
 
 void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_public_type(void)
 {
+    // These status codes have a one-to-one mapping for clarity
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS));
-
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR));
-
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH));
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_FAILURE,
+                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE));
+    // End one-to-one mappings
+
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST));
@@ -118,17 +127,6 @@ void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_pu
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE));
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND));
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE));
-
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
                                     KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR));
