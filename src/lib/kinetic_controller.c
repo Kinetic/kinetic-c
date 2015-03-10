@@ -31,24 +31,6 @@
 #include <pthread.h>
 #include "bus.h"
 
-KineticOperation* KineticController_CreateOperation(KineticSession * const session)
-{
-    if (session == NULL) {
-        LOG0("Specified session is NULL");
-        return NULL;
-    }
-
-    LOGF3("--------------------------------------------------\n"
-         "Building new operation on session @ 0x%llX", session);
-
-    KineticOperation* operation = KineticAllocator_NewOperation(session);
-    if (operation == NULL || operation->request == NULL) {
-        return NULL;
-    }
-
-    return operation;
-}
-
 typedef struct {
     pthread_mutex_t receiveCompleteMutex;
     pthread_cond_t receiveComplete;
