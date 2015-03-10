@@ -253,7 +253,7 @@ bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
 
     bus_config cfg = {
         .log_cb = log_cb,
-        .log_level = (log_level <= 1) ? 0 : log_level-2,
+        .log_level = (log_level <= 1) ? 0 : log_level,
         .sink_cb = sink_cb,
         .unpack_cb = unpack_cb,
         .unexpected_msg_cb = KineticController_HandleUnexpectedResponse,
