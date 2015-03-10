@@ -24,13 +24,6 @@
 #include "kinetic_types_internal.h"
 #include "bus.h"
 
-typedef struct {
-    pthread_mutex_t receiveCompleteMutex;
-    pthread_cond_t receiveComplete;
-    bool completed;
-    KineticStatus status;
-} DefaultCallbackData;
-
 KineticStatus KineticController_Init(KineticSession * const session);
 KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, KineticCompletionClosure* closure);
 
