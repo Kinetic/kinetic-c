@@ -47,7 +47,7 @@ KineticStatus KineticBuilder_BuildNoop(KineticOperation* const op)
     KineticOperation_ValidateOperation(op);
     op->request->message.command.header->messageType = KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP;
     op->request->message.command.header->has_messageType = true;
-    op->callback = &KineticCallbacks_Basic;
+    op->opCallback = &KineticCallbacks_Basic;
     return KINETIC_STATUS_SUCCESS;
 }
 
@@ -69,7 +69,7 @@ KineticStatus KineticBuilder_BuildPut(KineticOperation* const op,
 
     op->value.data = op->entry->value.array.data;
     op->value.len = op->entry->value.bytesUsed;
-    op->callback = &KineticCallbacks_Put;
+    op->opCallback = &KineticCallbacks_Put;
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -93,7 +93,7 @@ static void build_get_command(KineticOperation* const op,
         op->value.len = op->entry->value.bytesUsed;
     }
 
-    op->callback = cb;
+    op->opCallback = cb;
 }
 
 KineticStatus KineticBuilder_BuildGet(KineticOperation* const op,
@@ -130,7 +130,7 @@ KineticStatus KineticBuilder_BuildFlush(KineticOperation* const op)
     op->request->message.command.header->messageType =
         KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA;
     op->request->message.command.header->has_messageType = true;
-    op->callback = &KineticCallbacks_Basic;
+    op->opCallback = &KineticCallbacks_Basic;
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -152,7 +152,7 @@ KineticStatus KineticBuilder_BuildDelete(KineticOperation* const op,
         op->value.len = op->entry->value.bytesUsed;
     }
 
-    op->callback = &KineticCallbacks_Delete;
+    op->opCallback = &KineticCallbacks_Delete;
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -170,7 +170,7 @@ KineticStatus KineticBuilder_BuildGetKeyRange(KineticOperation* const op,
     KineticMessage_ConfigureKeyRange(&op->request->message, range);
 
     op->buffers = buffers;
-    op->callback = &KineticCallbacks_GetKeyRange;
+    op->opCallback = &KineticCallbacks_GetKeyRange;
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -254,7 +254,7 @@ KineticStatus KineticBuilder_BuildP2POperation(KineticOperation* const op,
     op->request->command->header->has_messageType = true;
     op->request->command->body = &op->request->message.body;
     op->p2pOp = p2pOp;
-    op->callback = &KineticCallbacks_P2POperation;
+    op->opCallback = &KineticCallbacks_P2POperation;
 
     op->request->command->body->p2pOperation = build_p2pOp(0, p2pOp);
     
@@ -299,7 +299,7 @@ KineticStatus KineticBuilder_BuildGetLog(KineticOperation* const op,
     }
 
     op->deviceInfo = info;
-    op->callback = &KineticCallbacks_GetLog;
+    op->opCallback = &KineticCallbacks_GetLog;
 
     return KINETIC_STATUS_SUCCESS;
 }
@@ -330,7 +330,7 @@ KineticStatus KineticBuilder_BuildSetPin(KineticOperation* const op, ByteArray o
         op->request->message.security.has_newErasePIN = true;
     }
     
-    op->callback = &KineticCallbacks_Basic;
+    op->opCallback = &KineticCallbacks_Basic;
     op->request->pinAuth = false;
     op->timeoutSeconds = KineticOperation_TimeoutSetPin;
 
@@ -351,7 +351,7 @@ KineticStatus KineticBuilder_BuildErase(KineticOperation* const op, bool secure_
         KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP;
     op->request->command->body->pinOp->has_pinOpType = true;
     
-    op->callback = &KineticCallbacks_Basic;
+    op->opCallback = &KineticCallbacks_Basic;
     op->request->pinAuth = true;
     op->timeoutSeconds = KineticOperation_TimeoutErase;
 
@@ -373,7 +373,7 @@ KineticStatus KineticBuilder_BuildLockUnlock(KineticOperation* const op, bool lo
         KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP;
     op->request->command->body->pinOp->has_pinOpType = true;
     
-    op->callback = &KineticCallbacks_Basic;
+    op->opCallback = &KineticCallbacks_Basic;
     op->request->pinAuth = true;
     op->timeoutSeconds = KineticOperation_TimeoutLockUnlock;
 
@@ -392,7 +392,7 @@ KineticStatus KineticBuilder_BuildSetClusterVersion(KineticOperation* op, int64_
     op->request->command->body->setup->newClusterVersion = new_cluster_version;
     op->request->command->body->setup->has_newClusterVersion = true;
 
-    op->callback = &KineticCallbacks_SetClusterVersion;
+    op->opCallback = &KineticCallbacks_SetClusterVersion;
     op->pendingClusterVersion = new_cluster_version;
 
     return KINETIC_STATUS_SUCCESS;
@@ -411,7 +411,7 @@ KineticStatus KineticBuilder_BuildSetACL(KineticOperation* const op,
     op->request->command->body->security->n_acl = ACLs->ACL_count;
     op->request->command->body->security->acl = ACLs->ACLs;
 
-    op->callback = &KineticCallbacks_SetACL;
+    op->opCallback = &KineticCallbacks_SetACL;
     op->timeoutSeconds = KineticOperation_TimeoutSetACL;
 
     return KINETIC_STATUS_SUCCESS;
@@ -480,7 +480,7 @@ KineticStatus KineticBuilder_BuildUpdateFirmware(KineticOperation* const op, con
     op->request->command->body->setup->firmwareDownload = true;
     op->request->command->body->setup->has_firmwareDownload = true;
 
-    op->callback = &KineticCallbacks_UpdateFirmware;
+    op->opCallback = &KineticCallbacks_UpdateFirmware;
 
     return KINETIC_STATUS_SUCCESS;
 

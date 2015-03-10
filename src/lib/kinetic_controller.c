@@ -255,8 +255,8 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
     }
 
     // Call operation-specific callback, if configured
-    if (op->callback != NULL) {
-        status = op->callback(op, status);
+    if (op->opCallback != NULL) {
+        status = op->opCallback(op, status);
     }
 
     KineticOperation_Complete(op, status);

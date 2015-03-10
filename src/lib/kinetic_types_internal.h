@@ -186,7 +186,7 @@ struct _KineticOperation {
     ByteBufferArray* buffers;
     KineticLogInfo** deviceInfo;
     KineticP2P_Operation* p2pOp;
-    KineticOperationCallback callback;
+    KineticOperationCallback opCallback;
     KineticCompletionClosure closure;
     ByteArray value;
 };
