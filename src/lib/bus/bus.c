@@ -440,6 +440,7 @@ bool bus_release_socket(struct bus *b, int fd, void **socket_udata_out) {
         return false;           /* couldn't send msg to listener */
     }
 
+    assert(completion_pipe != -1);
     bool completed = bus_poll_on_completion(b, completion_pipe);
     if (!completed) {           /* listener hung up while waiting */
         return false;

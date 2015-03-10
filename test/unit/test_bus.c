@@ -408,6 +408,7 @@ void test_bus_release_socket_should_expose_poll_IO_error(void)
     fake_listener.bus = &b;
 
     int fd = 3;
+    completion_pipe = 123;
     listener_remove_socket_ExpectAndReturn(&fake_listener, fd, &completion_pipe, true);
     bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, false);
 
@@ -429,6 +430,7 @@ void test_bus_release_socket_should_expose_hash_table_error(void)
     fake_listener.bus = &b;
 
     int fd = 3;
+    completion_pipe = 155;
     listener_remove_socket_ExpectAndReturn(&fake_listener, fd, &completion_pipe, true);
     bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, true);
 
@@ -454,6 +456,7 @@ void test_bus_release_socket_should_expose_SSL_disconnection_failure(void)
     fake_listener.bus = &b;
 
     int fd = 3;
+    completion_pipe = 155;
     listener_remove_socket_ExpectAndReturn(&fake_listener, fd, &completion_pipe, true);
     bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, true);
 
@@ -486,6 +489,7 @@ void test_bus_release_socket_should_return_true_on_successful_socket_disconnecti
     fake_listener.bus = &b;
 
     int fd = 3;
+    completion_pipe = 155;
     listener_remove_socket_ExpectAndReturn(&fake_listener, fd, &completion_pipe, true);
     bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, true);
 
@@ -517,6 +521,7 @@ void test_bus_release_socket_should_return_true_on_successful_SSL_socket_disconn
     fake_listener.bus = &b;
 
     int fd = 3;
+    completion_pipe = 155;
     listener_remove_socket_ExpectAndReturn(&fake_listener2, fd, &completion_pipe, true);
     bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, true);
 
@@ -592,6 +597,7 @@ void test_bus_shutdown_should_expose_poll_IO_error(void)
     b.fd_set = &fake_yacht;
     yacht_free_Expect(b.fd_set, free_connection_cb, &b);
 
+    completion_pipe = 155;
     listener_shutdown_ExpectAndReturn(b.listeners[0], &completion_pipe, true);
     bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, false);
 
@@ -621,6 +627,7 @@ void test_bus_shutdown_should_expose_pthread_join_failure(void)
     b.fd_set = &fake_yacht;
     yacht_free_Expect(b.fd_set, free_connection_cb, &b);
 
+    completion_pipe = 155;
     listener_shutdown_ExpectAndReturn(b.listeners[0], &completion_pipe, true);
     bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, true);
     syscall_pthread_join_ExpectAndReturn(b.threads[0], &unused, -1);
@@ -651,6 +658,7 @@ void test_bus_shutdown_should_shut_down_internal_resources(void)
     b.fd_set = &fake_yacht;
     yacht_free_Expect(b.fd_set, free_connection_cb, &b);
 
+    completion_pipe = 155;
     for (int i = 0; i < 2; i++) {
         listener_shutdown_ExpectAndReturn(b.listeners[i], &completion_pipe, true);
         bus_poll_on_completion_ExpectAndReturn(&b, completion_pipe, true);
@@ -684,6 +692,7 @@ void test_bus_free_should_call_shutdown_if_not_shut_down(void)
     b->fd_set = &fake_yacht;
     yacht_free_Expect(b->fd_set, free_connection_cb, b);
 
+    completion_pipe = 155;
     for (int i = 0; i < 2; i++) {
         listener_shutdown_ExpectAndReturn(b->listeners[i], &completion_pipe, true);
         bus_poll_on_completion_ExpectAndReturn(b, completion_pipe, true);

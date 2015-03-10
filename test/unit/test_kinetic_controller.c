@@ -97,7 +97,7 @@ void test_KineticController_ExecuteOperation_should_report_session_terminated_if
     KineticSession_GetTerminationStatus_ExpectAndReturn(&session, KINETIC_STATUS_HMAC_FAILURE);
     KineticStatus status = KineticController_ExecuteOperation(&operation, &closure);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINTEIC_STATUS_SESSION_TERMINATED, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_TERMINATED, status);
 }
 
 void test_KineticController_ExecuteOperation_should_carry_out_an_operation_with_closure_supplied_and_report_failure_to_send(void)

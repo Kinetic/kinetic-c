@@ -19,6 +19,7 @@
 */
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
+#include "kinetic_admin_client.h"
 
 KineticClient * client;
 KineticSession * session;
@@ -31,7 +32,10 @@ void setUp(void)
 
 void tearDown(void)
 {
-    SystemTestShutDown();
+    /* Don't shut down here, since we're testing sessions being terminated. */
+    if (SystemTestIsUnderSimulator()) {
+        SystemTestShutDown();
+    }
 }
 
 void test_Put_with_invalid_HMAC_should_cause_hangup(void)
@@ -53,5 +57,12 @@ void test_Put_with_invalid_HMAC_should_cause_hangup(void)
 
     KineticStatus status = KineticClient_Put(Fixture.session, &putEntry, NULL);
 
-    TEST_ASSERT_EQUAL_KineticStatus(KINTEIC_STATUS_SESSION_TERMINATED, status);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_TERMINATED, status);
+    status = KineticClient_DestroySession(Fixture.session);
+    if (status != KINETIC_STATUS_CONNECTION_ERROR) {
+        TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying client!");
+    }
+    status = KineticAdminClient_DestroySession(Fixture.adminSession);
+    TEST_ASSERT_EQUAL_MESSAGE(KINETIC_STATUS_SUCCESS, status, "Error when destroying admin client!");
+    KineticClient_Shutdown(Fixture.client);
 }

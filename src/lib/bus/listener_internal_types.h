@@ -91,6 +91,7 @@ typedef struct rx_info_t {
             int64_t seq_id;
             bool has_result;
             bus_unpack_cb_res_t result;
+            rx_error_t error;
         } hold;
         struct {
             boxed_msg *box;

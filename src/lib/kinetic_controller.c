@@ -54,9 +54,10 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
+    KineticSession *session = operation->session;
  
     if (KineticSession_GetTerminationStatus(operation->session) != KINETIC_STATUS_SUCCESS) {
-        return KINTEIC_STATUS_SESSION_TERMINATED;
+        return KINETIC_STATUS_SESSION_TERMINATED;
     }
 
     if (closure != NULL) {
@@ -86,6 +87,15 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 
         pthread_cond_destroy(&data.receiveComplete);
         pthread_mutex_destroy(&data.receiveCompleteMutex);
+
+        if (status != KINETIC_STATUS_SUCCESS) {
+            if (KineticSession_GetTerminationStatus(session) != KINETIC_STATUS_SUCCESS) {
+                (void)KineticSession_Disconnect(session);
+                if (status == KINETIC_STATUS_SOCKET_ERROR) {
+                    status = KINETIC_STATUS_SESSION_TERMINATED;
+                }
+            }
+        }
 
         return status;
     }
@@ -194,7 +204,6 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             protoLogAtLevel = 0;
             KineticStatus status = KineticResponse_GetStatus(response);
             KineticSession_SetTerminationStatus(session, status);
-            KineticSession_Disconnect(session);
         }
     }
     else {

@@ -85,7 +85,7 @@ bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *re
                 errno = 0;
                 continue;
             } else {
-                BUS_LOG_SNPRINTF(b, 10, LOG_LISTENER, b->udata, 64,
+                BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                     "write_commit error, errno %d", errno);
                 errno = 0;
                 ListenerTask_ReleaseMsg(l, msg);

@@ -112,11 +112,13 @@ void test_ListenerIO_AttemptRecv_should_handle_hangups(void) {
     l->tracked_fds = 2;
     l->rx_info_max_used = 2;
 
-    ListenerTask_ReleaseRXInfo_Expect(l, info2);
     ListenerIO_AttemptRecv(l, 1);
     
     // should no longer attempt to read socket; timeout will close it
     TEST_ASSERT_EQUAL(0, l->fds[1 + INCOMING_MSG_PIPE].events);
+
+    /* HOLD message should be marked with error */
+    TEST_ASSERT_EQUAL(RX_ERROR_POLLHUP, info2->u.hold.error);
 }
 
 void test_ListenerIO_AttemptRecv_should_handle_socket_errors(void) {
@@ -149,11 +151,11 @@ void test_ListenerIO_AttemptRecv_should_handle_socket_errors(void) {
     l->tracked_fds = 2;
     l->rx_info_max_used = 2;
 
-    ListenerTask_ReleaseRXInfo_Expect(l, info2);
     ListenerIO_AttemptRecv(l, 1);
     
     // should no longer attempt to read socket; timeout will close it
     TEST_ASSERT_EQUAL(0, l->fds[1 + INCOMING_MSG_PIPE].events);
+    TEST_ASSERT_EQUAL(RX_ERROR_POLLERR, info2->u.hold.error);
 }
 
 static uint8_t the_result[1];
@@ -314,8 +316,6 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     info->u.expect.box = box;
 
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, ci.to_read_size - 1);
-    ListenerIO_AttemptRecv(l, 1);
-
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, 1, 1);
 
     rx_info_t unpack_res_info = {

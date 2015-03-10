@@ -193,7 +193,7 @@ typedef enum {
     KINETIC_STATUS_DEVICE_NAME_REQUIRED,    ///< A device name is required, but was empty
     KINETIC_STATUS_INVALID_LOG_TYPE,        ///< The device log type specified was invalid
     KINETIC_STATUS_HMAC_FAILURE,            ///< An HMAC validation error was detected
-    KINTEIC_STATUS_SESSION_TERMINATED,      ///< The session has been terminated by the Kinetic device
+    KINETIC_STATUS_SESSION_TERMINATED,      ///< The session has been terminated by the Kinetic device
     KINETIC_STATUS_COUNT                    ///< Number of status codes in KineticStatusDescriptor
 } KineticStatus;
 
