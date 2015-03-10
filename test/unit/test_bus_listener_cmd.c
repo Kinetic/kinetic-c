@@ -351,8 +351,6 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_EXPE
         .u.expect.box = box,
     };
 
-    void *opaque_result = (void *)((uintptr_t)-25);
-
     rx_info_t hold_info = {
         .state = RIS_HOLD,
         .timeout_sec = 9,
