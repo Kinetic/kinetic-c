@@ -56,11 +56,11 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const op)
 {
     KineticOperation_ValidateOperation(op);
     
-    if (!KineticRequest_LockConnection(op->session)) {
+    if (!KineticRequest_LockSend(op->session)) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
     KineticStatus status = send_request_in_lock(op);
-    KineticRequest_UnlockConnection(op->session);
+    KineticRequest_UnlockSend(op->session);
     return status;
 }
 

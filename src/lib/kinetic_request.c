@@ -147,13 +147,13 @@ bool KineticRequest_SendRequest(KineticOperation *operation,
     return bus_send_request(operation->session->messageBus, &bus_msg);
 }
 
-bool KineticRequest_LockConnection(KineticSession* session)
+bool KineticRequest_LockSend(KineticSession* session)
 {
     KINETIC_ASSERT(session);
     return 0 == pthread_mutex_lock(&session->sendMutex);
 }
 
-bool KineticRequest_UnlockConnection(KineticSession* session)
+bool KineticRequest_UnlockSend(KineticSession* session)
 {
     KINETIC_ASSERT(session);
     KINETIC_ASSERT(session);

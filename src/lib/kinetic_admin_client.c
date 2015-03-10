@@ -270,8 +270,6 @@ KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
     KineticBuilder_BuildSetACL(operation, ACLs);
     KineticStatus status = KineticController_ExecuteOperation(operation, NULL);
 
-    // FIXME: confirm ACLs are freed
-
     return status;
 }
 

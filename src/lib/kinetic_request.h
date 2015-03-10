@@ -49,7 +49,7 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
 bool KineticRequest_SendRequest(KineticOperation *operation,
     uint8_t *msg, size_t msgSize);
 
-bool KineticRequest_LockConnection(KineticSession* session);
-bool KineticRequest_UnlockConnection(KineticSession* session);
+bool KineticRequest_LockSend(KineticSession* session);
+bool KineticRequest_UnlockSend(KineticSession* session);
 
 #endif

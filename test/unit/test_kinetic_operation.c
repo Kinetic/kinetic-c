@@ -64,7 +64,7 @@ void tearDown(void)
 
 void test_KineticOperation_SendRequest_should_error_out_on_lock_failure(void)
 {
-    KineticRequest_LockConnection_ExpectAndReturn(Operation.session, false);
+    KineticRequest_LockSend_ExpectAndReturn(Operation.session, false);
     KineticStatus status = KineticOperation_SendRequest(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_CONNECTION_ERROR, status);
 }
@@ -72,12 +72,12 @@ void test_KineticOperation_SendRequest_should_error_out_on_lock_failure(void)
 
 void test_KineticOperation_SendRequest_should_return_MEMORY_ERROR_on_command_pack_failure(void)
 {
-    KineticRequest_LockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_LockSend_ExpectAndReturn(Operation.session, true);
     KineticSession *session = Operation.session;
     KineticSession_GetNextSequenceCount_ExpectAndReturn(session, 12345);
 
     KineticRequest_PackCommand_ExpectAndReturn(Operation.request, KINETIC_REQUEST_PACK_FAILURE);
-    KineticRequest_UnlockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_UnlockSend_ExpectAndReturn(Operation.session, true);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_MEMORY_ERROR, status);
@@ -85,14 +85,14 @@ void test_KineticOperation_SendRequest_should_return_MEMORY_ERROR_on_command_pac
 
 void test_KineticOperation_SendRequest_should_return_error_status_on_authentication_failure(void)
 {
-    KineticRequest_LockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_LockSend_ExpectAndReturn(Operation.session, true);
     KineticSession *session = Operation.session;
     KineticSession_GetNextSequenceCount_ExpectAndReturn(session, 12345);
 
     KineticRequest_PackCommand_ExpectAndReturn(Operation.request, 100);
     KineticRequest_PopulateAuthentication_ExpectAndReturn(&session->config,
         Operation.request, NULL, KINETIC_STATUS_HMAC_REQUIRED);
-    KineticRequest_UnlockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_UnlockSend_ExpectAndReturn(Operation.session, true);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_HMAC_REQUIRED, status);
@@ -100,7 +100,7 @@ void test_KineticOperation_SendRequest_should_return_error_status_on_authenticat
 
 void test_KineticOperation_SendRequest_should_return_error_status_on_PackMessage_failure(void)
 {
-    KineticRequest_LockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_LockSend_ExpectAndReturn(Operation.session, true);
     KineticSession *session = Operation.session;
     KineticSession_GetNextSequenceCount_ExpectAndReturn(session, 12345);
 
@@ -110,7 +110,7 @@ void test_KineticOperation_SendRequest_should_return_error_status_on_PackMessage
 
     KineticRequest_PackMessage_ExpectAndReturn(&Operation, &msg, &msgSize,
         KINETIC_STATUS_MEMORY_ERROR);
-    KineticRequest_UnlockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_UnlockSend_ExpectAndReturn(Operation.session, true);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_MEMORY_ERROR, status);
@@ -118,7 +118,7 @@ void test_KineticOperation_SendRequest_should_return_error_status_on_PackMessage
 
 void test_KineticOperation_SendRequest_should_return_REQUEST_REJECTED_if_SendRequest_fails(void)
 {
-    KineticRequest_LockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_LockSend_ExpectAndReturn(Operation.session, true);
     KineticSession *session = Operation.session;
     KineticSession_GetNextSequenceCount_ExpectAndReturn(session, 12345);
 
@@ -132,7 +132,7 @@ void test_KineticOperation_SendRequest_should_return_REQUEST_REJECTED_if_SendReq
 
     KineticRequest_SendRequest_ExpectAndReturn(&Operation, msg, msgSize, false);
     KineticCountingSemaphore_Give_Expect(Operation.session->outstandingOperations);
-    KineticRequest_UnlockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_UnlockSend_ExpectAndReturn(Operation.session, true);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_REQUEST_REJECTED, status);
@@ -140,7 +140,7 @@ void test_KineticOperation_SendRequest_should_return_REQUEST_REJECTED_if_SendReq
 
 void test_KineticOperation_SendRequest_should_acquire_and_increment_sequence_count_and_send_PDU_to_bus(void)
 {
-    KineticRequest_LockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_LockSend_ExpectAndReturn(Operation.session, true);
     KineticSession *session = Operation.session;
     KineticSession_GetNextSequenceCount_ExpectAndReturn(session, 12345);
 
@@ -153,7 +153,7 @@ void test_KineticOperation_SendRequest_should_acquire_and_increment_sequence_cou
     KineticCountingSemaphore_Take_Expect(Operation.session->outstandingOperations);
 
     KineticRequest_SendRequest_ExpectAndReturn(&Operation, msg, msgSize, true);
-    KineticRequest_UnlockConnection_ExpectAndReturn(Operation.session, true);
+    KineticRequest_UnlockSend_ExpectAndReturn(Operation.session, true);
 
     KineticStatus status = KineticOperation_SendRequest(&Operation);
     TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, status);
