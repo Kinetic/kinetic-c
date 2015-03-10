@@ -45,13 +45,13 @@ struct boxed_msg;
 #define BUS_LOG(B, LEVEL, EVENT_KEY, MSG, UDATA)                       \
     do {                                                               \
         struct bus *_b = (B);                                          \
-        int level = LEVEL;                                             \
-        log_event_t event_key = EVENT_KEY;                             \
-        char *msg = MSG;                                               \
-        void *udata = UDATA;                                           \
-        if (_b->log_level >= level && _b->log_cb != NULL) {            \
+        int _level = LEVEL;                                            \
+        log_event_t _event_key = EVENT_KEY;                            \
+        char *_msg = MSG;                                              \
+        void *_udata = UDATA;                                          \
+        if (_b->log_level >= _level && _b->log_cb != NULL) {           \
             bus_lock_log(_b);                                          \
-            _b->log_cb(event_key, level, msg, udata);                  \
+            _b->log_cb(_event_key, _level, _msg, _udata);              \
             bus_unlock_log(_b);                                        \
         }                                                              \
     } while (0)
@@ -61,23 +61,23 @@ struct boxed_msg;
 #define BUS_LOG_SNPRINTF(B, LEVEL, EVENT_KEY, UDATA, MAX_SZ, FMT, ...) \
     do {                                                               \
         struct bus *_b = (B);                                          \
-        int level = LEVEL;                                             \
-        log_event_t event_key = EVENT_KEY;                             \
-        void *udata = UDATA;                                           \
-        if (_b->log_level >= level && _b->log_cb != NULL) {            \
+        int _level = LEVEL;                                            \
+        log_event_t _event_key = EVENT_KEY;                            \
+        void *_udata = UDATA;                                          \
+        if (_b->log_level >= _level && _b->log_cb != NULL) {           \
             bus_lock_log(_b);                                          \
-            char log_buf[MAX_SZ];                                      \
-            if (MAX_SZ < snprintf(log_buf, MAX_SZ,                     \
+            char _log_buf[MAX_SZ];                                     \
+            if (MAX_SZ < snprintf(_log_buf, MAX_SZ,                    \
                     FMT, __VA_ARGS__)) {                               \
-                _b->log_cb(event_key, level,                           \
+                _b->log_cb(_event_key, _level,                         \
                     "snprintf failure -- "                             \
                     __FILE__,                                          \
-                    udata);                                            \
-                char line_buf[32];                                     \
-                snprintf(line_buf, 32, "line %d\n", __LINE__);         \
-                _b->log_cb(event_key, level, line_buf, udata);         \
+                    _udata);                                           \
+                char _line_buf[32];                                    \
+                snprintf(_line_buf, 32, "line %d\n", __LINE__);        \
+                _b->log_cb(_event_key, _level, _line_buf, _udata);     \
             } else {                                                   \
-                _b->log_cb(event_key, level, log_buf, udata);          \
+                _b->log_cb(_event_key, _level, _log_buf, _udata);      \
             }                                                          \
             bus_unlock_log(_b);                                        \
         }                                                              \
