@@ -20,7 +20,8 @@ header_contents << "#define KINETIC_C_PROTOCOL_VERSION \"#{protocol_version}\"\n
 header_contents << "#define KINETIC_C_REPO_HASH \"#{commit_hash}\"\n"
 header_contents << "#endif"
 
-current_contents = File.readlines(info_header_file)
+current_contents = []
+current_contents = File.readlines(info_header_file) if File.exist?(info_header_file)
 
 if (current_contents != header_contents)
   File.open(info_header_file, "w+") do |f|
