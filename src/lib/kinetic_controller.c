@@ -241,7 +241,7 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
     if (status == KINETIC_STATUS_SUCCESS) {
         KineticResponse * response = res->u.response.opaque_msg;
 
-        KineticStatus status = KineticResponse_GetStatus(response);
+        status = KineticResponse_GetStatus(response);
 
         LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
             "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
@@ -258,9 +258,7 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
         if (op->response == NULL) {
             op->response = response;
         }
-    }
-    else {
-        // pull out bus error?
+    } else {
         LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
         if (res->status == BUS_SEND_RX_TIMEOUT) {
             KineticLogger_LogTimestamp(0, "RX_TIMEOUT");
