@@ -38,6 +38,7 @@ PROJECT = kinetic-c-client
 PREFIX ?= /usr/local
 LIBDIR ?= /lib
 LIB_DIR = ./src/lib
+VERSION_INFO = $(LIB_DIR)/kinetic_version_info.h
 VENDOR = ./vendor
 PROTOBUFC = $(VENDOR)/protobuf-c
 SOCKET99 = $(VENDOR)/socket99
@@ -101,7 +102,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/util.o \
 	$(OUT_DIR)/yacht.o \
 
-KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
+KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE) $(VERSION_INFO)
 
 
 default: makedirs $(KINETIC_LIB)
@@ -121,6 +122,9 @@ clean: makedirs
 	cd ${LIB_DIR}/threadpool && make clean
 	cd ${LIB_DIR}/bus && make clean
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make clean; fi;
+
+$(VERSION_INFO): $(VERSION_FILE)
+	@ruby scripts/generate_version_info.rb
 
 config: makedirs update_git_submodules
 
@@ -255,7 +259,7 @@ ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
 KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
 KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
 
-$(KINETIC_LIB): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS) $(JSONC_LIB)
+$(KINETIC_LIB): $(KINETIC_LIB_OTHER_DEPS) $(LIB_OBJS) $(JSONC_LIB)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Building static library: $(KINETIC_LIB)

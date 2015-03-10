@@ -228,7 +228,6 @@ void test_KineticClient_CreateSession_should_return_status_from_a_failed_connect
     KineticAllocator_NewSession_ExpectAndReturn(&MessageBus, &config, &Session);
     KineticSession_Create_ExpectAndReturn(&Session, &client, KINETIC_STATUS_SUCCESS);
     KineticSession_Connect_ExpectAndReturn(&Session, KINETIC_STATUS_HMAC_REQUIRED);
-    KineticSession_Destroy_ExpectAndReturn(&Session, KINETIC_STATUS_SUCCESS);
     KineticAllocator_FreeSession_Expect(&Session);
 
     KineticStatus status = KineticClient_CreateSession(&config, &client, &session);

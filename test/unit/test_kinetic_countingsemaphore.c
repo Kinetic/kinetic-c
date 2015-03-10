@@ -47,7 +47,14 @@ void test_kinetic_countingsemaphore_should_be_thread_safe(void)
 {
     KineticCountingSemaphore* sem = KineticCountingSemaphore_Create(3);
 
-    // Do stuff.....
+    KineticCountingSemaphore_Take(sem);
+    KineticCountingSemaphore_Take(sem);
+    KineticCountingSemaphore_Take(sem);
+    KineticCountingSemaphore_Give(sem);
+    KineticCountingSemaphore_Give(sem);
+    KineticCountingSemaphore_Take(sem);
+    KineticCountingSemaphore_Give(sem);
+    KineticCountingSemaphore_Give(sem);
 
     KineticCountingSemaphore_Destroy(sem);
 }

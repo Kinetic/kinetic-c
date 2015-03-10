@@ -102,7 +102,6 @@ KineticStatus KineticClient_CreateSession(KineticSessionConfig* const config,
     status = KineticSession_Connect(s);
     if (status != KINETIC_STATUS_SUCCESS) {
         LOGF0("Failed creating connection to %s:%d", config->host, config->port);
-        KineticSession_Destroy(s);
         KineticAllocator_FreeSession(s);
         return status;
     }

@@ -37,6 +37,7 @@ tmp/
 RemoteSystemsTempFiles/
 
 # Other local files to ignore
+src/lib/kinetic_version_info.h
 .tags*
 *.sublime-workspace
 .DS_Store
