@@ -197,7 +197,7 @@ typedef enum {
 typedef enum {
     BUS_SEND_UNDEFINED = 0,
     BUS_SEND_REQUEST_COMPLETE = 1,
-    BUS_SEND_SUCCESS = 2,
+    BUS_SEND_SUCCESS = 3,
     BUS_SEND_TX_TIMEOUT = -51,
     BUS_SEND_TX_FAILURE = -52,  // -> socket error
     BUS_SEND_RX_TIMEOUT = -53,

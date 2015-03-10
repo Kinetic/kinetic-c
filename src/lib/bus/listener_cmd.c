@@ -250,6 +250,9 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             info->u.expect.box = box;
             info->u.expect.has_result = true;
             info->u.expect.result = result;
+            BUS_ASSERT(b, b->udata,
+                box->result.status != BUS_SEND_UNDEFINED);
+
             ListenerTask_AttemptDelivery(l, info);
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 256,

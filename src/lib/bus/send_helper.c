@@ -219,6 +219,10 @@ static bool enqueue_EXPECT_message_to_listener(bus *b, boxed_msg *box) {
         "telling listener to expect sent response, with box %p, seq_id %lld",
         (void *)box, (long long)box->out_seq_id);
     
+    if (box->result.status == BUS_SEND_UNDEFINED) {
+        box->result.status = BUS_SEND_REQUEST_COMPLETE;
+    }
+
     struct listener *l = bus_get_listener_for_socket(b, box->fd);
 
     for (int retries = 0; retries < SEND_NOTIFY_LISTENER_RETRIES; retries++) {
