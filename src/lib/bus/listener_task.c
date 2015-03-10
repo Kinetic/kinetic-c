@@ -324,6 +324,7 @@ void ListenerTask_NotifyMessageFailure(listener *l,
     BUS_ASSERT(b, b->udata, info->state == RIS_EXPECT);
     BUS_ASSERT(b, b->udata, info->u.expect.box);
     
+    BUS_ASSERT(b, b->udata, status != BUS_SEND_UNDEFINED);
     info->u.expect.box->result.status = status;
     
     boxed_msg *box = info->u.expect.box;

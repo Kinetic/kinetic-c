@@ -161,7 +161,6 @@ void test_send_do_blocking_send_should_return_true_and_SUCCESS_status_if_write_c
     send_helper_handle_write_ExpectAndReturn(b, box, SHHW_DONE);
 
     TEST_ASSERT_TRUE(send_do_blocking_send(b, box));
-    TEST_ASSERT_EQUAL(BUS_SEND_REQUEST_COMPLETE, box->result.status);
 }
 
 void test_send_do_blocking_send_should_return_true_and_status_set_by_callee_if_write_fails(void) {

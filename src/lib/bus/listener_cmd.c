@@ -257,6 +257,9 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             info->u.expect.box = box;
             info->u.expect.has_result = true;
             info->u.expect.result = result;
+            BUS_ASSERT(b, b->udata,
+                box->result.status != BUS_SEND_UNDEFINED);
+
             ListenerTask_AttemptDelivery(l, info);
         } else if (info->u.hold.error != RX_ERROR_NONE) {
             rx_error_t error = info->u.hold.error;

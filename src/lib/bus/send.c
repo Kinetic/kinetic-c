@@ -45,7 +45,7 @@ int poll_errno = 0;
 int write_errno = 0;
 #endif
 
-static bool attempt_to_enqueue_hold_message_to_listener(struct bus *b,
+static bool attempt_to_enqueue_HOLD_message_to_listener(struct bus *b,
     int fd, int64_t seq_id, int16_t timeout_sec);
 /* Do a blocking send.
  *
@@ -96,7 +96,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
      * EXPECT hasn't, leading to ambiguity about what to do with
      * the response (which may or may not have arrived).
      * */
-    if (!attempt_to_enqueue_hold_message_to_listener(b,
+    if (!attempt_to_enqueue_HOLD_message_to_listener(b,
             box->fd, box->out_seq_id, box->timeout_sec + 5)) {
         return false;
     }
@@ -159,9 +159,6 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
                 case SHHW_OK:
                     continue;
                 case SHHW_DONE:
-                    box->result = (bus_msg_result_t){
-                        .status = BUS_SEND_REQUEST_COMPLETE,
-                    };
                     return true;
                 case SHHW_ERROR:
                     return true;
@@ -182,7 +179,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
     return true;
 }
 
-static bool attempt_to_enqueue_hold_message_to_listener(struct bus *b,
+static bool attempt_to_enqueue_HOLD_message_to_listener(struct bus *b,
     int fd, int64_t seq_id, int16_t timeout_sec) {
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
       "telling listener to expect response, with <fd%d, seq_id:%lld>",
@@ -207,6 +204,7 @@ void send_handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
         "send_handle_failure: box %p, <fd:%d, seq_id:%lld>, status %d",
         (void*)box, box->fd, (long long)box->out_seq_id, status);
+    BUS_ASSERT(b, b->udata, status != BUS_SEND_UNDEFINED);
 
     box->result = (bus_msg_result_t){
         .status = status,

@@ -59,6 +59,7 @@ static boxed_msg Box = {
     .fd = 1,
     .out_seq_id = 12345,
     .timeout_sec = 11,
+    .result.status = BUS_SEND_REQUEST_COMPLETE,
 };
 
 struct test_progress_info {
