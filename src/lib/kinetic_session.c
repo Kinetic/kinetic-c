@@ -110,7 +110,7 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
         goto connection_error_cleanup;
     }
     LOGF1("Received connection ID %lld for session %p",
-        (long long)session->connectionID, (void*)session);
+        (long long)KineticSession_GetConnectionID(session), (void*)session);
 
     return KINETIC_STATUS_SUCCESS;
 
@@ -156,23 +156,41 @@ KineticStatus KineticSession_GetTerminationStatus(KineticSession const * const s
     return session->terminationStatus;
 }
 
+void KineticSession_SetTerminationStatus(KineticSession * const session, KineticStatus status)
+{
+    KINETIC_ASSERT(session);
+    session->terminationStatus = status;
+}
+
 #define ATOMIC_FETCH_AND_INCREMENT(P) __sync_fetch_and_add(P, 1)
 
 int64_t KineticSession_GetNextSequenceCount(KineticSession * const session)
 {
-    assert(session);
+    KINETIC_ASSERT(session);
     int64_t seq_cnt = ATOMIC_FETCH_AND_INCREMENT(&session->sequence);
     return seq_cnt;
 }
 
 int64_t KineticSession_GetClusterVersion(KineticSession const * const session)
 {
-    assert(session);
+    KINETIC_ASSERT(session);
     return session->config.clusterVersion;
 }
 
 void KineticSession_SetClusterVersion(KineticSession * const session, int64_t cluster_version)
 {
-    assert(session);
+    KINETIC_ASSERT(session);
     session->config.clusterVersion = cluster_version;
+}
+
+int64_t KineticSession_GetConnectionID(KineticSession const * const session)
+{
+    KINETIC_ASSERT(session);
+    return session->connectionID;
+}
+
+void KineticSession_SetConnectionID(KineticSession * const session, int64_t id)
+{
+    KINETIC_ASSERT(session);
+    session->connectionID = id;
 }

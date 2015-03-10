@@ -72,8 +72,8 @@ STATIC bool unpack_header(uint8_t const * const read_buf, size_t const read_size
     uint8_t versionPrefix = buf_header->versionPrefix;
 
     if (protobufLength <= PDU_PROTO_MAX_LEN &&
-        valueLength <= PDU_PROTO_MAX_LEN) {
-
+        valueLength <= PDU_PROTO_MAX_LEN)
+    {
         *header = (KineticPDUHeader){
             .versionPrefix = versionPrefix,
             .protobufLength = protobufLength,
@@ -226,7 +226,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         {
             if (response->proto->has_authType &&
                 response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS
-                && session->connectionID == 0)
+                && KineticSession_GetConnectionID(session) == 0)
             {
                 /* Ignore the unsolicited status message on connect. */
                 seq_id = BUS_NO_SEQ_ID;

@@ -25,15 +25,15 @@
 
 KineticStatus KineticAuth_EnsureSslEnabled(KineticSessionConfig const * const config)
 {
-    assert(config);
+    KINETIC_ASSERT(config);
     if (!config->useSsl) {return KINETIC_STATUS_SSL_REQUIRED;}
     return KINETIC_STATUS_SUCCESS;
 }
 
 KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config, KineticRequest * const pdu)
 {
-    assert(config);
-    assert(pdu);
+    KINETIC_ASSERT(config);
+    KINETIC_ASSERT(pdu);
 
     LOG3("Adding HMAC auth info");
 
@@ -51,8 +51,8 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
 
     // Configure HMAC support
     ByteArray const * const hmacKey = &config->hmacKey;
-    assert(hmacKey->len <= KINETIC_HMAC_MAX_LEN);  // NOCOMMIT
-    assert(hmacKey->data != NULL);
+    KINETIC_ASSERT(hmacKey->len <= KINETIC_HMAC_MAX_LEN);  // NOCOMMIT
+    KINETIC_ASSERT(hmacKey->data != NULL);
 
     msg->hmacAuth = &pdu->message.hmacAuth;
 
@@ -75,8 +75,8 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
 
 KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config, KineticRequest * const pdu, ByteArray pin)
 {
-    assert(config);
-    assert(pdu);
+    KINETIC_ASSERT(config);
+    KINETIC_ASSERT(pdu);
 
     LOG3("Adding PIN auth info");
 
@@ -93,8 +93,8 @@ KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config,
     msg->command.header = &msg->header;
     
     // Configure PIN support
-    assert(pin.len <= KINETIC_PIN_MAX_LEN);
-    if (pin.len > 0) { assert(pin.data != NULL); }
+    KINETIC_ASSERT(pin.len <= KINETIC_PIN_MAX_LEN);
+    if (pin.len > 0) { KINETIC_ASSERT(pin.data != NULL); }
     msg->message.pinAuth->pin = (ProtobufCBinaryData) {
         .data = pin.data,
         .len = pin.len,

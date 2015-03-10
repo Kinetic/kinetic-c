@@ -23,8 +23,11 @@
 
 #include "kinetic_types_internal.h"
 
-KineticStatus KineticResponse_GetStatus(KineticResponse* pdu);
-KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse* pdu);
-KineticProto_Command_Range* KineticResponse_GetKeyRange(KineticResponse* pdu);
+uint32_t KineticResponse_GetProtobufLength(KineticResponse * response);
+uint32_t KineticResponse_GetValueLength(KineticResponse * response);
+KineticStatus KineticResponse_GetStatus(KineticResponse * response);
+int64_t KineticResponse_GetConnectionID(KineticResponse * response);
+KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse * response);
+KineticProto_Command_Range* KineticResponse_GetKeyRange(KineticResponse * response);
 
 #endif // _KINETIC_RESPONSE_H

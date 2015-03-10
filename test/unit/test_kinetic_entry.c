@@ -20,9 +20,19 @@
 
 #include "unity.h"
 #include "unity_helper.h"
-#include "kinetic_types.h"
-#include "kinetic_entry.h"
 #include "byte_array.h"
+#include "kinetic_types.h"
+#include "kinetic_types_internal.h"
+#include "kinetic_controller.h"
+#include "kinetic_logger.h"
+#include "kinetic_proto.h"
+#include "mock_kinetic_allocator.h"
+#include "mock_kinetic_operation.h"
+#include "mock_kinetic_resourcewaiter.h"
+#include "mock_kinetic_response.h"
+#include "mock_kinetic_session.h"
+#include "protobuf-c.h"
+#include "kinetic_entry.h"
 #include <string.h>
 #include <stdlib.h>
 

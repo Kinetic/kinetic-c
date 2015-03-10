@@ -176,14 +176,12 @@ void KineticController_HandleUnexpectedResponse(void *msg,
 
     // Handle unsolicited status PDUs
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
-        if (response->command != NULL &&
-            response->command->header != NULL &&
-            response->command->header->has_connectionID)
+        int64_t connectionID = KineticResponse_GetConnectionID(response);
+        if (connectionID != 0)
         {
-            // Extract connectionID from unsolicited status message
-            session->connectionID = response->command->header->connectionID;
-            LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
-                session->connectionID);
+            // Store connectionID from unsolicited status message in the session for future requests
+            KineticSession_SetConnectionID(session, connectionID);
+            LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)", connectionID);
             connetionInfoReceived = true;
             logTag = statusTag;
             logAtLevel = 2;
@@ -194,14 +192,9 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             logTag = statusTag;
             logAtLevel = 0; 
             protoLogAtLevel = 0;
-            if (response && response->command &&
-                response->command->status &&
-                response->command->status->has_code)
-            {
-                session->terminationStatus =
-                    KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
-                KineticSession_Disconnect(session);
-            }
+            KineticStatus status = KineticResponse_GetStatus(response);
+            KineticSession_SetTerminationStatus(session, status);
+            KineticSession_Disconnect(session);
         }
     }
     else {
@@ -217,7 +210,8 @@ void KineticController_HandleUnexpectedResponse(void *msg,
         (void*)response, (void*)session,
         (void*)session->messageBus,
         session->socket, (long long)seq_id,
-        response->header.protobufLength, response->header.valueLength);
+        KineticResponse_GetProtobufLength(response),
+        KineticResponse_GetValueLength(response));
     KineticLogger_LogProtobuf(protoLogAtLevel, response->proto);
 
     KineticAllocator_FreeKineticResponse(response);
@@ -237,27 +231,16 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
 
     if (status == KINETIC_STATUS_SUCCESS) {
         KineticResponse * response = res->u.response.opaque_msg;
-        KINETIC_ASSERT(response);
-        KINETIC_ASSERT(response->command);
-        KINETIC_ASSERT(response->command->header);
 
-        if (response->command != NULL &&
-            response->command->status != NULL &&
-            response->command->status->has_code)
-        {
-            status = KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
-            op->response = response;
-        }
-        else {
-            status = KINETIC_STATUS_INVALID;
-        }
+        KineticStatus status = KineticResponse_GetStatus(response);
 
         LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
             "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
             (void*)response,
             (void*)op->session, (void*)op->session->messageBus,
             op->session->socket, response->command->header->ackSequence,
-            response->header.protobufLength, response->header.valueLength,
+            KineticResponse_GetProtobufLength(response),
+            KineticResponse_GetValueLength(response),
             (void*)op,
             Kinetic_GetStatusDescription(status));
         KineticLogger_LogHeader(3, &response->header);

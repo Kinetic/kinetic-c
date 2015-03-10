@@ -32,7 +32,19 @@
 
 #include <time.h>
 
-KineticStatus KineticResponse_GetStatus(KineticResponse* response)
+uint32_t KineticResponse_GetProtobufLength(KineticResponse * response)
+{
+    KINETIC_ASSERT(response);
+    return response->header.protobufLength;
+}
+
+uint32_t KineticResponse_GetValueLength(KineticResponse * response)
+{
+    KINETIC_ASSERT(response);
+    return response->header.valueLength;
+}
+
+KineticStatus KineticResponse_GetStatus(KineticResponse * response)
 {
     KineticStatus status = KINETIC_STATUS_INVALID;
 
@@ -48,7 +60,22 @@ KineticStatus KineticResponse_GetStatus(KineticResponse* response)
     return status;
 }
 
-KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse* response)
+int64_t KineticResponse_GetConnectionID(KineticResponse * response)
+{
+    int64_t id = 0;
+    KINETIC_ASSERT(response);
+    KINETIC_ASSERT(response->proto);
+    if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS &&
+        response->command != NULL &&
+        response->command->header != NULL &&
+        response->command->header->has_connectionID)
+    {
+        id = response->command->header->connectionID;
+    }
+    return id;
+}
+
+KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse * response)
 {
     KineticProto_Command_KeyValue* keyValue = NULL;
 
@@ -61,7 +88,7 @@ KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse* resp
     return keyValue;
 }
 
-KineticProto_Command_Range* KineticResponse_GetKeyRange(KineticResponse* response)
+KineticProto_Command_Range* KineticResponse_GetKeyRange(KineticResponse * response)
 {
     KineticProto_Command_Range* range = NULL;
     if (response != NULL &&
