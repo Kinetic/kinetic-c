@@ -50,8 +50,13 @@ void ListenerCmd_NotifyCaller(listener *l, int fd) {
     uint16_t backpressure = ListenerTask_GetBackpressure(l);
     reply_buf[1] = (uint8_t)(backpressure & 0xff);
     reply_buf[2] = (uint8_t)((backpressure >> 8) & 0xff);
+    struct bus *b = l->bus;
 
     for (;;) {
+        BUS_LOG_SNPRINTF(b, 6, LOG_LISTENER, b->udata, 128,
+            "NotifyCaller on %d with backpressure %u",
+            fd, backpressure);;
+        
         ssize_t wres = syscall_write(fd, reply_buf, sizeof(reply_buf));
         if (wres == sizeof(reply_buf)) { break; }
         if (wres == -1) {
@@ -70,6 +75,8 @@ void ListenerCmd_CheckIncomingMessages(listener *l, int *res) {
     short events = l->fds[INCOMING_MSG_PIPE_ID].revents;
 
     if (events & (POLLERR | POLLHUP | POLLNVAL)) {  /* hangup/error */
+        BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
+            "hangup on listener incoming command pipe: %d", events);
         return;
     }
 
@@ -105,7 +112,7 @@ void ListenerCmd_CheckIncomingMessages(listener *l, int *res) {
 static void msg_handler(listener *l, listener_msg *pmsg) {
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 128,
-        "Handling message -- %p", (void*)pmsg);
+        "Handling message -- %p, type %d", (void*)pmsg, pmsg->type);
 
     l->is_idle = false;
 
@@ -237,7 +244,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
     rx_info_t *info = listener_helper_find_info_by_sequence_id(l, box->fd, box->out_seq_id);
     if (info && info->state == RIS_HOLD) {
         BUS_ASSERT(b, b->udata, info->state == RIS_HOLD);
-        if (info->u.hold.has_result) {
+        if (info->u.hold.error == RX_ERROR_NONE && info->u.hold.has_result) {
             bus_unpack_cb_res_t result = info->u.hold.result;
 
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 256,
@@ -254,6 +261,14 @@ static void expect_response(listener *l, struct boxed_msg *box) {
                 box->result.status != BUS_SEND_UNDEFINED);
 
             ListenerTask_AttemptDelivery(l, info);
+        } else if (info->u.hold.error != RX_ERROR_NONE) {
+            rx_error_t error = info->u.hold.error;
+            bus_unpack_cb_res_t result = info->u.hold.result;
+            info->state = RIS_EXPECT;
+            info->u.expect.error = error;
+            info->u.expect.result = result;
+            info->u.expect.box = box;
+            ListenerTask_NotifyMessageFailure(l, info, BUS_SEND_RX_FAILURE);
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 256,
                 "converting HOLD to EXPECT info %d (%p), attempting delivery <box:%p, fd:%d, seq_id:%lld>",
@@ -266,13 +281,16 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             /* Switch over to client's transferred timeout */
             info->timeout_sec = box->timeout_sec;
         }
-    } else {                    /* use free info */
+    } else if (info && info->state == RIS_EXPECT) {                    /* use free info */
         /* If we get here, the listener thinks the HOLD message timed out,
          * but the client doesn't think things timed out badly enough to
          * itself expose an error. We also don't know if we're going to
          * get a response or not. */
 
-        // FIXME: should we just assert false for this case now?
+        /* FIXME: should we just assert(false) for this case now?
+         * This should never happen, there is a large extra timeout added to
+         * the HOLD messages to avoid a window where HOLDs could time out
+         * just before EXPECTs arrive. */
 
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
             "get_hold_rx_info FAILED: fd %d, seq_id %lld",

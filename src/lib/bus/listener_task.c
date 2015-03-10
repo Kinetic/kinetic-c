@@ -75,6 +75,7 @@ void *ListenerTask_MainLoop(void *arg) {
         #ifndef TEST
         int poll_res = 0;
         #endif
+
         poll_res = syscall_poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, delay);
         BUS_LOG_SNPRINTF(b, (poll_res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
             "poll res %d", poll_res);
@@ -89,7 +90,9 @@ void *ListenerTask_MainLoop(void *arg) {
             }
         } else if (poll_res > 0) {
             ListenerCmd_CheckIncomingMessages(self, &poll_res);
-            ListenerIO_AttemptRecv(self, poll_res);
+            if (poll_res > 0) {
+                ListenerIO_AttemptRecv(self, poll_res);
+            }
         } else {
             /* nothing to do */
         }
@@ -107,6 +110,8 @@ void *ListenerTask_MainLoop(void *arg) {
         ListenerCmd_NotifyCaller(self, self->shutdown_notify_fd);
         self->shutdown_notify_fd = LISTENER_SHUTDOWN_COMPLETE_FD;
     }
+
+    BUS_LOG(b, 3, LOG_LISTENER, "shutting down...", b->udata);
     return NULL;
 }
 
@@ -354,12 +359,14 @@ void ListenerTask_ReleaseRXInfo(struct listener *l, rx_info_t *info) {
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, info);
     BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
-        "releasing RX info %d (%p)", info->id, (void *)info);
+        "releasing RX info %d (%p), state %d", info->id, (void *)info, info->state);
     BUS_ASSERT(b, b->udata, info->id < MAX_PENDING_MESSAGES);
     BUS_ASSERT(b, b->udata, info == &l->rx_info[info->id]);
 
     switch (info->state) {
     case RIS_HOLD:
+        BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
+            " -- releasing HOLD: has result? %d", info->u.hold.has_result);
         if (info->u.hold.has_result) {
             /* If we have a message that timed out, we need to free it,
              * but don't know how. We should never get here, because it

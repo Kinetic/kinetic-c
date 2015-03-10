@@ -18,7 +18,6 @@
 *
 */
 #include "listener_io.h"
-#include "listener_io_internal.h"
 #include "listener_helper.h"
 
 #include <unistd.h>
@@ -27,6 +26,19 @@
 #include "listener_task.h"
 #include "syscall.h"
 #include "util.h"
+
+static ssize_t socket_read_plain(struct bus *b,
+    listener *l, int pfd_i, connection_info *ci);
+static ssize_t socket_read_ssl(struct bus *b,
+    listener *l, int pfd_i, connection_info *ci);
+static bool sink_socket_read(struct bus *b,
+    listener *l, connection_info *ci, ssize_t size);
+static void print_SSL_error(struct bus *b,
+    connection_info *ci, int lvl, const char *prefix);
+static void set_error_for_socket(listener *l, int id,
+    int fd, rx_error_t err);
+static void process_unpacked_message(listener *l,
+    connection_info *ci, bus_unpack_cb_res_t result);
 
 void ListenerIO_AttemptRecv(listener *l, int available) {
     /*   --> failure --> set 'closed' error on socket, don't die */
@@ -44,23 +56,34 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
          * (POLLHUP | POLLERR | POLLNVAL), so if we get a status message
          * with a reason for a hangup we can still pass it along. */
 
-        if (fd->revents & POLLIN) {
-            BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                "reading %zd bytes from socket (buf is %zd)",
-                ci->to_read_size, l->read_buf_size);
-            BUS_ASSERT(b, b->udata, l->read_buf_size >= ci->to_read_size);
-            read_from++;
+        BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
+            "poll: l->fds[%d]->revents: 0x%04x",  // NOCOMMIT
+            i + INCOMING_MSG_PIPE, fd->revents);
 
-            switch (ci->type) {
-            case BUS_SOCKET_PLAIN:
-                socket_read_plain(b, l, i, ci);
-                break;
-            case BUS_SOCKET_SSL:
-                socket_read_ssl(b, l, i, ci);
-                break;
-            default:
-                BUS_ASSERT(b, b->udata, false);
-            }
+        if (fd->revents & POLLIN) {
+            // Try to read what we can (possibly before hangup)
+            ssize_t cur_read = 0;
+            size_t to_read = ci->to_read_size;
+            do {
+                BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
+                    "reading %zd bytes from socket (buf is %zd)",
+                    ci->to_read_size, l->read_buf_size);
+                BUS_ASSERT(b, b->udata, l->read_buf_size >= to_read);
+                
+                switch (ci->type) {
+                case BUS_SOCKET_PLAIN:
+                    cur_read = socket_read_plain(b, l, i, ci);
+                    break;
+                case BUS_SOCKET_SSL:
+                    cur_read = socket_read_ssl(b, l, i, ci);
+                    break;
+                default:
+                    BUS_ASSERT(b, b->udata, false);
+                }
+                // -1: socket error
+                // 0: no more to read
+            } while (cur_read > 0 && ci->to_read_size > 0);
+            read_from++;
         }
 
         if (fd->revents & (POLLERR | POLLNVAL)) {
@@ -77,11 +100,17 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
     }
 }
     
-static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
-    for (;;) {
+static ssize_t socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
+    ssize_t accum = 0;
+    while (ci->to_read_size > 0) {
         ssize_t size = syscall_read(ci->fd, l->read_buf, ci->to_read_size);
         if (size == -1) {
-            if (util_is_resumable_io_error(errno)) {
+            BUS_LOG_SNPRINTF(b, 6, LOG_LISTENER, b->udata, 64,
+                "read: size %zd, errno %d", size, errno);
+            if (errno == EAGAIN) {
+                errno = 0;
+                return accum;
+            } else if (util_is_resumable_io_error(errno)) {
                 errno = 0;
                 continue;
             } else {
@@ -89,18 +118,20 @@ static bool socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_
                     "read: socket error reading, %d", errno);
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
                 errno = 0;
-                return false;
+                return -1;
             }
         }
         
         if (size > 0) {
             BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 64,
                 "read: %zd", size);
-            return sink_socket_read(b, l, ci, size);
+            sink_socket_read(b, l, ci, size);
+            accum += size;
         } else {
-            return false;
+            return accum;
         }
     }
+    return accum;
 }
 
 static void print_SSL_error(struct bus *b, connection_info *ci, int lvl, const char *prefix) {
@@ -116,8 +147,9 @@ static void print_SSL_error(struct bus *b, connection_info *ci, int lvl, const c
     (void)prefix;
 }
 
-static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
+static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
     BUS_ASSERT(b, b->udata, ci->ssl);
+    ssize_t accum = 0;
     while (ci->to_read_size > 0) {
         // ssize_t pending = SSL_pending(ci->ssl);
         ssize_t size = (ssize_t)syscall_SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
@@ -128,7 +160,7 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
             case SSL_ERROR_WANT_READ:
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                     "SSL_read fd %d: WANT_READ\n", ci->fd);
-                return true;
+                return accum;
                 
             case SSL_ERROR_WANT_WRITE:
                 BUS_ASSERT(b, b->udata, false);
@@ -146,7 +178,7 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
                         "SSL_read fd %d: errno %d\n", ci->fd, errno);
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL");
                     set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
-                    return false;
+                    return -1;
                 }
                 break;
             }
@@ -155,7 +187,7 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                     "SSL_read fd %d: ZERO_RETURN (HUP)\n", ci->fd);
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_POLLHUP);
-                return false;
+                return -1;
             }
             
             default:
@@ -165,10 +197,11 @@ static bool socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection_in
             }
         } else if (size > 0) {
             sink_socket_read(b, l, ci, size);
-            if ((size_t)size == ci->to_read_size) { break; }
+            accum += size;
+            if ((size_t)accum == ci->to_read_size) { break; }
         }
     }
-    return true;
+    return accum;
 }
 
 #define DUMP_READ 0
@@ -228,9 +261,11 @@ static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
         case RIS_INACTIVE:
             break;
         case RIS_HOLD:
-            if (info->u.hold.fd == fd) {
-                ListenerTask_ReleaseRXInfo(l, info);
-            }
+            /* We should set an error on the info, but let the timeout
+             * or a pending EXPECT message handle the error. That way,
+             * it can be handled via the status callback whenever
+             * possible. */
+            info->u.hold.error = err;
             break;
         case RIS_EXPECT:
         {
@@ -264,7 +299,6 @@ static void process_unpacked_message(listener *l,
         rx_info_t *info = listener_helper_find_info_by_sequence_id(l, ci->fd, seq_id);
 
         if (info) {
-
             switch (info->state) {
             case RIS_HOLD:
                 /* Just save result, to match up later. */

@@ -45,7 +45,11 @@ bool bus_poll_on_completion(struct bus *b, int fd) {
         #ifdef TEST
         errno = poll_errno;
         #endif
+        BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
+            "poll_on_completion, polling %d", fd);
         int res = syscall_poll(fds, 1, -1);
+        BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
+            "poll_on_completion for %d, res %d (errno %d)", fd, res, errno);
         if (res == -1) {
             if (util_is_resumable_io_error(errno)) {
                 BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,

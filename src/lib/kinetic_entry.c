@@ -19,28 +19,11 @@
 */
 
 #include "kinetic_entry.h"
-
-// KineticEntry - byte arrays need to be preallocated by the client
-// typedef struct _KineticEntry {
-//     ByteBuffer key;
-//     ByteBuffer value;
-
-//     // Metadata
-//     ByteBuffer dbVersion;
-//     ByteBuffer tag;
-//     KineticAlgorithm algorithm;
-
-//     // Operation-specific attributes
-//     // (TODO: remove from struct, and specify a attributes to PUT/GET operations)
-//     ByteBuffer newVersion;
-//     bool metadataOnly;
-//     bool force;
-//     KineticSynchronization synchronization;
-// } KineticEntry;
+#include "kinetic_logger.h"
 
 void KineticEntry_Init(KineticEntry* entry)
 {
-    assert(entry != NULL);
+    KINETIC_ASSERT(entry != NULL);
     *entry = (KineticEntry) {
         .key = BYTE_BUFFER_NONE,
         .value = BYTE_BUFFER_NONE
@@ -49,36 +32,36 @@ void KineticEntry_Init(KineticEntry* entry)
 
 ByteBuffer* KineticEntry_GetVersion(KineticEntry* entry)
 {
-    assert(entry != NULL);
+    KINETIC_ASSERT(entry != NULL);
     return &entry->dbVersion;
 }
 
 void KineticEntry_SetVersion(KineticEntry* entry, ByteBuffer version)
 {
-    assert(entry != NULL);
+    KINETIC_ASSERT(entry != NULL);
     entry->dbVersion = version;
 }
 
 ByteBuffer* KineticEntry_GetTag(KineticEntry* entry)
 {
-    assert(entry != NULL);
+    KINETIC_ASSERT(entry != NULL);
     return &entry->tag;
 }
 
 void KineticEntry_SetTag(KineticEntry* entry, ByteBuffer tag)
 {
-    assert(entry != NULL);
+    KINETIC_ASSERT(entry != NULL);
     entry->tag = tag;
 }
 
 KineticAlgorithm KineticEntry_GetAlgorithm(KineticEntry* entry)
 {
-    assert(entry != NULL);
+    KINETIC_ASSERT(entry != NULL);
     return entry->algorithm;
 }
 
 void KineticEntry_SetAlgorithm(KineticEntry* entry, KineticAlgorithm algorithm)
 {
-    assert(entry != NULL);
+    KINETIC_ASSERT(entry != NULL);
     entry->algorithm = algorithm;
 }

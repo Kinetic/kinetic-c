@@ -251,3 +251,10 @@ void test_KineticClient_DestroySession_should_return_status_from_KineticSession_
     KineticStatus status = KineticClient_DestroySession(&Session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SESSION_INVALID, status);
 }
+
+void test_KineticClient_GetTerminationStatus_should_delegate_to_session(void)
+{
+    KineticSession_GetTerminationStatus_ExpectAndReturn(&Session, KINETIC_STATUS_DATA_ERROR);
+    KineticStatus status = KineticClient_GetTerminationStatus(&Session);
+    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR, status);
+}

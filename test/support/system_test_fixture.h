@@ -73,6 +73,4 @@ char* GetSystemTestHost2(void);
 int GetSystemTestPort2(void);
 int GetSystemTestTlsPort2(void);
 
-#define SYSTEM_TEST_SUITE_TEARDOWN void test_Suite_TearDown(void) {SystemTestShutDown();}
-
 #endif // _SYSTEM_TEST_FIXTURE

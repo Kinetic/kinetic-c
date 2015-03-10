@@ -300,6 +300,49 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_EXPE
     TEST_ASSERT_EQUAL(12345, hold_info.u.expect.result.u.success.seq_id);
 }
 
+void test_listener_ListenerCmd_CheckIncomingMessages_should_immediately_fail_incoming_EXPECT_command_when_corresponding_HOLD_has_an_error(void) {
+    listener_msg msg = {
+        .id = 1,
+        .type = MSG_EXPECT_RESPONSE,
+        .pipes = {9, 10},
+        .u.expect.box = box,
+    };
+
+    void *opaque_result = (void *)((uintptr_t)-25);
+
+    bus_unpack_cb_res_t hold_result = {
+        .ok = true,
+        .u.success = {
+            .msg = opaque_result,
+            .seq_id = 12345,
+        },
+    };
+
+    rx_info_t hold_info = {
+        .state = RIS_HOLD,
+        .timeout_sec = 9,
+        .u.hold = {
+            .fd = 23,
+            .has_result = true,
+            .result = hold_result,
+            .error = RX_ERROR_POLLHUP,
+        },
+    };
+
+    setup_command(&msg, NULL);
+    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, box->fd, box->out_seq_id, &hold_info);
+    int res = 1;
+    ListenerTask_NotifyMessageFailure_Expect(l, &hold_info, BUS_SEND_RX_FAILURE);
+    ListenerTask_ReleaseMsg_Expect(l, &msg);
+
+    ListenerCmd_CheckIncomingMessages(l, &res);
+    TEST_ASSERT_EQUAL(0, res);
+    TEST_ASSERT_EQUAL(RIS_EXPECT, hold_info.state);
+    TEST_ASSERT_EQUAL(box, hold_info.u.expect.box);
+    TEST_ASSERT_EQUAL(RX_ERROR_POLLHUP, hold_info.u.expect.error);
+    
+}
+
 void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_EXPECT_command_when_no_result_is_saved(void) {
     listener_msg msg = {
         .id = 1,

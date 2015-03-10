@@ -75,9 +75,18 @@ void test_KineticAllocator_NewSession_should_return_a_session_pointing_to_passed
 {
     KineticCalloc_ExpectAndReturn(1, sizeof(KineticSession), &Session);
     KineticResourceWaiter_Init_Expect(&Session.connectionReady);
-    KineticSession* session =  KineticAllocator_NewSession(&MessageBus, &Config);
+    KineticSession* session = KineticAllocator_NewSession(&MessageBus, &Config);
     TEST_ASSERT_NOT_NULL(session);
     TEST_ASSERT_EQUAL_PTR(&MessageBus, session->messageBus);
+}
+
+void test_KineticAllocator_NewSession_should_return_a_session_with_termination_status_set_to_SUCCESS(void)
+{
+    KineticCalloc_ExpectAndReturn(1, sizeof(KineticSession), &Session);
+    KineticResourceWaiter_Init_Expect(&Session.connectionReady);
+    KineticSession* session = KineticAllocator_NewSession(&MessageBus, &Config);
+    TEST_ASSERT_EQUAL(KINETIC_STATUS_SUCCESS, session->terminationStatus);
+    TEST_ASSERT_FALSE(session->connected);
 }
 
 void test_KineticAllocator_FreeSession_should_destroy_waiter_and_free_session(void)

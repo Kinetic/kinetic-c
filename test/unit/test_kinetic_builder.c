@@ -178,7 +178,7 @@ void test_KineticBuilder_BuildGet_should_build_a_GET_operation(void)
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -206,7 +206,7 @@ void test_KineticBuilder_BuildGet_should_build_a_GET_operation_requesting_metada
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -234,7 +234,7 @@ void test_KineticBuilder_BuildGetNext_should_build_a_GETNEXT_operation(void)
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
         Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -263,7 +263,7 @@ void test_KineticBuilder_BuildGetNext_should_build_a_GETNEXT_operation_with_meta
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
         Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -291,7 +291,7 @@ void test_KineticBuilder_BuildGetPrevious_should_build_a_GETPREVIOUS_operation(v
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
         Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -320,7 +320,7 @@ void test_KineticBuilder_BuildGetPrevious_should_build_a_GETPREVIOUS_operation_w
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
         Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -341,7 +341,7 @@ void test_KineticBuilder_BuildFlush_should_build_a_FLUSHALLDATA_operation(void)
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA,
         Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
 
@@ -364,7 +364,7 @@ void test_KineticBuilder_BuildDelete_should_build_a_DELETE_operation(void)
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE,
         Request.message.command.header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Delete, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Delete, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -409,7 +409,7 @@ void test_KineticBuilder_BuildGetKeyRange_should_build_a_GetKeyRange_request(voi
     TEST_ASSERT_TRUE(Request.command->header->has_messageType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE,
         Request.command->header->messageType);
-    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_GetKeyRange, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(KineticCallbacks_GetKeyRange, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.entry);
     TEST_ASSERT_EQUAL_PTR(&Request, Operation.request);
     TEST_ASSERT_FALSE(Request.pinAuth);
@@ -678,7 +678,7 @@ void test_KineticBuilder_BuildSetPin_should_build_a_SECURITY_operation_to_set_ne
     TEST_ASSERT_EQUAL_PTR(newPinData, Request.command->body->security->newLockPIN.data);
     TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newLockPIN.len);
     TEST_ASSERT_NULL(Request.command->body->pinOp);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -707,7 +707,7 @@ void test_KineticBuilder_BuildSetPin_should_build_a_SECURITY_operation_to_set_ne
     TEST_ASSERT_EQUAL_PTR(newPinData, Request.command->body->security->newErasePIN.data);
     TEST_ASSERT_EQUAL(newPin.len, Request.command->body->security->newErasePIN.len);
     TEST_ASSERT_NULL(Request.command->body->pinOp);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -732,7 +732,7 @@ void test_KineticBuilder_BuildErase_should_build_a_SECURE_ERASE_operation_with_P
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP,
         Request.command->body->pinOp->pinOpType);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(180, Operation.timeoutSeconds);
 }
@@ -757,7 +757,7 @@ void test_KineticBuilder_BuildErase_should_build_an_INSTANT_ERASE_operation_with
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP,
         Request.command->body->pinOp->pinOpType);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutErase, Operation.timeoutSeconds);
 }
@@ -782,7 +782,7 @@ void test_KineticBuilder_BuildLockUnlock_should_build_a_LOCK_operation_with_PIN_
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP,
         Request.command->body->pinOp->pinOpType);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutLockUnlock, Operation.timeoutSeconds);
 }
@@ -807,7 +807,7 @@ void test_KineticBuilder_BuildLockUnlock_should_build_an_UNLOCK_operation_with_P
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
     TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP,
         Request.command->body->pinOp->pinOpType);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutLockUnlock, Operation.timeoutSeconds);
 }
@@ -831,7 +831,7 @@ void test_KineticBuilder_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSI
     TEST_ASSERT_EQUAL_INT64(1776, Operation.pendingClusterVersion);
     TEST_ASSERT_TRUE(Request.message.setup.has_newClusterVersion);
     TEST_ASSERT_FALSE(Request.message.setup.has_firmwareDownload);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_SetClusterVersion, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_SetClusterVersion, Operation.opCallback);
 }
 
 void test_KineticBuilder_BuildSetACL_should_build_a_SECURITY_operation(void)
@@ -858,7 +858,7 @@ void test_KineticBuilder_BuildSetACL_should_build_a_SECURITY_operation(void)
 
     TEST_ASSERT_EQUAL_PTR(Request.command->body->security->acl, ACLs.ACLs);
 
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_SetACL, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_SetACL, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetACL, Operation.timeoutSeconds);
 }
@@ -888,7 +888,7 @@ void test_KineticBuilder_BuildUpdateFirmware_should_build_a_FIRMWARE_DOWNLOAD_op
     TEST_ASSERT_EQUAL_PTR(&Request.message.setup, Request.command->body->setup);
     TEST_ASSERT_TRUE(Request.message.setup.firmwareDownload);
     TEST_ASSERT_TRUE(Request.message.setup.has_firmwareDownload);
-    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_UpdateFirmware, Operation.callback);
+    TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_UpdateFirmware, Operation.opCallback);
 
     TEST_ASSERT_NOT_NULL(Operation.value.data);
     TEST_ASSERT_EQUAL(fwLen, Operation.value.len);

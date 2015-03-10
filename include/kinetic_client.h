@@ -82,6 +82,17 @@ KineticStatus KineticClient_CreateSession(KineticSessionConfig * const config,
 KineticStatus KineticClient_DestroySession(KineticSession * const session);
 
 /**
+ * @brief Returns the reason reported in the case of the Kinetic device
+ * terminating a session in the case of a catastrophic error occurring.
+ * 
+ * @param session       The KineticSession to query.
+ * 
+ * @return              Returns the status reported prior to termination
+ *                      or KINTEIC_STATUS_SUCCESS if not terminated.
+ */
+KineticStatus KineticClient_GetTerminationStatus(KineticSession * const session);
+
+/**
  * @brief Executes a `NOOP` operation to test whether the Kinetic Device is operational.
  *
  * @param session       The connected KineticSession to use for the operation.

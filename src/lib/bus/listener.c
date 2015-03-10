@@ -75,7 +75,7 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
 
         if (0 != pipe(msg->pipes)) {
             for (int i = 0; i < pipe_count; i++) {
-                listener_msg *msg = &l->msgs[i];
+                msg = &l->msgs[i];
                 syscall_close(msg->pipes[0]);
                 syscall_close(msg->pipes[1]);
             }

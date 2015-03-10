@@ -48,7 +48,7 @@ static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_da
     pthread_mutex_unlock(&data->receiveCompleteMutex);
 }
 
-static KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
+STATIC KineticCompletionClosure DefaultClosure(DefaultCallbackData * const data)
 {
     return (KineticCompletionClosure) {
         .callback = DefaultCallback,
@@ -61,14 +61,17 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     KINETIC_ASSERT(operation != NULL);
     KINETIC_ASSERT(operation->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
+    KineticSession *session = operation->session;
+ 
+    if (KineticSession_GetTerminationStatus(operation->session) != KINETIC_STATUS_SUCCESS) {
+        return KINETIC_STATUS_SESSION_TERMINATED;
+    }
 
-    if (closure != NULL)
-    {
+    if (closure != NULL) {
         operation->closure = *closure;
         return KineticOperation_SendRequest(operation);
     }
-    else
-    {
+    else {
         DefaultCallbackData data;
         pthread_mutex_init(&data.receiveCompleteMutex, NULL);
         pthread_cond_init(&data.receiveComplete, NULL);
@@ -82,14 +85,24 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
 
         if (status == KINETIC_STATUS_SUCCESS) {
             pthread_mutex_lock(&data.receiveCompleteMutex);
-            while(data.completed == false)
-            { pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex); }
+            while(data.completed == false) {
+                pthread_cond_wait(&data.receiveComplete, &data.receiveCompleteMutex);
+            }
             status = data.status;
             pthread_mutex_unlock(&data.receiveCompleteMutex);
         }
 
         pthread_cond_destroy(&data.receiveComplete);
         pthread_mutex_destroy(&data.receiveCompleteMutex);
+
+        if (status != KINETIC_STATUS_SUCCESS) {
+            if (KineticSession_GetTerminationStatus(session) != KINETIC_STATUS_SUCCESS) {
+                (void)KineticSession_Disconnect(session);
+                if (status == KINETIC_STATUS_SOCKET_ERROR) {
+                    status = KINETIC_STATUS_SESSION_TERMINATED;
+                }
+            }
+        }
 
         return status;
     }
@@ -99,8 +112,7 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
 {
     KineticStatus res = KINETIC_STATUS_INVALID;
 
-    switch(status)
-    {
+    switch(status) {
         // TODO scrutinize all these mappings
         case BUS_SEND_SUCCESS:
             res = KINETIC_STATUS_SUCCESS;
@@ -181,14 +193,12 @@ void KineticController_HandleUnexpectedResponse(void *msg,
 
     // Handle unsolicited status PDUs
     if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
-        if (response->command != NULL &&
-            response->command->header != NULL &&
-            response->command->header->has_connectionID)
+        int64_t connectionID = KineticResponse_GetConnectionID(response);
+        if (connectionID != 0)
         {
-            // Extract connectionID from unsolicited status message
-            session->connectionID = response->command->header->connectionID;
-            LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)",
-                session->connectionID);
+            // Store connectionID from unsolicited status message in the session for future requests
+            KineticSession_SetConnectionID(session, connectionID);
+            LOGF2("Extracted connection ID from unsolicited status PDU (id=%lld)", connectionID);
             connetionInfoReceived = true;
             logTag = statusTag;
             logAtLevel = 2;
@@ -199,10 +209,11 @@ void KineticController_HandleUnexpectedResponse(void *msg,
             logTag = statusTag;
             logAtLevel = 0; 
             protoLogAtLevel = 0;
+            KineticStatus status = KineticResponse_GetStatus(response);
+            KineticSession_SetTerminationStatus(session, status);
         }
     }
-    else
-    {
+    else {
         KineticLogger_LogTimestamp(0, "WARNING: Received unexpected response!");
         logTag = unexpectedTag;
         logAtLevel = 0;
@@ -215,7 +226,8 @@ void KineticController_HandleUnexpectedResponse(void *msg,
         (void*)response, (void*)session,
         (void*)session->messageBus,
         session->socket, (long long)seq_id,
-        response->header.protobufLength, response->header.valueLength);
+        KineticResponse_GetProtobufLength(response),
+        KineticResponse_GetValueLength(response));
     KineticLogger_LogProtobuf(protoLogAtLevel, response->proto);
 
     KineticAllocator_FreeKineticResponse(response);
@@ -235,35 +247,25 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
 
     if (status == KINETIC_STATUS_SUCCESS) {
         KineticResponse * response = res->u.response.opaque_msg;
-        KINETIC_ASSERT(response);
-        KINETIC_ASSERT(response->command);
-        KINETIC_ASSERT(response->command->header);
 
-        if (response->command != NULL &&
-            response->command->status != NULL &&
-            response->command->status->has_code)
-        {
-            status = KineticProtoStatusCode_to_KineticStatus(response->command->status->code);
-            op->response = response;
-        }
-        else {
-            status = KINETIC_STATUS_INVALID;
-        }
+        status = KineticResponse_GetStatus(response);
 
         LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
             "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
             (void*)response,
             (void*)op->session, (void*)op->session->messageBus,
             op->session->socket, response->command->header->ackSequence,
-            response->header.protobufLength, response->header.valueLength,
+            KineticResponse_GetProtobufLength(response),
+            KineticResponse_GetValueLength(response),
             (void*)op,
             Kinetic_GetStatusDescription(status));
         KineticLogger_LogHeader(3, &response->header);
         KineticLogger_LogProtobuf(3, response->proto);
-    }
-    else
-    {
-        // pull out bus error?
+
+        if (op->response == NULL) {
+            op->response = response;
+        }
+    } else {
         LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
         if (res->status == BUS_SEND_RX_TIMEOUT) {
             KineticLogger_LogTimestamp(0, "RX_TIMEOUT");
@@ -271,8 +273,8 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
     }
 
     // Call operation-specific callback, if configured
-    if (op->callback != NULL) {
-        status = op->callback(op, status);
+    if (op->opCallback != NULL) {
+        status = op->opCallback(op, status);
     }
 
     KineticOperation_Complete(op, status);

@@ -22,7 +22,9 @@ OPTIMIZE = -O3
 KINETIC_HOST1 ?= localhost
 SESSION_HMAC_KEY ?= asdfasdf
 SESSION_PIN ?= 1234
-WARN = -Wall -Wextra -Werror -Wstrict-prototypes -Wcast-align -pedantic -Wno-missing-field-initializers -Werror=strict-prototypes
+WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic 
+WARN += -Wno-missing-field-initializers -Werror=strict-prototypes -Wshadow
+WARN += -Werror
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1
 CFLAGS += -std=c99 -fPIC -g $(WARN) $(CDEFS) $(OPTIMIZE)
 LDFLAGS += -lm -L${OPENSSL_PATH}/lib -lcrypto -lssl -lpthread -ljson-c
@@ -143,7 +145,7 @@ ${OUT_DIR}/%.o: ${LIB_DIR}/%.c Makefile ${PUB_INC}/%.h Makefile
 
 # Sources with atypical paths / dependencies
 $(OUT_DIR)/socket99.o: $(SOCKET99)/socket99.c $(SOCKET99)/socket99.h
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(SOCKET99)
+	$(CC) -c -o $@ $< $(CFLAGS) -Wno-shadow -I$(SOCKET99)
 $(OUT_DIR)/protobuf-c.o: $(PROTOBUFC)/protobuf-c/protobuf-c.c $(PROTOBUFC)/protobuf-c/protobuf-c.h
 	$(CC) -c -o $@ $< -std=c99 -fPIC -g -Wall -Werror -Wno-unused-parameter $(OPTIMIZE) -I$(PROTOBUFC)
 ${OUT_DIR}/kinetic_types.o: ${LIB_DIR}/kinetic_types_internal.h

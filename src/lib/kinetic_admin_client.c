@@ -27,6 +27,7 @@
 #include "kinetic_auth.h"
 #include "kinetic_device_info.h"
 #include "kinetic_acl.h"
+#include "kinetic_logger.h"
 
 #ifdef TEST
 struct ACL *ACLs = NULL;
@@ -77,7 +78,7 @@ KineticStatus KineticAdminClient_SetErasePin(KineticSession * const session,
 KineticStatus KineticAdminClient_SecureErase(KineticSession * const session,
     ByteArray pin)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -98,7 +99,7 @@ KineticStatus KineticAdminClient_SecureErase(KineticSession * const session,
 KineticStatus KineticAdminClient_InstantErase(KineticSession * const session,
     ByteArray pin)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -140,7 +141,7 @@ KineticStatus KineticAdminClient_SetLockPin(KineticSession * const session,
 KineticStatus KineticAdminClient_LockDevice(KineticSession * const session,
     ByteArray pin)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -161,7 +162,7 @@ KineticStatus KineticAdminClient_LockDevice(KineticSession * const session,
 KineticStatus KineticAdminClient_UnlockDevice(KineticSession * const session,
     ByteArray pin)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
 
     KineticStatus status;
     status = KineticAuth_EnsureSslEnabled(&session->config);
@@ -184,8 +185,8 @@ KineticStatus KineticAdminClient_GetLog(KineticSession * const session,
                                    KineticLogInfo** info,
                                    KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(info != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(info != NULL);
 
     KineticProto_Command_GetLog_Type protoType =
         KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(type);
@@ -208,8 +209,8 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession * const ses
                                    KineticLogInfo** info,
                                    KineticCompletionClosure* closure)
 {
-    assert(session != NULL);
-    assert(info != NULL);
+    KINETIC_ASSERT(session != NULL);
+    KINETIC_ASSERT(info != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -224,7 +225,7 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession * const ses
 void KineticClient_FreeLogInfo(KineticSession * const session,
                                   KineticLogInfo* info)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
     if (info) { KineticLogInfo_Free(info); }
 
     /* The session is not currently used, but part of the API to allow
@@ -235,7 +236,7 @@ void KineticClient_FreeLogInfo(KineticSession * const session,
 KineticStatus KineticAdminClient_SetClusterVersion(KineticSession * const session,
     int64_t version)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -246,7 +247,7 @@ KineticStatus KineticAdminClient_SetClusterVersion(KineticSession * const sessio
 
 KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
         const char *ACLPath) {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
     if (ACLPath == NULL) {
         return KINETIC_STATUS_INVALID_REQUEST;
     }
@@ -275,7 +276,7 @@ KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
 KineticStatus KineticAdminClient_UpdateFirmware(KineticSession * const session,
     char const * const fw_path)
 {
-    assert(session != NULL);
+    KINETIC_ASSERT(session != NULL);
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
