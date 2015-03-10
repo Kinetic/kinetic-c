@@ -44,6 +44,7 @@ VERSION_FILE = ./config/VERSION
 VERSION = ${shell head -n1 $(VERSION_FILE)}
 THREADPOOL_PATH = ${LIB_DIR}/threadpool
 BUS_PATH = ${LIB_DIR}/bus
+JSONC_LIB = ${OUT_DIR}/libjson-c.a
 
 KINETIC_LIB_NAME = $(PROJECT).$(VERSION)
 KINETIC_LIB = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).a
@@ -101,12 +102,12 @@ LIB_OBJS = \
 KINETIC_LIB_OTHER_DEPS = Makefile Rakefile $(VERSION_FILE)
 
 
-default: makedirs json $(KINETIC_LIB)
+default: makedirs $(KINETIC_LIB)
 
 makedirs:
 	@echo; mkdir -p ./bin/examples &> /dev/null; mkdir -p ./bin/unit &> /dev/null; mkdir -p ./bin/systest &> /dev/null; mkdir -p ./out &> /dev/null
 
-all: default json test system_tests test_internals run examples
+all: default test system_tests test_internals run examples
 
 clean: makedirs
 	rm -rf ./bin/*.a ./bin/*.so ./bin/kinetic-c-util $(DISCOVERY_UTIL_EXEC)
@@ -184,11 +185,11 @@ apply_license:
 # json-c
 #-------------------------------------------------------------------------------
 
-json: ${OUT_DIR}/libjson-c.a
+json: ${JSONC_LIB}
 
-$(OUT_DIR)/kinetic_acl.o: json
+$(OUT_DIR)/kinetic_acl.o: ${JSONC_LIB}
 
-json_install: json
+json_install: ${JSONC_LIB}
 	cd ${JSONC} && \
 	make install
 
@@ -206,8 +207,8 @@ ${JSONC}/.libs/libjson-c.a: ${JSONC}/Makefile
 	cd ${JSONC} && \
 	make libjson-c.la
 
-${OUT_DIR}/libjson-c.a: ${JSONC}/.libs/libjson-c.a
-	cp ${JSONC}/.libs/libjson-c.a ${OUT_DIR}/libjson-c.a
+${JSONC_LIB}: ${JSONC}/.libs/libjson-c.a
+	cp ${JSONC}/.libs/libjson-c.a ${JSONC_LIB}
 
 
 #-------------------------------------------------------------------------------
@@ -252,7 +253,7 @@ ${OUT_DIR}/libthreadpool.a: ${LIB_DIR}/threadpool/*.[ch]
 KINETIC_SO_DEV = $(BIN_DIR)/lib$(KINETIC_LIB_NAME).so
 KINETIC_SO_RELEASE = $(PREFIX)/lib$(KINETIC_LIB_NAME).so
 
-$(KINETIC_LIB): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS) json
+$(KINETIC_LIB): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS) $(JSONC_LIB)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Building static library: $(KINETIC_LIB)
@@ -260,7 +261,7 @@ $(KINETIC_LIB): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS) json
 	ar -rcs $@ $(LIB_OBJS)
 	ar -t $@
 
-$(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
+$(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS) $(JSONC_LIB)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Building dynamic library: $(KINETIC_SO_DEV)
@@ -275,7 +276,7 @@ $(KINETIC_SO_DEV): $(LIB_OBJS) $(KINETIC_LIB_OTHER_DEPS)
 INSTALL ?= install
 RM ?= rm
 
-install: json json_install $(KINETIC_LIB) $(KINETIC_SO_DEV)
+install: ${JSONC_LIB} json_install $(KINETIC_LIB) $(KINETIC_SO_DEV)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Installing $(PROJECT) v$(VERSION) into $(PREFIX)
@@ -359,10 +360,10 @@ systest_names = $(patsubst $(SYSTEST_OUT)/run_%,%,$(systest_executables))
 list_system_tests:
 	echo $(systest_names)
 
-$(SYSTEST_OUT)/%_runner.c: $(SYSTEST_SRC)/%.c $(KINETIC_LIB)
+$(SYSTEST_OUT)/%_runner.c: $(SYSTEST_SRC)/%.c
 	./test/support/generate_test_runner.sh $< > $@
 
-$(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c
+$(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c $(KINETIC_LIB)
 	@echo
 	@echo ================================================================================
 	@echo System test: '$<'
@@ -374,7 +375,7 @@ $(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
 
 $(systest_names) : % : $(SYSTEST_OUT)/%.testpass
 
-system_tests: $(systest_passfiles) $(KINETIC_LIB)
+system_tests: $(systest_passfiles)
 
 
 #===============================================================================
@@ -415,7 +416,7 @@ DISCOVERY_UTIL_LDFLAGS +=  -lm -lssl $(KINETIC_LIB) -L${OUT_DIR} -lcrypto -lpthr
 $(OUT_DIR)/discovery.o: $(DISCOVERY_UTIL_DIR)/discovery.c
 	$(CC) -c -o $@ $< $(CFLAGS) -I$(PUB_INC) -I$(DISCOVERY_UTIL_DIR) $(LIB_INCS)
 
-$(DISCOVERY_UTIL_EXEC): $(DISCOVERY_UTIL_OBJ) $(KINETIC_LIB) json
+$(DISCOVERY_UTIL_EXEC): $(DISCOVERY_UTIL_OBJ) $(KINETIC_LIB) $(JSONC_LIB)
 	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Building service discovery utility: $(DISCOVERY_UTIL_EXEC)

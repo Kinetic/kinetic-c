@@ -191,7 +191,7 @@ void test_P2P_should_copy_keys_from_one_device_to_another(void)
     TEST_ASSERT_EQUAL_ByteBuffer(Value2Buffer, getEntry2.value);
 
     // Erase the peer drive we are copying to
-    status = KineticAdminClient_SecureErase(peerAdminSession, Pin);
+    // status = KineticAdminClient_SecureErase(peerAdminSession, Pin);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Execute a P2P operation to copy the entries
@@ -254,7 +254,7 @@ void disabled_test_P2P_should_support_nesting_of_p2p_operations(void)
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Erase the peer drive we are copying to
-    status = KineticAdminClient_SecureErase(peerAdminSession, Pin);
+    // status = KineticAdminClient_SecureErase(peerAdminSession, Pin);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Copy the entries back to primary device
