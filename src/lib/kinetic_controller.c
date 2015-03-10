@@ -254,6 +254,10 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
             Kinetic_GetStatusDescription(status));
         KineticLogger_LogHeader(3, &response->header);
         KineticLogger_LogProtobuf(3, response->proto);
+
+        if (op->response == NULL) {
+            op->response = response;
+        }
     }
     else {
         // pull out bus error?
