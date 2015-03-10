@@ -234,7 +234,7 @@ static void LogUnboxed(int log_level,
                 void const * const fieldData,
                 ProtobufCFieldDescriptor const * const fieldDesc,
                 size_t const i,
-                char* indent)
+                char* log_indent)
 {
     switch (fieldDesc->type) {
     case PROTOBUF_C_TYPE_INT32:
@@ -242,7 +242,7 @@ static void LogUnboxed(int log_level,
     case PROTOBUF_C_TYPE_SFIXED32:
         {
             int32_t const * value = (int32_t const *)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %ld", indent, fieldDesc->name, value[i]);
+            KineticLogger_LogPrintf(log_level, "%s%s: %ld", log_indent, fieldDesc->name, value[i]);
         }
         break;
 
@@ -251,7 +251,7 @@ static void LogUnboxed(int log_level,
     case PROTOBUF_C_TYPE_SFIXED64:
         {
             int64_t* value = (int64_t*)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %lld", indent, fieldDesc->name, value[i]);
+            KineticLogger_LogPrintf(log_level, "%s%s: %lld", log_indent, fieldDesc->name, value[i]);
         }
         break;
 
@@ -259,7 +259,7 @@ static void LogUnboxed(int log_level,
     case PROTOBUF_C_TYPE_FIXED32:
         {
             uint32_t* value = (uint32_t*)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %lu", indent, fieldDesc->name, value[i]);
+            KineticLogger_LogPrintf(log_level, "%s%s: %lu", log_indent, fieldDesc->name, value[i]);
         }
         break;
 
@@ -267,35 +267,35 @@ static void LogUnboxed(int log_level,
     case PROTOBUF_C_TYPE_FIXED64:
         {
             uint64_t* value = (uint64_t*)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %llu", indent, fieldDesc->name, value[i]);
+            KineticLogger_LogPrintf(log_level, "%s%s: %llu", log_indent, fieldDesc->name, value[i]);
         }
         break;
 
     case PROTOBUF_C_TYPE_FLOAT:
         {
             float* value = (float*)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %f", indent, fieldDesc->name, value[i]);
+            KineticLogger_LogPrintf(log_level, "%s%s: %f", log_indent, fieldDesc->name, value[i]);
         }
         break;
 
     case PROTOBUF_C_TYPE_DOUBLE:
         {
             double* value = (double*)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %f", indent, fieldDesc->name, value[i]);
+            KineticLogger_LogPrintf(log_level, "%s%s: %f", log_indent, fieldDesc->name, value[i]);
         }
         break;
 
     case PROTOBUF_C_TYPE_BOOL:
         {
             protobuf_c_boolean* value = (protobuf_c_boolean*)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %s", indent, fieldDesc->name, BOOL_TO_STRING(value[i]));
+            KineticLogger_LogPrintf(log_level, "%s%s: %s", log_indent, fieldDesc->name, BOOL_TO_STRING(value[i]));
         }
         break;
 
     case PROTOBUF_C_TYPE_STRING:
         {
             char** strings = (char**)fieldData;
-            KineticLogger_LogPrintf(log_level, "%s%s: %s", indent, fieldDesc->name, strings[i]);
+            KineticLogger_LogPrintf(log_level, "%s%s: %s", log_indent, fieldDesc->name, strings[i]);
         }
         break;
 
@@ -303,7 +303,7 @@ static void LogUnboxed(int log_level,
         {
             ProtobufCBinaryData* value = (ProtobufCBinaryData*)fieldData;
             log_proto_level_start(fieldDesc->name);
-            KineticLogger_LogByteArray(log_level, indent,
+            KineticLogger_LogByteArray(log_level, log_indent,
                                        (ByteArray){.data = value[i].data,
                                                    .len = value[i].len});
             log_proto_level_end();
@@ -315,7 +315,7 @@ static void LogUnboxed(int log_level,
             int * value = (int*)fieldData;
             ProtobufCEnumDescriptor const * enumDesc = fieldDesc->descriptor;
             ProtobufCEnumValue const * enumVal = protobuf_c_enum_descriptor_get_value(enumDesc, value[i]);
-            KineticLogger_LogPrintf(log_level, "%s%s: %s", indent, fieldDesc->name, enumVal->name);
+            KineticLogger_LogPrintf(log_level, "%s%s: %s", log_indent, fieldDesc->name, enumVal->name);
         }
         break;
 
@@ -325,7 +325,7 @@ static void LogUnboxed(int log_level,
             if (msg[i] != NULL)
             {
                 log_proto_level_start(fieldDesc->name);
-                log_protobuf_message(log_level, msg[i], indent);
+                log_protobuf_message(log_level, msg[i], log_indent);
                 log_proto_level_end();
             }
         } break;
@@ -337,7 +337,7 @@ static void LogUnboxed(int log_level,
     };
 }
 
-static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, char* indent)
+static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, char* log_indent)
 {
     if (msg == NULL || msg->descriptor == NULL || !is_level_enabled(log_level)) {
         return;
@@ -357,7 +357,7 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
         {
             case PROTOBUF_C_LABEL_REQUIRED:
             {
-                LogUnboxed(log_level, &pMsg[fieldDesc->offset], fieldDesc, 0, indent);
+                LogUnboxed(log_level, &pMsg[fieldDesc->offset], fieldDesc, 0, log_indent);
             } break;
             case PROTOBUF_C_LABEL_OPTIONAL:
             {
@@ -374,13 +374,13 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                         if ((value->data != NULL) && (value->len > 0)) {
                             log_proto_level_start(fieldDesc->name);
                             KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
-                            log_protobuf_message(log_level, &cmd->base, indent);
+                            log_protobuf_message(log_level, &cmd->base, log_indent);
                             log_proto_level_end();
                             KineticProto_command__free_unpacked(cmd, NULL);
                         }
                     }
                     else {
-                        LogUnboxed(log_level, &pMsg[fieldDesc->offset], fieldDesc, 0, indent);
+                        LogUnboxed(log_level, &pMsg[fieldDesc->offset], fieldDesc, 0, log_indent);
                     }
                 }
             } break;
@@ -389,9 +389,9 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                 unsigned const * quantifier = (unsigned const *)(void*)&pMsg[fieldDesc->quantifier_offset];
                 if (*quantifier > 0) {
                     log_proto_level_start_array(fieldDesc->name, *quantifier);
-                    for (uint32_t i = 0; i < *quantifier; i++) {
+                    for (uint32_t j = 0; j < *quantifier; j++) {
                         void const ** box = (void const **)(void*)&pMsg[fieldDesc->offset];
-                        LogUnboxed(log_level, *box, fieldDesc, i, indent);
+                        LogUnboxed(log_level, *box, fieldDesc, j, log_indent);
                     }
                     log_proto_level_end_array();
                 }
