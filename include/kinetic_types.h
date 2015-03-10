@@ -36,16 +36,15 @@
 #include "byte_array.h"
 
 
-#define KINETIC_HANDLE_INVALID  (0)
-#define KINETIC_PORT            (8123)
-#define KINETIC_TLS_PORT        (8443)
-#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)
-#define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN)
-#define KINETIC_PIN_MAX_LEN     (1024)
-#define KINETIC_DEFAULT_KEY_LEN (1024)
-#define KINETIC_MAX_KEY_LEN     (4096)
-#define KINETIC_MAX_VERSION_LEN (256)
-#define KINETIC_OBJ_SIZE        (1024 * 1024)
+#define KINETIC_SOCKET_INVALID  (-1)                    ///< Invalid socket file descriptor value
+#define KINETIC_PORT            (8123)                  ///< Default kinetic port 
+#define KINETIC_TLS_PORT        (8443)                  ///< Default kinetic TLS port
+#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)     ///< HMAC secure hash length
+#define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN) ///< HMAC max length
+#define KINETIC_PIN_MAX_LEN     (1024)                  ///< Max PIN length
+#define KINETIC_DEFAULT_KEY_LEN (1024)                  ///< Default key length
+#define KINETIC_MAX_KEY_LEN     (4096)                  ///< Max key length
+#define KINETIC_OBJ_SIZE        (1024 * 1024)           ///< Max object/value size
 
 // Define max host name length
 // Some Linux environments require this, although not all, but it's benign.
@@ -57,10 +56,6 @@
 #ifndef HOST_NAME_MAX
 #define HOST_NAME_MAX 256
 #endif // HOST_NAME_MAX
-
-#ifndef LOG_FILE_NAME_MAX
-#define LOG_FILE_NAME_MAX (HOST_NAME_MAX)
-#endif
 
 #define BOOL_TO_STRING(_bool) (_bool) ? "true" : "false"
 
@@ -468,7 +463,5 @@ typedef struct {
  * @return      Pointer to the appropriate string representation for the specified type.
  */
 const char* KineticMessageType_GetName(KineticMessageType type);
-
-#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN (1024 * 1024 * 4) // Will get reallocated to actual/used size post-copy
 
 #endif // _KINETIC_TYPES_H

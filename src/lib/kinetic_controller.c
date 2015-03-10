@@ -31,7 +31,14 @@
 #include <pthread.h>
 #include "bus.h"
 
-STATIC void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
+typedef struct {
+    pthread_mutex_t receiveCompleteMutex;
+    pthread_cond_t receiveComplete;
+    bool completed;
+    KineticStatus status;
+} DefaultCallbackData;
+
+static void DefaultCallback(KineticCompletionData* kinetic_data, void* client_data)
 {
     DefaultCallbackData * data = client_data;
     pthread_mutex_lock(&data->receiveCompleteMutex);
