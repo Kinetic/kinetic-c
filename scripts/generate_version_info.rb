@@ -18,7 +18,7 @@ header_contents << "#define _KINETIC_VERSION_INFO_H\n"
 header_contents << "#define KINETIC_C_VERSION \"#{kinetic_c_version}\"\n"
 header_contents << "#define KINETIC_C_PROTOCOL_VERSION \"#{protocol_version}\"\n"
 header_contents << "#define KINETIC_C_REPO_HASH \"#{commit_hash}\"\n"
-header_contents << "#endif"
+header_contents << "#endif\n\n"
 
 current_contents = []
 current_contents = File.readlines(info_header_file) if File.exist?(info_header_file)
