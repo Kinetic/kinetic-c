@@ -80,6 +80,7 @@ void test_send_helper_handle_write_should_notify_listener_and_succeed_when_writi
 
     send_helper_handle_write_res res = send_helper_handle_write(b, box);
     TEST_ASSERT_EQUAL(SHHW_DONE, res);
+    TEST_ASSERT_EQUAL(BUS_SEND_REQUEST_COMPLETE, box->result.status);
 }
 
 void test_send_helper_handle_write_should_fail_if_timestamp_fails(void) {

@@ -47,6 +47,7 @@ static boxed_msg Box = {
     .fd = 1,
     .out_seq_id = 12345,
     .timeout_sec = 11,
+    .result.status = BUS_SEND_REQUEST_COMPLETE,
 };
 
 void setUp(void) {
@@ -162,7 +163,8 @@ void test_listener_hold_response_should_enqueue_HOLD_RESPONSE_msg(void) {
 void test_listener_expect_response_should_enqueue_EXPECT_RESPONSE_msg(void) {
     listener_msg msg;
     struct boxed_msg box = {
-        .fd = 0
+        .fd = 0,
+        .result.status = BUS_SEND_REQUEST_COMPLETE,
     };
     listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
     uint16_t backpressure = 0;

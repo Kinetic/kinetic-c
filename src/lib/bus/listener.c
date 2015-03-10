@@ -161,6 +161,7 @@ bool listener_expect_response(struct listener *l, boxed_msg *box,
     msg->type = MSG_EXPECT_RESPONSE;
     msg->u.expect.box = box;
     *backpressure = ListenerTask_GetBackpressure(l);
+    BUS_ASSERT(b, b->udata, box->result.status != BUS_SEND_UNDEFINED);
 
     bool pm = listener_helper_push_message(l, msg, NULL);
     if (!pm) {
