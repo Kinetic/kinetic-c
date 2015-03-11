@@ -22,10 +22,6 @@
 
 #include "bus_types.h"
 
-/* This opaque bus struct represents the only user-facing interface to
- * the network handling code. Callbacks are provided to react to network
- * events. */
-
 /* Initialize a bus, based on configuration in *config. Returns a bool
  * indicating whether the construction succeeded, and the bus pointer
  * and/or a status code indicating the cause of failure in *res. */

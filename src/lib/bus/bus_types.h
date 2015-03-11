@@ -237,6 +237,7 @@ typedef enum {
     BUS_SOCKET_SSL,
 } bus_socket_t;
 
+/* A message being packaged for delivery by the message bus. */
 typedef struct {
     int fd;
     bus_socket_t type;
@@ -249,6 +250,9 @@ typedef struct {
     void *udata;
 } bus_user_msg;
 
+/* This opaque bus struct represents the only user-facing interface to
+ * the network handling code. Callbacks are provided to react to network
+ * events. */
 struct bus_t;
 
 typedef enum {
