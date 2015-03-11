@@ -65,7 +65,7 @@ void setUp(void)
 {
     KineticClientConfig clientConfig = {
         .logFile = "stdout",
-        .logLevel = 3,
+        .logLevel = 1,
     };
     client = KineticClient_Init(&clientConfig);
 
