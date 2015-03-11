@@ -45,7 +45,7 @@ bool listener_remove_socket(struct listener *l, int fd, int *notify_fd);
  * the response (with timeout) if it arrives before receiving further
  * instructions from the client. */
 bool listener_hold_response(struct listener *l, int fd,
-    int64_t seq_id, int16_t timeout_sec);
+    int64_t seq_id, int16_t timeout_sec, int *notify_fd);
 
 /* The client has finished a write, the listener should expect a response. */
 bool listener_expect_response(struct listener *l, boxed_msg *box,

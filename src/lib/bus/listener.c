@@ -56,17 +56,15 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     l->fds[INCOMING_MSG_PIPE_ID].events = POLLIN;
     l->shutdown_notify_fd = LISTENER_NO_FD;
 
-    for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
+    for (int i = MAX_PENDING_MESSAGES - 1; i >= 0; i--) {
         rx_info_t *info = &l->rx_info[i];
         info->state = RIS_INACTIVE;
 
         uint16_t *p_id = (uint16_t *)&info->id;
-        if (i < MAX_PENDING_MESSAGES - 1) {
-            info->next = &l->rx_info[i + 1];
-        }
+        info->next = l->rx_info_freelist;
+        l->rx_info_freelist = info;
         *p_id = i;
     }
-    l->rx_info_freelist = &l->rx_info[0];
 
     for (int pipe_count = 0; pipe_count < MAX_QUEUE_MESSAGES; pipe_count++) {
         listener_msg *msg = &l->msgs[pipe_count];
@@ -84,12 +82,9 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
             free(l);
             return NULL;
         }
-
-        if (pipe_count < MAX_QUEUE_MESSAGES - 1) { /* forward link */
-            msg->next = &l->msgs[pipe_count + 1];
-        }
+        msg->next = l->msg_freelist;
+        l->msg_freelist = msg;
     }
-    l->msg_freelist = &l->msgs[0];
     l->rx_info_max_used = 0;
 
     (void)cfg;
@@ -118,7 +113,7 @@ bool listener_remove_socket(struct listener *l, int fd, int *notify_fd) {
 }
 
 bool listener_hold_response(struct listener *l, int fd,
-        int64_t seq_id, int16_t timeout_sec) {
+        int64_t seq_id, int16_t timeout_sec, int *notify_fd) {
     listener_msg *msg = listener_helper_get_free_msg(l);
     struct bus *b = l->bus;
     if (msg == NULL) {
@@ -134,8 +129,9 @@ bool listener_hold_response(struct listener *l, int fd,
     msg->u.hold.fd = fd;
     msg->u.hold.seq_id = seq_id;
     msg->u.hold.timeout_sec = timeout_sec;
+    msg->u.hold.notify_fd = msg->pipes[1];
 
-    bool pm_res = listener_helper_push_message(l, msg, NULL);
+    bool pm_res = listener_helper_push_message(l, msg, notify_fd);
     if (!pm_res) {
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
             "listener_hold_response with <fd:%d, seq_id:%lld> FAILED",

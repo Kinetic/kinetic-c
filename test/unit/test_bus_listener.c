@@ -152,11 +152,14 @@ void test_listener_hold_response_should_enqueue_HOLD_RESPONSE_msg(void) {
     int16_t timeout_sec = 9;
     listener_msg msg;
     listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, NULL, true);
-    TEST_ASSERT_TRUE(listener_hold_response(l, socket, seq_id, timeout_sec));
+    int notify_fd = -1;
+    listener_helper_push_message_ExpectAndReturn(l, &msg, &notify_fd, true);
+    msg.pipes[1] = 123;
+    TEST_ASSERT_TRUE(listener_hold_response(l, socket, seq_id, timeout_sec, &notify_fd));
     TEST_ASSERT_EQUAL(MSG_HOLD_RESPONSE, msg.type);
     TEST_ASSERT_EQUAL(socket, msg.u.hold.fd);
     TEST_ASSERT_EQUAL(seq_id, msg.u.hold.seq_id);
+    TEST_ASSERT_EQUAL(123, msg.u.hold.notify_fd);
     TEST_ASSERT_EQUAL(timeout_sec, msg.u.hold.timeout_sec);
 }
 

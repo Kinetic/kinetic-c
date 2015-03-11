@@ -217,12 +217,14 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_NULL_info_fai
             .fd = 23,
             .seq_id = 12345,
             .timeout_sec = 9,
+            .notify_fd = 123,
         },
     };
 
     setup_command(&msg, NULL_INFO);
 
     int res = 1;
+    expect_notify_caller(l, 123);
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
     TEST_ASSERT_EQUAL(0, res);
@@ -237,6 +239,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_HOLD
             .fd = 23,
             .seq_id = 12345,
             .timeout_sec = 9,
+            .notify_fd = 456,
         },
     };
 
@@ -246,6 +249,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_HOLD
     setup_command(&msg, &info);
 
     int res = 1;
+    expect_notify_caller(l, 456);
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
     TEST_ASSERT_EQUAL(0, res);

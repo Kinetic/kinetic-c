@@ -42,9 +42,11 @@ listener_msg *listener_helper_get_free_msg(listener *l) {
         } else if (ATOMIC_BOOL_COMPARE_AND_SWAP(&l->msg_freelist, head, head->next)) {
             for (;;) {
                 int16_t miu = l->msgs_in_use;
-                
+                assert(miu < MAX_QUEUE_MESSAGES);
+
                 if (ATOMIC_BOOL_COMPARE_AND_SWAP(&l->msgs_in_use, miu, miu + 1)) {
-                    BUS_LOG(l->bus, 5, LOG_LISTENER, "got free msg", l->bus->udata);
+                    BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 64,
+                        "got free msg: %u", head->id);
 
                     /* Add counterpressure between the client and the listener.
                      * 10 * ((n >> 1) ** 2) microseconds */

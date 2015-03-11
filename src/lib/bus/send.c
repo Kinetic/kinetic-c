@@ -26,6 +26,7 @@
 #include <errno.h>
 
 #include "bus.h"
+#include "bus_poll.h"
 #include "bus_types.h"
 #include "bus_internal_types.h"
 #include "listener.h"
@@ -43,6 +44,7 @@ struct pollfd fds[1];
 size_t backpressure = 0;
 int poll_errno = 0;
 int write_errno = 0;
+int completion_pipe = -1;
 #endif
 
 static bool attempt_to_enqueue_HOLD_message_to_listener(struct bus *b,
@@ -182,15 +184,18 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
 static bool attempt_to_enqueue_HOLD_message_to_listener(struct bus *b,
     int fd, int64_t seq_id, int16_t timeout_sec) {
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 128,
-      "telling listener to expect response, with <fd%d, seq_id:%lld>",
+      "telling listener to HOLD response, with <fd:%d, seq_id:%lld>",
         fd, (long long)seq_id);
 
     struct listener *l = bus_get_listener_for_socket(b, fd);
 
     const int max_retries = SEND_NOTIFY_LISTENER_RETRIES;
     for (int try = 0; try < max_retries; try++) {
-        if (listener_hold_response(l, fd, seq_id, timeout_sec)) {
-            return true;
+        #ifndef TEST
+        int completion_pipe = -1;
+        #endif
+        if (listener_hold_response(l, fd, seq_id, timeout_sec, &completion_pipe)) {
+            return bus_poll_on_completion(b, completion_pipe);
         } else {
             /* Don't apply much backpressure here since the client
              * thread will get it when the message is done sending. */

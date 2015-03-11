@@ -58,6 +58,7 @@ typedef struct listener_msg {
             int fd;
             int64_t seq_id;
             int16_t timeout_sec;
+            int notify_fd;
         } hold;
         struct {
             boxed_msg *box;
@@ -110,7 +111,7 @@ typedef struct rx_info_t {
 #define MAX_PENDING_MESSAGES (1024)
 
 /* Max number of unprocessed queue messages */
-#define MAX_QUEUE_MESSAGES 32
+#define MAX_QUEUE_MESSAGES (32)
 typedef uint32_t msg_flag_t;
 
 /* Minimum and maximum poll() delays for listener, before going dormant. */

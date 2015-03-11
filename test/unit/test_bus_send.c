@@ -25,6 +25,7 @@
 #include <errno.h>
 
 #include "mock_bus.h"
+#include "mock_bus_poll.h"
 #include "mock_bus_inward.h"
 #include "mock_listener.h"
 #include "mock_send_helper.h"
@@ -38,6 +39,7 @@ extern struct pollfd fds[1];
 extern size_t backpressure;
 extern int poll_errno;
 extern int write_errno;
+extern int completion_pipe;
 
 struct bus *b = NULL;
 boxed_msg *box = NULL;
@@ -79,9 +81,13 @@ void test_send_do_blocking_send_should_reject_message_on_timestamp_failure(void)
 static void expect_notify_listener(bool ok) {
     bus_get_listener_for_socket_ExpectAndReturn(b, box->fd, l);
     for (int i = 0; i < SEND_NOTIFY_LISTENER_RETRIES; i++) {
+        completion_pipe = 41;
         listener_hold_response_ExpectAndReturn(l, box->fd,
-            box->out_seq_id, box->timeout_sec + 5, ok);
-        if (ok) { return; }
+            box->out_seq_id, box->timeout_sec + 5, &completion_pipe, ok);
+        if (ok) {
+            bus_poll_on_completion_ExpectAndReturn(b, completion_pipe, true);
+            return;
+        }
         syscall_poll_ExpectAndReturn(NULL, 0, SEND_NOTIFY_LISTENER_RETRY_DELAY, 0);
     }
 }

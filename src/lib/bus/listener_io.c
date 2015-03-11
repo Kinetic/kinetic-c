@@ -52,13 +52,18 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
         connection_info *ci = l->fd_info[i];
         BUS_ASSERT(b, b->udata, ci->fd == fd->fd);
         
-        /* TODO: handle POLLIN, *then* check for
-         * (POLLHUP | POLLERR | POLLNVAL), so if we get a status message
-         * with a reason for a hangup we can still pass it along. */
-
         BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
             "poll: l->fds[%d]->revents: 0x%04x",  // NOCOMMIT
             i + INCOMING_MSG_PIPE, fd->revents);
+
+        /* If a socket is about to be shut down, we want to get a
+         * complete read from it if possible, because it's likely to be
+         * an UNSOLICITEDSTATUS message with a reason for the hangup.
+         * Only do single reads otherwise, though, otherwise the
+         * listener can end up blocking too long handling consecutive
+         * reads on a busy connection and causing the incoming command
+         * queue to get backed up. */
+        bool is_closing = fd->events & (POLLERR | POLLNVAL | POLLHUP);
 
         if (fd->revents & POLLIN) {
             // Try to read what we can (possibly before hangup)
@@ -82,7 +87,7 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
                 }
                 // -1: socket error
                 // 0: no more to read
-            } while (cur_read > 0 && ci->to_read_size > 0);
+            } while (is_closing && cur_read > 0 && ci->to_read_size > 0);
             read_from++;
         }
 
@@ -199,6 +204,8 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
             sink_socket_read(b, l, ci, size);
             accum += size;
             if ((size_t)accum == ci->to_read_size) { break; }
+        } else {
+            break;
         }
     }
     return accum;

@@ -216,7 +216,7 @@ static bool enqueue_EXPECT_message_to_listener(bus *b, boxed_msg *box) {
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-        "telling listener to expect sent response, with box %p, seq_id %lld",
+        "telling listener to EXPECT sent response, with box %p, seq_id %lld",
         (void *)box, (long long)box->out_seq_id);
     
     if (box->result.status == BUS_SEND_UNDEFINED) {
