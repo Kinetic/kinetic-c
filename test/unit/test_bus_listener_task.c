@@ -95,7 +95,7 @@ void test_ListenerTask_MainLoop_should_notify_caller_on_shutdown(void)
 
 void test_ListenerTask_MainLoop_should_block_when_there_is_nothing_to_do(void)
 {
-    util_timestamp_ExpectAndReturn(&now, true, true);
+    Util_Timestamp_ExpectAndReturn(&now, true, true);
 
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         -1, 0);
@@ -118,7 +118,7 @@ void test_ListenerTask_MainLoop_should_step_timeouts_once_a_second(void)
     info1->timeout_sec = 6;
     info1->u.expect.box = box;
 
-    util_timestamp_ExpectAndReturn(&now, true, true);
+    Util_Timestamp_ExpectAndReturn(&now, true, true);
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
 
@@ -142,10 +142,10 @@ void test_ListenerTask_MainLoop_should_expire_timeouts(void)
     info1->timeout_sec = 1;
     info1->u.expect.box = box;
 
-    util_timestamp_ExpectAndReturn(&now, true, true);
-    util_timestamp_ExpectAndReturn(&cur, false, true);
-    util_timestamp_ExpectAndReturn(&cur, false, true);
-    bus_process_boxed_message_ExpectAndReturn(l->bus, box, &backpressure, true);
+    Util_Timestamp_ExpectAndReturn(&now, true, true);
+    Util_Timestamp_ExpectAndReturn(&cur, false, true);
+    Util_Timestamp_ExpectAndReturn(&cur, false, true);
+    Bus_ProcessBoxedMessage_ExpectAndReturn(l->bus, box, &backpressure, true);
 
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
@@ -191,8 +191,8 @@ void test_ListenerTask_MainLoop_should_properly_free_HOLD_message_with_payload(v
 
     l->fd_info[0] = &ci;
 
-    util_timestamp_ExpectAndReturn(&now, true, true);
-    util_timestamp_ExpectAndReturn(&cur, false, true);
+    Util_Timestamp_ExpectAndReturn(&now, true, true);
+    Util_Timestamp_ExpectAndReturn(&cur, false, true);
 
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
@@ -220,8 +220,8 @@ void test_ListenerTask_MainLoop_should_retry_delivery_of_messages_that_are_ready
     info0->u.expect.error = RX_ERROR_READY_FOR_DELIVERY;
 
     // fail delivery the first retry
-    util_timestamp_ExpectAndReturn(&cur, true, true);
-    bus_process_boxed_message_ExpectAndReturn(l->bus, box, &backpressure, false);
+    Util_Timestamp_ExpectAndReturn(&cur, true, true);
+    Bus_ProcessBoxedMessage_ExpectAndReturn(l->bus, box, &backpressure, false);
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
     ListenerTask_MainLoop((void *)l);
@@ -229,8 +229,8 @@ void test_ListenerTask_MainLoop_should_retry_delivery_of_messages_that_are_ready
     TEST_ASSERT_EQUAL(RX_ERROR_READY_FOR_DELIVERY, info0->u.expect.error);
 
     // successfully deliver
-    util_timestamp_ExpectAndReturn(&cur, true, true);
-    bus_process_boxed_message_ExpectAndReturn(l->bus, box, &backpressure, true);
+    Util_Timestamp_ExpectAndReturn(&cur, true, true);
+    Bus_ProcessBoxedMessage_ExpectAndReturn(l->bus, box, &backpressure, true);
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
     ListenerTask_MainLoop((void *)l);
@@ -248,14 +248,14 @@ void test_ListenerTask_MainLoop_should_retry_and_clean_up_DONE_messages(void)
     box->result.status = BUS_SEND_SUCCESS;
     info0->u.expect.error = RX_ERROR_DONE;
 
-    util_timestamp_ExpectAndReturn(&cur, true, true);
-    bus_process_boxed_message_ExpectAndReturn(l->bus, box, &backpressure, false);
+    Util_Timestamp_ExpectAndReturn(&cur, true, true);
+    Bus_ProcessBoxedMessage_ExpectAndReturn(l->bus, box, &backpressure, false);
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
     ListenerTask_MainLoop((void *)l);
 
-    util_timestamp_ExpectAndReturn(&cur, true, true);
-    bus_process_boxed_message_ExpectAndReturn(l->bus, box, &backpressure, true);
+    Util_Timestamp_ExpectAndReturn(&cur, true, true);
+    Bus_ProcessBoxedMessage_ExpectAndReturn(l->bus, box, &backpressure, true);
 
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
@@ -274,14 +274,14 @@ void test_ListenerTask_MainLoop_should_retry_and_expire_errored_messages(void)
     box->result.status = BUS_SEND_SUCCESS;
     info0->u.expect.error = RX_ERROR_POLLHUP;
 
-    util_timestamp_ExpectAndReturn(&cur, true, true);
-    bus_process_boxed_message_ExpectAndReturn(l->bus, box, &backpressure, false);
+    Util_Timestamp_ExpectAndReturn(&cur, true, true);
+    Bus_ProcessBoxedMessage_ExpectAndReturn(l->bus, box, &backpressure, false);
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
     ListenerTask_MainLoop((void *)l);
 
-    util_timestamp_ExpectAndReturn(&cur, true, true);
-    bus_process_boxed_message_ExpectAndReturn(l->bus, box, &backpressure, true);
+    Util_Timestamp_ExpectAndReturn(&cur, true, true);
+    Bus_ProcessBoxedMessage_ExpectAndReturn(l->bus, box, &backpressure, true);
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         LISTENER_TASK_TIMEOUT_DELAY, 0);
     ListenerTask_MainLoop((void *)l);
@@ -293,7 +293,7 @@ void test_ListenerTask_MainLoop_should_retry_and_expire_errored_messages(void)
 void test_ListenerTask_MainLoop_should_check_commands(void) {
     l->is_idle = true;
     poll_res = 1;
-    util_timestamp_ExpectAndReturn(&cur, true, true);
+    Util_Timestamp_ExpectAndReturn(&cur, true, true);
     syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds + INCOMING_MSG_PIPE,
         -1, poll_res);
     ListenerCmd_CheckIncomingMessages_Expect(l, &poll_res);

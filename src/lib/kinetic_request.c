@@ -144,7 +144,7 @@ bool KineticRequest_SendRequest(KineticOperation *operation,
         .udata    = operation,
         .timeout_sec = operation->timeoutSeconds,
     };
-    return bus_send_request(operation->session->messageBus, &bus_msg);
+    return Bus_SendRequest(operation->session->messageBus, &bus_msg);
 }
 
 bool KineticRequest_LockSend(KineticSession* session)

@@ -35,27 +35,27 @@
  * unsolicited status updates. */
 struct listener;
 
-struct listener *listener_init(struct bus *b, struct bus_config *cfg);
+struct listener *Listener_Init(struct bus *b, struct bus_config *cfg);
 
 /* Add/remove sockets' metadata from internal info. Blocking. */
-bool listener_add_socket(struct listener *l, connection_info *ci, int *notify_fd);
-bool listener_remove_socket(struct listener *l, int fd, int *notify_fd);
+bool Listener_AddSocket(struct listener *l, connection_info *ci, int *notify_fd);
+bool Listener_RemoveSocket(struct listener *l, int fd, int *notify_fd);
 
 /* The client is about to start a write, the listener should hold on to
  * the response (with timeout) if it arrives before receiving further
  * instructions from the client. */
-bool listener_hold_response(struct listener *l, int fd,
+bool Listener_HoldResponse(struct listener *l, int fd,
     int64_t seq_id, int16_t timeout_sec, int *notify_fd);
 
 /* The client has finished a write, the listener should expect a response. */
-bool listener_expect_response(struct listener *l, boxed_msg *box,
+bool Listener_ExpectResponse(struct listener *l, boxed_msg *box,
     uint16_t *backpressure);
 
 /* Shut down the listener. Blocking. */
-bool listener_shutdown(struct listener *l, int *notify_fd);
+bool Listener_Shutdown(struct listener *l, int *notify_fd);
 
 /* Free the listener, which must already be shut down. */
-void listener_free(struct listener *l);
+void Listener_Free(struct listener *l);
 
 #ifdef TEST
 #include "listener_internal_types.h"

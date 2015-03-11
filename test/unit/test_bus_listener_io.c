@@ -240,7 +240,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
     
     ListenerIO_AttemptRecv(l, 1);
@@ -281,7 +281,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     rx_info_t unpack_res_info = {
         .state = RIS_HOLD,
     };
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
 
     ListenerIO_AttemptRecv(l, 1);
 
@@ -322,7 +322,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
     
     ListenerIO_AttemptRecv(l, 1);
@@ -361,14 +361,14 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 
     errno = EINTR;
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, -1);
-    util_is_resumable_io_error_ExpectAndReturn(EINTR, true);
+    Util_IsResumableIOError_ExpectAndReturn(EINTR, true);
 
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, ci.to_read_size);
     
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
     
     ListenerIO_AttemptRecv(l, 1);
@@ -407,7 +407,7 @@ void test_ListenerIO_AttemptRecv_should_handle_socket_hangup_during_read(void) {
 
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, -1);
     errno = ECONNRESET;
-    util_is_resumable_io_error_ExpectAndReturn(errno, false);
+    Util_IsResumableIOError_ExpectAndReturn(errno, false);
     //save error status: RX_ERROR_READ_FAILURE
     ListenerIO_AttemptRecv(l, 1);
 
@@ -446,7 +446,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
     
     ListenerIO_AttemptRecv(l, 1);
@@ -492,7 +492,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
     
     ListenerIO_AttemptRecv(l, 1);

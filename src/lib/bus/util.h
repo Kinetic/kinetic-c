@@ -24,13 +24,13 @@
 #include <time.h>
 #include <sys/time.h>
 
-bool util_is_resumable_io_error(int errno_);
+bool Util_IsResumableIOError(int errno_);
 
-/* Get the current time. Returns false on failure, which should
+/* Get the current time. RetuBus_RegisterSockets false on failure, which should
  * never happen. If a time-adjustment-safe API is available on the
  * current OS (e.g. clock_gettime(CLOCK_MONOTONIC, ...), it will
  * be used when relative is true. If it's not available, the
  * relative flag has no impact. */
-bool util_timestamp(struct timeval *tv, bool relative);
+bool Util_Timestamp(struct timeval *tv, bool relative);
 
 #endif

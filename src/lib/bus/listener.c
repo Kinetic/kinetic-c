@@ -36,7 +36,7 @@
 #include "syscall.h"
 #include "util.h"
 
-struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
+struct listener *Listener_Init(struct bus *b, struct bus_config *cfg) {
     struct listener *l = calloc(1, sizeof(*l));
     if (l == NULL) { return NULL; }
 
@@ -91,30 +91,30 @@ struct listener *listener_init(struct bus *b, struct bus_config *cfg) {
     return l;
 }
 
-bool listener_add_socket(struct listener *l,
+bool Listener_AddSocket(struct listener *l,
         connection_info *ci, int *notify_fd) {
-    listener_msg *msg = listener_helper_get_free_msg(l);
+    listener_msg *msg = ListenerHelper_GetFreeMsg(l);
     if (msg == NULL) { return false; }
 
     msg->type = MSG_ADD_SOCKET;
     msg->u.add_socket.info = ci;
     msg->u.add_socket.notify_fd = msg->pipes[1];
-    return listener_helper_push_message(l, msg, notify_fd);
+    return ListenerHelper_PushMessage(l, msg, notify_fd);
 }
 
-bool listener_remove_socket(struct listener *l, int fd, int *notify_fd) {
-    listener_msg *msg = listener_helper_get_free_msg(l);
+bool Listener_RemoveSocket(struct listener *l, int fd, int *notify_fd) {
+    listener_msg *msg = ListenerHelper_GetFreeMsg(l);
     if (msg == NULL) { return false; }
 
     msg->type = MSG_REMOVE_SOCKET;
     msg->u.remove_socket.fd = fd;
     msg->u.remove_socket.notify_fd = msg->pipes[1];
-    return listener_helper_push_message(l, msg, notify_fd);
+    return ListenerHelper_PushMessage(l, msg, notify_fd);
 }
 
-bool listener_hold_response(struct listener *l, int fd,
+bool Listener_HoldResponse(struct listener *l, int fd,
         int64_t seq_id, int16_t timeout_sec, int *notify_fd) {
-    listener_msg *msg = listener_helper_get_free_msg(l);
+    listener_msg *msg = ListenerHelper_GetFreeMsg(l);
     struct bus *b = l->bus;
     if (msg == NULL) {
         BUS_LOG(b, 1, LOG_LISTENER, "OUT OF MESSAGES", b->udata);
@@ -122,7 +122,7 @@ bool listener_hold_response(struct listener *l, int fd,
     }
 
     BUS_LOG_SNPRINTF(b, 5, LOG_MEMORY, b->udata, 128,
-        "listener_hold_response with <fd:%d, seq_id:%lld>",
+        "Listener_HoldResponse with <fd:%d, seq_id:%lld>",
         fd, (long long)seq_id);
 
     msg->type = MSG_HOLD_RESPONSE;
@@ -131,27 +131,27 @@ bool listener_hold_response(struct listener *l, int fd,
     msg->u.hold.timeout_sec = timeout_sec;
     msg->u.hold.notify_fd = msg->pipes[1];
 
-    bool pm_res = listener_helper_push_message(l, msg, notify_fd);
+    bool pm_res = ListenerHelper_PushMessage(l, msg, notify_fd);
     if (!pm_res) {
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
-            "listener_hold_response with <fd:%d, seq_id:%lld> FAILED",
+            "Listener_HoldResponse with <fd:%d, seq_id:%lld> FAILED",
             fd, (long long)seq_id);
     }
     return pm_res;
 }
 
-bool listener_expect_response(struct listener *l, boxed_msg *box,
+bool Listener_ExpectResponse(struct listener *l, boxed_msg *box,
         uint16_t *backpressure) {
-    listener_msg *msg = listener_helper_get_free_msg(l);
+    listener_msg *msg = ListenerHelper_GetFreeMsg(l);
     struct bus *b = l->bus;
     if (msg == NULL) {
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
-            "! listener_helper_get_free_msg fail %p", (void*)box);
+            "! ListenerHelper_GetFreeMsg fail %p", (void*)box);
         return false;
     }
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
-        "listener_expect_response with box of %p, seq_id:%lld",
+        "Listener_ExpectResponse with box of %p, seq_id:%lld",
         (void*)box, (long long)box->out_seq_id);
 
     msg->type = MSG_EXPECT_RESPONSE;
@@ -159,24 +159,24 @@ bool listener_expect_response(struct listener *l, boxed_msg *box,
     *backpressure = ListenerTask_GetBackpressure(l);
     BUS_ASSERT(b, b->udata, box->result.status != BUS_SEND_UNDEFINED);
 
-    bool pm = listener_helper_push_message(l, msg, NULL);
+    bool pm = ListenerHelper_PushMessage(l, msg, NULL);
     if (!pm) {
         BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
-            "! listener_helper_push_message fail %p", (void*)box);
+            "! ListenerHelper_PushMessage fail %p", (void*)box);
     }
     return pm;
 }
 
-bool listener_shutdown(struct listener *l, int *notify_fd) {
-    listener_msg *msg = listener_helper_get_free_msg(l);
+bool Listener_Shutdown(struct listener *l, int *notify_fd) {
+    listener_msg *msg = ListenerHelper_GetFreeMsg(l);
     if (msg == NULL) { return false; }
 
     msg->type = MSG_SHUTDOWN;
     msg->u.shutdown.notify_fd = msg->pipes[1];
-    return listener_helper_push_message(l, msg, notify_fd);
+    return ListenerHelper_PushMessage(l, msg, notify_fd);
 }
 
-void listener_free(struct listener *l) {
+void Listener_Free(struct listener *l) {
     if (l) {
         struct bus *b = l->bus;
         /* Thread has joined but data has not been freed yet. */

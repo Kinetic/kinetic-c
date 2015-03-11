@@ -97,7 +97,7 @@ KineticStatus KineticSession_Connect(KineticSession * const session)
     bus_socket_t socket_type = session->config.useSsl ? BUS_SOCKET_SSL : BUS_SOCKET_PLAIN;
     session->si = calloc(1, sizeof(socket_info) + 2 * PDU_PROTO_MAX_LEN);
     if (session->si == NULL) { return KINETIC_STATUS_MEMORY_ERROR; }
-    bool success = bus_register_socket(session->messageBus, socket_type, session->socket, session);
+    bool success = Bus_RegisterSocket(session->messageBus, socket_type, session->socket, session);
     if (!success) {
         LOG0("Failed registering connection with client!");
         goto connection_error_cleanup;
@@ -138,7 +138,7 @@ KineticStatus KineticSession_Disconnect(KineticSession * const session)
     }
     
     // Close the connection
-    bus_release_socket(session->messageBus, session->socket, NULL);
+    Bus_ReleaseSocket(session->messageBus, session->socket, NULL);
     free(session->si);
     session->si = NULL;
     session->socket = KINETIC_SOCKET_INVALID;

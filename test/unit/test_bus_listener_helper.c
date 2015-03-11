@@ -81,24 +81,24 @@ void setUp(void)
 
 void tearDown(void) {}
 
-void test_listener_helper_get_free_msg_should_reserve_a_message_if_available(void)
+void test_ListenerHelper_GetFreeMsg_should_reserve_a_message_if_available(void)
 {
     listener_msg *msg = &l->msgs[9];
     l->msg_freelist = msg;
     l->msgs_in_use = 7;
-    TEST_ASSERT_EQUAL(msg, listener_helper_get_free_msg(l));
+    TEST_ASSERT_EQUAL(msg, ListenerHelper_GetFreeMsg(l));
     TEST_ASSERT_EQUAL(8, l->msgs_in_use);
 }
 
-void test_listener_helper_get_free_msg_should_expose_running_out_of_messages(void)
+void test_ListenerHelper_GetFreeMsg_should_expose_running_out_of_messages(void)
 {
     l->msg_freelist = NULL;
     l->msgs_in_use = 7;
-    TEST_ASSERT_EQUAL(NULL, listener_helper_get_free_msg(l));
+    TEST_ASSERT_EQUAL(NULL, ListenerHelper_GetFreeMsg(l));
     TEST_ASSERT_EQUAL(7, l->msgs_in_use);
 }
 
-void test_listener_helper_push_message_should_add_a_message_to_the_listeners_command_queue(void)
+void test_ListenerHelper_PushMessage_should_add_a_message_to_the_listeners_command_queue(void)
 {
     l->commit_pipe = 100;
     listener_msg *msg = &l->msgs[9];
@@ -108,11 +108,11 @@ void test_listener_helper_push_message_should_add_a_message_to_the_listeners_com
     syscall_write_ExpectAndReturn(l->commit_pipe, msg_buf, sizeof(msg_buf), sizeof(msg_buf));
     
     int reply_fd = -1;
-    TEST_ASSERT_TRUE(listener_helper_push_message(l, msg, &reply_fd));
+    TEST_ASSERT_TRUE(ListenerHelper_PushMessage(l, msg, &reply_fd));
     TEST_ASSERT_EQUAL(23, reply_fd);
 }
 
-void test_listener_helper_push_message_should_retry_and_add_a_message_to_the_listeners_command_queue_on_EINTR(void)
+void test_ListenerHelper_PushMessage_should_retry_and_add_a_message_to_the_listeners_command_queue_on_EINTR(void)
 {
     l->commit_pipe = 100;
     listener_msg *msg = &l->msgs[9];
@@ -124,11 +124,11 @@ void test_listener_helper_push_message_should_retry_and_add_a_message_to_the_lis
     syscall_write_ExpectAndReturn(l->commit_pipe, msg_buf, sizeof(msg_buf), sizeof(msg_buf));
     
     int reply_fd = -1;
-    TEST_ASSERT_TRUE(listener_helper_push_message(l, msg, &reply_fd));
+    TEST_ASSERT_TRUE(ListenerHelper_PushMessage(l, msg, &reply_fd));
     TEST_ASSERT_EQUAL(23, reply_fd);
 }
 
-void test_listener_helper_push_message_should_expose_errors(void)
+void test_ListenerHelper_PushMessage_should_expose_errors(void)
 {
     l->commit_pipe = 100;
     listener_msg *msg = &l->msgs[9];
@@ -140,45 +140,45 @@ void test_listener_helper_push_message_should_expose_errors(void)
     
     int reply_fd = -1;
     ListenerTask_ReleaseMsg_Expect(l, msg);
-    TEST_ASSERT_FALSE(listener_helper_push_message(l, msg, &reply_fd));
+    TEST_ASSERT_FALSE(ListenerHelper_PushMessage(l, msg, &reply_fd));
 }
 
-void test_listener_helper_get_free_rx_info_should_return_a_free_RX_INFO(void)
+void test_ListenerHelper_GetFreeRXInfo_should_return_a_free_RX_INFO(void)
 {
     struct rx_info_t *head = &l->rx_info[123];
     head->next = &l->rx_info[55];
     l->rx_info_in_use = 8;
     l->rx_info_freelist = head;
     l->rx_info_max_used = 122;
-    TEST_ASSERT_EQUAL(head, listener_helper_get_free_rx_info(l));
+    TEST_ASSERT_EQUAL(head, ListenerHelper_GetFreeRXInfo(l));
     TEST_ASSERT_EQUAL(&l->rx_info[55], l->rx_info_freelist);
     TEST_ASSERT_EQUAL(9, l->rx_info_in_use);
     TEST_ASSERT_EQUAL(head->id, l->rx_info_max_used);
 }
 
-void test_listener_helper_get_free_rx_info_should_expose_errors(void)
+void test_ListenerHelper_GetFreeRXInfo_should_expose_errors(void)
 {
     l->rx_info_freelist = NULL;
-    TEST_ASSERT_EQUAL(NULL, listener_helper_get_free_rx_info(l));
+    TEST_ASSERT_EQUAL(NULL, ListenerHelper_GetFreeRXInfo(l));
 }
 
-void test_listener_helper_find_info_by_sequence_id_should_find_info_by_sequence_id(void)
+void test_ListenerHelper_FindInfoBySequenceID_should_find_info_by_sequence_id(void)
 {
     l->rx_info_max_used = 100;
     struct rx_info_t *info = &l->rx_info[95];
     info->state = RIS_HOLD;
     info->u.hold.fd = 75;
     info->u.hold.seq_id = 12345;
-    TEST_ASSERT_EQUAL(info, listener_helper_find_info_by_sequence_id(l, 75, 12345));
+    TEST_ASSERT_EQUAL(info, ListenerHelper_FindInfoBySequenceID(l, 75, 12345));
 }
 
-void test_listener_helper_find_info_by_sequence_id_should_return_NULL_for_not_found(void)
+void test_ListenerHelper_FindInfoBySequenceID_should_return_NULL_for_not_found(void)
 {
     l->rx_info_max_used = 100;
     struct rx_info_t *info = &l->rx_info[95];
     info->state = RIS_HOLD;
     info->u.hold.fd = 75;
     info->u.hold.seq_id = 12345;
-    TEST_ASSERT_EQUAL(NULL, listener_helper_find_info_by_sequence_id(l, 75, 12346));
-    TEST_ASSERT_EQUAL(NULL, listener_helper_find_info_by_sequence_id(l, 74, 12345));
+    TEST_ASSERT_EQUAL(NULL, ListenerHelper_FindInfoBySequenceID(l, 75, 12346));
+    TEST_ASSERT_EQUAL(NULL, ListenerHelper_FindInfoBySequenceID(l, 74, 12345));
 }

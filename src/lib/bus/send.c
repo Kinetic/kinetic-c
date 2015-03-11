@@ -51,12 +51,12 @@ static bool attempt_to_enqueue_HOLD_message_to_listener(struct bus *b,
     int fd, int64_t seq_id, int16_t timeout_sec);
 /* Do a blocking send.
  *
- * Returning true indicates that the message has been queued up for
+ * RetuBus_RegisterSocketing true indicates that the message has been queued up for
  * delivery, but the request or response may still fail. Those errors
  * are handled by giving an error status code to the callback.
- * Returning false means that the send was rejected outright, and
+ * RetuBus_RegisterSocketing false means that the send was rejected outright, and
  * the callback-based error handling will not be used. */
-bool send_do_blocking_send(bus *b, boxed_msg *box) {
+bool Send_DoBlockingSend(bus *b, boxed_msg *box) {
     /* Note: assumes that all locking and thread-safe seq_id allocation
      * has been handled upstream. If multiple client requests are queued
      * up to go out at the same time, they must go out in monotonic order,
@@ -76,7 +76,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
     struct timeval now;
     struct pollfd fds[1];
 #endif
-    if (util_timestamp(&start, true)) {
+    if (Util_Timestamp(&start, true)) {
         box->tv_send_start = start;
     } else {
         BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 128,
@@ -107,7 +107,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
     int rem_msec = timeout_msec;
 
     while (rem_msec > 0) {
-        if (util_timestamp(&now, true)) {
+        if (Util_Timestamp(&now, true)) {
             size_t usec_elapsed = (((now.tv_sec - start.tv_sec) * 1000000)
                 + (now.tv_usec - start.tv_usec));
             size_t msec_elapsed = usec_elapsed / 1000;
@@ -120,7 +120,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
              * we don't know what state the connection was left in. */
             BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 128,
                 "gettimeofday failure in poll loop: %d", errno);
-            send_handle_failure(b, box, BUS_SEND_TX_FAILURE);
+            Send_HandleFailure(b, box, BUS_SEND_TX_FAILURE);
             return true;
         }
 
@@ -135,7 +135,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
                 errno = 0;
                 continue;
             } else {
-                send_handle_failure(b, box, BUS_SEND_TX_FAILURE);
+                Send_HandleFailure(b, box, BUS_SEND_TX_FAILURE);
                 return true;
             }
         } else if (res == 1) {
@@ -143,19 +143,19 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
             if (revents & POLLNVAL) {
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
                     "do_blocking_send on %d: POLLNVAL => UNREGISTERED_SOCKET", box->fd);
-                send_handle_failure(b, box, BUS_SEND_UNREGISTERED_SOCKET);
+                Send_HandleFailure(b, box, BUS_SEND_UNREGISTERED_SOCKET);
                 return true;
             } else if (revents & (POLLERR | POLLHUP)) {
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
                     "do_blocking_send on %d: POLLERR/POLLHUP => TX_FAILURE (%d)",
                     box->fd, revents);
-                send_handle_failure(b, box, BUS_SEND_TX_FAILURE);
+                Send_HandleFailure(b, box, BUS_SEND_TX_FAILURE);
                 return true;
             } else if (revents & POLLOUT) {
-                send_helper_handle_write_res hw_res = send_helper_handle_write(b, box);
+                SendHelper_HandleWrite_res hw_res = SendHelper_HandleWrite(b, box);
 
                 BUS_LOG_SNPRINTF(b, 4, LOG_SENDER, b->udata, 256,
-                    "send_helper_handle_write res %d", hw_res);
+                    "SendHelper_HandleWrite res %d", hw_res);
 
                 switch (hw_res) {
                 case SHHW_OK:
@@ -177,7 +177,7 @@ bool send_do_blocking_send(bus *b, boxed_msg *box) {
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 256,
         "do_blocking_send on <fd:%d, seq_id:%lld>: TX_TIMEOUT",
         box->fd, (long long)box->out_seq_id);
-    send_handle_failure(b, box, BUS_SEND_TX_TIMEOUT);
+    Send_HandleFailure(b, box, BUS_SEND_TX_TIMEOUT);
     return true;
 }
 
@@ -187,15 +187,15 @@ static bool attempt_to_enqueue_HOLD_message_to_listener(struct bus *b,
       "telling listener to HOLD response, with <fd:%d, seq_id:%lld>",
         fd, (long long)seq_id);
 
-    struct listener *l = bus_get_listener_for_socket(b, fd);
+    struct listener *l = Bus_GetListenerForSocket(b, fd);
 
     const int max_retries = SEND_NOTIFY_LISTENER_RETRIES;
     for (int try = 0; try < max_retries; try++) {
         #ifndef TEST
         int completion_pipe = -1;
         #endif
-        if (listener_hold_response(l, fd, seq_id, timeout_sec, &completion_pipe)) {
-            return bus_poll_on_completion(b, completion_pipe);
+        if (Listener_HoldResponse(l, fd, seq_id, timeout_sec, &completion_pipe)) {
+            return BusPoll_OnCompletion(b, completion_pipe);
         } else {
             /* Don't apply much backpressure here since the client
              * thread will get it when the message is done sending. */
@@ -205,9 +205,9 @@ static bool attempt_to_enqueue_HOLD_message_to_listener(struct bus *b,
     return false;
 }
 
-void send_handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status) {
+void Send_HandleFailure(struct bus *b, boxed_msg *box, bus_send_status_t status) {
     BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-        "send_handle_failure: box %p, <fd:%d, seq_id:%lld>, status %d",
+        "Send_HandleFailure: box %p, <fd:%d, seq_id:%lld>, status %d",
         (void*)box, box->fd, (long long)box->out_seq_id, status);
     BUS_ASSERT(b, b->udata, status != BUS_SEND_UNDEFINED);
 
@@ -222,10 +222,10 @@ void send_handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status
     /* Retry until it succeeds. */
     size_t retries = 0;
     for (;;) {
-        if (bus_process_boxed_message(b, box, &backpressure)) {
+        if (Bus_ProcessBoxedMessage(b, box, &backpressure)) {
             BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
                 "deleted box %p", (void*)box);
-            bus_backpressure_delay(b, backpressure,
+            Bus_BackpressureDelay(b, backpressure,
                 LISTENER_EXPECT_BACKPRESSURE_SHIFT);
             return;
         } else {

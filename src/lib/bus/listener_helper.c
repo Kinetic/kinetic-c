@@ -28,7 +28,7 @@
 uint8_t msg_buf[sizeof(uint8_t)];
 #endif
 
-listener_msg *listener_helper_get_free_msg(listener *l) {
+listener_msg *ListenerHelper_GetFreeMsg(listener *l) {
     struct bus *b = l->bus;
 
     BUS_LOG_SNPRINTF(b, 4, LOG_LISTENER, b->udata, 128,
@@ -67,7 +67,7 @@ listener_msg *listener_helper_get_free_msg(listener *l) {
     }
 }
 
-bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *reply_fd) {
+bool ListenerHelper_PushMessage(struct listener *l, listener_msg *msg, int *reply_fd) {
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, msg);
   
@@ -97,7 +97,7 @@ bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *re
     }
 }
 
-rx_info_t *listener_helper_get_free_rx_info(struct listener *l) {
+rx_info_t *ListenerHelper_GetFreeRXInfo(struct listener *l) {
     struct bus *b = l->bus;
 
     struct rx_info_t *head = l->rx_info_freelist;
@@ -124,7 +124,7 @@ rx_info_t *listener_helper_get_free_rx_info(struct listener *l) {
     }
 }
 
-rx_info_t *listener_helper_find_info_by_sequence_id(listener *l,
+rx_info_t *ListenerHelper_FindInfoBySequenceID(listener *l,
         int fd, int64_t seq_id) {
     struct bus *b = l->bus;    
     for (int i = 0; i <= l->rx_info_max_used; i++) {

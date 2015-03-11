@@ -45,7 +45,7 @@
 
 static void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
-    const char *event_str = bus_log_event_str(event);
+    const char *event_str = Bus_LogEventStr(event);
     fprintf(stderr, "%s[%d] -- %s\n",
         event_str, log_level, msg);
 }
@@ -248,7 +248,7 @@ void test_that_we_can_register_sockets(void)
         .bus_udata = NULL,
     };
     bus_result res = {0};
-    if (!bus_init(&cfg, &res)) {
+    if (!Bus_Init(&cfg, &res)) {
         LOGF1(0, "failed to init bus: %d\n", res.status);
         return;
     }
@@ -258,13 +258,13 @@ void test_that_we_can_register_sockets(void)
 
     int fd = KineticSocket_Connect(GetSystemTestHost1(), GetSystemTestPort1());
     assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
-    bool result = bus_register_socket(res.bus, BUS_SOCKET_PLAIN, fd, si);
+    bool result = Bus_RegisterSocket(res.bus, BUS_SOCKET_PLAIN, fd, si);
     assert(result);
 
     sleep(5);
 
-    bus_shutdown(res.bus);
-    bus_free(res.bus);
+    Bus_Shutdown(res.bus);
+    Bus_Free(res.bus);
 
     free(si);
 
@@ -286,7 +286,7 @@ void test_that_we_can_register_SSL_sockets(void)
         .bus_udata = NULL,
     };
     bus_result res = {0};
-    if (!bus_init(&cfg, &res)) {
+    if (!Bus_Init(&cfg, &res)) {
         LOGF1(0, "failed to init bus: %d\n", res.status);
         return;
     }
@@ -296,13 +296,13 @@ void test_that_we_can_register_SSL_sockets(void)
 
     int fd = KineticSocket_Connect(GetSystemTestHost1(), GetSystemTestTlsPort1());
     assert(fd != KINETIC_SOCKET_DESCRIPTOR_INVALID);
-    bool result = bus_register_socket(res.bus, BUS_SOCKET_SSL, fd, si);
+    bool result = Bus_RegisterSocket(res.bus, BUS_SOCKET_SSL, fd, si);
     assert(result);
 
     sleep(5);
 
-    bus_shutdown(res.bus);
-    bus_free(res.bus);
+    Bus_Shutdown(res.bus);
+    Bus_Free(res.bus);
 
     free(si);
 

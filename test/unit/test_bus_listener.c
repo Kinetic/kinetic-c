@@ -58,104 +58,104 @@ void setUp(void) {
 
 void tearDown(void) {}
 
-void test_listener_add_socket_should_handle_msg_exhaustion(void) {
+void test_Listener_AddSocket_should_handle_msg_exhaustion(void) {
     l->msg_freelist = NULL;
     connection_info ci;
     int fd = -1;
-    listener_helper_get_free_msg_ExpectAndReturn(l, NULL);
-    TEST_ASSERT_FALSE(listener_add_socket(l, &ci, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, NULL);
+    TEST_ASSERT_FALSE(Listener_AddSocket(l, &ci, &fd));
 }
 
-void test_listener_add_socket_should_handle_full_msg_queue(void) {
+void test_Listener_AddSocket_should_handle_full_msg_queue(void) {
     l->msg_freelist = NULL;
     connection_info ci;
     int fd = -1;
     listener_msg msg;
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, &fd, false);
-    TEST_ASSERT_FALSE(listener_add_socket(l, &ci, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, &fd, false);
+    TEST_ASSERT_FALSE(Listener_AddSocket(l, &ci, &fd));
 }
 
-void test_listener_add_socket_should_add_ADD_SOCKET_msg_to_queue(void) {
+void test_Listener_AddSocket_should_add_ADD_SOCKET_msg_to_queue(void) {
     l->msg_freelist = NULL;
     connection_info ci;
     int fd = -1;
     listener_msg msg;
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, &fd, true);
-    TEST_ASSERT_TRUE(listener_add_socket(l, &ci, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, &fd, true);
+    TEST_ASSERT_TRUE(Listener_AddSocket(l, &ci, &fd));
 
     TEST_ASSERT_EQUAL(MSG_ADD_SOCKET, msg.type);
     TEST_ASSERT_EQUAL(&ci, msg.u.add_socket.info);
     TEST_ASSERT_EQUAL(msg.pipes[1], msg.u.add_socket.notify_fd);
 }
 
-void test_listener_remove_socket_should_handle_msg_exhaustion(void) {
+void test_Listener_RemoveSocket_should_handle_msg_exhaustion(void) {
     l->msg_freelist = NULL;
     int fd = -1;
-    listener_helper_get_free_msg_ExpectAndReturn(l, NULL);
-    TEST_ASSERT_FALSE(listener_remove_socket(l, fd, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, NULL);
+    TEST_ASSERT_FALSE(Listener_RemoveSocket(l, fd, &fd));
 }
 
-void test_listener_remove_socket_should_handle_full_msg_queue(void) {
+void test_Listener_RemoveSocket_should_handle_full_msg_queue(void) {
     l->msg_freelist = NULL;
     int fd = -1;
     listener_msg msg;
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, &fd, false);
-    TEST_ASSERT_FALSE(listener_remove_socket(l, fd, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, &fd, false);
+    TEST_ASSERT_FALSE(Listener_RemoveSocket(l, fd, &fd));
 }
 
-void test_listener_remove_socket_should_add_ADD_SOCKET_msg_to_queue(void) {
+void test_Listener_RemoveSocket_should_add_ADD_SOCKET_msg_to_queue(void) {
     l->msg_freelist = NULL;
     int fd = -1;
     listener_msg msg;
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, &fd, true);
-    TEST_ASSERT_TRUE(listener_remove_socket(l, fd, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, &fd, true);
+    TEST_ASSERT_TRUE(Listener_RemoveSocket(l, fd, &fd));
 
     TEST_ASSERT_EQUAL(MSG_REMOVE_SOCKET, msg.type);
     TEST_ASSERT_EQUAL(fd, msg.u.remove_socket.fd);
     TEST_ASSERT_EQUAL(msg.pipes[1], msg.u.remove_socket.notify_fd);
 }
 
-void test_listener_shutdown_should_handle_msg_exhaustion(void) {
+void test_Listener_Shutdown_should_handle_msg_exhaustion(void) {
     l->msg_freelist = NULL;
     int fd = -1;
-    listener_helper_get_free_msg_ExpectAndReturn(l, NULL);
-    TEST_ASSERT_FALSE(listener_shutdown(l, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, NULL);
+    TEST_ASSERT_FALSE(Listener_Shutdown(l, &fd));
 }
 
-void test_listener_shutdown_should_handle_full_msg_queue(void) {
+void test_Listener_Shutdown_should_handle_full_msg_queue(void) {
     l->msg_freelist = NULL;
     int fd = -1;
     listener_msg msg;
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, &fd, false);
-    TEST_ASSERT_FALSE(listener_shutdown(l, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, &fd, false);
+    TEST_ASSERT_FALSE(Listener_Shutdown(l, &fd));
 }
 
-void test_listener_shutdown_should_add_ADD_SOCKET_msg_to_queue(void) {
+void test_Listener_Shutdown_should_add_ADD_SOCKET_msg_to_queue(void) {
     l->msg_freelist = NULL;
     int fd = -1;
     listener_msg msg;
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, &fd, true);
-    TEST_ASSERT_TRUE(listener_shutdown(l, &fd));
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, &fd, true);
+    TEST_ASSERT_TRUE(Listener_Shutdown(l, &fd));
 
     TEST_ASSERT_EQUAL(MSG_SHUTDOWN, msg.type);
 }
 
-void test_listener_hold_response_should_enqueue_HOLD_RESPONSE_msg(void) {
+void test_Listener_HoldResponse_should_enqueue_HOLD_RESPONSE_msg(void) {
     int socket = 7;
     int64_t seq_id = 12345;
     int16_t timeout_sec = 9;
     listener_msg msg;
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
     int notify_fd = -1;
-    listener_helper_push_message_ExpectAndReturn(l, &msg, &notify_fd, true);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, &notify_fd, true);
     msg.pipes[1] = 123;
-    TEST_ASSERT_TRUE(listener_hold_response(l, socket, seq_id, timeout_sec, &notify_fd));
+    TEST_ASSERT_TRUE(Listener_HoldResponse(l, socket, seq_id, timeout_sec, &notify_fd));
     TEST_ASSERT_EQUAL(MSG_HOLD_RESPONSE, msg.type);
     TEST_ASSERT_EQUAL(socket, msg.u.hold.fd);
     TEST_ASSERT_EQUAL(seq_id, msg.u.hold.seq_id);
@@ -163,28 +163,28 @@ void test_listener_hold_response_should_enqueue_HOLD_RESPONSE_msg(void) {
     TEST_ASSERT_EQUAL(timeout_sec, msg.u.hold.timeout_sec);
 }
 
-void test_listener_expect_response_should_enqueue_EXPECT_RESPONSE_msg(void) {
+void test_Listener_ExpectResponse_should_enqueue_EXPECT_RESPONSE_msg(void) {
     listener_msg msg;
     struct boxed_msg box = {
         .fd = 0,
         .result.status = BUS_SEND_REQUEST_COMPLETE,
     };
-    listener_helper_get_free_msg_ExpectAndReturn(l, &msg);
+    ListenerHelper_GetFreeMsg_ExpectAndReturn(l, &msg);
     uint16_t backpressure = 0;
     ListenerTask_GetBackpressure_ExpectAndReturn(l, 0x4321);
-    listener_helper_push_message_ExpectAndReturn(l, &msg, NULL, true);
+    ListenerHelper_PushMessage_ExpectAndReturn(l, &msg, NULL, true);
 
-    TEST_ASSERT_TRUE(listener_expect_response(l, &box, &backpressure));
+    TEST_ASSERT_TRUE(Listener_ExpectResponse(l, &box, &backpressure));
     TEST_ASSERT_EQUAL(MSG_EXPECT_RESPONSE, msg.type);
     TEST_ASSERT_EQUAL(&box, msg.u.expect.box);
     TEST_ASSERT_EQUAL(0x4321, backpressure);
 }
 
-void test_listener_free_on_NULL_should_be_a_no_op(void) {
-    listener_free(NULL);
+void test_Listener_Free_on_NULL_should_be_a_no_op(void) {
+    Listener_Free(NULL);
 }
 
-void test_listener_free_should_unblock_pending_callers_and_close_file_handles(void) {
+void test_Listener_Free_should_unblock_pending_callers_and_close_file_handles(void) {
     /* setup */
     struct listener *nl = calloc(1, sizeof(*nl));
     nl->commit_pipe = 37;
@@ -219,6 +219,6 @@ void test_listener_free_should_unblock_pending_callers_and_close_file_handles(vo
     syscall_close_ExpectAndReturn(37, 0);
     syscall_close_ExpectAndReturn(149, 0);
 
-    listener_free(nl);
+    Listener_Free(nl);
 }
 

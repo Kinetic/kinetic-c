@@ -33,7 +33,7 @@ static void disable_known_bad_ciphers(SSL_CTX *ctx);
 static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd);
 
 /* Initialize the SSL library internals for use by the messaging bus. */
-bool bus_ssl_init(struct bus *b) {
+bool BusSSL_Init(struct bus *b) {
     if (!SSL_library_init()) { return false; }
     SSL_load_error_strings();
     ERR_load_BIO_strings();
@@ -47,8 +47,8 @@ bool bus_ssl_init(struct bus *b) {
 }
 
 /* Do an SSL / TLS handshake for a connection. Blocking.
- * Returns whether the connection succeeded. */
-SSL *bus_ssl_connect(struct bus *b, int fd) {
+ * RetuBus_RegisterSockets whether the connection succeeded. */
+SSL *BusSSL_Connect(struct bus *b, int fd) {
     SSL *ssl = NULL;
 
     ssl = SSL_new(b->ssl_ctx);
@@ -70,14 +70,14 @@ SSL *bus_ssl_connect(struct bus *b, int fd) {
 }
 
 /* Disconnect and free an individual SSL handle. */
-bool bus_ssl_disconnect(struct bus *b, SSL *ssl) {
+bool BusSSL_Disconnect(struct bus *b, SSL *ssl) {
     SSL_free(ssl);
     (void)b;
     return true;
 }
 
 /* Free all internal data for using SSL (the SSL_CTX). */
-void bus_ssl_ctx_free(struct bus *b) {
+void BusSSL_CtxFree(struct bus *b) {
     if (b && b->ssl_ctx) {
         SSL_CTX_free(b->ssl_ctx);
         b->ssl_ctx = NULL;
@@ -144,7 +144,7 @@ static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd) {
             "SSL_Connect handshake for socket %d, poll res %d", fd, pres);
 
         if (pres < 0) {
-            if (util_is_resumable_io_error(errno)) {
+            if (Util_IsResumableIOError(errno)) {
                 errno = 0;
             } else {
                 /*  */
@@ -176,7 +176,7 @@ static bool do_blocking_connection(struct bus *b, SSL *ssl, int fd) {
                         
                     case SSL_ERROR_SYSCALL:
                     {
-                        if (util_is_resumable_io_error(errno)) {
+                        if (Util_IsResumableIOError(errno)) {
                             errno = 0;
                             break;
                         } else {

@@ -198,7 +198,7 @@ static void tick_handler(config *cfg) {
 static void listen_loop_poll(config *cfg) {
     struct timeval tv;
 
-    if (!util_timestamp(&tv, true)) { assert(false); }
+    if (!Util_Timestamp(&tv, true)) { assert(false); }
     cfg->last_second = tv.tv_sec;
 
     assert(cfg->client_fds[0].fd == NO_CLIENT);
@@ -206,7 +206,7 @@ static void listen_loop_poll(config *cfg) {
     int delay = 1;
 
     for (;;) {
-        if (!util_timestamp(&tv, true)) { assert(false); }
+        if (!Util_Timestamp(&tv, true)) { assert(false); }
         if (tv.tv_sec != cfg->last_second) {
             tick_handler(cfg);
             cfg->last_second = tv.tv_sec;
@@ -229,7 +229,7 @@ static void listen_loop_poll(config *cfg) {
             LOG((res == 0 ? 6 : 3), "accept poll res %d\n", res);
             
             if (res == -1) {
-                if (util_is_resumable_io_error(errno)) {
+                if (Util_IsResumableIOError(errno)) {
                     errno = 0;
                 } else {
                     err(1, "poll");
@@ -248,7 +248,7 @@ static void listen_loop_poll(config *cfg) {
             LOG((res == 0 ? 6 : 3), "client poll res %d\n", res);
             /* Read / write to clients */
             if (res == -1) {
-                if (util_is_resumable_io_error(errno)) {
+                if (Util_IsResumableIOError(errno)) {
                     errno = 0;
                 } else {
                     err(1, "poll");
@@ -347,7 +347,7 @@ static void handle_client_io(config *cfg, int available) {
             size_t wr_size = buf->out_bytes - buf->written_bytes;
             ssize_t wres = write(buf->fd, &buf->buf[buf->written_bytes], wr_size);
             if (wres == -1) {
-                if (util_is_resumable_io_error(errno)) {
+                if (Util_IsResumableIOError(errno)) {
                     errno = 0;
                 } else if (errno == EPIPE) {
                     disconnect_client(cfg, fd->fd);
@@ -370,7 +370,7 @@ static void handle_client_io(config *cfg, int available) {
             ssize_t rres = read(buf->fd, read_buf, BUF_SZ - 1);
 
             if (rres == -1) {
-                if (util_is_resumable_io_error(errno)) {
+                if (Util_IsResumableIOError(errno)) {
                     errno = 0;
                 } else if (errno == EPIPE) {
                     disconnect_client(cfg, fd->fd);

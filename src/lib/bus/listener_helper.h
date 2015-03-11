@@ -24,11 +24,11 @@
 #include "listener.h"
 #include "listener_internal_types.h"
 
-listener_msg *listener_helper_get_free_msg(listener *l);
-bool listener_helper_push_message(struct listener *l, listener_msg *msg, int *reply_fd);
+listener_msg *ListenerHelper_GetFreeMsg(listener *l);
+bool ListenerHelper_PushMessage(struct listener *l, listener_msg *msg, int *reply_fd);
 
-rx_info_t *listener_helper_get_free_rx_info(listener *l);
-rx_info_t *listener_helper_find_info_by_sequence_id(listener *l,
+rx_info_t *ListenerHelper_GetFreeRXInfo(listener *l);
+rx_info_t *ListenerHelper_FindInfoBySequenceID(listener *l,
     int fd, int64_t seq_id);
 
 #endif

@@ -35,7 +35,7 @@
 
 STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
-    const char *event_str = bus_log_event_str(event);
+    const char *event_str = Bus_LogEventStr(event);
     struct timeval tv;
     gettimeofday(&tv, NULL);
 #if 0
@@ -265,7 +265,7 @@ bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
     };
     bus_result res;
     memset(&res, 0, sizeof(res));
-    if (!bus_init(&cfg, &res)) {
+    if (!Bus_Init(&cfg, &res)) {
         LOGF0("failed to init bus: %d\n", res.status);
         return false;
     }
@@ -276,8 +276,8 @@ bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
 void KineticBus_Shutdown(KineticClient * const client)
 {
     if (client) {
-        bus_shutdown(client->bus);
-        bus_free(client->bus);
+        Bus_Shutdown(client->bus);
+        Bus_Free(client->bus);
         client->bus = NULL;
     }
 }

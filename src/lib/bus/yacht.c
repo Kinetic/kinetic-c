@@ -38,7 +38,7 @@ static bool grow(struct yacht *y);
 #define MAX_PROBES 16
 
 /* Init a hash table with approx. 2 ** sz2 buckets. */
-struct yacht *yacht_init(uint8_t sz2) {
+struct yacht *Yacht_Init(uint8_t sz2) {
     if (sz2 == 0) { sz2 = DEF_SZ2; }
     size_t size = 1 << sz2;
     struct yacht *y = calloc(1, sizeof(*y));
@@ -68,7 +68,7 @@ static size_t hash(int key) {
     return key * LARGE_PRIME;
 }
 
-bool yacht_get(struct yacht *y, int key, void **value) {
+bool Yacht_Get(struct yacht *y, int key, void **value) {
     size_t b = hash(key) & y->mask;
     LOG(" -- getting key %d with bucket %zd\n", key, b);
 
@@ -86,13 +86,13 @@ bool yacht_get(struct yacht *y, int key, void **value) {
 }
 
 /* Check if KEY is in the table. */
-bool yacht_member(struct yacht *y, int key) {
+bool Yacht_Member(struct yacht *y, int key) {
     LOG(" -- checking membership for %d\n", key);
-    return yacht_get(y, key, NULL);
+    return Yacht_Get(y, key, NULL);
 }
 
 /* Set KEY to VALUE in the table. */
-bool yacht_set(struct yacht *y, int key, void *value, void **old_value) {
+bool Yacht_Set(struct yacht *y, int key, void *value, void **old_value) {
     LOG(" -- setting key %d\n", key);
 
     for (;;) {
@@ -169,7 +169,7 @@ cleanup:
 }
 
 /* Remove KEY from the table. */
-bool yacht_remove(struct yacht *y, int key, void **old_value) {
+bool Yacht_Remove(struct yacht *y, int key, void **old_value) {
     size_t b = hash(key) & y->mask;
     LOG(" -- removing %d with bucket %zd\n", key, b);
 
@@ -197,7 +197,7 @@ bool yacht_remove(struct yacht *y, int key, void **old_value) {
 }
 
 /* Free the table. */
-void yacht_free(struct yacht *y, yacht_free_cb *cb, void *udata) {
+void Yacht_Free(struct yacht *y, Yacht_Free_cb *cb, void *udata) {
     if (y) {
         for (size_t i = 0; i < y->size; i++) {
             int key = y->buckets[i];

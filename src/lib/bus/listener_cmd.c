@@ -216,7 +216,7 @@ static void hold_response(listener *l, int fd, int64_t seq_id,
     BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
         "hold_response <fd:%d, seq_id:%lld>", fd, (long long)seq_id);
 
-    rx_info_t *info = listener_helper_get_free_rx_info(l);
+    rx_info_t *info = ListenerHelper_GetFreeRXInfo(l);
     if (info == NULL) {
         BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
             "failed to get free rx_info for <fd:%d, seq_id:%lld>, dropping it",
@@ -247,7 +247,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         (void *)box, box->fd, (long long)box->out_seq_id);
 
     /* If there's a pending HOLD message, convert it. */
-    rx_info_t *info = listener_helper_find_info_by_sequence_id(l, box->fd, box->out_seq_id);
+    rx_info_t *info = ListenerHelper_FindInfoBySequenceID(l, box->fd, box->out_seq_id);
     if (info && info->state == RIS_HOLD) {
         BUS_ASSERT(b, b->udata, info->state == RIS_HOLD);
         if (info->u.hold.error == RX_ERROR_NONE && info->u.hold.has_result) {

@@ -115,7 +115,7 @@ static ssize_t socket_read_plain(struct bus *b, listener *l, int pfd_i, connecti
             if (errno == EAGAIN) {
                 errno = 0;
                 return accum;
-            } else if (util_is_resumable_io_error(errno)) {
+            } else if (Util_IsResumableIOError(errno)) {
                 errno = 0;
                 continue;
             } else {
@@ -175,7 +175,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
                 if (errno == 0) {
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL errno 0");
                     BUS_ASSERT(b, b->udata, false);
-                } else if (util_is_resumable_io_error(errno)) {
+                } else if (Util_IsResumableIOError(errno)) {
                     errno = 0;
                     continue;
                 } else {
@@ -219,14 +219,14 @@ static bool sink_socket_read(struct bus *b,
         "read %zd bytes, calling sink CB", size);
     
 #if DUMP_READ
-    bus_lock_log(b);
+    Bus_LockLog(b);
     printf("\n");
     for (int i = 0; i < size; i++) {
         if (i > 0 && (i & 15) == 0) { printf("\n"); }
         printf("%02x ", l->read_buf[i]);
     }
     printf("\n\n");
-    bus_unlock_log(b);
+    Bus_UnlockLog(b);
 #endif
     
     bus_sink_cb_res_t sres = b->sink_cb(l->read_buf, size, ci->udata);
@@ -303,7 +303,7 @@ static void process_unpacked_message(listener *l,
         int64_t seq_id = result.u.success.seq_id;
         void *opaque_msg = result.u.success.msg;
 
-        rx_info_t *info = listener_helper_find_info_by_sequence_id(l, ci->fd, seq_id);
+        rx_info_t *info = ListenerHelper_FindInfoBySequenceID(l, ci->fd, seq_id);
 
         if (info) {
             switch (info->state) {
