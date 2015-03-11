@@ -291,37 +291,12 @@ static void expect_response(listener *l, struct boxed_msg *box) {
             /* Switch over to client's transferred timeout */
             info->timeout_sec = box->timeout_sec;
         }
-    } else if (info && info->state == RIS_EXPECT) {                    /* use free info */
-        /* If we get here, the listener thinks the HOLD message timed out,
-         * but the client doesn't think things timed out badly enough to
-         * itself expose an error. We also don't know if we're going to
-         * get a response or not. */
-
-        /* FIXME: should we just assert(false) for this case now?
-         * This should never happen, there is a large extra timeout added to
-         * the HOLD messages to avoid a window where HOLDs could time out
-         * just before EXPECTs arrive. */
-
-        BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 128,
-            "get_hold_rx_info FAILED: fd %d, seq_id %lld",
-            box->fd, (long long)box->out_seq_id);
-
-        /* This should be treated like a send timeout. */
-        info = listener_helper_get_free_rx_info(l);
-        BUS_ASSERT(b, b->udata, info);
-        BUS_ASSERT(b, b->udata, info->state == RIS_INACTIVE);
-
-        BUS_LOG_SNPRINTF(b, 0, LOG_MEMORY, b->udata, 256,
-            "Setting info %p (+%d)'s box to %p, which will be expired immediately (timeout %lld)",
-            (void*)info, info->id, (void*)box, (long long)box->timeout_sec);
-        
-        info->state = RIS_EXPECT;
-        BUS_ASSERT(b, b->udata, info->u.expect.box == NULL);
-        info->u.expect.box = box;
-        info->u.expect.error = RX_ERROR_NONE;
-        info->u.expect.has_result = false;
-        /* Switch over to client's transferred timeout */
-        ListenerTask_NotifyMessageFailure(l, info, BUS_SEND_RX_TIMEOUT_EXPECT);
+    } else if (info && info->state == RIS_EXPECT) {
+        /* Multiple identical EXPECTs should never happen, outside of
+         * memory corruption in the queue. */
+        assert(false);          
+    } else {
+        /* should never happen; just drop the message */
     }
 }
 
