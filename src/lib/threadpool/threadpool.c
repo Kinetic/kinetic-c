@@ -46,7 +46,6 @@ static void set_defaults(struct threadpool_config *cfg) {
         cfg->task_ringbuf_size2 = DEFAULT_TASK_RINGBUF_SIZE2;
     }
     
-    if (cfg->max_delay == 0) { cfg->max_delay = DEFAULT_MAX_DELAY; }
     if (cfg->max_threads == 0) { cfg->max_threads = DEFAULT_MAX_THREADS; }
 }
 
@@ -88,7 +87,6 @@ struct threadpool *threadpool_init(struct threadpool_config *cfg) {
     t->task_ringbuf_size2 = cfg->task_ringbuf_size2;
     t->task_ringbuf_mask = t->task_ringbuf_size - 1;
     t->max_threads = cfg->max_threads;
-    t->max_delay = cfg->max_delay;
     return t;
 
 cleanup:
@@ -107,7 +105,6 @@ bool threadpool_schedule(struct threadpool *t, struct threadpool_task *task,
      * shutting down. */
     if (t->shutting_down) { return false; }
 
-    //size_t queue_size = (1 << t->task_ringbuf_size2) - 1;
     size_t queue_size = t->task_ringbuf_size - 1;
     size_t mask = queue_size;
 
