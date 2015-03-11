@@ -136,7 +136,7 @@ bool KineticRequest_SendRequest(KineticOperation *operation,
     KINETIC_ASSERT(msgSize > 0);
     bus_user_msg bus_msg = {
         .fd       = operation->session->socket,
-        .type     = BUS_SOCKET_PLAIN,  // FIXME: no SSL?
+        .type     = BUS_SOCKET_PLAIN,
         .seq_id   = operation->request->message.header.sequence,
         .msg      = msg,
         .msg_size = msgSize,
