@@ -208,7 +208,7 @@ void threadpool_free(struct threadpool *t) {
 static void notify_new_task(struct threadpool *t) {
     for (int i = 0; i < t->live_threads; i++) {
         struct thread_info *ti = &t->threads[i];
-        if (ti->status == STATUS_ASLEEP || true) {
+        if (ti->status == STATUS_ASLEEP) {
             ssize_t res = write(ti->parent_fd,
                 NOTIFY_MSG, NOTIFY_MSG_LEN);
             if (NOTIFY_MSG_LEN == res) {
@@ -300,6 +300,9 @@ static void *thread_task(void *arg) {
 
     while (ti->status < STATUS_SHUTDOWN) {
         if (t->task_request_head == t->task_commit_head) {
+            if (ti->status == STATUS_AWAKE) {
+                ti->status = STATUS_ASLEEP;
+            }
             int res = poll(pfd, 1, -1);
             if (res == 1) {
                 if (pfd[0].revents & (POLLHUP | POLLERR | POLLNVAL)) {
