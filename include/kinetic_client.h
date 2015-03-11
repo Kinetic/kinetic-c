@@ -24,6 +24,13 @@
 #include "kinetic_types.h"
 
 /**
+ * @brief Gets current version info of kinetic-c library
+ * 
+ * @return Returns a pointer to static version info
+ */
+KineticVersionInfo KineticClient_Version(void);
+
+/**
  * Initializes the Kinetic API and configures logging.
  *
  * @param config A configuration struct.

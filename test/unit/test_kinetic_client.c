@@ -25,6 +25,7 @@
 #include "kinetic_logger.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
+#include "kinetic_version_info.h"
 #include "byte_array.h"
 #include "mock_kinetic_builder.h"
 #include "mock_kinetic_operation.h"
@@ -54,6 +55,14 @@ void setUp(void)
 void tearDown(void)
 {
     KineticLogger_Close();
+}
+
+void test_KineticClient_Version_should_return_pointer_to_static_version_info(void)
+{
+    KineticVersionInfo info = KineticClient_Version();
+    TEST_ASSERT_EQUAL_STRING(KINETIC_C_VERSION, info.version);
+    TEST_ASSERT_EQUAL_STRING(KINETIC_C_PROTOCOL_VERSION, info.protocolVersion);
+    TEST_ASSERT_EQUAL_STRING(KINETIC_C_REPO_HASH, info.repoCommitHash);
 }
 
 void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_client(void)

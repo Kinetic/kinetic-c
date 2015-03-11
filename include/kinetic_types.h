@@ -57,13 +57,21 @@
 #define HOST_NAME_MAX 256
 #endif // HOST_NAME_MAX
 
-#define BOOL_TO_STRING(_bool) (_bool) ? "true" : "false"
+
+/**
+ * @brief kinetic-c library version info (returned from KineticClient_Version())
+ */
+ typedef struct {
+    const char * version;           ///< kinetic-c library version
+    const char * protocolVersion;   ///< kinetic-protocol version library is built with
+    const char * repoCommitHash;    ///< repository commit hash which library is built from
+ } KineticVersionInfo;
 
 /**
  * @brief Enumeration of encryption/checksum key algorithms
  */
 typedef enum _KineticAlgorithm {
-    KINETIC_ALGORITHM_INVALID = -1,
+    KINETIC_ALGORITHM_INVALID = -1, ///< Invalid algorithm value
     KINETIC_ALGORITHM_SHA1 = 2,     ///< SHA1
     KINETIC_ALGORITHM_SHA2 = 3,     ///< SHA2
     KINETIC_ALGORITHM_SHA3 = 4,     ///< SHA3
@@ -76,6 +84,8 @@ typedef enum _KineticAlgorithm {
  * @brief Enumeration of synchronization types for an operation on a `KineticEntry`.
  */
 typedef enum _KineticSynchronization {
+
+    /// Invalid synchronization value
     KINETIC_SYNCHRONIZATION_INVALID = -1,
 
     /// This request is made persistent before returning.
@@ -138,17 +148,6 @@ typedef struct _KineticSessionConfig {
  * @brief An instance of a session with a Kinetic device.
  */
 typedef struct _KineticSession KineticSession;
-
-#define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey) { \
-    (*_session).config = (KineticSessionConfig) { \
-        .port = KINETIC_PORT, \
-        .clusterVersion = (_clusterVersion), \
-        .identity = (_identity), \
-        .hmacKey = {.data = (_session)->config.keyData, .len = (_hmacKey).len}, \
-    }; \
-    strcpy((_session)->config.host, (_host)); \
-    memcpy((_session)->config.hmacKey.data, (_hmacKey).data, (_hmacKey).len); \
-}
 
 /**
 * @brief Kinetic status codes.
@@ -283,6 +282,10 @@ typedef struct _KineticKeyRange {
 } KineticKeyRange;
 
 // Kinetic GetLog data types
+
+/**
+ * @brief Log info type
+ */
 typedef enum {
     KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS = 0,
     KINETIC_DEVICE_INFO_TYPE_TEMPERATURES,
@@ -292,10 +295,18 @@ typedef enum {
     KINETIC_DEVICE_INFO_TYPE_MESSAGES,
     KINETIC_DEVICE_INFO_TYPE_LIMITS
 } KineticLogInfo_Type;
+
+/**
+ * @brief Log info untilization entry
+ */
 typedef struct {
     char* name;
     float value;
 } KineticLogInfo_Utilization;
+
+/**
+ * Log info temperature entry
+ */
 typedef struct {
     char* name;
     float current;
@@ -303,16 +314,28 @@ typedef struct {
     float maximum;
     float target;
 } KineticLogInfo_Temperature;
+
+/**
+ * Log info capacity entry
+ */
 typedef struct {
     uint64_t nominalCapacityInBytes;
     float portionFull;
 } KineticLogInfo_Capacity;
+
+/**
+ * Log info network interface entry
+ */
 typedef struct {
     char* name;
     ByteArray MAC;
     ByteArray ipv4Address;
     ByteArray ipv6Address;
 } KineticLogInfo_Interface;
+
+/**
+ * Log info device configuration
+ */
 typedef struct {
     char* vendor;
     char* model;
@@ -329,6 +352,10 @@ typedef struct {
     int32_t port;
     int32_t tlsPort;
 } KineticLogInfo_Configuration;
+
+/**
+ * Log info message types
+ */
 typedef enum {
     KINETIC_MESSAGE_TYPE_INVALID = 0,
     KINETIC_MESSAGE_TYPE_GET_RESPONSE,              ///< GET_RESPONSE
@@ -364,11 +391,19 @@ typedef enum {
     KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE,    ///< MEDIAOPTIMIZE_RESPONSE
     KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE,             ///< MEDIAOPTIMIZE
 } KineticMessageType;
+
+/**
+ * @brief Log info statistics entry
+ */
 typedef struct {
     KineticMessageType messageType;
     uint64_t count;
     uint64_t bytes;
 } KineticLogInfo_Statistics;
+
+/**
+ * @brief Log info device limits
+ */
 typedef struct {
     uint32_t maxKeySize;
     uint32_t maxValueSize;
@@ -382,9 +417,17 @@ typedef struct {
     uint32_t maxIdentityCount;
     uint32_t maxPinSize;
 } KineticLogInfo_Limits;
+
+/**
+ * Log info device name (used as a key for device-specific log data)
+ */
 typedef struct {
     ByteArray name;
 } KineticLogInfo_Device;
+
+/**
+ * Base log info structure which is allocated by client and passed to KineticAdminClient_GetLog
+ */
 typedef struct {
     KineticLogInfo_Utilization* utilizations;
     size_t numUtilizations;
@@ -408,8 +451,14 @@ typedef struct {
     bool    tls;        ///< If set, will use TLS for peer connection. Optional, defaults to false
 } KineticP2P_Peer;
 
+/**
+ * @brief Peer-to-peer opearation instance
+ */
 typedef struct _KineticP2P_Operation KineticP2P_Operation;
 
+/**
+ * @brief Peer-to-peer operation data structure
+ */
 typedef struct {
     ByteBuffer    key;
     ByteBuffer    version; // optional (defaults to force if not specified)
@@ -419,9 +468,9 @@ typedef struct {
 } KineticP2P_OperationData;
 
 struct _KineticP2P_Operation {
-    KineticP2P_Peer peer; 
-    size_t numOperations;
-    KineticP2P_OperationData* operations; // pointer must remain valid until operations complete
+    KineticP2P_Peer peer; ///> Peer to perform operations with
+    size_t numOperations; ///> Number of operations in operations array
+    KineticP2P_OperationData* operations; ///> Pointer to operations array which must remain valid until operations complete
 };
 
 /**

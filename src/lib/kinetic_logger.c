@@ -238,6 +238,8 @@ int KineticLogger_ByteArraySliceToCString(char* p_buf,
     return len;
 }
 
+#define BOOL_TO_STRING(_bool) (_bool) ? "true" : "false"
+
 static void LogUnboxed(int log_level,
                 void const * const fieldData,
                 ProtobufCFieldDescriptor const * const fieldDesc,
