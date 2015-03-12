@@ -152,7 +152,7 @@ static void setup_command(listener_msg *pmsg, rx_info_t *info) {
     }
     
     if (info) {
-        listener_helper_get_free_rx_info_ExpectAndReturn(l, info == NULL_INFO ? NULL : info);
+        ListenerHelper_GetFreeRXInfo_ExpectAndReturn(l, info == NULL_INFO ? NULL : info);
     }
 }
 
@@ -217,12 +217,14 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_NULL_info_fai
             .fd = 23,
             .seq_id = 12345,
             .timeout_sec = 9,
+            .notify_fd = 123,
         },
     };
 
     setup_command(&msg, NULL_INFO);
 
     int res = 1;
+    expect_notify_caller(l, 123);
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
     TEST_ASSERT_EQUAL(0, res);
@@ -237,6 +239,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_HOLD
             .fd = 23,
             .seq_id = 12345,
             .timeout_sec = 9,
+            .notify_fd = 456,
         },
     };
 
@@ -246,6 +249,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_HOLD
     setup_command(&msg, &info);
 
     int res = 1;
+    expect_notify_caller(l, 456);
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
     TEST_ASSERT_EQUAL(0, res);
@@ -285,7 +289,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_EXPE
     };
 
     setup_command(&msg, NULL);
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, box->fd, box->out_seq_id, &hold_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, box->fd, box->out_seq_id, &hold_info);
     ListenerTask_AttemptDelivery_Expect(l, &hold_info);
     int res = 1;
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
@@ -330,7 +334,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_immediately_fail_inc
     };
 
     setup_command(&msg, NULL);
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, box->fd, box->out_seq_id, &hold_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, box->fd, box->out_seq_id, &hold_info);
     int res = 1;
     ListenerTask_NotifyMessageFailure_Expect(l, &hold_info, BUS_SEND_RX_FAILURE);
     ListenerTask_ReleaseMsg_Expect(l, &msg);
@@ -361,7 +365,7 @@ void test_listener_ListenerCmd_CheckIncomingMessages_should_handle_incoming_EXPE
     };
 
     setup_command(&msg, NULL);
-    listener_helper_find_info_by_sequence_id_ExpectAndReturn(l, box->fd, box->out_seq_id, &hold_info);
+    ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, box->fd, box->out_seq_id, &hold_info);
     int res = 1;
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);

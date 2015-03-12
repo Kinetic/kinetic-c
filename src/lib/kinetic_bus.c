@@ -35,16 +35,8 @@
 
 STATIC void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     (void)udata;
-    const char *event_str = bus_log_event_str(event);
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-#if 0
-    KineticLogger_Log(log_level, msg);
-#else
-    LOGF0("%ld.%06ld: %s[%d] -- %s\n",
-        (long)tv.tv_sec, (long)tv.tv_usec,
-        event_str, log_level, msg);
-#endif
+    const char *event_str = Bus_LogEventStr(event);
+    KineticLogger_LogPrintf(log_level, "%s[%d] %s", event_str, log_level, msg);
 }
 
 static bus_sink_cb_res_t reset_transfer(socket_info *si) {
@@ -265,8 +257,8 @@ bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
     };
     bus_result res;
     memset(&res, 0, sizeof(res));
-    if (!bus_init(&cfg, &res)) {
-        LOGF0("failed to init bus: %d\n", res.status);
+    if (!Bus_Init(&cfg, &res)) {
+        LOGF0("failed to init bus: %d", res.status);
         return false;
     }
     client->bus = res.bus;
@@ -276,8 +268,8 @@ bool KineticBus_Init(KineticClient * client, KineticClientConfig * config)
 void KineticBus_Shutdown(KineticClient * const client)
 {
     if (client) {
-        bus_shutdown(client->bus);
-        bus_free(client->bus);
+        Bus_Shutdown(client->bus);
+        Bus_Free(client->bus);
         client->bus = NULL;
     }
 }

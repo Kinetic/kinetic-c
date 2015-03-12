@@ -61,7 +61,7 @@ void *ListenerTask_MainLoop(void *arg) {
      * need any internal locking. */
 
     WHILE (self->shutdown_notify_fd == LISTENER_NO_FD) {
-        if (!util_timestamp(&now, true)) {
+        if (!Util_Timestamp(&now, true)) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "timestamp failure: %d", errno);
         }
@@ -81,7 +81,7 @@ void *ListenerTask_MainLoop(void *arg) {
             "poll res %d", poll_res);
 
         if (poll_res < 0) {
-            if (util_is_resumable_io_error(errno)) {
+            if (Util_IsResumableIOError(errno)) {
                 errno = 0;
             } else {
                 /* unrecoverable poll error -- FD count is bad
@@ -145,7 +145,7 @@ static void tick_handler(listener *l) {
                 #ifndef TEST
                 struct timeval cur;
                 #endif
-                if (!util_timestamp(&cur, false)) {
+                if (!Util_Timestamp(&cur, false)) {
                     BUS_LOG(b, 0, LOG_LISTENER,
                         "gettimeofday failure in tick_handler!", b->udata);
                     continue;
@@ -185,7 +185,7 @@ static void tick_handler(listener *l) {
                 #ifndef TEST
                 struct timeval cur;
                 #endif
-                if (!util_timestamp(&cur, false)) {
+                if (!Util_Timestamp(&cur, false)) {
                     BUS_LOG(b, 0, LOG_LISTENER,
                         "gettimeofday failure in tick_handler!", b->udata);
                     continue;
@@ -258,7 +258,7 @@ static void retry_delivery(listener *l, rx_info_t *info) {
     #ifndef TEST
     size_t backpressure = 0;
     #endif
-    if (bus_process_boxed_message(l->bus, box, &backpressure)) {
+    if (Bus_ProcessBoxedMessage(l->bus, box, &backpressure)) {
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
             "successfully delivered box %p (seq_id %lld) from info %d at line %d (retry)",
             (void*)box, (long long)box->out_seq_id, info->id, __LINE__);
@@ -301,7 +301,7 @@ static void clean_up_completed_info(listener *l, rx_info_t *info) {
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
             "releasing box %p at line %d", (void*)box, __LINE__);
         info->u.expect.box = NULL;       /* release */
-        if (bus_process_boxed_message(l->bus, box, &backpressure)) {
+        if (Bus_ProcessBoxedMessage(l->bus, box, &backpressure)) {
             ListenerTask_ReleaseRXInfo(l, info);
         } else {
             BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
@@ -331,14 +331,14 @@ void ListenerTask_NotifyMessageFailure(listener *l,
     info->u.expect.box = NULL;
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
         "releasing box %p at line %d", (void*)box, __LINE__);
-    if (bus_process_boxed_message(l->bus, box, &backpressure)) {
+    if (Bus_ProcessBoxedMessage(l->bus, box, &backpressure)) {
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
             "delivered box %p with failure message %d at line %d (info %p)",
             (void*)box, status, __LINE__, (void*)info);
         info->u.expect.error = RX_ERROR_DONE;
         ListenerTask_ReleaseRXInfo(l, info);
     } else {
-        /* Return to info, will be released on retry. */
+        /* RetuBus_RegisterSocket to info, will be released on retry. */
         info->u.expect.box = box;
     }
 
@@ -503,7 +503,7 @@ void ListenerTask_AttemptDelivery(listener *l, struct rx_info_t *info) {
     #ifndef TEST
     size_t backpressure = 0;
     #endif
-    if (bus_process_boxed_message(b, box, &backpressure)) {
+    if (Bus_ProcessBoxedMessage(b, box, &backpressure)) {
         /* success */
         BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 256,
             "successfully delivered box %p (seq_id:%lld), marking info %d as DONE",

@@ -23,11 +23,11 @@
 
 #include "util.h"
 
-bool util_is_resumable_io_error(int errno_) {
+bool Util_IsResumableIOError(int errno_) {
     return errno_ == EAGAIN || errno_ == EINTR || errno_ == EWOULDBLOCK;
 }
 
-bool util_timestamp(struct timeval *tv, bool relative) {
+bool Util_Timestamp(struct timeval *tv, bool relative) {
     if (tv == NULL) {
         return false;
     }

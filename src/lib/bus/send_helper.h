@@ -1,5 +1,5 @@
 /*
-* kinetic-c-client
+* kinetic-c
 * Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@ typedef enum {
     SHHW_OK,
     SHHW_DONE,
     SHHW_ERROR = -1,
-} send_helper_handle_write_res;
+} SendHelper_HandleWrite_res;
 
-send_helper_handle_write_res send_helper_handle_write(bus *b, boxed_msg *box);
+SendHelper_HandleWrite_res SendHelper_HandleWrite(bus *b, boxed_msg *box);
 
 #endif

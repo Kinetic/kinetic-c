@@ -59,22 +59,22 @@ struct threadpool_info {
 };
 
 /* Initialize a threadpool, according to a config. Returns NULL on error. */
-struct threadpool *threadpool_init(struct threadpool_config *cfg);
+struct threadpool *Threadpool_Init(struct threadpool_config *cfg);
 
 /* Schedule a task in the threadpool. Returns whether the task was successfully
- * registered or not. If threadpool_shutdown has been called, this
+ * registered or not. If Threadpool_Shutdown has been called, this
  * function will always return false, due to API misuse.
  *
  * If *pushback is non-NULL, it will be set to the number of tasks
  * in the backlog, so code upstream can provide counterpressure.
  *
  * TASK is copied into the threadpool by value. */
-bool threadpool_schedule(struct threadpool *t, struct threadpool_task *task,
+bool Threadpool_Schedule(struct threadpool *t, struct threadpool_task *task,
     size_t *pushback);
 
 /* If TI is non-NULL, fill out some statistics about the operating state
  * of the thread pool. */
-void threadpool_stats(struct threadpool *t, struct threadpool_info *ti);
+void Threadpool_Stats(struct threadpool *t, struct threadpool_info *ti);
 
 /* Notify the threadpool's threads that the system is going to shut down soon.
  * Returns whether all previously active threads have shut down.
@@ -83,12 +83,12 @@ void threadpool_stats(struct threadpool *t, struct threadpool_info *ti);
  * (possibly with memory leaks), but is not yet implemented.
  *
  * Returns whether everything has halted. */
-bool threadpool_shutdown(struct threadpool *t, bool kill_all);
+bool Threadpool_Shutdown(struct threadpool *t, bool kill_all);
 
-/* Free a threadpool. Assumes either threadpool_shutdown() has been
+/* Free a threadpool. Assumes either Threadpool_Shutdown() has been
  * repeatedly called already, or leaking memory and other resources
  * is acceptable. */
-void threadpool_free(struct threadpool *t);
+void Threadpool_Free(struct threadpool *t);
 
 #ifdef TEST
 #include "threadpool_internals.h"

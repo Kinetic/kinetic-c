@@ -1,5 +1,5 @@
 /*
-* kinetic-c-client
+* kinetic-c
 * Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ struct timeval done;
 uint16_t backpressure = 0;
 #endif
 
-send_helper_handle_write_res send_helper_handle_write(bus *b, boxed_msg *box) {
+SendHelper_HandleWrite_res SendHelper_HandleWrite(bus *b, boxed_msg *box) {
     SSL *ssl = box->ssl;
     ssize_t wrsz = 0;
 
@@ -51,7 +51,7 @@ send_helper_handle_write_res send_helper_handle_write(bus *b, boxed_msg *box) {
         "wrote %zd", wrsz);
 
     if (wrsz == -1) {
-        send_handle_failure(b, box, BUS_SEND_TX_FAILURE);
+        Send_HandleFailure(b, box, BUS_SEND_TX_FAILURE);
         return SHHW_ERROR;
     } else if (wrsz == 0) {
         /* If the OS set POLLOUT but we can't actually write, then
@@ -76,17 +76,17 @@ send_helper_handle_write_res send_helper_handle_write(bus *b, boxed_msg *box) {
         #ifndef TEST
         struct timeval done;
         #endif
-        if (util_timestamp(&done, true)) {
+        if (Util_Timestamp(&done, true)) {
             box->tv_send_done = done;
         } else {
-            send_handle_failure(b, box, BUS_SEND_TIMESTAMP_ERROR);
+            Send_HandleFailure(b, box, BUS_SEND_TIMESTAMP_ERROR);
             return SHHW_ERROR;
         }
 
         if (enqueue_EXPECT_message_to_listener(b, box)) {
             return SHHW_DONE;
         } else {
-            send_handle_failure(b, box, BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER);
+            Send_HandleFailure(b, box, BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER);
             return SHHW_ERROR;
         }
     } else {
@@ -109,7 +109,7 @@ static ssize_t write_plain(struct bus *b, boxed_msg *box) {
     for (;;) {
         ssize_t wrsz = syscall_write(fd, &msg[sent_size], rem);
         if (wrsz == -1) {
-            if (util_is_resumable_io_error(errno)) {
+            if (Util_IsResumableIOError(errno)) {
                 errno = 0;
                 continue;
             } else {
@@ -121,7 +121,7 @@ static ssize_t write_plain(struct bus *b, boxed_msg *box) {
             }
         } else if (wrsz > 0) {
             BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-                "sent: %zd\n", wrsz);
+                "sent: %zd", wrsz);
             return wrsz;
         } else {
             return 0;
@@ -164,7 +164,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
                 
             case SSL_ERROR_SYSCALL:
             {
-                if (util_is_resumable_io_error(errno)) {
+                if (Util_IsResumableIOError(errno)) {
                     errno = 0;
                     /* don't break; we want to retry on EINTR etc. until
                      * we get WANT_WRITE, otherwise poll(2) may not retry
@@ -216,22 +216,22 @@ static bool enqueue_EXPECT_message_to_listener(bus *b, boxed_msg *box) {
     /* Notify listener that it should expect a response to a
      * successfully sent message. */
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
-        "telling listener to expect sent response, with box %p, seq_id %lld",
+        "telling listener to EXPECT sent response, with box %p, seq_id %lld",
         (void *)box, (long long)box->out_seq_id);
     
     if (box->result.status == BUS_SEND_UNDEFINED) {
         box->result.status = BUS_SEND_REQUEST_COMPLETE;
     }
 
-    struct listener *l = bus_get_listener_for_socket(b, box->fd);
+    struct listener *l = Bus_GetListenerForSocket(b, box->fd);
 
     for (int retries = 0; retries < SEND_NOTIFY_LISTENER_RETRIES; retries++) {
         #ifndef TEST
         uint16_t backpressure = 0;
         #endif
         /* If this succeeds, then this thread cannot touch the box anymore. */
-        if (listener_expect_response(l, box, &backpressure)) {
-            bus_backpressure_delay(b, backpressure,
+        if (Listener_ExpectResponse(l, box, &backpressure)) {
+            Bus_BackpressureDelay(b, backpressure,
                 LISTENER_EXPECT_BACKPRESSURE_SHIFT);
             return true;
         } else {

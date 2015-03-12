@@ -29,15 +29,15 @@
 #endif
 
 /* Initialize the SSL library internals for use by the messaging bus. */
-bool bus_ssl_init(struct bus *b);
+bool BusSSL_Init(struct bus *b);
 
 /* Do an SSL / TLS shake for a connection. Blocking. */
-SSL *bus_ssl_connect(struct bus *b, int fd);
+SSL *BusSSL_Connect(struct bus *b, int fd);
 
 /* Disconnect and free an individual SSL handle. */
-bool bus_ssl_disconnect(struct bus *b, SSL *ssl);
+bool BusSSL_Disconnect(struct bus *b, SSL *ssl);
 
 /* Free all internal data for using SSL (the SSL_CTX). */
-void bus_ssl_ctx_free(struct bus *b);
+void BusSSL_CtxFree(struct bus *b);
 
 #endif

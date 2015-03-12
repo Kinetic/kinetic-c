@@ -46,11 +46,10 @@ static void set_defaults(struct threadpool_config *cfg) {
         cfg->task_ringbuf_size2 = DEFAULT_TASK_RINGBUF_SIZE2;
     }
     
-    if (cfg->max_delay == 0) { cfg->max_delay = DEFAULT_MAX_DELAY; }
     if (cfg->max_threads == 0) { cfg->max_threads = DEFAULT_MAX_THREADS; }
 }
 
-struct threadpool *threadpool_init(struct threadpool_config *cfg) {
+struct threadpool *Threadpool_Init(struct threadpool_config *cfg) {
     set_defaults(cfg);
 
     if (cfg->task_ringbuf_size2 > THREADPOOL_MAX_RINGBUF_SIZE2) {
@@ -88,7 +87,6 @@ struct threadpool *threadpool_init(struct threadpool_config *cfg) {
     t->task_ringbuf_size2 = cfg->task_ringbuf_size2;
     t->task_ringbuf_mask = t->task_ringbuf_size - 1;
     t->max_threads = cfg->max_threads;
-    t->max_delay = cfg->max_delay;
     return t;
 
 cleanup:
@@ -98,7 +96,7 @@ cleanup:
     return NULL;
 }
 
-bool threadpool_schedule(struct threadpool *t, struct threadpool_task *task,
+bool Threadpool_Schedule(struct threadpool *t, struct threadpool_task *task,
         size_t *pushback) {
     if (t == NULL) { return false; }
     if (task == NULL || task->task == NULL) { return false; }
@@ -107,7 +105,6 @@ bool threadpool_schedule(struct threadpool *t, struct threadpool_task *task,
      * shutting down. */
     if (t->shutting_down) { return false; }
 
-    //size_t queue_size = (1 << t->task_ringbuf_size2) - 1;
     size_t queue_size = t->task_ringbuf_size - 1;
     size_t mask = queue_size;
 
@@ -149,7 +146,7 @@ static void commit_current_task(struct threadpool *t, struct marked_task *task, 
     }
 }
 
-void threadpool_stats(struct threadpool *t, struct threadpool_info *info) {
+void Threadpool_Stats(struct threadpool *t, struct threadpool_info *info) {
     if (info) {
         uint8_t at = 0;
         for (int i = 0; i < t->live_threads; i++) {
@@ -163,7 +160,7 @@ void threadpool_stats(struct threadpool *t, struct threadpool_info *info) {
     }
 }
 
-bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
+bool Threadpool_Shutdown(struct threadpool *t, bool kill_all) {
     t->shutting_down = true;
     size_t mask = t->task_ringbuf_mask;
 
@@ -200,7 +197,7 @@ bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
     return notify_shutdown(t);
 }
 
-void threadpool_free(struct threadpool *t) {
+void Threadpool_Free(struct threadpool *t) {
     free(t->tasks);
     t->tasks = NULL;
     free(t->threads);
@@ -211,7 +208,7 @@ void threadpool_free(struct threadpool *t) {
 static void notify_new_task(struct threadpool *t) {
     for (int i = 0; i < t->live_threads; i++) {
         struct thread_info *ti = &t->threads[i];
-        if (ti->status == STATUS_ASLEEP || true) {
+        if (ti->status == STATUS_ASLEEP) {
             ssize_t res = write(ti->parent_fd,
                 NOTIFY_MSG, NOTIFY_MSG_LEN);
             if (NOTIFY_MSG_LEN == res) {
@@ -303,6 +300,9 @@ static void *thread_task(void *arg) {
 
     while (ti->status < STATUS_SHUTDOWN) {
         if (t->task_request_head == t->task_commit_head) {
+            if (ti->status == STATUS_AWAKE) {
+                ti->status = STATUS_ASLEEP;
+            }
             int res = poll(pfd, 1, -1);
             if (res == 1) {
                 if (pfd[0].revents & (POLLHUP | POLLERR | POLLNVAL)) {

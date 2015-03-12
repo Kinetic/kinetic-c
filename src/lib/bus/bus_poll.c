@@ -1,5 +1,5 @@
 /*
-* kinetic-c-client
+* kinetic-c
 * Copyright (C) 2015 Seagate Technology.
 *
 * This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ int poll_errno;
 int read_errno;
 #endif
 
-bool bus_poll_on_completion(struct bus *b, int fd) {
+bool BusPoll_OnCompletion(struct bus *b, int fd) {
     /* POLL in a pipe */
     #ifndef TEST
     struct pollfd fds[1];
@@ -51,7 +51,7 @@ bool bus_poll_on_completion(struct bus *b, int fd) {
         BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
             "poll_on_completion for %d, res %d (errno %d)", fd, res, errno);
         if (res == -1) {
-            if (util_is_resumable_io_error(errno)) {
+            if (Util_IsResumableIOError(errno)) {
                 BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
                     "poll_on_completion, resumable IO error %d", errno);
                 errno = 0;
@@ -83,11 +83,11 @@ bool bus_poll_on_completion(struct bus *b, int fd) {
                 assert(read_buf[0] == LISTENER_MSG_TAG);
 
                 msec = (read_buf[1] << 0) + (read_buf[2] << 8);
-                bus_backpressure_delay(b, msec, LISTENER_BACKPRESSURE_SHIFT);
+                Bus_BackpressureDelay(b, msec, LISTENER_BACKPRESSURE_SHIFT);
                 BUS_LOG(b, 4, LOG_SENDING_REQUEST, "sent!", b->udata);
                 return true;
             } else if (sz == -1) {
-                if (util_is_resumable_io_error(errno)) {
+                if (Util_IsResumableIOError(errno)) {
                     BUS_LOG_SNPRINTF(b, 5, LOG_SENDING_REQUEST, b->udata, 64,
                         "poll_on_completion read, resumable IO error %d", errno);
                     errno = 0;
@@ -104,9 +104,12 @@ bool bus_poll_on_completion(struct bus *b, int fd) {
                 return false;
             }
         } else {
-            BUS_LOG_SNPRINTF(b, 0, LOG_SENDING_REQUEST, b->udata, 64,
-                "poll_on_completion, blocking forever returned 0, errno %d", errno);
-            assert(false);
+            /* This should never happen, but I have seen it occur on OSX.
+             * If we log it, reset errno, and continue, it does not appear
+             * to fall into busywaiting by always returning 0. */
+            BUS_LOG_SNPRINTF(b, 1, LOG_SENDING_REQUEST, b->udata, 64,
+                "poll_on_completion, blocking forever returned %d, errno %d", res, errno);
+            errno = 0;
         }
     }
 }

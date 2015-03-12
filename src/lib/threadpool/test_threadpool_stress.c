@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
         .task_ringbuf_size2 = sz2,
         .max_threads = max_threads,
     };
-    struct threadpool *t = threadpool_init(&cfg);
+    struct threadpool *t = Threadpool_Init(&cfg);
     assert(t);
 
     struct threadpool_task task = {
@@ -99,13 +99,19 @@ int main(int argc, char **argv) {
         gettimeofday(&tv, NULL);
         if (tv.tv_sec > last_sec) {
             last_sec = tv.tv_sec;
-            threadpool_stats(t, &stats);
+            Threadpool_Stats(t, &stats);
             ticks++;
             dump_stats("tick...", &stats, ticks);
         }
 
+        /* Every 16 seconds, pause scheduling for 5 seconds to test
+         * thread sleep/wake-up alerts. */
+        if ((ticks & 15) == 0) {
+            sleep(5);
+        }
+
         for (size_t i = 0; i < 1000; i++) {
-            if (!threadpool_schedule(t, &task, &counterpressure)) {
+            if (!Threadpool_Schedule(t, &task, &counterpressure)) {
                 size_t msec = i * 1000 * counterpressure;
                 usleep(msec >> 12);
             } else {

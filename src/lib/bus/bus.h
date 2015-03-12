@@ -22,28 +22,24 @@
 
 #include "bus_types.h"
 
-/* This opaque bus struct represents the only user-facing interface to
- * the network handling code. Callbacks are provided to react to network
- * events. */
-
-/* Initialize a bus, based on configuration in *config. Returns a bool
+/* Initialize a bus, based on configuration in *config. RetuBus_RegisterSockets a bool
  * indicating whether the construction succeeded, and the bus pointer
  * and/or a status code indicating the cause of failure in *res. */
-bool bus_init(bus_config *config, struct bus_result *res);
+bool Bus_Init(bus_config *config, struct bus_result *res);
 
 /* Send a request. Blocks until the request has been transmitted.
  * 
- * Assumes the FD has been registered with bus_register_socket;
+ * Assumes the FD has been registered with Bus_register_socket;
  * sending to an unregistered socket is an error.
  *
- * Returns true if the request has been accepted and the bus will
+ * RetuBus_RegisterSockets true if the request has been accepted and the bus will
  * attempt to handle the request and response. They can still fail,
  * but the error status will be passed to the result handler callback.
  *
- * Returns false if the request has been rejected, due to a memory
+ * RetuBus_RegisterSockets false if the request has been rejected, due to a memory
  * allocation error or invalid arguments.
  * */
-bool bus_send_request(struct bus *b, bus_user_msg *msg);
+bool Bus_SendRequest(struct bus *b, bus_user_msg *msg);
 
 /* Register a socket connected to an endpoint, and data that will be passed
  * to all interactions on that socket.
@@ -53,17 +49,17 @@ bool bus_send_request(struct bus *b, bus_user_msg *msg);
  *
  * If USES_SSL is true, then the function will block until the initial
  * SSL/TLS connection handshake has completed. */
-bool bus_register_socket(struct bus *b, bus_socket_t type, int fd, void *socket_udata);
+bool Bus_RegisterSocket(struct bus *b, bus_socket_t type, int fd, void *socket_udata);
 
 /* Free metadata about a socket that has been disconnected. */
-bool bus_release_socket(struct bus *b, int fd, void **socket_udata_out);
+bool Bus_ReleaseSocket(struct bus *b, int fd, void **socket_udata_out);
 
-/* Begin shutting the system down. Returns true once everything pending
+/* Begin shutting the system down. RetuBus_RegisterSockets true once everything pending
  * has resolved. */
-bool bus_shutdown(struct bus *b);
+bool Bus_Shutdown(struct bus *b);
 
 /* Free internal data structures for the bus. */
-void bus_free(struct bus *b);
+void Bus_Free(struct bus *b);
 
 /* Inward facing portion of the message bus -- functions called
  * by other parts of the message bus, like the Listener thread,

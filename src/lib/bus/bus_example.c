@@ -88,7 +88,7 @@ static time_t get_cur_second(void);
 
 static void log_cb(log_event_t event, int log_level, const char *msg, void *udata) {
     example_state *s = (example_state *)udata;
-    const char *event_str = bus_log_event_str(event);
+    const char *event_str = Bus_LogEventStr(event);
     fprintf(/*stderr*/stdout, "%ld -- %s[%d] -- %s\n",
         s->last_second, event_str, log_level, msg);
 }
@@ -253,7 +253,7 @@ int main(int argc, char **argv) {
         .bus_udata = &state,
     };
     bus_result res = {0};
-    if (!bus_init(&cfg, &res)) {
+    if (!Bus_Init(&cfg, &res)) {
         LOG(0, "failed to init bus: %d\n", res.status);
         return 1;
     }
@@ -264,8 +264,8 @@ int main(int argc, char **argv) {
 
     if (b) {
         LOG(1, "shutting down\n");
-        bus_shutdown(b);
-        bus_free(b);
+        Bus_Shutdown(b);
+        Bus_Free(b);
         return 0;
     } else {
         return 1;
@@ -445,7 +445,7 @@ static void tick_handler(example_state *s) {
 
 static time_t get_cur_second(void) {
     struct timeval tv;
-    if (!util_timestamp(&tv, true)) {
+    if (!Util_Timestamp(&tv, true)) {
         assert(false);
     }
     return tv.tv_sec;
@@ -456,7 +456,7 @@ static void run_bus(example_state *s, struct bus *b) {
     open_sockets(s);
 
     for (int i = 0; i < s->sockets_used; i++) {
-        bus_register_socket(b, BUS_SOCKET_PLAIN, s->sockets[i], s->info[i]);
+        Bus_RegisterSocket(b, BUS_SOCKET_PLAIN, s->sockets[i], s->info[i]);
     }
 
     int cur_socket_i = 0;
@@ -503,8 +503,8 @@ static void run_bus(example_state *s, struct bus *b) {
             
             s->sent_msgs++;
             payload_size++;
-            if (!bus_send_request(b, &msg)) {
-                LOG(1, " @@@ bus_send_request failed!\n");
+            if (!Bus_SendRequest(b, &msg)) {
+                LOG(1, " @@@ Bus_SendRequest failed!\n");
                 dropped++;
                 if (dropped >= 100) {
                     LOG(1, " @@@ more than 100 send failures, halting\n");

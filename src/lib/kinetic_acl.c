@@ -114,7 +114,7 @@ KineticACL_LoadFromFile(const char *path, struct ACL **instance) {
     }
 
 #ifndef TEST
-    LOGF2(" -- read %zd bytes, parsing...\n", buf_used);
+    LOGF2(" -- read %zd bytes, parsing...", buf_used);
 #endif
     res = acl_of_string(buf, buf_used, instance);
 cleanup:
@@ -147,13 +147,13 @@ acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
         size_t offset_out = 0;
         Com_Seagate_Kinetic_Proto_Command_Security_ACL *new_acl = NULL;
 #ifndef TEST
-        LOGF2(" -- reading next ACL at offset %zd, rem %zd\n", offset, buf_size - offset);
+        LOGF2(" -- reading next ACL at offset %zd, rem %zd", offset, buf_size - offset);
 #endif
         res = read_next_ACL(buf, buf_size, offset,
             &offset_out, tokener, &new_acl);
         offset += offset_out;
 #ifndef TEST
-        LOGF2(" -- result %d, offset_out %zd\n", res, offset);
+        LOGF2(" -- result %d, offset_out %zd", res, offset);
 #endif
         if (res == ACL_OK) {
             if (acl_group->ACL_count == acl_group->ACL_ceil) {  /* grow */
@@ -178,7 +178,7 @@ cleanup:
     
     if (res == ACL_END_OF_STREAM || res == ACL_OK) {
         if (acl_group && acl_group->ACL_count == 0) {
-            LOG2("Failed to read any JSON objects\n");
+            LOG2("Failed to read any JSON objects");
             return ACL_ERROR_BAD_JSON;
         } else {            /* read at least one ACL */
             *instance = acl_group;
@@ -200,7 +200,7 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         if (json_tokener_get_error(tokener) == json_tokener_error_parse_eof) {
             return ACL_END_OF_STREAM;
         } else {
-            LOGF2("JSON error %d\n", json_tokener_get_error(tokener));
+            LOGF2("JSON error %d", json_tokener_get_error(tokener));
             return ACL_ERROR_BAD_JSON;
         }
     }

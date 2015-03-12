@@ -61,7 +61,7 @@ static void task_cb(void *udata) {
     printf("%zd -- fibs(%zd) => %zd", tc, arg, res);
     
     struct threadpool_info stats;
-    threadpool_stats(t, &stats);
+    Threadpool_Stats(t, &stats);
     dump_stats("", &stats);
 }
 
@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
         .task_ringbuf_size2 = sz2,
         .max_threads = max_threads,
     };
-    struct threadpool *t = threadpool_init(&cfg);
+    struct threadpool *t = Threadpool_Init(&cfg);
     assert(t);
 
     struct threadpool_task task = {
@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
         for (int j = 0; j < 40; j++) {
             for (;;) {
                 size_t counterpressure = 0;
-                if (threadpool_schedule(t, &task, &counterpressure)) {
+                if (Threadpool_Schedule(t, &task, &counterpressure)) {
                     break;
                 } else {
                     size_t msec = 10 * 1000 * counterpressure;
@@ -108,10 +108,10 @@ int main(int argc, char **argv) {
             }
         }
 
-        threadpool_stats(t, &stats);
+        Threadpool_Stats(t, &stats);
         dump_stats("sleeping...", &stats);
         sleep(1);
-        threadpool_stats(t, &stats);
+        Threadpool_Stats(t, &stats);
         dump_stats("waking...", &stats);
     }
 
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
 
     task.task = inf_loop_cb;
     size_t counterpressure = 0;
-    while (!threadpool_schedule(t, &task, &counterpressure)) {
+    while (!Threadpool_Schedule(t, &task, &counterpressure)) {
         usleep(10 * 1000);
     }
 
@@ -132,15 +132,15 @@ int main(int argc, char **argv) {
 
     int limit = (1000 * THREAD_SHUTDOWN_SECONDS)/10;
     for (int i = 0; i < limit; i++) {
-        if (threadpool_shutdown(t, false)) { break; }
+        if (Threadpool_Shutdown(t, false)) { break; }
         (void)poll(NULL, 0, 10);
 
         if (i == limit - 1) {
             printf("cancelling thread in intentional infinite loop\n");
-            threadpool_shutdown(t, true);
+            Threadpool_Shutdown(t, true);
         }
     }
-    threadpool_free(t);
+    Threadpool_Free(t);
 
     return 0;
 }

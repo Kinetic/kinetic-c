@@ -52,13 +52,18 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
         connection_info *ci = l->fd_info[i];
         BUS_ASSERT(b, b->udata, ci->fd == fd->fd);
         
-        /* TODO: handle POLLIN, *then* check for
-         * (POLLHUP | POLLERR | POLLNVAL), so if we get a status message
-         * with a reason for a hangup we can still pass it along. */
-
         BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
             "poll: l->fds[%d]->revents: 0x%04x",  // NOCOMMIT
             i + INCOMING_MSG_PIPE, fd->revents);
+
+        /* If a socket is about to be shut down, we want to get a
+         * complete read from it if possible, because it's likely to be
+         * an UNSOLICITEDSTATUS message with a reason for the hangup.
+         * Only do single reads otherwise, though, otherwise the
+         * listener can end up blocking too long handling consecutive
+         * reads on a busy connection and causing the incoming command
+         * queue to get backed up. */
+        bool is_closing = fd->events & (POLLERR | POLLNVAL | POLLHUP);
 
         if (fd->revents & POLLIN) {
             // Try to read what we can (possibly before hangup)
@@ -82,7 +87,7 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
                 }
                 // -1: socket error
                 // 0: no more to read
-            } while (cur_read > 0 && ci->to_read_size > 0);
+            } while (is_closing && cur_read > 0 && ci->to_read_size > 0);
             read_from++;
         }
 
@@ -110,7 +115,7 @@ static ssize_t socket_read_plain(struct bus *b, listener *l, int pfd_i, connecti
             if (errno == EAGAIN) {
                 errno = 0;
                 return accum;
-            } else if (util_is_resumable_io_error(errno)) {
+            } else if (Util_IsResumableIOError(errno)) {
                 errno = 0;
                 continue;
             } else {
@@ -159,7 +164,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
             switch (reason) {
             case SSL_ERROR_WANT_READ:
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                    "SSL_read fd %d: WANT_READ\n", ci->fd);
+                    "SSL_read fd %d: WANT_READ", ci->fd);
                 return accum;
                 
             case SSL_ERROR_WANT_WRITE:
@@ -170,12 +175,12 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
                 if (errno == 0) {
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL errno 0");
                     BUS_ASSERT(b, b->udata, false);
-                } else if (util_is_resumable_io_error(errno)) {
+                } else if (Util_IsResumableIOError(errno)) {
                     errno = 0;
                     continue;
                 } else {
                     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                        "SSL_read fd %d: errno %d\n", ci->fd, errno);
+                        "SSL_read fd %d: errno %d", ci->fd, errno);
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL");
                     set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
                     return -1;
@@ -185,7 +190,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
             case SSL_ERROR_ZERO_RETURN:
             {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                    "SSL_read fd %d: ZERO_RETURN (HUP)\n", ci->fd);
+                    "SSL_read fd %d: ZERO_RETURN (HUP)", ci->fd);
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_POLLHUP);
                 return -1;
             }
@@ -199,6 +204,8 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
             sink_socket_read(b, l, ci, size);
             accum += size;
             if ((size_t)accum == ci->to_read_size) { break; }
+        } else {
+            break;
         }
     }
     return accum;
@@ -212,14 +219,12 @@ static bool sink_socket_read(struct bus *b,
         "read %zd bytes, calling sink CB", size);
     
 #if DUMP_READ
-    bus_lock_log(b);
     printf("\n");
     for (int i = 0; i < size; i++) {
         if (i > 0 && (i & 15) == 0) { printf("\n"); }
         printf("%02x ", l->read_buf[i]);
     }
     printf("\n\n");
-    bus_unlock_log(b);
 #endif
     
     bus_sink_cb_res_t sres = b->sink_cb(l->read_buf, size, ci->udata);
@@ -296,7 +301,7 @@ static void process_unpacked_message(listener *l,
         int64_t seq_id = result.u.success.seq_id;
         void *opaque_msg = result.u.success.msg;
 
-        rx_info_t *info = listener_helper_find_info_by_sequence_id(l, ci->fd, seq_id);
+        rx_info_t *info = ListenerHelper_FindInfoBySequenceID(l, ci->fd, seq_id);
 
         if (info) {
             switch (info->state) {

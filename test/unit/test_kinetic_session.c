@@ -168,7 +168,7 @@ void test_KineticSession_Connect_should_report_a_failure_to_receive_register_wit
         hmacKey, expected.config.hmacKey.len);
 
     KineticSocket_Connect_ExpectAndReturn(expected.config.host, expected.config.port, expected.socket);
-    bus_register_socket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
+    Bus_RegisterSocket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
         expected.socket, &session, false);
     KineticSocket_Close_Expect(session.socket);
 
@@ -216,7 +216,7 @@ void test_KineticSession_Connect_should_report_a_failure_to_receive_initializati
         hmacKey, expected.config.hmacKey.len);
 
     KineticSocket_Connect_ExpectAndReturn(expected.config.host, expected.config.port, expected.socket);
-    bus_register_socket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
+    Bus_RegisterSocket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
         expected.socket, &session, true);
     KineticResourceWaiter_WaitTilAvailable_ExpectAndReturn(&session.connectionReady,
         KINETIC_CONNECTION_TIMEOUT_SECS, false);
@@ -267,7 +267,7 @@ void test_KineticSession_Connect_should_connect_to_specified_host(void)
         hmacKey, expected.config.hmacKey.len);
 
     KineticSocket_Connect_ExpectAndReturn(expected.config.host, expected.config.port, expected.socket);
-    bus_register_socket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
+    Bus_RegisterSocket_ExpectAndReturn(NULL, BUS_SOCKET_PLAIN,
         expected.socket, &session, true);
     KineticResourceWaiter_WaitTilAvailable_ExpectAndReturn(&session.connectionReady,
         KINETIC_CONNECTION_TIMEOUT_SECS, true);

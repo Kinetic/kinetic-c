@@ -50,9 +50,7 @@ struct boxed_msg;
         char *_msg = MSG;                                              \
         void *_udata = UDATA;                                          \
         if (_b->log_level >= _level && _b->log_cb != NULL) {           \
-            bus_lock_log(_b);                                          \
             _b->log_cb(_event_key, _level, _msg, _udata);              \
-            bus_unlock_log(_b);                                        \
         }                                                              \
     } while (0)
 
@@ -65,7 +63,6 @@ struct boxed_msg;
         log_event_t _event_key = EVENT_KEY;                            \
         void *_udata = UDATA;                                          \
         if (_b->log_level >= _level && _b->log_cb != NULL) {           \
-            bus_lock_log(_b);                                          \
             char _log_buf[MAX_SZ];                                     \
             if (MAX_SZ < snprintf(_log_buf, MAX_SZ,                    \
                     FMT, __VA_ARGS__)) {                               \
@@ -79,7 +76,6 @@ struct boxed_msg;
             } else {                                                   \
                 _b->log_cb(_event_key, _level, _log_buf, _udata);      \
             }                                                          \
-            bus_unlock_log(_b);                                        \
         }                                                              \
     } while (0)
 #endif
@@ -123,7 +119,7 @@ typedef struct {
  * size is based on the previously requested size. (If the size for the
  * next request is undefined, this can be called with a READ_SIZE of 0.)
  *
- * The (void *) that was passed in during bus_register_socket will be
+ * The (void *) that was passed in during Bus_RegisterSocket will be
  * passed along.
  *
  * A bus_sink_cb_res_t struct should be returned, with next_read
@@ -192,7 +188,7 @@ typedef enum {
     BUS_INIT_ERROR_THREADPOOL_INIT_FAIL = -7,
     BUS_INIT_ERROR_PTHREAD_INIT_FAIL = -8,
     BUS_INIT_ERROR_MUTEX_INIT_FAIL = -9,
-} bus_init_res_t;
+} Bus_Init_res_t;
 
 typedef enum {
     BUS_SEND_UNDEFINED = 0,
@@ -211,7 +207,7 @@ typedef enum {
 
 /* Result from attempting to configure a message bus. */
 typedef struct bus_result {
-    bus_init_res_t status;
+    Bus_Init_res_t status;
     struct bus *bus;
 } bus_result;
 
@@ -237,6 +233,7 @@ typedef enum {
     BUS_SOCKET_SSL,
 } bus_socket_t;
 
+/* A message being packaged for delivery by the message bus. */
 typedef struct {
     int fd;
     bus_socket_t type;
@@ -249,6 +246,9 @@ typedef struct {
     void *udata;
 } bus_user_msg;
 
+/* This opaque bus struct represents the only user-facing interface to
+ * the network handling code. Callbacks are provided to react to network
+ * events. */
 struct bus_t;
 
 typedef enum {

@@ -78,7 +78,6 @@ typedef struct bus {
 
     int log_level;
     bus_log_cb *log_cb;
-    pthread_mutex_t log_lock;
 
     uint8_t listener_count;
     struct listener **listeners;
