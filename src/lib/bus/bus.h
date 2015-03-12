@@ -64,6 +64,6 @@ void Bus_Free(struct bus *b);
 /* Inward facing portion of the message bus -- functions called
  * by other parts of the message bus, like the Listener thread,
  * but not by code outside the bus. */
-#include "Bus_inward.h"
+#include "bus_inward.h"
 
 #endif
