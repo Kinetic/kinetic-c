@@ -100,6 +100,9 @@ void KineticLogger_Log(int log_level, const char* message)
 
 void KineticLogger_LogPrintf(int log_level, const char* format, ...)
 {
+    if (KineticLoggerHandle == NULL) {
+        return;
+    }
     if (format == NULL || !is_level_enabled(log_level)) {
         return;
     }
@@ -107,6 +110,13 @@ void KineticLogger_LogPrintf(int log_level, const char* format, ...)
     char* buffer = NULL;
     buffer = get_buffer();
 
+    /* Add timestamp prefix */
+    struct timeval tv;
+    if (0 == gettimeofday(&tv, NULL)) {
+        fprintf(KineticLoggerHandle, "%08lld.%06lld  ",
+            (long long)tv.tv_sec, (long long)tv.tv_usec);
+    }
+    
     va_list arg_ptr;
     va_start(arg_ptr, format);
     int len = vsnprintf(buffer, BUFFER_MAX_STRLEN, format, arg_ptr);
@@ -532,19 +542,6 @@ void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer bu
     KineticLogger_LogByteArray(log_level, title, array);
 }
 
-void KineticLogger_LogTimestamp(int log_level, const char* title) {
-    struct timeval tv;
-    if (title == NULL) {
-        title = "";
-    }
-    if (0 == gettimeofday(&tv, NULL)) {
-        KineticLogger_LogPrintf(log_level, "%s: %lld.%lld\n",
-            title, (long long)tv.tv_sec, (long long)tv.tv_usec);
-    } else {
-        KineticLogger_LogPrintf(0, "%s: (gettimeofday failure)", title);
-    }
-}
-
 //------------------------------------------------------------------------------
 // Private Method Definitions
 
@@ -565,9 +562,6 @@ static inline void unlock_buffer()
 
 static void flush_buffer(void)
 {
-    if (KineticLoggerHandle == NULL) {
-        return;
-    }
     fprintf(KineticLoggerHandle, "%s", Buffer);
     fflush(KineticLoggerHandle);
 }

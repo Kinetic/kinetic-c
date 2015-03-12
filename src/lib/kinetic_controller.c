@@ -141,13 +141,13 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
         case BUS_SEND_UNDEFINED:
         default:
         {
-            LOGF0("bus_to_kinetic_status: UNMATCHED %d\n", status);
+            LOGF0("bus_to_kinetic_status: UNMATCHED %d", status);
             KINETIC_ASSERT(false);
             return KINETIC_STATUS_INVALID;
         }
     }
     
-    LOGF3("bus_to_kinetic_status: mapping status %d => %d\n",
+    LOGF3("bus_to_kinetic_status: mapping status %d => %d",
         status, res);
     return res;
 }
@@ -214,7 +214,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
         }
     }
     else {
-        KineticLogger_LogTimestamp(0, "WARNING: Received unexpected response!");
+        LOG0("WARNING: Received unexpected response!");
         logTag = unexpectedTag;
         logAtLevel = 0;
         protoLogAtLevel = 0;
@@ -268,7 +268,7 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
     } else {
         LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
         if (res->status == BUS_SEND_RX_TIMEOUT) {
-            KineticLogger_LogTimestamp(0, "RX_TIMEOUT");
+            LOG0("RX_TIMEOUT");
         }
     }
 

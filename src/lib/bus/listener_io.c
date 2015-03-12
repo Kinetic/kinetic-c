@@ -164,7 +164,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
             switch (reason) {
             case SSL_ERROR_WANT_READ:
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                    "SSL_read fd %d: WANT_READ\n", ci->fd);
+                    "SSL_read fd %d: WANT_READ", ci->fd);
                 return accum;
                 
             case SSL_ERROR_WANT_WRITE:
@@ -180,7 +180,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
                     continue;
                 } else {
                     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                        "SSL_read fd %d: errno %d\n", ci->fd, errno);
+                        "SSL_read fd %d: errno %d", ci->fd, errno);
                     print_SSL_error(b, ci, 1, "SSL_ERROR_SYSCALL");
                     set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
                     return -1;
@@ -190,7 +190,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
             case SSL_ERROR_ZERO_RETURN:
             {
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
-                    "SSL_read fd %d: ZERO_RETURN (HUP)\n", ci->fd);
+                    "SSL_read fd %d: ZERO_RETURN (HUP)", ci->fd);
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_POLLHUP);
                 return -1;
             }

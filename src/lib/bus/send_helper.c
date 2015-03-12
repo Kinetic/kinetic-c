@@ -121,7 +121,7 @@ static ssize_t write_plain(struct bus *b, boxed_msg *box) {
             }
         } else if (wrsz > 0) {
             BUS_LOG_SNPRINTF(b, 5, LOG_SENDER, b->udata, 64,
-                "sent: %zd\n", wrsz);
+                "sent: %zd", wrsz);
             return wrsz;
         } else {
             return 0;
