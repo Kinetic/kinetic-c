@@ -219,14 +219,12 @@ static bool sink_socket_read(struct bus *b,
         "read %zd bytes, calling sink CB", size);
     
 #if DUMP_READ
-    Bus_LockLog(b);
     printf("\n");
     for (int i = 0; i < size; i++) {
         if (i > 0 && (i & 15) == 0) { printf("\n"); }
         printf("%02x ", l->read_buf[i]);
     }
     printf("\n\n");
-    Bus_UnlockLog(b);
 #endif
     
     bus_sink_cb_res_t sres = b->sink_cb(l->read_buf, size, ci->udata);

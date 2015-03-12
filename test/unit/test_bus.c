@@ -710,7 +710,6 @@ void test_Bus_Free_should_call_shutdown_if_not_shut_down(void)
     Threadpool_Free_Expect(b->threadpool);
 
     TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->fd_set_lock, NULL));
-    TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->log_lock, NULL));
     BusSSL_CtxFree_Expect(b);
     Bus_Free(b);
 }
@@ -745,7 +744,6 @@ void test_Bus_Free_should_free_bus(void)
     Threadpool_Free_Expect(b->threadpool);
 
     TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->fd_set_lock, NULL));
-    TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->log_lock, NULL));
     BusSSL_CtxFree_Expect(b);
     Bus_Free(b);
 }

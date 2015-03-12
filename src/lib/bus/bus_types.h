@@ -50,9 +50,7 @@ struct boxed_msg;
         char *_msg = MSG;                                              \
         void *_udata = UDATA;                                          \
         if (_b->log_level >= _level && _b->log_cb != NULL) {           \
-            Bus_LockLog(_b);                                           \
             _b->log_cb(_event_key, _level, _msg, _udata);              \
-            Bus_UnlockLog(_b);                                         \
         }                                                              \
     } while (0)
 
@@ -65,7 +63,6 @@ struct boxed_msg;
         log_event_t _event_key = EVENT_KEY;                            \
         void *_udata = UDATA;                                          \
         if (_b->log_level >= _level && _b->log_cb != NULL) {           \
-            Bus_LockLog(_b);                                           \
             char _log_buf[MAX_SZ];                                     \
             if (MAX_SZ < snprintf(_log_buf, MAX_SZ,                    \
                     FMT, __VA_ARGS__)) {                               \
@@ -79,7 +76,6 @@ struct boxed_msg;
             } else {                                                   \
                 _b->log_cb(_event_key, _level, _log_buf, _udata);      \
             }                                                          \
-            Bus_UnlockLog(_b);                                         \
         }                                                              \
     } while (0)
 #endif

@@ -105,11 +105,6 @@ bool Bus_Init(bus_config *config, struct bus_result *res) {
     b->log_cb = config->log_cb;
     b->log_level = config->log_level;
     b->udata = config->bus_udata;
-    if (0 != pthread_mutex_init(&b->log_lock, NULL)) {
-        res->status = BUS_INIT_ERROR_MUTEX_INIT_FAIL;
-        goto cleanup;
-    }
-    locks_initialized++;
     if (0 != pthread_mutex_init(&b->fd_set_lock, NULL)) {
         res->status = BUS_INIT_ERROR_MUTEX_INIT_FAIL;
         goto cleanup;
@@ -187,9 +182,6 @@ cleanup:
     if (b) {
         if (locks_initialized > 1) {
             pthread_mutex_destroy(&b->fd_set_lock);
-        }
-        if (locks_initialized > 0) {
-            pthread_mutex_destroy(&b->log_lock);
         }
         free(b);
     }
@@ -567,14 +559,6 @@ void Bus_BackpressureDelay(struct bus *b, size_t backpressure, uint8_t shift) {
     }
 }
 
-void Bus_LockLog(struct bus *b) {
-    pthread_mutex_lock(&b->log_lock);
-}
-
-void Bus_UnlockLog(struct bus *b) {
-    pthread_mutex_unlock(&b->log_lock);
-}
-
 static void box_execute_cb(void *udata) {
     boxed_msg *box = (boxed_msg *)udata;
 
@@ -644,7 +628,6 @@ void Bus_Free(bus *b) {
     free(b->joined);
     free(b->threads);
     pthread_mutex_destroy(&b->fd_set_lock);
-    pthread_mutex_destroy(&b->log_lock);
 
     BusSSL_CtxFree(b);
     free(b);

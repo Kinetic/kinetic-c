@@ -29,10 +29,6 @@ const char *Bus_LogEventStr(log_event_t event);
  * This will level sockets between multiple threads. */
 struct listener *Bus_GetListenerForSocket(struct bus *b, int fd);
 
-/* Lock / unlock the log mutex, since logging can occur on several threads. */
-void Bus_LockLog(struct bus *b);
-void Bus_UnlockLog(struct bus *b);
-
 /* Deliver a boxed message to the thread pool to execute. */
 bool Bus_ProcessBoxedMessage(struct bus *b,
     struct boxed_msg *box, size_t *backpressure);
