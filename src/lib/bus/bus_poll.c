@@ -104,9 +104,12 @@ bool BusPoll_OnCompletion(struct bus *b, int fd) {
                 return false;
             }
         } else {
-            BUS_LOG_SNPRINTF(b, 0, LOG_SENDING_REQUEST, b->udata, 64,
-                "poll_on_completion, blocking forever returned 0, errno %d", errno);
-            assert(false);
+            /* This should never happen, but I have seen it occur on OSX.
+             * If we log it, reset errno, and continue, it does not appear
+             * to fall into busywaiting by always returning 0. */
+            BUS_LOG_SNPRINTF(b, 1, LOG_SENDING_REQUEST, b->udata, 64,
+                "poll_on_completion, blocking forever returned %d, errno %d", res, errno);
+            errno = 0;
         }
     }
 }
