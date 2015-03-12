@@ -23,7 +23,7 @@
 #include "byte_array.h"
 #include "kinetic_types.h"
 #include "kinetic_operation.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_logger.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_device_info.h"

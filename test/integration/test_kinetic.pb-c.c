@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include "protobuf-c/protobuf-c.h"
 #include "kinetic_types.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "unity.h"
 
 void setUp(void)
@@ -37,49 +37,49 @@ void tearDown(void)
 void test_KineticProto_should_pack_and_unpack_protocol_buffers(void)
 {
     size_t expectedLen;
-    KineticProto_Message msg;
-    KineticProto_Command cmd;
-    KineticProto_Command_Header header;
+    Com_Seagate_Kinetic_Proto_Message msg;
+    Com_Seagate_Kinetic_Proto_Command cmd;
+    Com_Seagate_Kinetic_Proto_Command_Header header;
     uint8_t buffer[256];
     ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);
     uint8_t* packedMessage;
     uint8_t* packedCommand;
 
-    KineticProto_Message__init(&msg);
-    KineticProto_command__init(&cmd);
-    KineticProto_command_header__init(&header);
+    com_seagate_kinetic_proto_message__init(&msg);
+    com_seagate_kinetic_proto_command__init(&cmd);
+    com_seagate_kinetic_proto_command_header__init(&header);
 
     cmd.header = &header;
 
     // msg.commandBytes = &cmd;
 
-    expectedLen = KineticProto_command__get_packed_size(&cmd);
-    packedCommand = malloc(KineticProto_command__get_packed_size(&cmd));
+    expectedLen = com_seagate_kinetic_proto_command__get_packed_size(&cmd);
+    packedCommand = malloc(com_seagate_kinetic_proto_command__get_packed_size(&cmd));
     TEST_ASSERT_NOT_NULL_MESSAGE(packedCommand,
                                  "Failed dynamically allocating command buffer");
     TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
-                              KineticProto_command__pack(&cmd, packedCommand),
+                              com_seagate_kinetic_proto_command__pack(&cmd, packedCommand),
                               "Packed size command invalid");
     TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
-                              KineticProto_command__get_packed_size(&cmd),
+                              com_seagate_kinetic_proto_command__get_packed_size(&cmd),
                               "Inspected packed command size invalid");
     TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
-                              KineticProto_command__pack_to_buffer(&cmd, &bs.base),
+                              com_seagate_kinetic_proto_command__pack_to_buffer(&cmd, &bs.base),
                               "Packed BufferSimple command size invalid");
 
 
-    expectedLen = KineticProto_Message__get_packed_size(&msg);
-    packedMessage = malloc(KineticProto_Message__get_packed_size(&msg));
+    expectedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
+    packedMessage = malloc(com_seagate_kinetic_proto_message__get_packed_size(&msg));
     TEST_ASSERT_NOT_NULL_MESSAGE(packedMessage,
                                  "Failed dynamically allocating buffer");
     TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
-                              KineticProto_Message__pack(&msg, packedMessage),
+                              com_seagate_kinetic_proto_message__pack(&msg, packedMessage),
                               "Packed size invalid");
     TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
-                              KineticProto_Message__get_packed_size(&msg),
+                              com_seagate_kinetic_proto_message__get_packed_size(&msg),
                               "Inspected packed size invalid");
     TEST_ASSERT_EQUAL_MESSAGE(expectedLen,
-                              KineticProto_Message__pack_to_buffer(&msg, &bs.base),
+                              com_seagate_kinetic_proto_message__pack_to_buffer(&msg, &bs.base),
                               "Packed BufferSimple size invalid");
 
     // Validate the both packed buffers are equal
@@ -97,51 +97,51 @@ void test_KinetiProto_double_packing_should_work(void)
     size_t expectedPackedLen, actualPackedLen;
     uint8_t packBuf[128];
 
-    KineticProto_Message msg;
-    KineticProto_Message__init(&msg);
-    expectedPackedLen = KineticProto_Message__get_packed_size(&msg);
+    Com_Seagate_Kinetic_Proto_Message msg;
+    com_seagate_kinetic_proto_message__init(&msg);
+    expectedPackedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
     TEST_ASSERT_TRUE(expectedPackedLen == 0);
-    actualPackedLen = KineticProto_Message__pack(&msg, packBuf);
+    actualPackedLen = com_seagate_kinetic_proto_message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
     msg.has_authType = true;
-    expectedPackedLen = KineticProto_Message__get_packed_size(&msg);
-    TEST_ASSERT_TRUE(KineticProto_Message__get_packed_size(&msg) > 0);
-    actualPackedLen = KineticProto_Message__pack(&msg, packBuf);
+    expectedPackedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
+    TEST_ASSERT_TRUE(com_seagate_kinetic_proto_message__get_packed_size(&msg) > 0);
+    actualPackedLen = com_seagate_kinetic_proto_message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
-    msg.authType = KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
-    expectedPackedLen = KineticProto_Message__get_packed_size(&msg);
-    TEST_ASSERT_TRUE(KineticProto_Message__get_packed_size(&msg) > 0);
-    actualPackedLen = KineticProto_Message__pack(&msg, packBuf);
+    msg.authType = COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    expectedPackedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
+    TEST_ASSERT_TRUE(com_seagate_kinetic_proto_message__get_packed_size(&msg) > 0);
+    actualPackedLen = com_seagate_kinetic_proto_message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
-    KineticProto_Message_HMACauth hmacAuth;
-    KineticProto_Message_hmacauth__init(&hmacAuth);
+    Com_Seagate_Kinetic_Proto_Message_HMACauth hmacAuth;
+    com_seagate_kinetic_proto_message_hmacauth__init(&hmacAuth);
     msg.hmacAuth = &hmacAuth;
-    expectedPackedLen = KineticProto_Message__get_packed_size(&msg);
-    TEST_ASSERT_TRUE(KineticProto_Message__get_packed_size(&msg) > 0);
-    actualPackedLen = KineticProto_Message__pack(&msg, packBuf);
+    expectedPackedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
+    TEST_ASSERT_TRUE(com_seagate_kinetic_proto_message__get_packed_size(&msg) > 0);
+    actualPackedLen = com_seagate_kinetic_proto_message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
     hmacAuth.has_identity = true;
-    expectedPackedLen = KineticProto_Message__get_packed_size(&msg);
-    TEST_ASSERT_TRUE(KineticProto_Message__get_packed_size(&msg) > 0);
-    actualPackedLen = KineticProto_Message__pack(&msg, packBuf);
+    expectedPackedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
+    TEST_ASSERT_TRUE(com_seagate_kinetic_proto_message__get_packed_size(&msg) > 0);
+    actualPackedLen = com_seagate_kinetic_proto_message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
     hmacAuth.identity = 17;
-    expectedPackedLen = KineticProto_Message__get_packed_size(&msg);
-    TEST_ASSERT_TRUE(KineticProto_Message__get_packed_size(&msg) > 0);
-    actualPackedLen = KineticProto_Message__pack(&msg, packBuf);
+    expectedPackedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
+    TEST_ASSERT_TRUE(com_seagate_kinetic_proto_message__get_packed_size(&msg) > 0);
+    actualPackedLen = com_seagate_kinetic_proto_message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
     uint8_t hmacData[] = {1,2,3,4,5};
     hmacAuth.hmac = (ProtobufCBinaryData) {.data = hmacData, .len = sizeof(hmacData)};
     hmacAuth.has_hmac = true;
-    expectedPackedLen = KineticProto_Message__get_packed_size(&msg);
-    TEST_ASSERT_TRUE(KineticProto_Message__get_packed_size(&msg) > 0);
-    actualPackedLen = KineticProto_Message__pack(&msg, packBuf);
+    expectedPackedLen = com_seagate_kinetic_proto_message__get_packed_size(&msg);
+    TEST_ASSERT_TRUE(com_seagate_kinetic_proto_message__get_packed_size(&msg) > 0);
+    actualPackedLen = com_seagate_kinetic_proto_message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 }
 
@@ -151,13 +151,13 @@ void test_KineticProto_should_pass_data_accurately_through_raw_buffers(void)
     uint8_t* packed;
     KineticProto* unpacked;
     KineticProto proto;
-    KineticProto_Command cmd;
-    KineticProto_Command_Header header;
+    Com_Seagate_Kinetic_Proto_Command cmd;
+    Com_Seagate_Kinetic_Proto_Command_Header header;
 
     KineticProto__init(&proto);
-    KineticProto_command__init(&cmd);
+    com_seagate_kinetic_proto_command__init(&cmd);
     proto.command = &cmd;
-    KineticProto_command_header__init(&header);
+    com_seagate_kinetic_proto_command_header__init(&header);
     header.clusterVersion = 12345678;
     header.has_clusterVersion = true;
     header.identity = -12345678;
@@ -165,12 +165,12 @@ void test_KineticProto_should_pass_data_accurately_through_raw_buffers(void)
     cmd.header = &header;
 
     // Pack the buffer
-    packed = malloc(KineticProto_Message__get_packed_size(&proto));
+    packed = malloc(com_seagate_kinetic_proto_message__get_packed_size(&proto));
     KineticProto__pack(&proto, packed);
 
     // Unpack and verify the raw buffer results
     unpacked = KineticProto__unpack(NULL,
-                                    KineticProto_Message__get_packed_size(&proto), packed);
+                                    com_seagate_kinetic_proto_message__get_packed_size(&proto), packed);
     TEST_ASSERT_NOT_NULL_MESSAGE(unpacked,
                                  "Unpack method returned NULL");
     TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_identity,
@@ -193,15 +193,15 @@ void test_KineticProto_should_pass_data_accurately_through_BufferSimple(void)
 {
     KineticProto proto;
     KineticProto* unpacked;
-    KineticProto_Command cmd;
-    KineticProto_Command_Header header;
+    Com_Seagate_Kinetic_Proto_Command cmd;
+    Com_Seagate_Kinetic_Proto_Command_Header header;
     uint8_t buffer[1024];
     ProtobufCBufferSimple bs = PROTOBUF_C_BUFFER_SIMPLE_INIT(buffer);
 
     KineticProto__init(&proto);
-    KineticProto_command__init(&cmd);
+    com_seagate_kinetic_proto_command__init(&cmd);
     proto.command = &cmd;
-    KineticProto_command_header__init(&header);
+    com_seagate_kinetic_proto_command_header__init(&header);
     header.clusterVersion = 12345678;
     header.has_clusterVersion = true;
     header.identity = -12345678;
@@ -213,7 +213,7 @@ void test_KineticProto_should_pass_data_accurately_through_BufferSimple(void)
 
     // Unpack and verify the simple buffer results
     unpacked = KineticProto__unpack(NULL,
-                                    KineticProto_Message__get_packed_size(&proto), bs.data);
+                                    com_seagate_kinetic_proto_message__get_packed_size(&proto), bs.data);
     TEST_ASSERT_NOT_NULL_MESSAGE(unpacked, "Unpack method returned NULL");
     TEST_ASSERT_TRUE_MESSAGE(unpacked->command->header->has_identity,
                              "Command header identity reported as unavailable");

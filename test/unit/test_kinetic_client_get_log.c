@@ -34,7 +34,7 @@
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_acl.h"
 #include "kinetic_logger.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
 #include "unity.h"
@@ -85,7 +85,7 @@ void test_KineticAdminClient_GetDeviceSpecificLog_should_request_the_specified_d
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
-    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &info, KINETIC_STATUS_SUCCESS);
+    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_GetDeviceSpecificLog(&Session, name, &info, NULL);

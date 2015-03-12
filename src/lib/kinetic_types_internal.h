@@ -22,7 +22,7 @@
 #define _KINETIC_TYPES_INTERNAL_H
 
 #include "kinetic_types.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_countingsemaphore.h"
 #include "kinetic_resourcewaiter_types.h"
 #include "kinetic_resourcewaiter.h"
@@ -108,7 +108,7 @@ struct _KineticSession {
 
 // Kinetic Message HMAC
 typedef struct _KineticHMAC {
-    KineticProto_Command_Security_ACL_HMACAlgorithm algorithm;
+    Com_Seagate_Kinetic_Proto_Command_Security_ACL_HMACAlgorithm algorithm;
     uint32_t len;
     uint8_t data[KINETIC_HMAC_MAX_LEN];
 } KineticHMAC;
@@ -119,25 +119,25 @@ typedef struct _KineticMessage {
     // Kinetic Protocol Buffer Elements
 
     // Base Message
-    KineticProto_Message                message;
-    KineticProto_Message_HMACauth       hmacAuth;
-    KineticProto_Message_PINauth        pinAuth;
+    Com_Seagate_Kinetic_Proto_Message                message;
+    Com_Seagate_Kinetic_Proto_Message_HMACauth       hmacAuth;
+    Com_Seagate_Kinetic_Proto_Message_PINauth        pinAuth;
     uint8_t                             hmacData[KINETIC_HMAC_MAX_LEN];
 
     // Internal Command
-    KineticProto_Command                command;
-    KineticProto_Command_Header         header;
-    KineticProto_Command_Body           body;
-    KineticProto_Command_Status         status;
-    KineticProto_Command_Security       security;
-    KineticProto_Command_Security_ACL   acl;
-    KineticProto_Command_KeyValue       keyValue;
-    KineticProto_Command_Range          keyRange;
-    KineticProto_Command_Setup          setup;
-    KineticProto_Command_GetLog         getLog;
-    KineticProto_Command_GetLog_Type    getLogType;
-    KineticProto_Command_GetLog_Device  getLogDevice;
-    KineticProto_Command_PinOperation   pinOp;
+    Com_Seagate_Kinetic_Proto_Command                command;
+    Com_Seagate_Kinetic_Proto_Command_Header         header;
+    Com_Seagate_Kinetic_Proto_Command_Body           body;
+    Com_Seagate_Kinetic_Proto_Command_Status         status;
+    Com_Seagate_Kinetic_Proto_Command_Security       security;
+    Com_Seagate_Kinetic_Proto_Command_Security_ACL   acl;
+    Com_Seagate_Kinetic_Proto_Command_KeyValue       keyValue;
+    Com_Seagate_Kinetic_Proto_Command_Range          keyRange;
+    Com_Seagate_Kinetic_Proto_Command_Setup          setup;
+    Com_Seagate_Kinetic_Proto_Command_GetLog         getLog;
+    Com_Seagate_Kinetic_Proto_Command_GetLog_Type    getLogType;
+    Com_Seagate_Kinetic_Proto_Command_GetLog_Device  getLogDevice;
+    Com_Seagate_Kinetic_Proto_Command_PinOperation   pinOp;
 } KineticMessage;
 
 // Kinetic PDU Header
@@ -157,15 +157,15 @@ typedef enum {
 
 struct _KineticRequest {
     KineticMessage message;
-    KineticProto_Command* command;
+    Com_Seagate_Kinetic_Proto_Command* command;
     bool pinAuth;
 };
 
 typedef struct _KineticResponse
 {
     KineticPDUHeader header;
-    KineticProto_Message* proto;
-    KineticProto_Command* command;
+    Com_Seagate_Kinetic_Proto_Message* proto;
+    Com_Seagate_Kinetic_Proto_Command* command;
     uint8_t value[];
 } KineticResponse;
 
@@ -192,35 +192,35 @@ struct _KineticOperation {
 };
 
 
-KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
+Com_Seagate_Kinetic_Proto_Command_Algorithm Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(
     KineticAlgorithm kinteicAlgorithm);
-KineticAlgorithm KineticAlgorithm_from_KineticProto_Command_Algorithm(
-    KineticProto_Command_Algorithm protoAlgorithm);
+KineticAlgorithm KineticAlgorithm_from_Com_Seagate_Kinetic_Proto_Command_Algorithm(
+    Com_Seagate_Kinetic_Proto_Command_Algorithm protoAlgorithm);
 
-KineticProto_Command_Synchronization KineticProto_Command_Synchronization_from_KineticSynchronization(
+Com_Seagate_Kinetic_Proto_Command_Synchronization Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
     KineticSynchronization sync_mode);
-KineticSynchronization KineticSynchronization_from_KineticProto_Command_Synchronization(
-    KineticProto_Command_Synchronization sync_mode);
+KineticSynchronization KineticSynchronization_from_Com_Seagate_Kinetic_Proto_Command_Synchronization(
+    Com_Seagate_Kinetic_Proto_Command_Synchronization sync_mode);
 
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
-    KineticProto_Command_Status_StatusCode protoStatus);
+    Com_Seagate_Kinetic_Proto_Command_Status_StatusCode protoStatus);
 ByteArray ProtobufCBinaryData_to_ByteArray(
     ProtobufCBinaryData protoData);
 bool Copy_ProtobufCBinaryData_to_ByteBuffer(
     ByteBuffer dest, ProtobufCBinaryData src);
-bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(
-    KineticProto_Command_KeyValue* keyValue, KineticEntry* entry);
-bool Copy_KineticProto_Command_Range_to_ByteBufferArray(
-    KineticProto_Command_Range* keyRange, ByteBufferArray* keys);
+bool Copy_Com_Seagate_Kinetic_Proto_Command_KeyValue_to_KineticEntry(
+    Com_Seagate_Kinetic_Proto_Command_KeyValue* keyValue, KineticEntry* entry);
+bool Copy_Com_Seagate_Kinetic_Proto_Command_Range_to_ByteBufferArray(
+    Com_Seagate_Kinetic_Proto_Command_Range* keyRange, ByteBufferArray* keys);
 int Kinetic_GetErrnoDescription(int err_num, char *buf, size_t len);
 struct timeval Kinetic_TimevalZero(void);
 bool Kinetic_TimevalIsZero(struct timeval const tv);
 struct timeval Kinetic_TimevalAdd(struct timeval const a, struct timeval const b);
 int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b);
 
-KineticProto_Command_GetLog_Type KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KineticLogInfo_Type type);
+Com_Seagate_Kinetic_Proto_Command_GetLog_Type KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KineticLogInfo_Type type);
 
-KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type);
+KineticMessageType Com_Seagate_Kinetic_Proto_Command_MessageType_to_KineticMessageType(Com_Seagate_Kinetic_Proto_Command_MessageType type);
 
 void KineticMessage_Init(KineticMessage* const message);
 void KineticRequest_Init(KineticRequest* reqeust, KineticSession const * const session);

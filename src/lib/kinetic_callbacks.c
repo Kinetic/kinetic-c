@@ -87,9 +87,9 @@ KineticStatus KineticCallbacks_Get(KineticOperation* const operation, KineticSta
     {
         KINETIC_ASSERT(operation->response != NULL);
         // Update the entry upon success
-        KineticProto_Command_KeyValue* keyValue = KineticResponse_GetKeyValue(operation->response);
+        Com_Seagate_Kinetic_Proto_Command_KeyValue* keyValue = KineticResponse_GetKeyValue(operation->response);
         if (keyValue != NULL) {
-            if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, operation->entry)) {
+            if (!Copy_Com_Seagate_Kinetic_Proto_Command_KeyValue_to_KineticEntry(keyValue, operation->entry)) {
                 return KINETIC_STATUS_BUFFER_OVERRUN;
             }
         }
@@ -126,9 +126,9 @@ KineticStatus KineticCallbacks_GetKeyRange(KineticOperation* const operation, Ki
     {
         KINETIC_ASSERT(operation->response != NULL);
         // Report the key list upon success
-        KineticProto_Command_Range* keyRange = KineticResponse_GetKeyRange(operation->response);
+        Com_Seagate_Kinetic_Proto_Command_Range* keyRange = KineticResponse_GetKeyRange(operation->response);
         if (keyRange != NULL) {
-            if (!Copy_KineticProto_Command_Range_to_ByteBufferArray(keyRange, operation->buffers)) {
+            if (!Copy_Com_Seagate_Kinetic_Proto_Command_Range_to_ByteBufferArray(keyRange, operation->buffers)) {
                 return KINETIC_STATUS_BUFFER_OVERRUN;
             }
         }
@@ -136,7 +136,7 @@ KineticStatus KineticCallbacks_GetKeyRange(KineticOperation* const operation, Ki
     return status;
 }
 
-static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, KineticProto_Command_P2POperation const * const p2pOperation)
+static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, Com_Seagate_Kinetic_Proto_Command_P2POperation const * const p2pOperation)
 {
     if (p2pOperation == NULL) { return; }
     for(size_t i = 0; i < p2pOp->numOperations; i++)

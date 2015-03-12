@@ -21,13 +21,13 @@
 #ifndef KINETIC_PDU_UNPACK_H
 #define KINETIC_PDU_UNPACK_H
 
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 
 /* This wrapper only exists for mocking purposes. */
-KineticProto_Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
+Com_Seagate_Kinetic_Proto_Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
     size_t len, const uint8_t* data);
 
-KineticProto_Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
+Com_Seagate_Kinetic_Proto_Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
     size_t len, const uint8_t* data);
 
 #endif

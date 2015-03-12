@@ -24,7 +24,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_bus.h"
 #include "kinetic_nbo.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_logger.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_message.h"
@@ -308,7 +308,7 @@ void test_unpack_cb_should_skip_empty_commands(void)
 
     KineticAllocator_NewKineticResponse_ExpectAndReturn(1, response);
 
-    KineticProto_Message Proto;
+    Com_Seagate_Kinetic_Proto_Message Proto;
     memset(&Proto, 0, sizeof(Proto));
     Proto.has_commandBytes = false;
 
@@ -342,7 +342,7 @@ void test_unpack_cb_should_unpack_command_bytes(void)
 
     KineticAllocator_NewKineticResponse_ExpectAndReturn(8, response);
 
-    KineticProto_Message Proto;
+    Com_Seagate_Kinetic_Proto_Message Proto;
     memset(&Proto, 0, sizeof(Proto));
     Proto.has_commandBytes = true;
     Proto.commandBytes.data = (uint8_t *)"data";
@@ -351,9 +351,9 @@ void test_unpack_cb_should_unpack_command_bytes(void)
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
 
-    KineticProto_Command Command;
+    Com_Seagate_Kinetic_Proto_Command Command;
     memset(&Command, 0, sizeof(Command));
-    KineticProto_Command_Header Header;
+    Com_Seagate_Kinetic_Proto_Command_Header Header;
     memset(&Header, 0, sizeof(Header));
     Command.header = &Header;
     response->header.valueLength = 1;

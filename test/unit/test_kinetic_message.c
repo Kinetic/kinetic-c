@@ -24,7 +24,7 @@
 #include "byte_array.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_message.h"
 #include "kinetic_logger.h"
 
@@ -106,7 +106,7 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
     TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.tag, entry.tag);
     TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_ALGORITHM_SHA1, message.keyValue.algorithm);
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_SHA1, message.keyValue.algorithm);
     TEST_ASSERT_TRUE(message.keyValue.has_metadataOnly);
     TEST_ASSERT_TRUE(message.keyValue.metadataOnly);
     TEST_ASSERT_TRUE(message.keyValue.has_force);

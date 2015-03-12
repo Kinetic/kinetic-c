@@ -52,7 +52,7 @@ static void free_byte_array(ByteArray ba) {
 }
 
 static KineticLogInfo_Utilization* KineticLogInfo_GetUtilizations(
-    const KineticProto_Command_GetLog* getLog,
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog,
     size_t *numUtilizations)
 {
     *numUtilizations = 0;
@@ -78,7 +78,7 @@ static KineticLogInfo_Utilization* KineticLogInfo_GetUtilizations(
 }
 
 static KineticLogInfo_Temperature *KineticLogInfo_GetTemperatures(
-    const KineticProto_Command_GetLog* getLog,
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog,
     size_t *numTemperatures)
 {
     size_t num_temp = getLog->n_temperatures;
@@ -99,7 +99,7 @@ static KineticLogInfo_Temperature *KineticLogInfo_GetTemperatures(
 }
 
 static KineticLogInfo_Capacity *KineticLogInfo_GetCapacity(
-    const KineticProto_Command_GetLog* getLog)
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog)
 {
     KineticLogInfo_Capacity *cap = calloc(1, sizeof(*cap));
     if (cap && getLog->capacity) {
@@ -110,9 +110,9 @@ static KineticLogInfo_Capacity *KineticLogInfo_GetCapacity(
 }
 
 static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
-    const KineticProto_Command_GetLog* getLog)
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog)
 {
-    KineticProto_Command_GetLog_Configuration const *gcfg = getLog->configuration;
+    Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration const *gcfg = getLog->configuration;
 
     KineticLogInfo_Configuration *cfg = calloc(1, sizeof(*cfg));
     if (cfg) {
@@ -193,7 +193,7 @@ cleanup:
 }
 
 static KineticLogInfo_Statistics *KineticLogInfo_GetStatistics(
-    const KineticProto_Command_GetLog* getLog,
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog,
     size_t *numStatistics)
 {
     size_t num_stats = getLog->n_statistics;
@@ -215,14 +215,14 @@ static KineticLogInfo_Statistics *KineticLogInfo_GetStatistics(
 }
 
 static ByteArray KineticLogInfo_GetMessages(
-    const KineticProto_Command_GetLog* getLog)
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog)
 {
     return copy_to_byte_array(getLog->messages.data, getLog->messages.len);
     //COPY_BYTES_OPTIONAL(messages, info, getLog, allocator);
 }
 
 static KineticLogInfo_Limits * KineticLogInfo_GetLimits(
-    const KineticProto_Command_GetLog* getLog)
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog)
 {
     KineticLogInfo_Limits * limits = calloc(1, sizeof(*limits));
     if (limits) {
@@ -242,7 +242,7 @@ static KineticLogInfo_Limits * KineticLogInfo_GetLimits(
 }
 
 static KineticLogInfo_Device * KineticLogInfo_GetDevice(
-    const KineticProto_Command_GetLog* getLog)
+    const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog)
 {
     KineticLogInfo_Device *device = calloc(1, sizeof(*device));
     if (device && getLog->device) {
@@ -254,7 +254,7 @@ static KineticLogInfo_Device * KineticLogInfo_GetDevice(
     return device;
 }
 
-KineticLogInfo* KineticLogInfo_Create(const KineticProto_Command_GetLog* getLog)
+KineticLogInfo* KineticLogInfo_Create(const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog)
 {
     KINETIC_ASSERT(getLog != NULL);
 

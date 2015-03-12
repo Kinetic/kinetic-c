@@ -3,7 +3,7 @@
 	[
 		{
 			"cmd": "make",
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Default Build",
 			"working_dir": "${project_path}",
 			"path": "/usr/local/bin:/usr/local/sbin:/usr/bin:/Users/greg/bin:~/.local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
@@ -14,7 +14,7 @@
 				"make",
 				"test"
 			],
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Run all tests (full)",
 			"working_dir": "${project_path}",
 			"path": "/usr/local/bin:/usr/local/sbin:/usr/bin:/Users/greg/bin:~/.local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
@@ -26,7 +26,7 @@
 				"CC=gcc-4.8",
 				"test:${file_name}"
 			],
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Test current module",
 			"selector":
 			[
@@ -42,7 +42,7 @@
 				"make",
 				"${file_base_name}"
 			],
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Build and run system test",
 			"working_dir": "${project_path}",
 			"path": "/usr/local/bin:/usr/local/sbin:/usr/bin:/Users/greg/bin:~/.local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
@@ -53,7 +53,7 @@
 				"make",
 				"utility"
 			],
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Build test utility",
 			"working_dir": "${project_path}",
 			"path": "/usr/local/bin:/usr/local/sbin:/usr/bin:/Users/greg/bin:~/.local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
@@ -64,7 +64,7 @@
 				"make",
 				"run"
 			],
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Build and run test utility",
 			"working_dir": "${project_path}",
 			"path": "/usr/local/bin:/usr/local/sbin:/usr/bin:/Users/greg/bin:~/.local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
@@ -75,7 +75,7 @@
 				"make",
 				"examples"
 			],
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Build and run examples",
 			"working_dir": "${project_path}",
 			"path": "/usr/local/bin:/usr/local/sbin:/usr/bin:/Users/greg/bin:~/.local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
@@ -86,7 +86,7 @@
 				"make",
 				"all"
 			],
-			"file_regex": "([A-Za-z][A-Za-z0-9/_]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
+			"file_regex": "([A-Za-z][A-Za-z0-9/_\\-\\.]+\\.[ch])[:,] ?l?i?n?e? ?([0-9]+)[\\.:,]*([0-9]*)",
 			"name": "kinetic-c - Full CI build",
 			"working_dir": "${project_path}",
 			"path": "/usr/local/bin:/usr/local/sbin:/usr/bin:/Users/greg/bin:~/.local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",

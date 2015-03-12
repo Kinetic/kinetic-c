@@ -18,7 +18,7 @@
 *
 */
 
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_types.h"
 #include "kinetic_logger.h"
 #include "protobuf-c/protobuf-c.h"
@@ -96,134 +96,132 @@ void test_KineticProtoStatusCode_to_KineticStatus_should_map_from_internal_to_pu
 {
     // These status codes have a one-to-one mapping for clarity
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CONNECTION_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_BUSY,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_FOUND,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_CLUSTER_MISMATCH,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_VERSION_MISMATCH,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_HMAC_FAILURE,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE));
     // End one-to-one mappings
 
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID_REQUEST,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DATA_ERROR,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_NOT_AUTHORIZED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_OPERATION_FAILED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_LOCKED,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED));
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
-                                    KineticProtoStatusCode_to_KineticStatus(KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE));
+                                    KineticProtoStatusCode_to_KineticStatus(COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE));
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
-                                    KineticProtoStatusCode_to_KineticStatus(_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_IS_INT_SIZE));
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_INVALID,
-                                    KineticProtoStatusCode_to_KineticStatus((KineticProto_Command_Status_StatusCode)
-                                            (KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 100)));
+                                    KineticProtoStatusCode_to_KineticStatus((Com_Seagate_Kinetic_Proto_Command_Status_StatusCode)
+                                            (COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS + 100)));
 }
 
-void test_KineticProto_Command_Synchronization_from_KineticSynchronization_should_map_from_internal_to_public_type(void)
+void test_Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization_should_map_from_internal_to_public_type(void)
 {
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH,
-                      KineticProto_Command_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH,
+                      Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_WRITETHROUGH));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK,
-                      KineticProto_Command_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK,
+                      Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_WRITEBACK));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH,
-                      KineticProto_Command_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH,
+                      Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_FLUSH));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
-                      KineticProto_Command_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
+                      Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
                           KINETIC_SYNCHRONIZATION_INVALID));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
-                      KineticProto_Command_Synchronization_from_KineticSynchronization(
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION,
+                      Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
                           (KineticSynchronization)((int)KINETIC_SYNCHRONIZATION_FLUSH + 1000)));
 }
 
-void test_KineticProto_Command_Algorithm_from_KineticAlgorithm_should_map_from_public_to_internal_type(void)
+void test_Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm_should_map_from_public_to_internal_type(void)
 {
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_SHA1,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA1));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_SHA1,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA1));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_SHA2,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA2));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_SHA2,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA2));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_SHA3,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA3));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_SHA3,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_SHA3));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_CRC32,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC32));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_CRC32,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC32));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_CRC64,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC64));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_CRC64,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_CRC64));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_INVALID));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(KINETIC_ALGORITHM_INVALID));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm)1000));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm)1000));
     TEST_ASSERT_EQUAL(
-        KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
-        KineticProto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
+        COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM,
+        Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm((KineticAlgorithm) - 19));
 }
 
-void test_KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type_should_convert_from_public_to_protobuf_type(void)
+void test_KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type_should_convert_from_public_to_protobuf_type(void)
 {
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_TEMPERATURES));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_CAPACITIES));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_CONFIGURATION));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_STATISTICS));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_MESSAGES));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_LIMITS));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_TEMPERATURES));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_CAPACITIES));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CONFIGURATION,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_CONFIGURATION));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_STATISTICS));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_MESSAGES));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type(KINETIC_DEVICE_INFO_TYPE_LIMITS));
 
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type((KineticLogInfo_Type)-1));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type((KineticLogInfo_Type)((int)KINETIC_DEVICE_INFO_TYPE_LIMITS + 1)));
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type((KineticLogInfo_Type)1000));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type((KineticLogInfo_Type)-1));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type((KineticLogInfo_Type)((int)KINETIC_DEVICE_INFO_TYPE_LIMITS + 1)));
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE,
+        KineticLogInfo_Type_to_Com_Seagate_Kinetic_Proto_Command_GetLog_Type((KineticLogInfo_Type)1000));
 }
 
-void test_Copy_KineticProto_Command_Range_to_ByteBufferArray_should_copy_keys_into_byte_buffers(void)
+void test_Copy_Com_Seagate_Kinetic_Proto_Command_Range_to_ByteBufferArray_should_copy_keys_into_byte_buffers(void)
 {
     ByteBuffer buffers[5];
     ByteBufferArray array = {
@@ -231,5 +229,5 @@ void test_Copy_KineticProto_Command_Range_to_ByteBufferArray_should_copy_keys_in
         .count = 5,
     };
 
-    TEST_ASSERT_TRUE(Copy_KineticProto_Command_Range_to_ByteBufferArray(NULL, &array));
+    TEST_ASSERT_TRUE(Copy_Com_Seagate_Kinetic_Proto_Command_Range_to_ByteBufferArray(NULL, &array));
 }

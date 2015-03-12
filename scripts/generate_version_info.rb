@@ -2,8 +2,8 @@
 kinetic_c_version = `cat config/VERSION`.strip
 commit_hash = `git rev-parse HEAD`.strip
 protocol_version = nil
-File.readlines('src/lib/kinetic_proto.c').each do |l|
-    m = l.match /^char KineticProto_local_protocol_version_default_value\[\]\s+=\s+\"(.*)\"/
+File.readlines('src/lib/kinetic.pb-c.c').each do |l|
+    m = l.match /^char com_seagate_kinetic_proto_local_protocol_version_default_value\[\]\s+=\s+\"(.*)\"/
     if m
         protocol_version = m[1].strip
         break

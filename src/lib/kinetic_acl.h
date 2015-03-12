@@ -21,7 +21,7 @@
 #define KINETIC_ACL_H
 
 #include "kinetic_acl_types.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 
 /* Attempt to instantiate an ACL structure based on the JSON data
  * contained in PATH. */

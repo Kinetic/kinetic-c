@@ -69,7 +69,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_bus.o \
 	$(OUT_DIR)/kinetic_auth.o \
 	$(OUT_DIR)/kinetic_pdu_unpack.o \
-	$(OUT_DIR)/kinetic_proto.o \
+	$(OUT_DIR)/kinetic.pb-c.o \
 	$(OUT_DIR)/kinetic_socket.o \
 	$(OUT_DIR)/kinetic_message.o \
 	$(OUT_DIR)/kinetic_logger.o \
@@ -310,7 +310,7 @@ uninstall:
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_semaphore.h
 	$(RM) -f $(PREFIX)/include/byte_array.h
-	$(RM) -f $(PREFIX)/include/kinetic_proto.h
+	$(RM) -f $(PREFIX)/include/kinetic.pb-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make uninstall; fi;

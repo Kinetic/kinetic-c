@@ -27,7 +27,7 @@ uint32_t KineticResponse_GetProtobufLength(KineticResponse * response);
 uint32_t KineticResponse_GetValueLength(KineticResponse * response);
 KineticStatus KineticResponse_GetStatus(KineticResponse * response);
 int64_t KineticResponse_GetConnectionID(KineticResponse * response);
-KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse * response);
-KineticProto_Command_Range* KineticResponse_GetKeyRange(KineticResponse * response);
+Com_Seagate_Kinetic_Proto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse * response);
+Com_Seagate_Kinetic_Proto_Command_Range* KineticResponse_GetKeyRange(KineticResponse * response);
 
 #endif // _KINETIC_RESPONSE_H

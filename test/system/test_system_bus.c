@@ -31,7 +31,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_device_info.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_allocator.h"
 #include "kinetic_message.h"
 #include "kinetic_bus.h"
@@ -155,8 +155,8 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *sock
 struct kinetic_response_payload
 {
     KineticPDUHeader header;
-    KineticProto_Message* protoBuf;
-    KineticProto_Command* command;
+    Com_Seagate_Kinetic_Proto_Message* protoBuf;
+    Com_Seagate_Kinetic_Proto_Command* command;
     uint8_t value[];
 };
 
@@ -196,12 +196,14 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         return res;
     } else {
         payload->header = si->header;
-        payload->protoBuf = KineticProto_Message__unpack(NULL, si->header.protobufLength, si->buf);
+        payload->protoBuf = com_seagate_kinetic_proto_message__unpack(NULL,
+            si->header.protobufLength, si->buf);
         if (payload->protoBuf->has_commandBytes &&
             payload->protoBuf->commandBytes.data != NULL &&
             payload->protoBuf->commandBytes.len > 0)
         {
-            payload->command = KineticProto_command__unpack(NULL, payload->protoBuf->commandBytes.len, payload->protoBuf->commandBytes.data);
+            payload->command = com_seagate_kinetic_proto_command__unpack(NULL,
+                payload->protoBuf->commandBytes.len, payload->protoBuf->commandBytes.data);
         } else {
             payload->command = NULL;
         }

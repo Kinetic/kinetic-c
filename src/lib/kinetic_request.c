@@ -35,7 +35,7 @@ uint8_t *msg = NULL;
 
 size_t KineticRequest_PackCommand(KineticRequest* request)
 {
-    size_t expectedLen = KineticProto_command__get_packed_size(&request->message.command);
+    size_t expectedLen = com_seagate_kinetic_proto_command__get_packed_size(&request->message.command);
     #ifndef TEST
     uint8_t *cmdBuf = (uint8_t*)malloc(expectedLen);
     #endif
@@ -46,7 +46,7 @@ size_t KineticRequest_PackCommand(KineticRequest* request)
     }
     request->message.message.commandBytes.data = cmdBuf;
 
-    size_t packedLen = KineticProto_command__pack(
+    size_t packedLen = com_seagate_kinetic_proto_command__pack(
         &request->message.command, cmdBuf);
     KINETIC_ASSERT(packedLen == expectedLen);
     request->message.message.commandBytes.len = packedLen;
@@ -73,10 +73,10 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
     uint8_t **out_msg, size_t *msgSize)
 {
     // Configure PDU header
-    KineticProto_Message* proto = &operation->request->message.message;
+    Com_Seagate_Kinetic_Proto_Message* proto = &operation->request->message.message;
     KineticPDUHeader header = {
         .versionPrefix = 'F',
-        .protobufLength = KineticProto_Message__get_packed_size(proto)
+        .protobufLength = com_seagate_kinetic_proto_message__get_packed_size(proto)
     };
     header.valueLength = operation->value.len;
     uint32_t nboProtoLength = KineticNBO_FromHostU32(header.protobufLength);
@@ -100,7 +100,7 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
     offset += sizeof(nboProtoLength);
     memcpy(&msg[offset], &nboValueLength, sizeof(nboValueLength));
     offset += sizeof(nboValueLength);
-    size_t len = KineticProto_Message__pack(&request->message.message, &msg[offset]);
+    size_t len = com_seagate_kinetic_proto_message__pack(&request->message.message, &msg[offset]);
     KINETIC_ASSERT(len == header.protobufLength);
     offset += header.protobufLength;
 

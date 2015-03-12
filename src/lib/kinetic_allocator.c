@@ -120,7 +120,7 @@ void KineticAllocator_FreeOperation(KineticOperation* operation)
     KineticFree(operation);
 }
 
-void KineticAllocator_FreeP2PProtobuf(KineticProto_Command_P2POperation* proto_p2pOp)
+void KineticAllocator_FreeP2PProtobuf(Com_Seagate_Kinetic_Proto_Command_P2POperation* proto_p2pOp)
 {
     if (proto_p2pOp != NULL) {
         if (proto_p2pOp->peer != NULL) {

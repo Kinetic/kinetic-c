@@ -23,7 +23,7 @@
 #include "kinetic_auth.h"
 #include "kinetic_hmac.h"
 #include "kinetic_nbo.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_logger.h"
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
@@ -112,7 +112,7 @@ void test_KineticAuth_PopulateHmac_should_add_and_populate_HMAC_authentication(v
 
     TEST_ASSERT_NULL(Request.message.message.pinAuth);
     TEST_ASSERT_TRUE(Request.message.message.has_authType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, Request.message.message.authType);
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, Request.message.message.authType);
     TEST_ASSERT_TRUE(Request.message.message.hmacAuth->has_hmac);
     TEST_ASSERT_EQUAL_PTR(Request.message.hmacAuth.hmac.data, Request.message.message.hmacAuth->hmac.data);
     TEST_ASSERT_EQUAL(KINETIC_HMAC_SHA1_LEN, Request.message.message.hmacAuth->hmac.len);
@@ -142,7 +142,7 @@ void test_KineticAuth_Populate_should_add_and_populate_PIN_authentication(void)
 
     TEST_ASSERT_NULL(Request.message.message.hmacAuth);
     TEST_ASSERT_TRUE(Request.message.message.has_authType);
-    TEST_ASSERT_EQUAL(KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, Request.message.message.authType);
+    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, Request.message.message.authType);
     TEST_ASSERT_TRUE(Request.message.message.pinAuth->has_pin);
     TEST_ASSERT_EQUAL_PTR(testPin, Request.message.message.pinAuth->pin.data);
     TEST_ASSERT_EQUAL(strlen(testPin), Request.message.message.pinAuth->pin.len);

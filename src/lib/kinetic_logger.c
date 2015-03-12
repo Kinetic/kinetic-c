@@ -383,10 +383,10 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                         ProtobufCBinaryData* value = (ProtobufCBinaryData*)(void*)&pMsg[fieldDesc->offset];
                         if ((value->data != NULL) && (value->len > 0)) {
                             log_proto_level_start(fieldDesc->name);
-                            KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
+                            Com_Seagate_Kinetic_Proto_Command * cmd = com_seagate_kinetic_proto_command__unpack(NULL, value->len, value->data);
                             log_protobuf_message(log_level, &cmd->base, log_indent);
                             log_proto_level_end();
-                            KineticProto_command__free_unpacked(cmd, NULL);
+                            com_seagate_kinetic_proto_command__free_unpacked(cmd, NULL);
                         }
                     }
                     else {
@@ -410,7 +410,7 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
     }
 }
 
-void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
+void KineticLogger_LogProtobuf(int log_level, const Com_Seagate_Kinetic_Proto_Message* msg)
 {
     if (msg == NULL || !is_level_enabled(log_level)) {
         return;
@@ -422,19 +422,19 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
     log_protobuf_message(log_level, &msg->base, indent);
 }
 
-void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
+void KineticLogger_LogStatus(int log_level, Com_Seagate_Kinetic_Proto_Command_Status* status)
 {
     if (status == NULL || !is_level_enabled(log_level)) {
         return;
     }
 
     ProtobufCMessage* protoMessage = &status->base;
-    KineticProto_Command_Status_StatusCode code = status->code;
+    Com_Seagate_Kinetic_Proto_Command_Status_StatusCode code = status->code;
 
-    if (code == KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS) {
+    if (code == COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS) {
         KineticLogger_LogPrintf(log_level, "Operation completed successfully\n");
     }
-    else if (code == KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
+    else if (code == COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
         KineticLogger_LogPrintf(log_level, "Operation was aborted!\n");
     }
     else {

@@ -24,7 +24,7 @@
 #include "kinetic_device_info.h"
 #include "kinetic_types_internal.h"
 
-KineticLogInfo* KineticLogInfo_Create(const KineticProto_Command_GetLog* getLog);
+KineticLogInfo* KineticLogInfo_Create(const Com_Seagate_Kinetic_Proto_Command_GetLog* getLog);
 void KineticLogInfo_Free(KineticLogInfo* kdi);
 
 #endif // _KINETIC_LOG_INFO_H
