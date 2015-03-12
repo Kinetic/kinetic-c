@@ -23,12 +23,12 @@
 #include "bus_types.h"
 #include "bus_internal_types.h"
 
-/* Do a blocking send.
+/** Do a blocking send.
  *
- * RetuBus_RegisterSocketing true indicates that the message has been queued up for
+ * Returning true indicates that the message has been queued up for
  * delivery, but the request or response may still fail. Those errors
  * are handled by giving an error status code to the callback.
- * RetuBus_RegisterSocketing false means that the send was rejected outright, and
+ * Returning false means that the send was rejected outright, and
  * the callback-based error handling will not be used. */
 bool Send_DoBlockingSend(struct bus *b, boxed_msg *box);
 

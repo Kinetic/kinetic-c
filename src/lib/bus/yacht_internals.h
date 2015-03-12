@@ -24,10 +24,10 @@
  *   An (int -> void *metadata) hash table for tracking active file
  *   descriptors and their metadata. */
 struct yacht {
-    size_t size;
-    size_t mask;
-    int *buckets;
-    void **values;
+    size_t size;        ///< Size of bucket array.
+    size_t mask;        ///< Mask for hash table bucket array.
+    int *buckets;       ///< Hash table buckets (keys).
+    void **values;      ///< Values associated with keys, if any.
 };
 
 #endif

@@ -38,22 +38,22 @@ struct hmac_key {
 };
 
 struct ACL {
-    size_t ACL_ceil;
-    size_t ACL_count;
-    KineticProto_Command_Security_ACL **ACLs;
+    size_t ACL_ceil;     ///< Ceiling of ACLs array: resize if count == ceil.
+    size_t ACL_count;    ///< How many ACL * structs are in ACLs[].
+    KineticProto_Command_Security_ACL **ACLs;  ///< ACL struct array.
 };
 
 #define ACL_MAX_PERMISSIONS 8
 
 typedef enum {
-    ACL_OK = 0,
-    ACL_END_OF_STREAM = 1,
-    ACL_ERROR_NULL = -1,
-    ACL_ERROR_MEMORY = -2,
-    ACL_ERROR_JSON_FILE = -3,
-    ACL_ERROR_BAD_JSON = -4,
-    ACL_ERROR_MISSING_FIELD = -5,
-    ACL_ERROR_INVALID_FIELD = -6,
+    ACL_OK = 0,                      ///< Okay
+    ACL_END_OF_STREAM = 1,           ///< End of stream
+    ACL_ERROR_NULL = -1,             ///< NULL pointer error
+    ACL_ERROR_MEMORY = -2,           ///< Memory allocation failure
+    ACL_ERROR_JSON_FILE = -3,        ///< Unable to open JSON file
+    ACL_ERROR_BAD_JSON = -4,         ///< Invalid JSON in file
+    ACL_ERROR_MISSING_FIELD = -5,    ///< Missing required field
+    ACL_ERROR_INVALID_FIELD = -6,    ///< Invalid field
 } KineticACLLoadResult;
 
 #endif // KINETIC_ACL_TYPES_H

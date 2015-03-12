@@ -28,16 +28,16 @@
 #define KINETIC_USE_TLS_1_2 0
 #endif
 
-/* Initialize the SSL library internals for use by the messaging bus. */
+/** Initialize the SSL library internals for use by the messaging bus. */
 bool BusSSL_Init(struct bus *b);
 
-/* Do an SSL / TLS shake for a connection. Blocking. */
+/** Do an SSL / TLS shake for a connection. Blocking. */
 SSL *BusSSL_Connect(struct bus *b, int fd);
 
-/* Disconnect and free an individual SSL handle. */
+/** Disconnect and free an individual SSL handle. */
 bool BusSSL_Disconnect(struct bus *b, SSL *ssl);
 
-/* Free all internal data for using SSL (the SSL_CTX). */
+/** Free all internal data for using SSL (the SSL_CTX). */
 void BusSSL_CtxFree(struct bus *b);
 
 #endif

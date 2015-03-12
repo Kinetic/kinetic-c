@@ -23,7 +23,7 @@
 #include <stdbool.h>
 #include "bus_types.h"
 
-/* Poll on fd until complete, return true on success or false on IO
+/** Poll on fd until complete, return true on success or false on IO
  * error. (This is mostly in a distinct module to add a testing seam.) */
 bool BusPoll_OnCompletion(struct bus *b, int fd);
 

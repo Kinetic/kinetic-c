@@ -62,8 +62,10 @@ struct yacht *Yacht_Init(uint8_t sz2) {
     }
 }
 
+/* A large prime used to spread around the hashes. */
 #define LARGE_PRIME (4294967291L /* (2 ** 32) - 5 */)
 
+/* Just a constant multiply, since we're hashing file descriptors. */
 static size_t hash(int key) {
     return key * LARGE_PRIME;
 }

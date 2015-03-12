@@ -22,10 +22,10 @@
 
 #include "listener_internal_types.h"
 
-/* Notify the listener's caller that a command has completed. */
+/** Notify the listener's caller that a command has completed. */
 void ListenerCmd_NotifyCaller(listener *l, int fd);
 
-/* Process incoming commands, if any. */
+/** Process incoming commands, if any. */
 void ListenerCmd_CheckIncomingMessages(listener *l, int *res);
 
 #endif

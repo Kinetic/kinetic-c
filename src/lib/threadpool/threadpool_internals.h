@@ -23,29 +23,30 @@
 #include <pthread.h>
 #include "threadpool.h"
 
+/** Current status of a worker thread. */
 typedef enum {
-    STATUS_NONE,                /* undefined status */
-    STATUS_ASLEEP,              /* thread is poll-sleeping to reduce CPU */
-    STATUS_AWAKE,               /* thread is active */
-    STATUS_SHUTDOWN,            /* thread has been notified about shutdown */
-    STATUS_JOINED,              /* thread has been pthread_join'd */
+    STATUS_NONE,                //> undefined status
+    STATUS_ASLEEP,              //> thread is poll-sleeping to reduce CPU
+    STATUS_AWAKE,               //> thread is active
+    STATUS_SHUTDOWN,            //> thread has been notified about shutdown
+    STATUS_JOINED,              //> thread has been pthread_join'd
 } thread_status_t;
 
-/* Info retained by a thread while working. */
+/** Info retained by a thread while working. */
 struct thread_info {
-    pthread_t t;                /* thread */
-    int parent_fd;              /* alert pipe parent writes into */
-    int child_fd;               /* alert pipe child reads from */
-    thread_status_t status;     /* current worker thread status */
+    pthread_t t;                //> thread
+    int parent_fd;              //> alert pipe parent writes into
+    int child_fd;               //> alert pipe child reads from
+    thread_status_t status;     //> current worker thread status
 };
 
-/* Thread_info, plus pointer back to main threadpool manager. */
+/** Thread_info, plus pointer back to main threadpool manager. */
 struct thread_context {
     struct threadpool *t;
     struct thread_info *ti;
 };
 
-/* A task, with an additional mark. */
+/** A task, with an additional mark. */
 struct marked_task {
     threadpool_task_cb *task;
     threadpool_task_cleanup_cb *cleanup;
@@ -61,25 +62,25 @@ struct marked_task {
     size_t mark;
 };
 
-/* Internal threadpool state. */
+/** Internal threadpool state. */
 struct threadpool {
     /* reserve -> commit -> request -> release */
-    size_t task_reserve_head;   /* reserved for write */
-    size_t task_commit_head;    /* done with write */
-    size_t task_request_head;   /* requested for read */
-    size_t task_release_head;   /* done processing task, can be overwritten */
+    size_t task_reserve_head;   //> reserved for write
+    size_t task_commit_head;    //> done with write
+    size_t task_request_head;   //> requested for read
+    size_t task_release_head;   //> done processing task, can be overwritten
 
-    struct marked_task *tasks;  /* ring buffer for tasks */
+    struct marked_task *tasks;  //> ring buffer for tasks
 
     /* Size and mask. These can be derived from task_ringbuf_size2,
      * but are cached to reduce CPU. */
-    size_t task_ringbuf_size;   /* size of ring buffer */
-    size_t task_ringbuf_mask;   /* mask to fit counter within ring buffer */
-    uint8_t task_ringbuf_size2; /* log2 of size of ring buffer */
+    size_t task_ringbuf_size;   //> size of ring buffer
+    size_t task_ringbuf_mask;   //> mask to fit counter within ring buffer
+    uint8_t task_ringbuf_size2; //> log2 of size of ring buffer
 
-    bool shutting_down;         /* shutdown has been called */
-    uint8_t live_threads;       /* currently live threads */
-    uint8_t max_threads;        /* max number of threads to start */
+    bool shutting_down;         //> shutdown has been called
+    uint8_t live_threads;       //> currently live threads
+    uint8_t max_threads;        //> max number of threads to start
     struct thread_info *threads;
 };
 

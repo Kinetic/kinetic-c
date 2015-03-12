@@ -92,18 +92,18 @@ typedef struct {
  * @brief An instance of a session with a Kinetic device.
  */
 struct _KineticSession {
-    KineticSessionConfig config;                        ///> session configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession
-    bool            connected;                          ///> state of connection
-    KineticStatus   terminationStatus;                  ///> reported status upon device termination (SUCCESS if not terminated)
-    int             socket;                             ///> socket file descriptor
-    int64_t         connectionID;                       ///> initialized to seconds since epoch
-    int64_t         sequence;                           ///> increments for each request in a session
-    struct bus *    messageBus;                         ///> pointer to message bus instance
-    socket_info *   si;                                 ///> pointer to socket information
-    pthread_mutex_t sendMutex;                          ///> mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
-    KineticResourceWaiter connectionReady;              ///> connection ready status (set to true once connectionID recieved)
-    KineticCountingSemaphore * outstandingOperations;   ///> counting semaphore to only allows the configured number of outstanding operation at a given time
-    uint16_t timeoutSeconds;                            ///> Default response timeout
+    KineticSessionConfig config;                        ///< session configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession
+    bool            connected;                          ///< state of connection
+    KineticStatus   terminationStatus;                  ///< reported status upon device termination (SUCCESS if not terminated)
+    int             socket;                             ///< socket file descriptor
+    int64_t         connectionID;                       ///< initialized to seconds since epoch
+    int64_t         sequence;                           ///< increments for each request in a session
+    struct bus *    messageBus;                         ///< pointer to message bus instance
+    socket_info *   si;                                 ///< pointer to socket information
+    pthread_mutex_t sendMutex;                          ///< mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool
+    KineticResourceWaiter connectionReady;              ///< connection ready status (set to true once connectionID recieved)
+    KineticCountingSemaphore * outstandingOperations;   ///< counting semaphore to only allows the configured number of outstanding operation at a given time
+    uint16_t timeoutSeconds;                            ///< Default response timeout
 };
 
 // Kinetic Message HMAC

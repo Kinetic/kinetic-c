@@ -25,9 +25,18 @@
 
 #include <poll.h>
 
+/** Default size for the read buffer, which will grow on demand. */
 #define DEFAULT_READ_BUF_SIZE (1024L * 1024L)
-#define INCOMING_MSG_PIPE 1
+
+/** ID of the `struct pollfd` for the listener's incoming command
+ * pipe. This is in the same pollfd array as the sockets being
+ * watched so that an incoming command will wake it from its
+ * blocking poll. */
 #define INCOMING_MSG_PIPE_ID 0
+
+/** Offset to account for the first file descriptor being the incoming
+ * message pipe. */
+#define INCOMING_MSG_PIPE 1
 
 typedef enum {
     MSG_NONE,
@@ -38,14 +47,14 @@ typedef enum {
     MSG_SHUTDOWN,
 } MSG_TYPE;
 
-/* Queue message. */
+/** A queue message, with a command in the tagged union. */
 typedef struct listener_msg {
     const uint8_t id;
     MSG_TYPE type;
     struct listener_msg *next;
     int pipes[2];
     
-    union {
+    union {                     /* keyed by .type */
         struct {
             connection_info *info;
             int notify_fd;
@@ -69,7 +78,8 @@ typedef struct listener_msg {
     } u;
 } listener_msg;
 
-/* How long the listener should wait for responses before blocking. */
+/** How long the listener should wait for responses before becoming idle
+ * and blocking. */
 #define LISTENER_TASK_TIMEOUT_DELAY 100
 
 typedef enum {
@@ -78,7 +88,7 @@ typedef enum {
     RIS_INACTIVE = 3,
 } rx_info_state;
 
-/* Record in table for partially processed messages. */
+/** Record in table for partially processed messages. */
 typedef struct rx_info_t {
     const uint16_t id;
     struct rx_info_t *next;
@@ -103,27 +113,26 @@ typedef struct rx_info_t {
     } u;
 } rx_info_t;
 
-/* Max number of sockets to monitor. */
+/** Max number of sockets to monitor.
+ * If listening to more sockets than this, use multiple listener threads. */
 #define MAX_FDS 1000
 
 /* Max number of partially processed messages.
  * TODO: Capacity planning. */
 #define MAX_PENDING_MESSAGES (1024)
 
-/* Max number of unprocessed queue messages */
+/** Max number of unprocessed queue messages */
 #define MAX_QUEUE_MESSAGES (32)
 typedef uint32_t msg_flag_t;
 
-/* Minimum and maximum poll() delays for listener, before going dormant. */
-#define MIN_DELAY 10
-#define MAX_DELAY 100
+/** Special value meaning poll should block indefinitely. */
 #define INFINITE_DELAY (-1)
 
-/* Sentinel values used for listener.shutdown_notify_fd. */
+/** Sentinel values used for listener.shutdown_notify_fd. */
 #define LISTENER_NO_FD (-1)
 #define LISTENER_SHUTDOWN_COMPLETE_FD (-2)
 
-/* Receiver of responses */
+/** Receiver of responses */
 typedef struct listener {
     struct bus *bus;
 

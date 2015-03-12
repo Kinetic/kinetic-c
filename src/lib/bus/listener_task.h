@@ -24,29 +24,29 @@
 #include "bus_internal_types.h"
 #include "listener_internal_types.h"
 
-/* Listener's main loop -- function pointer for pthread start function. */
+/** Listener's main loop -- function pointer for pthread start function. */
 void *ListenerTask_MainLoop(void *arg);
 
-/* Release a message to the listener's message pool. */
+/** Release a message to the listener's message pool. */
 void ListenerTask_ReleaseMsg(listener *l, listener_msg *msg);
 
-/* Release an INFO to the listener's info pool. */
+/** Release an INFO to the listener's info pool. */
 void ListenerTask_ReleaseRXInfo(listener *l, struct rx_info_t *info);
 
-/* Grow the listener's read buffer to NSIZE. */
+/** Grow the listener's read buffer to NSIZE. */
 bool ListenerTask_GrowReadBuf(listener *l, size_t nsize);
 
-/* Attempt delivery of the message boxed in INFO. */
+/** Attempt delivery of the message boxed in INFO. */
 void ListenerTask_AttemptDelivery(listener *l, struct rx_info_t *info);
 
-/* Notify the client that the event in INFO has failed with STATUS. */
+/** Notify the client that the event in INFO has failed with STATUS. */
 void ListenerTask_NotifyMessageFailure(listener *l,
     rx_info_t *info, bus_send_status_t status);
 
-/* Get the current backpressure from the listener. */
+/** Get the current backpressure from the listener. */
 uint16_t ListenerTask_GetBackpressure(struct listener *l);
 
-/* Dump the RX info table. (Debugging only.) */
+/** Dump the RX info table. (Debugging only.) */
 void ListenerTask_DumpRXInfoTable(listener *l);
 
 #endif

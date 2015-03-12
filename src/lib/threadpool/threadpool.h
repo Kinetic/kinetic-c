@@ -27,41 +27,41 @@
 /* More than a billion tasks in the backlog is likely an error. */
 #define THREADPOOL_MAX_RINGBUF_SIZE2 30
 
-/* Opaque handle to threadpool. */
+/** Opaque handle to threadpool. */
 struct threadpool;
 
-/* Configuration for thread pool. */
+/** Configuration for thread pool. */
 struct threadpool_config {
-    uint8_t task_ringbuf_size2; /* log2(size) of task ring buffer */
-    size_t max_delay;           /* max delay, in msec. 0 => default */
-    uint8_t max_threads;        /* max threads to alloc on demand */
+    uint8_t task_ringbuf_size2; //> log2(size) of task ring buffer
+    size_t max_delay;           //> max delay, in msec. 0 => default
+    uint8_t max_threads;        //> max threads to alloc on demand
 };
 
-/* Callback for a task, with an arbitrary user-supplied pointer. */
+/** Callback for a task, with an arbitrary user-supplied pointer. */
 typedef void (threadpool_task_cb)(void *udata);
 
-/* Callback to clean up a cancelled task's data, with the arbitrary
+/** Callback to clean up a cancelled task's data, with the arbitrary
  * user-supplied pointer that would have gone to the task. */
 typedef void (threadpool_task_cleanup_cb)(void *udata);
 
-/* A task. */
+/** A task. */
 struct threadpool_task {
-    threadpool_task_cb *task;
-    threadpool_task_cleanup_cb *cleanup;
-    void *udata;
+    threadpool_task_cb *task;   //> Task function pointer.
+    threadpool_task_cleanup_cb *cleanup;  //> Cleanup function pointer.
+    void *udata;                //> User data to pass along to function pointer.
 };
 
-/* Statistics about the current state of the threadpool. */
+/** Statistics about the current state of the threadpool. */
 struct threadpool_info {
     uint8_t active_threads;
     uint8_t dormant_threads;
     size_t backlog_size;
 };
 
-/* Initialize a threadpool, according to a config. Returns NULL on error. */
+/** Initialize a threadpool, according to a config. Returns NULL on error. */
 struct threadpool *Threadpool_Init(struct threadpool_config *cfg);
 
-/* Schedule a task in the threadpool. Returns whether the task was successfully
+/** Schedule a task in the threadpool. Returns whether the task was successfully
  * registered or not. If Threadpool_Shutdown has been called, this
  * function will always return false, due to API misuse.
  *
@@ -72,11 +72,11 @@ struct threadpool *Threadpool_Init(struct threadpool_config *cfg);
 bool Threadpool_Schedule(struct threadpool *t, struct threadpool_task *task,
     size_t *pushback);
 
-/* If TI is non-NULL, fill out some statistics about the operating state
+/** If TI is non-NULL, fill out some statistics about the operating state
  * of the thread pool. */
 void Threadpool_Stats(struct threadpool *t, struct threadpool_info *ti);
 
-/* Notify the threadpool's threads that the system is going to shut down soon.
+/** Notify the threadpool's threads that the system is going to shut down soon.
  * Returns whether all previously active threads have shut down.
  *
  * kill_all will eventually permit immediately shutting down all active threads
@@ -85,7 +85,7 @@ void Threadpool_Stats(struct threadpool *t, struct threadpool_info *ti);
  * Returns whether everything has halted. */
 bool Threadpool_Shutdown(struct threadpool *t, bool kill_all);
 
-/* Free a threadpool. Assumes either Threadpool_Shutdown() has been
+/** Free a threadpool. Assumes either Threadpool_Shutdown() has been
  * repeatedly called already, or leaking memory and other resources
  * is acceptable. */
 void Threadpool_Free(struct threadpool *t);

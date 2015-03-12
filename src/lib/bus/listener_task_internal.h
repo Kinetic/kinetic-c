@@ -24,7 +24,7 @@
 #include "bus_internal_types.h"
 #include "listener_internal_types.h"
 
-/* Coefficients for backpressure based on certain conditions. */
+/** Coefficients for backpressure based on certain conditions. */
 #define MSG_BP_1QTR       (0.25)
 #define MSG_BP_HALF       (0.5)
 #define MSG_BP_3QTR       (2.0)

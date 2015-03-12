@@ -47,7 +47,7 @@ bool BusSSL_Init(struct bus *b) {
 }
 
 /* Do an SSL / TLS handshake for a connection. Blocking.
- * RetuBus_RegisterSockets whether the connection succeeded. */
+ * Returns whether the connection succeeded. */
 SSL *BusSSL_Connect(struct bus *b, int fd) {
     SSL *ssl = NULL;
 

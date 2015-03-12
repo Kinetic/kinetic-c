@@ -26,7 +26,7 @@
 
 bool Util_IsResumableIOError(int errno_);
 
-/* Get the current time. RetuBus_RegisterSockets false on failure, which should
+/* Get the current time. Returns false on failure, which should
  * never happen. If a time-adjustment-safe API is available on the
  * current OS (e.g. clock_gettime(CLOCK_MONOTONIC, ...), it will
  * be used when relative is true. If it's not available, the

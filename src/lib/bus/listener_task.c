@@ -71,7 +71,7 @@ void *ListenerTask_MainLoop(void *arg) {
             last_sec = cur_sec;
         }
 
-        int delay = (self->is_idle ? -1 : LISTENER_TASK_TIMEOUT_DELAY);
+        int delay = (self->is_idle ? INFINITE_DELAY : LISTENER_TASK_TIMEOUT_DELAY);
         #ifndef TEST
         int poll_res = 0;
         #endif

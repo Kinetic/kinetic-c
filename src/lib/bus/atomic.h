@@ -20,6 +20,10 @@
 #ifndef ATOMIC_H
 #define ATOMIC_H
 
+/* Compiler intrinsic for an atomic compare-and-swap.
+ * Returns true if *PTR has been atomically changed from
+ * OLD to NEW, or false if OLD is no longer the current value
+ * (typically, because another thread changed it first). */
 #define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)     \
     (__sync_bool_compare_and_swap(PTR, OLD, NEW))
 
