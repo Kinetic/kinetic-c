@@ -706,8 +706,8 @@ void test_Bus_Free_should_call_shutdown_if_not_shut_down(void)
 
     Listener_Free_Expect(b->listeners[0]);
     Listener_Free_Expect(b->listeners[1]);
-    threadpool_shutdown_ExpectAndReturn(b->threadpool, false, true);
-    threadpool_free_Expect(b->threadpool);
+    Threadpool_Shutdown_ExpectAndReturn(b->threadpool, false, true);
+    Threadpool_Free_Expect(b->threadpool);
 
     TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->fd_set_lock, NULL));
     TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->log_lock, NULL));
@@ -741,8 +741,8 @@ void test_Bus_Free_should_free_bus(void)
 
     Listener_Free_Expect(b->listeners[0]);
     Listener_Free_Expect(b->listeners[1]);
-    threadpool_shutdown_ExpectAndReturn(b->threadpool, false, true);
-    threadpool_free_Expect(b->threadpool);
+    Threadpool_Shutdown_ExpectAndReturn(b->threadpool, false, true);
+    Threadpool_Free_Expect(b->threadpool);
 
     TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->fd_set_lock, NULL));
     TEST_ASSERT_EQUAL(0, pthread_mutex_init(&b->log_lock, NULL));

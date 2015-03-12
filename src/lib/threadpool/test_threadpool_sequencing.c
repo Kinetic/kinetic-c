@@ -73,7 +73,7 @@ static void task_cb(void *udata) {
             printf("count: %zd on %p\n", e->count, (void *)pthread_self());
         }
         for (;;) {
-            if (threadpool_schedule(e->t, e->task, NULL)) {
+            if (Threadpool_Schedule(e->t, e->task, NULL)) {
                 break;
             }
             usleep(1 * 1000);
@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
         .task_ringbuf_size2 = sz2,
         .max_threads = max_threads,
     };
-    struct threadpool *t = threadpool_init(&cfg);
+    struct threadpool *t = Threadpool_Init(&cfg);
     assert(t);
 
     struct threadpool_info stats;
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
         tasks[i] = (struct threadpool_task){ .task = task_cb, .udata = &envs[i], };
 
         for (;;) {
-            if (threadpool_schedule(t, &tasks[i], &counterpressure)) {
+            if (Threadpool_Schedule(t, &tasks[i], &counterpressure)) {
                 break;
             }
         }        
@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
         gettimeofday(&tv, NULL);
         if (tv.tv_sec > last_sec) {
             last_sec = tv.tv_sec;
-            threadpool_stats(t, &stats);
+            Threadpool_Stats(t, &stats);
             ticks++;
             dump_stats("tick...", &stats, ticks);
         }

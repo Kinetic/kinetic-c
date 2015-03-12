@@ -137,7 +137,7 @@ bool Bus_Init(bus_config *config, struct bus_result *res) {
         }
     }
 
-    tp = threadpool_init(&config->threadpool_cfg);
+    tp = Threadpool_Init(&config->threadpool_cfg);
     if (tp == NULL) {
         res->status = BUS_INIT_ERROR_THREADPOOL_INIT_FAIL;
         goto cleanup;
@@ -182,7 +182,7 @@ cleanup:
         }
         free(ls);
     }
-    if (tp) { threadpool_free(tp); }
+    if (tp) { Threadpool_Free(tp); }
     if (joined) { free(joined); }
     if (b) {
         if (locks_initialized > 1) {
@@ -606,7 +606,7 @@ bool Bus_ProcessBoxedMessage(struct bus *b,
 
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
         "Scheduling boxed message -- %p -- where it will be freed", (void*)box);
-    return threadpool_schedule(b->threadpool, &task, backpressure);
+    return Threadpool_Schedule(b->threadpool, &task, backpressure);
 }
 
 /* How many seconds should it give the thread pool to shut down? */
@@ -629,18 +629,18 @@ void Bus_Free(bus *b) {
     int limit = (1000 * THREAD_SHUTDOWN_SECONDS)/10;
     for (int i = 0; i < limit; i++) {
         BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
-            "threadpool_shutdown -- %d", i);
-        if (threadpool_shutdown(b->threadpool, false)) { break; }
+            "Threadpool_Shutdown -- %d", i);
+        if (Threadpool_Shutdown(b->threadpool, false)) { break; }
         (void)syscall_poll(NULL, 0, 10);
 
         if (i == limit - 1) {
             BUS_LOG_SNPRINTF(b, 3, LOG_SHUTDOWN, b->udata, 128,
-                "threadpool_shutdown -- %d (forced)", i);
-            threadpool_shutdown(b->threadpool, true);
+                "Threadpool_Shutdown -- %d (forced)", i);
+            Threadpool_Shutdown(b->threadpool, true);
         }
     }
-    BUS_LOG(b, 3, LOG_SHUTDOWN, "threadpool_free", b->udata);
-    threadpool_free(b->threadpool);
+    BUS_LOG(b, 3, LOG_SHUTDOWN, "Threadpool_Free", b->udata);
+    Threadpool_Free(b->threadpool);
     free(b->joined);
     free(b->threads);
     pthread_mutex_destroy(&b->fd_set_lock);

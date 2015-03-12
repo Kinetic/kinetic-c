@@ -49,7 +49,7 @@ static void set_defaults(struct threadpool_config *cfg) {
     if (cfg->max_threads == 0) { cfg->max_threads = DEFAULT_MAX_THREADS; }
 }
 
-struct threadpool *threadpool_init(struct threadpool_config *cfg) {
+struct threadpool *Threadpool_Init(struct threadpool_config *cfg) {
     set_defaults(cfg);
 
     if (cfg->task_ringbuf_size2 > THREADPOOL_MAX_RINGBUF_SIZE2) {
@@ -96,7 +96,7 @@ cleanup:
     return NULL;
 }
 
-bool threadpool_schedule(struct threadpool *t, struct threadpool_task *task,
+bool Threadpool_Schedule(struct threadpool *t, struct threadpool_task *task,
         size_t *pushback) {
     if (t == NULL) { return false; }
     if (task == NULL || task->task == NULL) { return false; }
@@ -146,7 +146,7 @@ static void commit_current_task(struct threadpool *t, struct marked_task *task, 
     }
 }
 
-void threadpool_stats(struct threadpool *t, struct threadpool_info *info) {
+void Threadpool_Stats(struct threadpool *t, struct threadpool_info *info) {
     if (info) {
         uint8_t at = 0;
         for (int i = 0; i < t->live_threads; i++) {
@@ -160,7 +160,7 @@ void threadpool_stats(struct threadpool *t, struct threadpool_info *info) {
     }
 }
 
-bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
+bool Threadpool_Shutdown(struct threadpool *t, bool kill_all) {
     t->shutting_down = true;
     size_t mask = t->task_ringbuf_mask;
 
@@ -197,7 +197,7 @@ bool threadpool_shutdown(struct threadpool *t, bool kill_all) {
     return notify_shutdown(t);
 }
 
-void threadpool_free(struct threadpool *t) {
+void Threadpool_Free(struct threadpool *t) {
     free(t->tasks);
     t->tasks = NULL;
     free(t->threads);
