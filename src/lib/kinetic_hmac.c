@@ -25,13 +25,13 @@
 #include <openssl/hmac.h>
 
 static void KineticHMAC_Compute(KineticHMAC* hmac,
-                                const Com_Seagate_Kinetic_Proto_Message* proto,
+                                const Com__Seagate__Kinetic__Proto__Message* proto,
                                 const ByteArray key);
 
 void KineticHMAC_Init(KineticHMAC* hmac,
-                      Com_Seagate_Kinetic_Proto_Command_Security_ACL_HMACAlgorithm algorithm)
+                      Com__Seagate__Kinetic__Proto__Command__Security__ACL_HMACAlgorithm algorithm)
 {
-    if (algorithm == COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1) {
+    if (algorithm == COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1) {
         *hmac = (KineticHMAC) {
             .algorithm = algorithm,
             .len = KINETIC_HMAC_MAX_LEN
@@ -39,13 +39,13 @@ void KineticHMAC_Init(KineticHMAC* hmac,
     }
     else {
         *hmac = (KineticHMAC) {
-            .algorithm = COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM
+            .algorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__INVALID_HMAC_ALGORITHM
         };
     }
 }
 
 void KineticHMAC_Populate(KineticHMAC* hmac,
-                          Com_Seagate_Kinetic_Proto_Message* msg,
+                          Com__Seagate__Kinetic__Proto__Message* msg,
                           const ByteArray key)
 {
     KINETIC_ASSERT(hmac != NULL);
@@ -55,7 +55,7 @@ void KineticHMAC_Populate(KineticHMAC* hmac,
     KINETIC_ASSERT(key.len > 0);
     KINETIC_ASSERT(msg->hmacAuth->hmac.data != NULL);
 
-    KineticHMAC_Init(hmac, COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Init(hmac, COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1);
     KineticHMAC_Compute(hmac, msg, key);
 
     // Copy computed HMAC into message
@@ -64,7 +64,7 @@ void KineticHMAC_Populate(KineticHMAC* hmac,
     msg->hmacAuth->has_hmac = true;
 }
 
-bool KineticHMAC_Validate(const Com_Seagate_Kinetic_Proto_Message* msg,
+bool KineticHMAC_Validate(const Com__Seagate__Kinetic__Proto__Message* msg,
                           const ByteArray key)
 {
     KINETIC_ASSERT(msg != NULL);
@@ -77,7 +77,7 @@ bool KineticHMAC_Validate(const Com_Seagate_Kinetic_Proto_Message* msg,
     KineticHMAC tempHMAC;
 
     if (!msg->has_authType
-     || msg->authType != COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH
+     || msg->authType != COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH
      || msg->hmacAuth == NULL
      || !msg->hmacAuth->has_hmac
      || msg->hmacAuth->hmac.data == NULL
@@ -85,7 +85,7 @@ bool KineticHMAC_Validate(const Com_Seagate_Kinetic_Proto_Message* msg,
         return false;
     }
 
-    KineticHMAC_Init(&tempHMAC, COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Init(&tempHMAC, COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1);
     KineticHMAC_Compute(&tempHMAC, msg, key);
     if (msg->hmacAuth->hmac.len == tempHMAC.len) {
         for (i = 0; i < tempHMAC.len; i++) {
@@ -110,7 +110,7 @@ bool KineticHMAC_Validate(const Com_Seagate_Kinetic_Proto_Message* msg,
 #define LOG_HMAC 0
 
 static void KineticHMAC_Compute(KineticHMAC* hmac,
-                                const Com_Seagate_Kinetic_Proto_Message* msg,
+                                const Com__Seagate__Kinetic__Proto__Message* msg,
                                 const ByteArray key)
 {
     KINETIC_ASSERT(hmac != NULL);

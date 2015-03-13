@@ -78,9 +78,9 @@ void tearDown(void)
 
 void test_KineticResponse_GetKeyValue_should_return_NULL_if_message_has_no_KeyValue(void)
 {
-    Com_Seagate_Kinetic_Proto_Command Command;
+    Com__Seagate__Kinetic__Proto__Command Command;
     memset(&Command, 0, sizeof(Command));
-    Com_Seagate_Kinetic_Proto_Command_KeyValue* keyValue = NULL;
+    Com__Seagate__Kinetic__Proto__Command__KeyValue* keyValue = NULL;
 
     keyValue = KineticResponse_GetKeyValue(NULL);
     TEST_ASSERT_NULL(keyValue);
@@ -96,9 +96,9 @@ void test_KineticResponse_GetKeyValue_should_return_NULL_if_message_has_no_KeyVa
 }
 
 
-void test_KineticResponse_GetKeyRange_should_return_the_Com_Seagate_Kinetic_Proto_Command_Range_from_the_message_if_avaliable(void)
+void test_KineticResponse_GetKeyRange_should_return_the_Com__Seagate__Kinetic__Proto__Command__Range_from_the_message_if_avaliable(void)
 {
-    Com_Seagate_Kinetic_Proto_Command_Range* range = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Range* range = NULL;
 
     range = KineticResponse_GetKeyRange(NULL);
     TEST_ASSERT_NULL(range);
@@ -106,23 +106,23 @@ void test_KineticResponse_GetKeyRange_should_return_the_Com_Seagate_Kinetic_Prot
     range = KineticResponse_GetKeyRange(&Response);
     TEST_ASSERT_NULL(range);
     
-    Com_Seagate_Kinetic_Proto_Message Message;
+    Com__Seagate__Kinetic__Proto__Message Message;
     memset(&Message, 0, sizeof(Message));
     Response.proto = &Message;
     range = KineticResponse_GetKeyRange(&Response);
     TEST_ASSERT_NULL(range);
 
-    Com_Seagate_Kinetic_Proto_Command Command;
+    Com__Seagate__Kinetic__Proto__Command Command;
     memset(&Command, 0, sizeof(Command));
     Response.command = &Command;
     range = KineticResponse_GetKeyRange(&Response);
     TEST_ASSERT_NULL(range);
 
-    Com_Seagate_Kinetic_Proto_Command_Body Body;
+    Com__Seagate__Kinetic__Proto__Command__Body Body;
     memset(&Body, 0, sizeof(Body));
     Response.command->body = &Body;
 
-    Com_Seagate_Kinetic_Proto_Command_Range Range;
+    Com__Seagate__Kinetic__Proto__Command__Range Range;
     memset(&Range, 0, sizeof(Range));
     Body.range = &Range;
     range = KineticResponse_GetKeyRange(&Response);

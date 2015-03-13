@@ -308,7 +308,7 @@ void test_unpack_cb_should_skip_empty_commands(void)
 
     KineticAllocator_NewKineticResponse_ExpectAndReturn(1, response);
 
-    Com_Seagate_Kinetic_Proto_Message Proto;
+    Com__Seagate__Kinetic__Proto__Message Proto;
     memset(&Proto, 0, sizeof(Proto));
     Proto.has_commandBytes = false;
 
@@ -342,7 +342,7 @@ void test_unpack_cb_should_unpack_command_bytes(void)
 
     KineticAllocator_NewKineticResponse_ExpectAndReturn(8, response);
 
-    Com_Seagate_Kinetic_Proto_Message Proto;
+    Com__Seagate__Kinetic__Proto__Message Proto;
     memset(&Proto, 0, sizeof(Proto));
     Proto.has_commandBytes = true;
     Proto.commandBytes.data = (uint8_t *)"data";
@@ -351,9 +351,9 @@ void test_unpack_cb_should_unpack_command_bytes(void)
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
 
-    Com_Seagate_Kinetic_Proto_Command Command;
+    Com__Seagate__Kinetic__Proto__Command Command;
     memset(&Command, 0, sizeof(Command));
-    Com_Seagate_Kinetic_Proto_Command_Header Header;
+    Com__Seagate__Kinetic__Proto__Command__Header Header;
     memset(&Header, 0, sizeof(Header));
     Command.header = &Header;
     response->header.valueLength = 1;

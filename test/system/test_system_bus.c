@@ -155,8 +155,8 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *sock
 struct kinetic_response_payload
 {
     KineticPDUHeader header;
-    Com_Seagate_Kinetic_Proto_Message* protoBuf;
-    Com_Seagate_Kinetic_Proto_Command* command;
+    Com__Seagate__Kinetic__Proto__Message* protoBuf;
+    Com__Seagate__Kinetic__Proto__Command* command;
     uint8_t value[];
 };
 
@@ -196,13 +196,13 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         return res;
     } else {
         payload->header = si->header;
-        payload->protoBuf = com_seagate_kinetic_proto_message__unpack(NULL,
+        payload->protoBuf = com__seagate__kinetic__proto__message__unpack(NULL,
             si->header.protobufLength, si->buf);
         if (payload->protoBuf->has_commandBytes &&
             payload->protoBuf->commandBytes.data != NULL &&
             payload->protoBuf->commandBytes.len > 0)
         {
-            payload->command = com_seagate_kinetic_proto_command__unpack(NULL,
+            payload->command = com__seagate__kinetic__proto__command__unpack(NULL,
                 payload->protoBuf->commandBytes.len, payload->protoBuf->commandBytes.data);
         } else {
             payload->command = NULL;

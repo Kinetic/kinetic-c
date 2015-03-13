@@ -55,7 +55,7 @@ KineticStatus KineticBuilder_BuildP2POperation(KineticOperation* const op,
  * Admin Client Operations
 *******************************************************************************/
 KineticStatus KineticBuilder_BuildGetLog(KineticOperation* const op,
-    Com_Seagate_Kinetic_Proto_Command_GetLog_Type type, ByteArray name, KineticLogInfo** info);
+    Com__Seagate__Kinetic__Proto__Command__GetLog_Type type, ByteArray name, KineticLogInfo** info);
 KineticStatus KineticBuilder_BuildSetPin(KineticOperation* const op,
     ByteArray old_pin, ByteArray new_pin, bool lock);
 KineticStatus KineticBuilder_BuildErase(KineticOperation* const op,

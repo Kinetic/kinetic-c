@@ -24,10 +24,10 @@
 #include "kinetic.pb-c.h"
 
 /* This wrapper only exists for mocking purposes. */
-Com_Seagate_Kinetic_Proto_Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
+Com__Seagate__Kinetic__Proto__Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
     size_t len, const uint8_t* data);
 
-Com_Seagate_Kinetic_Proto_Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
+Com__Seagate__Kinetic__Proto__Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
     size_t len, const uint8_t* data);
 
 #endif

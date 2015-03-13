@@ -65,7 +65,7 @@ int64_t KineticResponse_GetConnectionID(KineticResponse * response)
     int64_t id = 0;
     KINETIC_ASSERT(response);
     KINETIC_ASSERT(response->proto);
-    if (response->proto->authType == COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS &&
+    if (response->proto->authType == COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS &&
         response->command != NULL &&
         response->command->header != NULL &&
         response->command->header->has_connectionID)
@@ -75,9 +75,9 @@ int64_t KineticResponse_GetConnectionID(KineticResponse * response)
     return id;
 }
 
-Com_Seagate_Kinetic_Proto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse * response)
+Com__Seagate__Kinetic__Proto__Command__KeyValue* KineticResponse_GetKeyValue(KineticResponse * response)
 {
-    Com_Seagate_Kinetic_Proto_Command_KeyValue* keyValue = NULL;
+    Com__Seagate__Kinetic__Proto__Command__KeyValue* keyValue = NULL;
 
     if (response != NULL &&
         response->command != NULL &&
@@ -88,9 +88,9 @@ Com_Seagate_Kinetic_Proto_Command_KeyValue* KineticResponse_GetKeyValue(KineticR
     return keyValue;
 }
 
-Com_Seagate_Kinetic_Proto_Command_Range* KineticResponse_GetKeyRange(KineticResponse * response)
+Com__Seagate__Kinetic__Proto__Command__Range* KineticResponse_GetKeyRange(KineticResponse * response)
 {
-    Com_Seagate_Kinetic_Proto_Command_Range* range = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Range* range = NULL;
     if (response != NULL &&
         response->proto != NULL &&
         response->command != NULL &&

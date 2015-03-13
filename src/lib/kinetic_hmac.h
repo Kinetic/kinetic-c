@@ -25,13 +25,13 @@
 #include "kinetic.pb-c.h"
 
 void KineticHMAC_Init(KineticHMAC* hmac,
-                      Com_Seagate_Kinetic_Proto_Command_Security_ACL_HMACAlgorithm algorithm);
+                      Com__Seagate__Kinetic__Proto__Command__Security__ACL_HMACAlgorithm algorithm);
 
 void KineticHMAC_Populate(KineticHMAC* hmac,
-                          Com_Seagate_Kinetic_Proto_Message* msg,
+                          Com__Seagate__Kinetic__Proto__Message* msg,
                           const ByteArray key);
 
-bool KineticHMAC_Validate(const Com_Seagate_Kinetic_Proto_Message* msg,
+bool KineticHMAC_Validate(const Com__Seagate__Kinetic__Proto__Message* msg,
                           const ByteArray key);
 
 #endif  // _KINETIC_HMAC_H

@@ -59,11 +59,11 @@ void test_KineticLogInfo_Create_should_allocate_and_populate_device_info_with_ut
 {
     size_t expectedSize = sizeof(KineticLogInfo);
     const int numUtilizations = 2;
-    Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization utilizations[] = {
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization utilizations[] = {
         COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_UTILIZATION__INIT,
         COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_UTILIZATION__INIT,
     };
-    Com_Seagate_Kinetic_Proto_Command_GetLog getLog = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG__INIT;
+    Com__Seagate__Kinetic__Proto__Command__GetLog getLog = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG__INIT;
     getLog.n_utilizations = numUtilizations;
     char* names[] = {"fo", "shizzle"};
     
@@ -77,7 +77,7 @@ void test_KineticLogInfo_Create_should_allocate_and_populate_device_info_with_ut
     utilizations[1].value = 2.3f;
     expectedSize += sizeof(KineticLogInfo_Utilization) + GetPaddedLength(strlen(utilizations[1].name)+1);
 
-    Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization* pUtilizations[] = {
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization* pUtilizations[] = {
         &utilizations[0], &utilizations[1]
     };
     getLog.utilizations = pUtilizations;

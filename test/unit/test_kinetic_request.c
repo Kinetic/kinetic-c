@@ -56,7 +56,7 @@ void test_KineticRequest_PackCommand_should_return_KINETIC_REQUEST_PACK_FAILURE_
     memset(&request, 0, sizeof(request));
     request.message = message;
 
-    com_seagate_kinetic_proto_command__get_packed_size_ExpectAndReturn(&request.message.command,
+    com__seagate__kinetic__proto__command__get_packed_size_ExpectAndReturn(&request.message.command,
         ((size_t)-1));
 
     cmdBuf = NULL;  // fake malloc failure
@@ -73,10 +73,10 @@ void test_KineticRequest_PackCommand_should_return_size_when_packing_command(voi
 
     uint8_t buf[12345];
     cmdBuf = buf;
-    com_seagate_kinetic_proto_command__get_packed_size_ExpectAndReturn(&request.message.command,
+    com__seagate__kinetic__proto__command__get_packed_size_ExpectAndReturn(&request.message.command,
         (size_t)12345);
 
-    com_seagate_kinetic_proto_command__pack_ExpectAndReturn(&request.message.command,
+    com__seagate__kinetic__proto__command__pack_ExpectAndReturn(&request.message.command,
         cmdBuf, 12345);
     TEST_ASSERT_EQUAL(12345, KineticRequest_PackCommand(&request));
 
@@ -116,8 +116,8 @@ void test_KineticRequest_PackMessage_should_return_MEMORY_ERROR_on_alloc_fail(vo
     uint8_t *out_msg = NULL;
     size_t msgSize = 0;
 
-    Com_Seagate_Kinetic_Proto_Message* proto = &operation.request->message.message;
-    com_seagate_kinetic_proto_message__get_packed_size_ExpectAndReturn(proto, 12345);
+    Com__Seagate__Kinetic__Proto__Message* proto = &operation.request->message.message;
+    com__seagate__kinetic__proto__message__get_packed_size_ExpectAndReturn(proto, 12345);
 
     KineticNBO_FromHostU32_ExpectAndReturn(12345, 0xaabbccdd);
     KineticNBO_FromHostU32_ExpectAndReturn(9999, 0xddccbbaa);
@@ -146,8 +146,8 @@ void test_KineticRequest_PackMessage_should_return_SUCCESS_on_message_packing(vo
     uint8_t *out_msg = NULL;
     size_t msgSize = 0;
 
-    Com_Seagate_Kinetic_Proto_Message* proto = &operation.request->message.message;
-    com_seagate_kinetic_proto_message__get_packed_size_ExpectAndReturn(proto, packedSize);
+    Com__Seagate__Kinetic__Proto__Message* proto = &operation.request->message.message;
+    com__seagate__kinetic__proto__message__get_packed_size_ExpectAndReturn(proto, packedSize);
 
     // size of filler protobuf, mainly to get things nicely aligned w/ 9-byte header
     KineticNBO_FromHostU32_ExpectAndReturn(packedSize, 0xaabbccdd);
@@ -162,7 +162,7 @@ void test_KineticRequest_PackMessage_should_return_SUCCESS_on_message_packing(vo
     // filler where protobuf message would be
     for (size_t i = 0; i < packedSize; i++) { buf[i + offset] = 0x33; }
 
-    com_seagate_kinetic_proto_message__pack_ExpectAndReturn(&request.message.message, &buf[offset], packedSize);
+    com__seagate__kinetic__proto__message__pack_ExpectAndReturn(&request.message.message, &buf[offset], packedSize);
 
     KineticStatus status = KineticRequest_PackMessage(&operation, &out_msg, &msgSize);
     TEST_ASSERT_EQUAL(out_msg, msg);

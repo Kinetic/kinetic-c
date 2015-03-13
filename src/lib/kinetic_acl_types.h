@@ -40,7 +40,7 @@ struct hmac_key {
 struct ACL {
     size_t ACL_ceil;
     size_t ACL_count;
-    Com_Seagate_Kinetic_Proto_Command_Security_ACL **ACLs;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL **ACLs;
 };
 
 #define ACL_MAX_PERMISSIONS 8

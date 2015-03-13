@@ -85,7 +85,7 @@ void test_KineticAdminClient_GetDeviceSpecificLog_should_request_the_specified_d
     KineticOperation operation;
 
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
-    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &info, KINETIC_STATUS_SUCCESS);
+    KineticBuilder_BuildGetLog_ExpectAndReturn(&operation, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, name, &info, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_SUCCESS);
 
     KineticStatus status = KineticAdminClient_GetDeviceSpecificLog(&Session, name, &info, NULL);

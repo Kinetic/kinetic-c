@@ -192,7 +192,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
     (void)bus_udata;
 
     // Handle unsolicited status PDUs
-    if (response->proto->authType == COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS) {
+    if (response->proto->authType == COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS) {
         int64_t connectionID = KineticResponse_GetConnectionID(response);
         if (connectionID != 0)
         {

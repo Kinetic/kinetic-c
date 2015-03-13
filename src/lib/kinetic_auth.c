@@ -39,14 +39,14 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
 
     if (config->hmacKey.data == NULL) { return KINETIC_STATUS_HMAC_REQUIRED; }
 
-    Com_Seagate_Kinetic_Proto_Message* msg = &pdu->message.message;
+    Com__Seagate__Kinetic__Proto__Message* msg = &pdu->message.message;
 
     // Add HMAC authentication struct
     msg->hmacAuth = &pdu->message.hmacAuth;
-    com_seagate_kinetic_proto_message_hmacauth__init(msg->hmacAuth);
+    com__seagate__kinetic__proto__message__hmacauth__init(msg->hmacAuth);
     msg->hmacAuth = msg->hmacAuth;
     msg->pinAuth = NULL;
-    msg->authType = COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH;
+    msg->authType = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH;
     msg->has_authType = true;
 
     // Configure HMAC support
@@ -67,7 +67,7 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
 
     // Populate with hashed HMAC
     KineticHMAC hmac;
-    KineticHMAC_Init(&hmac, COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1);
+    KineticHMAC_Init(&hmac, COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1);
     KineticHMAC_Populate(&hmac, &pdu->message.message, config->hmacKey);
 
     return KINETIC_STATUS_SUCCESS;
@@ -85,10 +85,10 @@ KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config,
     KineticMessage* msg = &pdu->message;
 
     // Add PIN authentication struct
-    com_seagate_kinetic_proto_message_pinauth__init(&msg->pinAuth);
+    com__seagate__kinetic__proto__message__pinauth__init(&msg->pinAuth);
     msg->message.pinAuth = &msg->pinAuth;
     msg->message.hmacAuth = NULL;
-    msg->message.authType = COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH;
+    msg->message.authType = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__PINAUTH;
     msg->message.has_authType = true;
     msg->command.header = &msg->header;
     

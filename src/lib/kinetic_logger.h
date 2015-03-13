@@ -36,8 +36,8 @@ void KineticLogger_Log(int log_level, const char* message);
 void KineticLogger_LogPrintf(int log_level, const char* format, ...);
 void KineticLogger_LogLocation(const char* filename, int line, const char * message);
 void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header);
-void KineticLogger_LogProtobuf(int log_level, const Com_Seagate_Kinetic_Proto_Message* msg);
-void KineticLogger_LogStatus(int log_level, Com_Seagate_Kinetic_Proto_Command_Status* status);
+void KineticLogger_LogProtobuf(int log_level, const Com__Seagate__Kinetic__Proto__Message* msg);
+void KineticLogger_LogStatus(int log_level, Com__Seagate__Kinetic__Proto__Command__Status* status);
 void KineticLogger_LogByteArray(int log_level, const char* title, ByteArray bytes);
 void KineticLogger_LogByteBuffer(int log_level, const char* title, ByteBuffer buffer);
 

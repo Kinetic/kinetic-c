@@ -105,7 +105,7 @@ void test_KineticAllocator_NewKineticResponse_should_return_null_if_calloc_retur
 
 void test_KineticAllocator_FreeKineticResponse_should_free_the_command_if_its_not_null(void)
 {
-    Com_Seagate_Kinetic_Proto_Command command;
+    Com__Seagate__Kinetic__Proto__Command command;
 
     KineticResponse rsp = { .command = &command};
     protobuf_c_message_free_unpacked_Expect(&command.base, NULL);
@@ -117,7 +117,7 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_command_if_its_no
 
 void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_if_its_not_null(void)
 {
-    Com_Seagate_Kinetic_Proto_Message proto;
+    Com__Seagate__Kinetic__Proto__Message proto;
 
     KineticResponse rsp = { .proto = &proto};
     protobuf_c_message_free_unpacked_Expect(&proto.base, NULL);
@@ -129,8 +129,8 @@ void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_if_its_not_
 
 void test_KineticAllocator_FreeKineticResponse_should_free_the_proto_and_command_if_they_are_not_null(void)
 {
-    Com_Seagate_Kinetic_Proto_Message proto;
-    Com_Seagate_Kinetic_Proto_Command command;
+    Com__Seagate__Kinetic__Proto__Message proto;
+    Com__Seagate__Kinetic__Proto__Command command;
 
     KineticResponse rsp = {
         .proto = &proto,

@@ -61,7 +61,7 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_algorithm = (bool)((int)entry->algorithm > 0);
     if (message->keyValue.has_algorithm) {
         message->keyValue.algorithm =
-            Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(entry->algorithm);
+            Com__Seagate__Kinetic__Proto__Command_Algorithm_from_KineticAlgorithm(entry->algorithm);
     }
     message->keyValue.has_metadataOnly = entry->metadataOnly;
     if (message->keyValue.has_metadataOnly) {
@@ -71,7 +71,7 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_synchronization = (entry->synchronization > 0);
     if (message->keyValue.has_synchronization) {
         message->keyValue.synchronization =
-            Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
+            Com__Seagate__Kinetic__Proto__Command_Synchronization_from_KineticSynchronization(
                 entry->synchronization);
     }
 }

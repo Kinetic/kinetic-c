@@ -217,7 +217,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
             response->command->header != NULL)
         {
             if (response->proto->has_authType &&
-                response->proto->authType == COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS
+                response->proto->authType == COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS
                 && KineticSession_GetConnectionID(session) == 0)
             {
                 /* Ignore the unsolicited status message on connect. */

@@ -63,7 +63,7 @@ void test_KineticBuilder_BuildNoop_should_build_and_execute_a_NOOP_operation(voi
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP, Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__NOOP, Request.message.command.header->messageType);
     TEST_ASSERT_NULL(Operation.response);
 }
 
@@ -115,7 +115,7 @@ void test_KineticBuilder_BuildPut_should_build_and_execute_a_PUT_operation_to_cr
     TEST_ASSERT_EQUAL_PTR(entry.value.array.data, Operation.value.data);
     TEST_ASSERT_EQUAL(entry.value.bytesUsed, Operation.value.len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PUT,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -150,7 +150,7 @@ void test_KineticBuilder_BuildPut_should_build_and_execute_a_PUT_operation_to_cr
     TEST_ASSERT_EQUAL_PTR(entry.value.array.data, Operation.value.data);
     TEST_ASSERT_EQUAL(entry.value.bytesUsed, Operation.value.len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PUT,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_ByteArray(value, Operation.entry->value.array);
     TEST_ASSERT_EQUAL(0, Operation.entry->value.bytesUsed);
@@ -177,7 +177,7 @@ void test_KineticBuilder_BuildGet_should_build_a_GET_operation(void)
     KineticBuilder_BuildGet(&Operation, &entry);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GET, Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL(value.len, Operation.entry->value.array.len);
@@ -205,7 +205,7 @@ void test_KineticBuilder_BuildGet_should_build_a_GET_operation_requesting_metada
     KineticBuilder_BuildGet(&Operation, &entry);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET, Request.message.command.header->messageType);
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GET, Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
     TEST_ASSERT_EQUAL_PTR(value.len, Operation.entry->value.array.len);
@@ -232,7 +232,7 @@ void test_KineticBuilder_BuildGetNext_should_build_a_GETNEXT_operation(void)
     KineticBuilder_BuildGetNext(&Operation, &entry);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETNEXT,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
@@ -261,7 +261,7 @@ void test_KineticBuilder_BuildGetNext_should_build_a_GETNEXT_operation_with_meta
     KineticBuilder_BuildGetNext(&Operation, &entry);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETNEXT,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
@@ -289,7 +289,7 @@ void test_KineticBuilder_BuildGetPrevious_should_build_a_GETPREVIOUS_operation(v
     KineticBuilder_BuildGetPrevious(&Operation, &entry);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETPREVIOUS,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
@@ -318,7 +318,7 @@ void test_KineticBuilder_BuildGetPrevious_should_build_a_GETPREVIOUS_operation_w
     KineticBuilder_BuildGetPrevious(&Operation, &entry);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETPREVIOUS,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Get, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
@@ -339,7 +339,7 @@ void test_KineticBuilder_BuildFlush_should_build_a_FLUSHALLDATA_operation(void)
     KineticBuilder_BuildFlush(&Operation);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__FLUSHALLDATA,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_FALSE(Request.pinAuth);
@@ -362,7 +362,7 @@ void test_KineticBuilder_BuildDelete_should_build_a_DELETE_operation(void)
     KineticBuilder_BuildDelete(&Operation, &entry);
 
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__DELETE,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_Delete, Operation.opCallback);
     TEST_ASSERT_EQUAL_PTR(value.data, Operation.entry->value.array.data);
@@ -407,7 +407,7 @@ void test_KineticBuilder_BuildGetKeyRange_should_build_a_GetKeyRange_request(voi
     KineticBuilder_BuildGetKeyRange(&Operation, &range, &keys);
 
     TEST_ASSERT_TRUE(Request.command->header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETKEYRANGE,
         Request.command->header->messageType);
     TEST_ASSERT_EQUAL_PTR(KineticCallbacks_GetKeyRange, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.entry);
@@ -473,7 +473,7 @@ void test_KineticBuilder_BuildP2POperation_should_build_a_P2POperation_request(v
 
     TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PEER2PEERPUSH,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     
@@ -577,13 +577,13 @@ void test_KineticBuilder_BuildGetLog_should_build_a_GetLog_request(void)
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETLOG,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.getLog, Request.command->body->getLog);
     TEST_ASSERT_NOT_NULL(Request.command->body->getLog->types);
     TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__STATISTICS,
         Request.command->body->getLog->types[0]);
     TEST_ASSERT_EQUAL_PTR(&pInfo, Operation.deviceInfo);
     TEST_ASSERT_FALSE(Request.pinAuth);
@@ -599,17 +599,17 @@ void test_KineticBuilder_BuildGetLog_should_build_a_GetLog_request_to_retrieve_d
 
     KineticOperation_ValidateOperation_Expect(&Operation);
 
-    KineticStatus status = KineticBuilder_BuildGetLog(&Operation, COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+    KineticStatus status = KineticBuilder_BuildGetLog(&Operation, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, name, &pInfo);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETLOG,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.getLog, Request.command->body->getLog);
     TEST_ASSERT_NOT_NULL(Request.command->body->getLog->types);
     TEST_ASSERT_EQUAL(1, Request.command->body->getLog->n_types);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE,
         Request.command->body->getLog->types[0]);
     TEST_ASSERT_EQUAL_PTR(&Request.message.getLogDevice, Request.command->body->getLog->device);
     TEST_ASSERT_TRUE(Request.command->body->getLog->device->has_name);
@@ -633,7 +633,7 @@ void test_KineticBuilder_BuildGetLog_should_return_KINETIC_STATUS_DEVICE_NAME_RE
     name.len = 0;
     KineticOperation_ValidateOperation_Expect(&Operation);
     status = KineticBuilder_BuildGetLog(&Operation,
-        COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+        COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, name, &pInfo);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_NAME_REQUIRED, status);
 
     // Data is NULL
@@ -641,7 +641,7 @@ void test_KineticBuilder_BuildGetLog_should_return_KINETIC_STATUS_DEVICE_NAME_RE
     name.len = strlen(nameData);
     KineticOperation_ValidateOperation_Expect(&Operation);
     status = KineticBuilder_BuildGetLog(&Operation,
-        COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+        COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, name, &pInfo);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_NAME_REQUIRED, status);
 
     // Length is zero and data is NULL
@@ -649,7 +649,7 @@ void test_KineticBuilder_BuildGetLog_should_return_KINETIC_STATUS_DEVICE_NAME_RE
     name.len = 0;
     KineticOperation_ValidateOperation_Expect(&Operation);
     status = KineticBuilder_BuildGetLog(&Operation,
-        COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, &pInfo);
+        COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, name, &pInfo);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_DEVICE_NAME_REQUIRED, status);
 }
 
@@ -667,7 +667,7 @@ void test_KineticBuilder_BuildSetPin_should_build_a_SECURITY_operation_to_set_ne
     TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetPin, Operation.timeoutSeconds);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.security, Request.command->body->security);
@@ -696,7 +696,7 @@ void test_KineticBuilder_BuildSetPin_should_build_a_SECURITY_operation_to_set_ne
     TEST_ASSERT_FALSE(Request.pinAuth);
     TEST_ASSERT_EQUAL(KineticOperation_TimeoutSetPin, Operation.timeoutSeconds);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.security, Request.command->body->security);
@@ -725,12 +725,12 @@ void test_KineticBuilder_BuildErase_should_build_a_SECURE_ERASE_operation_with_P
     TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
     TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__SECURE_ERASE_PINOP,
         Request.command->body->pinOp->pinOpType);
     TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
@@ -750,12 +750,12 @@ void test_KineticBuilder_BuildErase_should_build_an_INSTANT_ERASE_operation_with
     TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
     TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__ERASE_PINOP,
         Request.command->body->pinOp->pinOpType);
     TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
@@ -775,12 +775,12 @@ void test_KineticBuilder_BuildLockUnlock_should_build_a_LOCK_operation_with_PIN_
     TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
     TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__LOCK_PINOP,
         Request.command->body->pinOp->pinOpType);
     TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
@@ -800,12 +800,12 @@ void test_KineticBuilder_BuildLockUnlock_should_build_an_UNLOCK_operation_with_P
     TEST_ASSERT_EQUAL_PTR(&pinData, Operation.pin->data);
     TEST_ASSERT_EQUAL_PTR(strlen(pinData), Operation.pin->len);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
     TEST_ASSERT_EQUAL_PTR(&Request.message.pinOp, Request.command->body->pinOp);
     TEST_ASSERT_TRUE(&Request.message.pinOp.has_pinOpType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__UNLOCK_PINOP,
         Request.command->body->pinOp->pinOpType);
     TEST_ASSERT_EQUAL_PTR(&KineticCallbacks_Basic, Operation.opCallback);
     TEST_ASSERT_NULL(Operation.response);
@@ -822,7 +822,7 @@ void test_KineticBuilder_BuildSetClusterVersion_should_build_a_SET_CLUSTER_VERSI
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
 
@@ -846,7 +846,7 @@ void test_KineticBuilder_BuildSetACL_should_build_a_SECURITY_operation(void)
 
     KineticBuilder_BuildSetACL(&Operation, &ACLs);
 
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY,
         Request.message.command.header->messageType);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
@@ -881,7 +881,7 @@ void test_KineticBuilder_BuildUpdateFirmware_should_build_a_FIRMWARE_DOWNLOAD_op
     TEST_ASSERT_NULL(Operation.response);
     TEST_ASSERT_EQUAL(0, Operation.timeoutSeconds);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messageType);
-    TEST_ASSERT_EQUAL(COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP,
+    TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP,
         Request.message.command.header->messageType);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
 

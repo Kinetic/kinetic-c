@@ -7,233 +7,281 @@
 #endif
 
 #include "kinetic.pb-c.h"
-void com_seagate_kinetic_proto_local__init(Com_Seagate_Kinetic_Proto_Local* message)
+void   com__seagate__kinetic__proto__local__init
+                     (Com__Seagate__Kinetic__Proto__Local         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Local init_value = COM_SEAGATE_KINETIC_PROTO_LOCAL__INIT;
+  static Com__Seagate__Kinetic__Proto__Local init_value = COM__SEAGATE__KINETIC__PROTO__LOCAL__INIT;
   *message = init_value;
 }
-size_t com_seagate_kinetic_proto_local__get_packed_size(const Com_Seagate_Kinetic_Proto_Local *message)
+size_t com__seagate__kinetic__proto__local__get_packed_size
+                     (const Com__Seagate__Kinetic__Proto__Local *message)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_local__descriptor);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__local__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
-size_t com_seagate_kinetic_proto_local__pack(const Com_Seagate_Kinetic_Proto_Local *message,
-  uint8_t* out)
+size_t com__seagate__kinetic__proto__local__pack
+                     (const Com__Seagate__Kinetic__Proto__Local *message,
+                      uint8_t       *out)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_local__descriptor);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__local__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
-size_t com_seagate_kinetic_proto_local__pack_to_buffer(const Com_Seagate_Kinetic_Proto_Local *message,
-  ProtobufCBuffer *buffer)
+size_t com__seagate__kinetic__proto__local__pack_to_buffer
+                     (const Com__Seagate__Kinetic__Proto__Local *message,
+                      ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_local__descriptor);
-  return protobuf_c_message_pack_to_buffer((const ProtobufCMessage*)message, buffer);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__local__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
-Com_Seagate_Kinetic_Proto_Local* com_seagate_kinetic_proto_local__unpack(ProtobufCAllocator *allocator,
-  size_t len,
-  const uint8_t *data)
+Com__Seagate__Kinetic__Proto__Local *
+       com__seagate__kinetic__proto__local__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
 {
-  return (Com_Seagate_Kinetic_Proto_Local *)protobuf_c_message_unpack(&com_seagate_kinetic_proto_local__descriptor,
-    allocator, len, data);
+  return (Com__Seagate__Kinetic__Proto__Local *)
+     protobuf_c_message_unpack (&com__seagate__kinetic__proto__local__descriptor,
+                                allocator, len, data);
 }
-void com_seagate_kinetic_proto_local__free_unpacked(Com_Seagate_Kinetic_Proto_Local *message,
-  ProtobufCAllocator *allocator)
+void   com__seagate__kinetic__proto__local__free_unpacked
+                     (Com__Seagate__Kinetic__Proto__Local *message,
+                      ProtobufCAllocator *allocator)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_local__descriptor);
-  protobuf_c_message_free_unpacked((ProtobufCMessage*)message, allocator);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__local__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
-void com_seagate_kinetic_proto_message_hmacauth__init(Com_Seagate_Kinetic_Proto_Message_HMACauth* message)
+void   com__seagate__kinetic__proto__message__hmacauth__init
+                     (Com__Seagate__Kinetic__Proto__Message__HMACauth         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Message_HMACauth init_value = COM_SEAGATE_KINETIC_PROTO_MESSAGE_HMACAUTH__INIT;
+  static Com__Seagate__Kinetic__Proto__Message__HMACauth init_value = COM__SEAGATE__KINETIC__PROTO__MESSAGE__HMACAUTH__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_message_pinauth__init(Com_Seagate_Kinetic_Proto_Message_PINauth* message)
+void   com__seagate__kinetic__proto__message__pinauth__init
+                     (Com__Seagate__Kinetic__Proto__Message__PINauth         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Message_PINauth init_value = COM_SEAGATE_KINETIC_PROTO_MESSAGE_PINAUTH__INIT;
+  static Com__Seagate__Kinetic__Proto__Message__PINauth init_value = COM__SEAGATE__KINETIC__PROTO__MESSAGE__PINAUTH__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_message__init(Com_Seagate_Kinetic_Proto_Message* message)
+void   com__seagate__kinetic__proto__message__init
+                     (Com__Seagate__Kinetic__Proto__Message         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Message init_value = COM_SEAGATE_KINETIC_PROTO_MESSAGE__INIT;
+  static Com__Seagate__Kinetic__Proto__Message init_value = COM__SEAGATE__KINETIC__PROTO__MESSAGE__INIT;
   *message = init_value;
 }
-size_t com_seagate_kinetic_proto_message__get_packed_size(const Com_Seagate_Kinetic_Proto_Message *message)
+size_t com__seagate__kinetic__proto__message__get_packed_size
+                     (const Com__Seagate__Kinetic__Proto__Message *message)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_message__descriptor);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__message__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
-size_t com_seagate_kinetic_proto_message__pack(const Com_Seagate_Kinetic_Proto_Message *message,
-  uint8_t* out)
+size_t com__seagate__kinetic__proto__message__pack
+                     (const Com__Seagate__Kinetic__Proto__Message *message,
+                      uint8_t       *out)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_message__descriptor);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__message__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
-size_t com_seagate_kinetic_proto_message__pack_to_buffer(const Com_Seagate_Kinetic_Proto_Message *message,
-  ProtobufCBuffer *buffer)
+size_t com__seagate__kinetic__proto__message__pack_to_buffer
+                     (const Com__Seagate__Kinetic__Proto__Message *message,
+                      ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_message__descriptor);
-  return protobuf_c_message_pack_to_buffer((const ProtobufCMessage*)message, buffer);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__message__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
-Com_Seagate_Kinetic_Proto_Message* com_seagate_kinetic_proto_message__unpack(ProtobufCAllocator *allocator,
-  size_t len,
-  const uint8_t *data)
+Com__Seagate__Kinetic__Proto__Message *
+       com__seagate__kinetic__proto__message__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
 {
-  return (Com_Seagate_Kinetic_Proto_Message *)protobuf_c_message_unpack(&com_seagate_kinetic_proto_message__descriptor,
-    allocator, len, data);
+  return (Com__Seagate__Kinetic__Proto__Message *)
+     protobuf_c_message_unpack (&com__seagate__kinetic__proto__message__descriptor,
+                                allocator, len, data);
 }
-void com_seagate_kinetic_proto_message__free_unpacked(Com_Seagate_Kinetic_Proto_Message *message,
-  ProtobufCAllocator *allocator)
+void   com__seagate__kinetic__proto__message__free_unpacked
+                     (Com__Seagate__Kinetic__Proto__Message *message,
+                      ProtobufCAllocator *allocator)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_message__descriptor);
-  protobuf_c_message_free_unpacked((ProtobufCMessage*)message, allocator);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__message__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
-void com_seagate_kinetic_proto_command_header__init(Com_Seagate_Kinetic_Proto_Command_Header* message)
+void   com__seagate__kinetic__proto__command__header__init
+                     (Com__Seagate__Kinetic__Proto__Command__Header         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Header init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_HEADER__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Header init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__HEADER__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_body__init(Com_Seagate_Kinetic_Proto_Command_Body* message)
+void   com__seagate__kinetic__proto__command__body__init
+                     (Com__Seagate__Kinetic__Proto__Command__Body         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Body init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_BODY__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Body init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__BODY__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_status__init(Com_Seagate_Kinetic_Proto_Command_Status* message)
+void   com__seagate__kinetic__proto__command__status__init
+                     (Com__Seagate__Kinetic__Proto__Command__Status         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Status init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Status init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_key_value__init(Com_Seagate_Kinetic_Proto_Command_KeyValue* message)
+void   com__seagate__kinetic__proto__command__key_value__init
+                     (Com__Seagate__Kinetic__Proto__Command__KeyValue         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_KeyValue init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_KEY_VALUE__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__KeyValue init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__KEY_VALUE__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_range__init(Com_Seagate_Kinetic_Proto_Command_Range* message)
+void   com__seagate__kinetic__proto__command__range__init
+                     (Com__Seagate__Kinetic__Proto__Command__Range         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Range init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_RANGE__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Range init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__RANGE__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_setup__init(Com_Seagate_Kinetic_Proto_Command_Setup* message)
+void   com__seagate__kinetic__proto__command__setup__init
+                     (Com__Seagate__Kinetic__Proto__Command__Setup         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Setup init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_SETUP__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Setup init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__SETUP__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_p2_poperation_operation__init(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation* message)
+void   com__seagate__kinetic__proto__command__p2_poperation__operation__init
+                     (Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_P2_POPERATION_OPERATION__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__OPERATION__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_p2_poperation_peer__init(Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer* message)
+void   com__seagate__kinetic__proto__command__p2_poperation__peer__init
+                     (Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_P2_POPERATION_PEER__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__PEER__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_p2_poperation__init(Com_Seagate_Kinetic_Proto_Command_P2POperation* message)
+void   com__seagate__kinetic__proto__command__p2_poperation__init
+                     (Com__Seagate__Kinetic__Proto__Command__P2POperation         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_P2POperation init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_P2_POPERATION__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__P2POperation init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_utilization__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization* message)
+void   com__seagate__kinetic__proto__command__get_log__utilization__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_UTILIZATION__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__UTILIZATION__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_temperature__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature* message)
+void   com__seagate__kinetic__proto__command__get_log__temperature__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TEMPERATURE__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TEMPERATURE__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_capacity__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity* message)
+void   com__seagate__kinetic__proto__command__get_log__capacity__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_CAPACITY__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CAPACITY__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_configuration_interface__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface* message)
+void   com__seagate__kinetic__proto__command__get_log__configuration__interface__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_CONFIGURATION_INTERFACE__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INTERFACE__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_configuration__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration* message)
+void   com__seagate__kinetic__proto__command__get_log__configuration__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_CONFIGURATION__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_statistics__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics* message)
+void   com__seagate__kinetic__proto__command__get_log__statistics__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_STATISTICS__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__STATISTICS__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_limits__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits* message)
+void   com__seagate__kinetic__proto__command__get_log__limits__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Limits         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Limits init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_LIMITS__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Limits init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__LIMITS__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log_device__init(Com_Seagate_Kinetic_Proto_Command_GetLog_Device* message)
+void   com__seagate__kinetic__proto__command__get_log__device__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog__Device         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog_Device init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_DEVICE__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog__Device init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__DEVICE__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_get_log__init(Com_Seagate_Kinetic_Proto_Command_GetLog* message)
+void   com__seagate__kinetic__proto__command__get_log__init
+                     (Com__Seagate__Kinetic__Proto__Command__GetLog         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_GetLog init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__GetLog init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_security_acl_scope__init(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope* message)
+void   com__seagate__kinetic__proto__command__security__acl__scope__init
+                     (Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_SCOPE__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__SCOPE__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_security_acl__init(Com_Seagate_Kinetic_Proto_Command_Security_ACL* message)
+void   com__seagate__kinetic__proto__command__security__acl__init
+                     (Com__Seagate__Kinetic__Proto__Command__Security__ACL         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Security_ACL init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Security__ACL init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_security__init(Com_Seagate_Kinetic_Proto_Command_Security* message)
+void   com__seagate__kinetic__proto__command__security__init
+                     (Com__Seagate__Kinetic__Proto__Command__Security         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_Security init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__Security init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command_pin_operation__init(Com_Seagate_Kinetic_Proto_Command_PinOperation* message)
+void   com__seagate__kinetic__proto__command__pin_operation__init
+                     (Com__Seagate__Kinetic__Proto__Command__PinOperation         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command_PinOperation init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION__INIT;
+  static Com__Seagate__Kinetic__Proto__Command__PinOperation init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__INIT;
   *message = init_value;
 }
-void com_seagate_kinetic_proto_command__init(Com_Seagate_Kinetic_Proto_Command* message)
+void   com__seagate__kinetic__proto__command__init
+                     (Com__Seagate__Kinetic__Proto__Command         *message)
 {
-  static Com_Seagate_Kinetic_Proto_Command init_value = COM_SEAGATE_KINETIC_PROTO_COMMAND__INIT;
+  static Com__Seagate__Kinetic__Proto__Command init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__INIT;
   *message = init_value;
 }
-size_t com_seagate_kinetic_proto_command__get_packed_size(const Com_Seagate_Kinetic_Proto_Command *message)
+size_t com__seagate__kinetic__proto__command__get_packed_size
+                     (const Com__Seagate__Kinetic__Proto__Command *message)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_command__descriptor);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__command__descriptor);
   return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
 }
-size_t com_seagate_kinetic_proto_command__pack(const Com_Seagate_Kinetic_Proto_Command *message,
-  uint8_t* out)
+size_t com__seagate__kinetic__proto__command__pack
+                     (const Com__Seagate__Kinetic__Proto__Command *message,
+                      uint8_t       *out)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_command__descriptor);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__command__descriptor);
   return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
 }
-size_t com_seagate_kinetic_proto_command__pack_to_buffer(const Com_Seagate_Kinetic_Proto_Command *message,
-  ProtobufCBuffer *buffer)
+size_t com__seagate__kinetic__proto__command__pack_to_buffer
+                     (const Com__Seagate__Kinetic__Proto__Command *message,
+                      ProtobufCBuffer *buffer)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_command__descriptor);
-  return protobuf_c_message_pack_to_buffer((const ProtobufCMessage*)message, buffer);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__command__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
 }
-Com_Seagate_Kinetic_Proto_Command* com_seagate_kinetic_proto_command__unpack(ProtobufCAllocator *allocator,
-  size_t len,
-  const uint8_t *data)
+Com__Seagate__Kinetic__Proto__Command *
+       com__seagate__kinetic__proto__command__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
 {
-  return (Com_Seagate_Kinetic_Proto_Command *)protobuf_c_message_unpack(&com_seagate_kinetic_proto_command__descriptor,
-    allocator, len, data);
+  return (Com__Seagate__Kinetic__Proto__Command *)
+     protobuf_c_message_unpack (&com__seagate__kinetic__proto__command__descriptor,
+                                allocator, len, data);
 }
-void com_seagate_kinetic_proto_command__free_unpacked(Com_Seagate_Kinetic_Proto_Command *message,
-  ProtobufCAllocator *allocator)
+void   com__seagate__kinetic__proto__command__free_unpacked
+                     (Com__Seagate__Kinetic__Proto__Command *message,
+                      ProtobufCAllocator *allocator)
 {
-  assert(message->base.descriptor == &com_seagate_kinetic_proto_command__descriptor);
-  protobuf_c_message_free_unpacked((ProtobufCMessage*)message, allocator);
+  assert(message->base.descriptor == &com__seagate__kinetic__proto__command__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
-char com_seagate_kinetic_proto_local_protocol_version_default_value[] = "3.0.5";
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_local__field_descriptors[1] =
+char com__seagate__kinetic__proto__local__protocol_version__default_value[] = "3.0.5";
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__local__field_descriptors[1] =
 {
   {
     "protocolVersion",
@@ -241,45 +289,45 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_local__field_des
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Local, protocolVersion),
+    offsetof(Com__Seagate__Kinetic__Proto__Local, protocolversion),
     NULL,
-    &com_seagate_kinetic_proto_local_protocol_version_default_value,
+    &com__seagate__kinetic__proto__local__protocol_version__default_value,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_local__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__local__field_indices_by_name[] = {
   0,   /* field[0] = protocolVersion */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_local__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__local__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 1 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_local__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__local__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Local",
   "Local",
-  "Com_Seagate_Kinetic_Proto_Local",
+  "Com__Seagate__Kinetic__Proto__Local",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Local),
+  sizeof(Com__Seagate__Kinetic__Proto__Local),
   1,
-  com_seagate_kinetic_proto_local__field_descriptors,
-  com_seagate_kinetic_proto_local__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_local__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_local__init,
+  com__seagate__kinetic__proto__local__field_descriptors,
+  com__seagate__kinetic__proto__local__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__local__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__local__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_message_hmacauth__field_descriptors[2] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__message__hmacauth__field_descriptors[2] =
 {
   {
     "identity",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Message_HMACauth, has_identity),
-    offsetof(Com_Seagate_Kinetic_Proto_Message_HMACauth, identity),
+    offsetof(Com__Seagate__Kinetic__Proto__Message__HMACauth, has_identity),
+    offsetof(Com__Seagate__Kinetic__Proto__Message__HMACauth, identity),
     NULL,
     NULL,
     0,             /* flags */
@@ -290,118 +338,118 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_message_hmacauth
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Message_HMACauth, has_hmac),
-    offsetof(Com_Seagate_Kinetic_Proto_Message_HMACauth, hmac),
+    offsetof(Com__Seagate__Kinetic__Proto__Message__HMACauth, has_hmac),
+    offsetof(Com__Seagate__Kinetic__Proto__Message__HMACauth, hmac),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_message_hmacauth__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__message__hmacauth__field_indices_by_name[] = {
   1,   /* field[1] = hmac */
   0,   /* field[0] = identity */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_message_hmacauth__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__message__hmacauth__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 2 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_message_hmacauth__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__message__hmacauth__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Message.HMACauth",
   "HMACauth",
-  "Com_Seagate_Kinetic_Proto_Message_HMACauth",
+  "Com__Seagate__Kinetic__Proto__Message__HMACauth",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Message_HMACauth),
+  sizeof(Com__Seagate__Kinetic__Proto__Message__HMACauth),
   2,
-  com_seagate_kinetic_proto_message_hmacauth__field_descriptors,
-  com_seagate_kinetic_proto_message_hmacauth__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_message_hmacauth__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_message_hmacauth__init,
+  com__seagate__kinetic__proto__message__hmacauth__field_descriptors,
+  com__seagate__kinetic__proto__message__hmacauth__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__message__hmacauth__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__message__hmacauth__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_message_pinauth__field_descriptors[1] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__message__pinauth__field_descriptors[1] =
 {
   {
     "pin",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Message_PINauth, has_pin),
-    offsetof(Com_Seagate_Kinetic_Proto_Message_PINauth, pin),
+    offsetof(Com__Seagate__Kinetic__Proto__Message__PINauth, has_pin),
+    offsetof(Com__Seagate__Kinetic__Proto__Message__PINauth, pin),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_message_pinauth__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__message__pinauth__field_indices_by_name[] = {
   0,   /* field[0] = pin */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_message_pinauth__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__message__pinauth__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 1 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_message_pinauth__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__message__pinauth__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Message.PINauth",
   "PINauth",
-  "Com_Seagate_Kinetic_Proto_Message_PINauth",
+  "Com__Seagate__Kinetic__Proto__Message__PINauth",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Message_PINauth),
+  sizeof(Com__Seagate__Kinetic__Proto__Message__PINauth),
   1,
-  com_seagate_kinetic_proto_message_pinauth__field_descriptors,
-  com_seagate_kinetic_proto_message_pinauth__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_message_pinauth__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_message_pinauth__init,
+  com__seagate__kinetic__proto__message__pinauth__field_descriptors,
+  com__seagate__kinetic__proto__message__pinauth__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__message__pinauth__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__message__pinauth__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_message_auth_type__enum_values_by_number[4] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__message__auth_type__enum_values_by_number[4] =
 {
-  { "INVALID_AUTH_TYPE", "COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_INVALID_AUTH_TYPE", -1 },
-  { "HMACAUTH", "COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH", 1 },
-  { "PINAUTH", "COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH", 2 },
-  { "UNSOLICITEDSTATUS", "COM_SEAGATE_KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS", 3 },
+  { "INVALID_AUTH_TYPE", "COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__INVALID_AUTH_TYPE", -1 },
+  { "HMACAUTH", "COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH", 1 },
+  { "PINAUTH", "COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__PINAUTH", 2 },
+  { "UNSOLICITEDSTATUS", "COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS", 3 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_message_auth_type__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__message__auth_type__value_ranges[] = {
 {-1, 0},{1, 1},{0, 4}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_message_auth_type__enum_values_by_name[4] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__message__auth_type__enum_values_by_name[4] =
 {
   { "HMACAUTH", 1 },
   { "INVALID_AUTH_TYPE", 0 },
   { "PINAUTH", 2 },
   { "UNSOLICITEDSTATUS", 3 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_message_auth_type__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__message__auth_type__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Message.AuthType",
   "AuthType",
-  "Com_Seagate_Kinetic_Proto_Message_AuthType",
+  "Com__Seagate__Kinetic__Proto__Message__AuthType",
   "com.seagate.kinetic.proto",
   4,
-  com_seagate_kinetic_proto_message_auth_type__enum_values_by_number,
+  com__seagate__kinetic__proto__message__auth_type__enum_values_by_number,
   4,
-  com_seagate_kinetic_proto_message_auth_type__enum_values_by_name,
+  com__seagate__kinetic__proto__message__auth_type__enum_values_by_name,
   2,
-  com_seagate_kinetic_proto_message_auth_type__value_ranges,
+  com__seagate__kinetic__proto__message__auth_type__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_message__field_descriptors[4] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__message__field_descriptors[4] =
 {
   {
     "authType",
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Message, has_authType),
-    offsetof(Com_Seagate_Kinetic_Proto_Message, authType),
-    &com_seagate_kinetic_proto_message_auth_type__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Message, has_authtype),
+    offsetof(Com__Seagate__Kinetic__Proto__Message, authtype),
+    &com__seagate__kinetic__proto__message__auth_type__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -412,8 +460,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_message__field_d
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Message, hmacAuth),
-    &com_seagate_kinetic_proto_message_hmacauth__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Message, hmacauth),
+    &com__seagate__kinetic__proto__message__hmacauth__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -424,8 +472,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_message__field_d
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Message, pinAuth),
-    &com_seagate_kinetic_proto_message_pinauth__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Message, pinauth),
+    &com__seagate__kinetic__proto__message__pinauth__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -435,49 +483,49 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_message__field_d
     7,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Message, has_commandBytes),
-    offsetof(Com_Seagate_Kinetic_Proto_Message, commandBytes),
+    offsetof(Com__Seagate__Kinetic__Proto__Message, has_commandbytes),
+    offsetof(Com__Seagate__Kinetic__Proto__Message, commandbytes),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_message__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__message__field_indices_by_name[] = {
   0,   /* field[0] = authType */
   3,   /* field[3] = commandBytes */
   1,   /* field[1] = hmacAuth */
   2,   /* field[2] = pinAuth */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_message__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__message__number_ranges[1 + 1] =
 {
   { 4, 0 },
   { 0, 4 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_message__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__message__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Message",
   "Message",
-  "Com_Seagate_Kinetic_Proto_Message",
+  "Com__Seagate__Kinetic__Proto__Message",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Message),
+  sizeof(Com__Seagate__Kinetic__Proto__Message),
   4,
-  com_seagate_kinetic_proto_message__field_descriptors,
-  com_seagate_kinetic_proto_message__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_message__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_message__init,
+  com__seagate__kinetic__proto__message__field_descriptors,
+  com__seagate__kinetic__proto__message__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__message__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__message__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__field_descriptors[9] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__header__field_descriptors[9] =
 {
   {
     "clusterVersion",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_clusterVersion),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, clusterVersion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_clusterversion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, clusterversion),
     NULL,
     NULL,
     0,             /* flags */
@@ -488,8 +536,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_connectionID),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, connectionID),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_connectionid),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, connectionid),
     NULL,
     NULL,
     0,             /* flags */
@@ -500,8 +548,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_sequence),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, sequence),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_sequence),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, sequence),
     NULL,
     NULL,
     0,             /* flags */
@@ -512,8 +560,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     6,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_ackSequence),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, ackSequence),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_acksequence),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, acksequence),
     NULL,
     NULL,
     0,             /* flags */
@@ -524,9 +572,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     7,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_messageType),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, messageType),
-    &com_seagate_kinetic_proto_command_message_type__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_messagetype),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, messagetype),
+    &com__seagate__kinetic__proto__command__message_type__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -536,8 +584,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     9,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_timeout),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, timeout),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_timeout),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, timeout),
     NULL,
     NULL,
     0,             /* flags */
@@ -548,8 +596,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     10,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_earlyExit),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, earlyExit),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_earlyexit),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, earlyexit),
     NULL,
     NULL,
     0,             /* flags */
@@ -560,9 +608,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     12,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_priority),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, priority),
-    &com_seagate_kinetic_proto_command_priority__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_priority),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, priority),
+    &com__seagate__kinetic__proto__command__priority__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -572,15 +620,15 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_header__
     13,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, has_TimeQuanta),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Header, TimeQuanta),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, has_timequanta),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Header, timequanta),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_header__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__header__field_indices_by_name[] = {
   8,   /* field[8] = TimeQuanta */
   3,   /* field[3] = ackSequence */
   0,   /* field[0] = clusterVersion */
@@ -591,7 +639,7 @@ static const unsigned com_seagate_kinetic_proto_command_header__field_indices_by
   2,   /* field[2] = sequence */
   5,   /* field[5] = timeout */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_header__number_ranges[5 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__header__number_ranges[5 + 1] =
 {
   { 1, 0 },
   { 3, 1 },
@@ -600,22 +648,22 @@ static const ProtobufCIntRange com_seagate_kinetic_proto_command_header__number_
   { 12, 7 },
   { 0, 9 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_header__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__header__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Header",
   "Header",
-  "Com_Seagate_Kinetic_Proto_Command_Header",
+  "Com__Seagate__Kinetic__Proto__Command__Header",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Header),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Header),
   9,
-  com_seagate_kinetic_proto_command_header__field_descriptors,
-  com_seagate_kinetic_proto_command_header__field_indices_by_name,
-  5,  com_seagate_kinetic_proto_command_header__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_header__init,
+  com__seagate__kinetic__proto__command__header__field_descriptors,
+  com__seagate__kinetic__proto__command__header__field_indices_by_name,
+  5,  com__seagate__kinetic__proto__command__header__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__header__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__field_descriptors[7] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__body__field_descriptors[7] =
 {
   {
     "keyValue",
@@ -623,8 +671,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__fi
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Body, keyValue),
-    &com_seagate_kinetic_proto_command_key_value__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, keyvalue),
+    &com__seagate__kinetic__proto__command__key_value__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -635,8 +683,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__fi
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Body, range),
-    &com_seagate_kinetic_proto_command_range__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, range),
+    &com__seagate__kinetic__proto__command__range__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -647,8 +695,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__fi
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Body, setup),
-    &com_seagate_kinetic_proto_command_setup__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, setup),
+    &com__seagate__kinetic__proto__command__setup__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -659,8 +707,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__fi
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Body, p2pOperation),
-    &com_seagate_kinetic_proto_command_p2_poperation__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, p2poperation),
+    &com__seagate__kinetic__proto__command__p2_poperation__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -671,8 +719,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__fi
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Body, getLog),
-    &com_seagate_kinetic_proto_command_get_log__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, getlog),
+    &com__seagate__kinetic__proto__command__get_log__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -683,8 +731,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__fi
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Body, security),
-    &com_seagate_kinetic_proto_command_security__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, security),
+    &com__seagate__kinetic__proto__command__security__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -695,14 +743,14 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_body__fi
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Body, pinOp),
-    &com_seagate_kinetic_proto_command_pin_operation__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, pinop),
+    &com__seagate__kinetic__proto__command__pin_operation__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_body__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__body__field_indices_by_name[] = {
   4,   /* field[4] = getLog */
   0,   /* field[0] = keyValue */
   3,   /* field[3] = p2pOperation */
@@ -711,56 +759,56 @@ static const unsigned com_seagate_kinetic_proto_command_body__field_indices_by_n
   5,   /* field[5] = security */
   2,   /* field[2] = setup */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_body__number_ranges[2 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__body__number_ranges[2 + 1] =
 {
   { 1, 0 },
   { 6, 4 },
   { 0, 7 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_body__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__body__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Body",
   "Body",
-  "Com_Seagate_Kinetic_Proto_Command_Body",
+  "Com__Seagate__Kinetic__Proto__Command__Body",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Body),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Body),
   7,
-  com_seagate_kinetic_proto_command_body__field_descriptors,
-  com_seagate_kinetic_proto_command_body__field_indices_by_name,
-  2,  com_seagate_kinetic_proto_command_body__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_body__init,
+  com__seagate__kinetic__proto__command__body__field_descriptors,
+  com__seagate__kinetic__proto__command__body__field_indices_by_name,
+  2,  com__seagate__kinetic__proto__command__body__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__body__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_status_status_code__enum_values_by_number[22] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__status__status_code__enum_values_by_number[22] =
 {
-  { "INVALID_STATUS_CODE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE", -1 },
-  { "NOT_ATTEMPTED", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED", 0 },
-  { "SUCCESS", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS", 1 },
-  { "HMAC_FAILURE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE", 2 },
-  { "NOT_AUTHORIZED", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED", 3 },
-  { "VERSION_FAILURE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE", 4 },
-  { "INTERNAL_ERROR", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR", 5 },
-  { "HEADER_REQUIRED", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED", 6 },
-  { "NOT_FOUND", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND", 7 },
-  { "VERSION_MISMATCH", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH", 8 },
-  { "SERVICE_BUSY", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY", 9 },
-  { "EXPIRED", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED", 10 },
-  { "DATA_ERROR", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR", 11 },
-  { "PERM_DATA_ERROR", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR", 12 },
-  { "REMOTE_CONNECTION_ERROR", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR", 13 },
-  { "NO_SPACE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE", 14 },
-  { "NO_SUCH_HMAC_ALGORITHM", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM", 15 },
-  { "INVALID_REQUEST", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST", 16 },
-  { "NESTED_OPERATION_ERRORS", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS", 17 },
-  { "DEVICE_LOCKED", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED", 18 },
-  { "DEVICE_ALREADY_UNLOCKED", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_ALREADY_UNLOCKED", 19 },
-  { "CONNECTION_TERMINATED", "COM_SEAGATE_KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_CONNECTION_TERMINATED", 20 },
+  { "INVALID_STATUS_CODE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_STATUS_CODE", -1 },
+  { "NOT_ATTEMPTED", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_ATTEMPTED", 0 },
+  { "SUCCESS", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SUCCESS", 1 },
+  { "HMAC_FAILURE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HMAC_FAILURE", 2 },
+  { "NOT_AUTHORIZED", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_AUTHORIZED", 3 },
+  { "VERSION_FAILURE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_FAILURE", 4 },
+  { "INTERNAL_ERROR", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INTERNAL_ERROR", 5 },
+  { "HEADER_REQUIRED", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HEADER_REQUIRED", 6 },
+  { "NOT_FOUND", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_FOUND", 7 },
+  { "VERSION_MISMATCH", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_MISMATCH", 8 },
+  { "SERVICE_BUSY", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SERVICE_BUSY", 9 },
+  { "EXPIRED", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__EXPIRED", 10 },
+  { "DATA_ERROR", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DATA_ERROR", 11 },
+  { "PERM_DATA_ERROR", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__PERM_DATA_ERROR", 12 },
+  { "REMOTE_CONNECTION_ERROR", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__REMOTE_CONNECTION_ERROR", 13 },
+  { "NO_SPACE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SPACE", 14 },
+  { "NO_SUCH_HMAC_ALGORITHM", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SUCH_HMAC_ALGORITHM", 15 },
+  { "INVALID_REQUEST", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_REQUEST", 16 },
+  { "NESTED_OPERATION_ERRORS", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NESTED_OPERATION_ERRORS", 17 },
+  { "DEVICE_LOCKED", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DEVICE_LOCKED", 18 },
+  { "DEVICE_ALREADY_UNLOCKED", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DEVICE_ALREADY_UNLOCKED", 19 },
+  { "CONNECTION_TERMINATED", "COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__CONNECTION_TERMINATED", 20 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_status_status_code__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__status__status_code__value_ranges[] = {
 {-1, 0},{0, 22}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_status_status_code__enum_values_by_name[22] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__status__status_code__enum_values_by_name[22] =
 {
   { "CONNECTION_TERMINATED", 21 },
   { "DATA_ERROR", 12 },
@@ -785,31 +833,31 @@ const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_status_status_co
   { "VERSION_FAILURE", 5 },
   { "VERSION_MISMATCH", 9 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_status_status_code__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__status__status_code__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Status.StatusCode",
   "StatusCode",
-  "Com_Seagate_Kinetic_Proto_Command_Status_StatusCode",
+  "Com__Seagate__Kinetic__Proto__Command__Status__StatusCode",
   "com.seagate.kinetic.proto",
   22,
-  com_seagate_kinetic_proto_command_status_status_code__enum_values_by_number,
+  com__seagate__kinetic__proto__command__status__status_code__enum_values_by_number,
   22,
-  com_seagate_kinetic_proto_command_status_status_code__enum_values_by_name,
+  com__seagate__kinetic__proto__command__status__status_code__enum_values_by_name,
   1,
-  com_seagate_kinetic_proto_command_status_status_code__value_ranges,
+  com__seagate__kinetic__proto__command__status__status_code__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_status__field_descriptors[3] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__status__field_descriptors[3] =
 {
   {
     "code",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Status, has_code),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Status, code),
-    &com_seagate_kinetic_proto_command_status_status_code__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Status, has_code),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Status, code),
+    &com__seagate__kinetic__proto__command__status__status_code__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -820,7 +868,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_status__
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Status, statusMessage),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Status, statusmessage),
     NULL,
     NULL,
     0,             /* flags */
@@ -831,48 +879,48 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_status__
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Status, has_detailedMessage),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Status, detailedMessage),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Status, has_detailedmessage),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Status, detailedmessage),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_status__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__status__field_indices_by_name[] = {
   0,   /* field[0] = code */
   2,   /* field[2] = detailedMessage */
   1,   /* field[1] = statusMessage */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_status__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__status__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 3 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_status__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__status__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Status",
   "Status",
-  "Com_Seagate_Kinetic_Proto_Command_Status",
+  "Com__Seagate__Kinetic__Proto__Command__Status",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Status),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Status),
   3,
-  com_seagate_kinetic_proto_command_status__field_descriptors,
-  com_seagate_kinetic_proto_command_status__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_status__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_status__init,
+  com__seagate__kinetic__proto__command__status__field_descriptors,
+  com__seagate__kinetic__proto__command__status__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__status__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__status__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_value__field_descriptors[8] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__key_value__field_descriptors[8] =
 {
   {
     "newVersion",
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_newVersion),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, newVersion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_newversion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, newversion),
     NULL,
     NULL,
     0,             /* flags */
@@ -883,8 +931,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_valu
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_key),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, key),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_key),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, key),
     NULL,
     NULL,
     0,             /* flags */
@@ -895,8 +943,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_valu
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_dbVersion),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, dbVersion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_dbversion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, dbversion),
     NULL,
     NULL,
     0,             /* flags */
@@ -907,8 +955,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_valu
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_tag),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, tag),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_tag),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, tag),
     NULL,
     NULL,
     0,             /* flags */
@@ -919,9 +967,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_valu
     6,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_algorithm),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, algorithm),
-    &com_seagate_kinetic_proto_command_algorithm__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_algorithm),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, algorithm),
+    &com__seagate__kinetic__proto__command__algorithm__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -931,8 +979,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_valu
     7,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_metadataOnly),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, metadataOnly),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_metadataonly),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, metadataonly),
     NULL,
     NULL,
     0,             /* flags */
@@ -943,8 +991,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_valu
     8,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_force),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, force),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_force),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, force),
     NULL,
     NULL,
     0,             /* flags */
@@ -955,15 +1003,15 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_key_valu
     9,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, has_synchronization),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_KeyValue, synchronization),
-    &com_seagate_kinetic_proto_command_synchronization__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, has_synchronization),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__KeyValue, synchronization),
+    &com__seagate__kinetic__proto__command__synchronization__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_key_value__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__key_value__field_indices_by_name[] = {
   4,   /* field[4] = algorithm */
   2,   /* field[2] = dbVersion */
   6,   /* field[6] = force */
@@ -973,35 +1021,35 @@ static const unsigned com_seagate_kinetic_proto_command_key_value__field_indices
   7,   /* field[7] = synchronization */
   3,   /* field[3] = tag */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_key_value__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__key_value__number_ranges[1 + 1] =
 {
   { 2, 0 },
   { 0, 8 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_key_value__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__key_value__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.KeyValue",
   "KeyValue",
-  "Com_Seagate_Kinetic_Proto_Command_KeyValue",
+  "Com__Seagate__Kinetic__Proto__Command__KeyValue",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_KeyValue),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__KeyValue),
   8,
-  com_seagate_kinetic_proto_command_key_value__field_descriptors,
-  com_seagate_kinetic_proto_command_key_value__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_key_value__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_key_value__init,
+  com__seagate__kinetic__proto__command__key_value__field_descriptors,
+  com__seagate__kinetic__proto__command__key_value__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__key_value__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__key_value__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_range__field_descriptors[7] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__range__field_descriptors[7] =
 {
   {
     "startKey",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, has_startKey),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, startKey),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, has_startkey),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, startkey),
     NULL,
     NULL,
     0,             /* flags */
@@ -1012,8 +1060,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_range__f
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, has_endKey),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, endKey),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, has_endkey),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, endkey),
     NULL,
     NULL,
     0,             /* flags */
@@ -1024,8 +1072,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_range__f
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, has_startKeyInclusive),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, startKeyInclusive),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, has_startkeyinclusive),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, startkeyinclusive),
     NULL,
     NULL,
     0,             /* flags */
@@ -1036,8 +1084,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_range__f
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, has_endKeyInclusive),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, endKeyInclusive),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, has_endkeyinclusive),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, endkeyinclusive),
     NULL,
     NULL,
     0,             /* flags */
@@ -1048,8 +1096,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_range__f
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, has_maxReturned),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, maxReturned),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, has_maxreturned),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, maxreturned),
     NULL,
     NULL,
     0,             /* flags */
@@ -1060,8 +1108,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_range__f
     6,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, has_reverse),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, reverse),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, has_reverse),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, reverse),
     NULL,
     NULL,
     0,             /* flags */
@@ -1072,15 +1120,15 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_range__f
     8,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, n_keys),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Range, keys),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, n_keys),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Range, keys),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_range__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__range__field_indices_by_name[] = {
   1,   /* field[1] = endKey */
   3,   /* field[3] = endKeyInclusive */
   6,   /* field[6] = keys */
@@ -1089,36 +1137,36 @@ static const unsigned com_seagate_kinetic_proto_command_range__field_indices_by_
   0,   /* field[0] = startKey */
   2,   /* field[2] = startKeyInclusive */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_range__number_ranges[2 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__range__number_ranges[2 + 1] =
 {
   { 1, 0 },
   { 8, 6 },
   { 0, 7 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_range__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__range__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Range",
   "Range",
-  "Com_Seagate_Kinetic_Proto_Command_Range",
+  "Com__Seagate__Kinetic__Proto__Command__Range",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Range),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Range),
   7,
-  com_seagate_kinetic_proto_command_range__field_descriptors,
-  com_seagate_kinetic_proto_command_range__field_indices_by_name,
-  2,  com_seagate_kinetic_proto_command_range__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_range__init,
+  com__seagate__kinetic__proto__command__range__field_descriptors,
+  com__seagate__kinetic__proto__command__range__field_indices_by_name,
+  2,  com__seagate__kinetic__proto__command__range__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__range__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_setup__field_descriptors[2] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__setup__field_descriptors[2] =
 {
   {
     "newClusterVersion",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Setup, has_newClusterVersion),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Setup, newClusterVersion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Setup, has_newclusterversion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Setup, newclusterversion),
     NULL,
     NULL,
     0,             /* flags */
@@ -1129,48 +1177,48 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_setup__f
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Setup, has_firmwareDownload),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Setup, firmwareDownload),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Setup, has_firmwaredownload),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Setup, firmwaredownload),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_setup__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__setup__field_indices_by_name[] = {
   1,   /* field[1] = firmwareDownload */
   0,   /* field[0] = newClusterVersion */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_setup__number_ranges[2 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__setup__number_ranges[2 + 1] =
 {
   { 1, 0 },
   { 5, 1 },
   { 0, 2 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_setup__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__setup__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Setup",
   "Setup",
-  "Com_Seagate_Kinetic_Proto_Command_Setup",
+  "Com__Seagate__Kinetic__Proto__Command__Setup",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Setup),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Setup),
   2,
-  com_seagate_kinetic_proto_command_setup__field_descriptors,
-  com_seagate_kinetic_proto_command_setup__field_indices_by_name,
-  2,  com_seagate_kinetic_proto_command_setup__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_setup__init,
+  com__seagate__kinetic__proto__command__setup__field_descriptors,
+  com__seagate__kinetic__proto__command__setup__field_indices_by_name,
+  2,  com__seagate__kinetic__proto__command__setup__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__setup__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poperation_operation__field_descriptors[6] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__p2_poperation__operation__field_descriptors[6] =
 {
   {
     "key",
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, has_key),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, key),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, has_key),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, key),
     NULL,
     NULL,
     0,             /* flags */
@@ -1181,8 +1229,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, has_version),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, version),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, has_version),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, version),
     NULL,
     NULL,
     0,             /* flags */
@@ -1193,8 +1241,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, has_newKey),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, newKey),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, has_newkey),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, newkey),
     NULL,
     NULL,
     0,             /* flags */
@@ -1205,8 +1253,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     6,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, has_force),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, force),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, has_force),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, force),
     NULL,
     NULL,
     0,             /* flags */
@@ -1218,8 +1266,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, status),
-    &com_seagate_kinetic_proto_command_status__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, status),
+    &com__seagate__kinetic__proto__command__status__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -1230,14 +1278,14 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation, p2pop),
-    &com_seagate_kinetic_proto_command_p2_poperation__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation, p2pop),
+    &com__seagate__kinetic__proto__command__p2_poperation__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_p2_poperation_operation__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__p2_poperation__operation__field_indices_by_name[] = {
   3,   /* field[3] = force */
   0,   /* field[0] = key */
   2,   /* field[2] = newKey */
@@ -1245,27 +1293,27 @@ static const unsigned com_seagate_kinetic_proto_command_p2_poperation_operation_
   4,   /* field[4] = status */
   1,   /* field[1] = version */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_p2_poperation_operation__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__p2_poperation__operation__number_ranges[1 + 1] =
 {
   { 3, 0 },
   { 0, 6 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_p2_poperation_operation__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__p2_poperation__operation__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.P2POperation.Operation",
   "Operation",
-  "Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation",
+  "Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Operation),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation),
   6,
-  com_seagate_kinetic_proto_command_p2_poperation_operation__field_descriptors,
-  com_seagate_kinetic_proto_command_p2_poperation_operation__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_p2_poperation_operation__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_p2_poperation_operation__init,
+  com__seagate__kinetic__proto__command__p2_poperation__operation__field_descriptors,
+  com__seagate__kinetic__proto__command__p2_poperation__operation__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__p2_poperation__operation__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__p2_poperation__operation__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poperation_peer__field_descriptors[3] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__p2_poperation__peer__field_descriptors[3] =
 {
   {
     "hostname",
@@ -1273,7 +1321,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer, hostname),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer, hostname),
     NULL,
     NULL,
     0,             /* flags */
@@ -1284,8 +1332,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer, has_port),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer, port),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer, has_port),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer, port),
     NULL,
     NULL,
     0,             /* flags */
@@ -1296,40 +1344,40 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer, has_tls),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer, tls),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer, has_tls),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer, tls),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_p2_poperation_peer__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__p2_poperation__peer__field_indices_by_name[] = {
   0,   /* field[0] = hostname */
   1,   /* field[1] = port */
   2,   /* field[2] = tls */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_p2_poperation_peer__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__p2_poperation__peer__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 3 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_p2_poperation_peer__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__p2_poperation__peer__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.P2POperation.Peer",
   "Peer",
-  "Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer",
+  "Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_P2POperation_Peer),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer),
   3,
-  com_seagate_kinetic_proto_command_p2_poperation_peer__field_descriptors,
-  com_seagate_kinetic_proto_command_p2_poperation_peer__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_p2_poperation_peer__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_p2_poperation_peer__init,
+  com__seagate__kinetic__proto__command__p2_poperation__peer__field_descriptors,
+  com__seagate__kinetic__proto__command__p2_poperation__peer__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__p2_poperation__peer__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__p2_poperation__peer__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poperation__field_descriptors[3] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__p2_poperation__field_descriptors[3] =
 {
   {
     "peer",
@@ -1337,8 +1385,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation, peer),
-    &com_seagate_kinetic_proto_command_p2_poperation_peer__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation, peer),
+    &com__seagate__kinetic__proto__command__p2_poperation__peer__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -1348,9 +1396,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     2,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation, n_operation),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation, operation),
-    &com_seagate_kinetic_proto_command_p2_poperation_operation__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation, n_operation),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation, operation),
+    &com__seagate__kinetic__proto__command__p2_poperation__operation__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -1360,40 +1408,40 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_p2_poper
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation, has_allChildOperationsSucceeded),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_P2POperation, allChildOperationsSucceeded),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation, has_allchildoperationssucceeded),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__P2POperation, allchildoperationssucceeded),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_p2_poperation__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__p2_poperation__field_indices_by_name[] = {
   2,   /* field[2] = allChildOperationsSucceeded */
   1,   /* field[1] = operation */
   0,   /* field[0] = peer */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_p2_poperation__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__p2_poperation__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 3 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_p2_poperation__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__p2_poperation__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.P2POperation",
   "P2POperation",
-  "Com_Seagate_Kinetic_Proto_Command_P2POperation",
+  "Com__Seagate__Kinetic__Proto__Command__P2POperation",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_P2POperation),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__P2POperation),
   3,
-  com_seagate_kinetic_proto_command_p2_poperation__field_descriptors,
-  com_seagate_kinetic_proto_command_p2_poperation__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_p2_poperation__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_p2_poperation__init,
+  com__seagate__kinetic__proto__command__p2_poperation__field_descriptors,
+  com__seagate__kinetic__proto__command__p2_poperation__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__p2_poperation__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__p2_poperation__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_utilization__field_descriptors[2] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__utilization__field_descriptors[2] =
 {
   {
     "name",
@@ -1401,7 +1449,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization, name),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization, name),
     NULL,
     NULL,
     0,             /* flags */
@@ -1412,39 +1460,39 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_FLOAT,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization, has_value),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization, value),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization, has_value),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization, value),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_utilization__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__utilization__field_indices_by_name[] = {
   0,   /* field[0] = name */
   1,   /* field[1] = value */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_utilization__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__utilization__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 2 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_utilization__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__utilization__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Utilization",
   "Utilization",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Utilization),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization),
   2,
-  com_seagate_kinetic_proto_command_get_log_utilization__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_utilization__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log_utilization__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_utilization__init,
+  com__seagate__kinetic__proto__command__get_log__utilization__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__utilization__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__utilization__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__utilization__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_temperature__field_descriptors[5] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__temperature__field_descriptors[5] =
 {
   {
     "name",
@@ -1452,7 +1500,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, name),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, name),
     NULL,
     NULL,
     0,             /* flags */
@@ -1463,8 +1511,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_FLOAT,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, has_current),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, current),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, has_current),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, current),
     NULL,
     NULL,
     0,             /* flags */
@@ -1475,8 +1523,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_FLOAT,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, has_minimum),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, minimum),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, has_minimum),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, minimum),
     NULL,
     NULL,
     0,             /* flags */
@@ -1487,8 +1535,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_FLOAT,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, has_maximum),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, maximum),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, has_maximum),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, maximum),
     NULL,
     NULL,
     0,             /* flags */
@@ -1499,50 +1547,50 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_FLOAT,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, has_target),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature, target),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, has_target),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature, target),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_temperature__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__temperature__field_indices_by_name[] = {
   1,   /* field[1] = current */
   3,   /* field[3] = maximum */
   2,   /* field[2] = minimum */
   0,   /* field[0] = name */
   4,   /* field[4] = target */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_temperature__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__temperature__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 5 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_temperature__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__temperature__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Temperature",
   "Temperature",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Temperature),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature),
   5,
-  com_seagate_kinetic_proto_command_get_log_temperature__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_temperature__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log_temperature__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_temperature__init,
+  com__seagate__kinetic__proto__command__get_log__temperature__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__temperature__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__temperature__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__temperature__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_capacity__field_descriptors[2] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__capacity__field_descriptors[2] =
 {
   {
     "nominalCapacityInBytes",
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity, has_nominalCapacityInBytes),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity, nominalCapacityInBytes),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity, has_nominalcapacityinbytes),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity, nominalcapacityinbytes),
     NULL,
     NULL,
     0,             /* flags */
@@ -1553,39 +1601,39 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_FLOAT,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity, has_portionFull),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity, portionFull),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity, has_portionfull),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity, portionfull),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_capacity__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__capacity__field_indices_by_name[] = {
   0,   /* field[0] = nominalCapacityInBytes */
   1,   /* field[1] = portionFull */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_capacity__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__capacity__number_ranges[1 + 1] =
 {
   { 4, 0 },
   { 0, 2 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_capacity__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__capacity__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Capacity",
   "Capacity",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Capacity),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity),
   2,
-  com_seagate_kinetic_proto_command_get_log_capacity__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_capacity__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log_capacity__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_capacity__init,
+  com__seagate__kinetic__proto__command__get_log__capacity__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__capacity__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__capacity__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__capacity__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_configuration_interface__field_descriptors[4] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__configuration__interface__field_descriptors[4] =
 {
   {
     "name",
@@ -1593,7 +1641,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface, name),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface, name),
     NULL,
     NULL,
     0,             /* flags */
@@ -1604,8 +1652,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface, has_MAC),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface, MAC),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface, has_mac),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface, mac),
     NULL,
     NULL,
     0,             /* flags */
@@ -1616,8 +1664,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface, has_ipv4Address),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface, ipv4Address),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface, has_ipv4address),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface, ipv4address),
     NULL,
     NULL,
     0,             /* flags */
@@ -1628,41 +1676,41 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface, has_ipv6Address),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface, ipv6Address),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface, has_ipv6address),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface, ipv6address),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_configuration_interface__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__configuration__interface__field_indices_by_name[] = {
   1,   /* field[1] = MAC */
   2,   /* field[2] = ipv4Address */
   3,   /* field[3] = ipv6Address */
   0,   /* field[0] = name */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_configuration_interface__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__configuration__interface__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 4 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_configuration_interface__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__configuration__interface__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Configuration.Interface",
   "Interface",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration_Interface),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface),
   4,
-  com_seagate_kinetic_proto_command_get_log_configuration_interface__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_configuration_interface__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log_configuration_interface__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_configuration_interface__init,
+  com__seagate__kinetic__proto__command__get_log__configuration__interface__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__configuration__interface__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__configuration__interface__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__configuration__interface__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_configuration__field_descriptors[13] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__configuration__field_descriptors[13] =
 {
   {
     "vendor",
@@ -1670,7 +1718,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, vendor),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, vendor),
     NULL,
     NULL,
     0,             /* flags */
@@ -1682,7 +1730,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, model),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, model),
     NULL,
     NULL,
     0,             /* flags */
@@ -1693,8 +1741,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     7,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, has_serialNumber),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, serialNumber),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, has_serialnumber),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, serialnumber),
     NULL,
     NULL,
     0,             /* flags */
@@ -1706,7 +1754,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, version),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, version),
     NULL,
     NULL,
     0,             /* flags */
@@ -1717,9 +1765,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     9,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, n_interface),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, interface),
-    &com_seagate_kinetic_proto_command_get_log_configuration_interface__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, n_interface),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, interface),
+    &com__seagate__kinetic__proto__command__get_log__configuration__interface__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -1729,8 +1777,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     10,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, has_port),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, port),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, has_port),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, port),
     NULL,
     NULL,
     0,             /* flags */
@@ -1741,8 +1789,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     11,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, has_tlsPort),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, tlsPort),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, has_tlsport),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, tlsport),
     NULL,
     NULL,
     0,             /* flags */
@@ -1754,7 +1802,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, compilationDate),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, compilationdate),
     NULL,
     NULL,
     0,             /* flags */
@@ -1766,7 +1814,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, sourceHash),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, sourcehash),
     NULL,
     NULL,
     0,             /* flags */
@@ -1777,8 +1825,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     14,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, has_worldWideName),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, worldWideName),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, has_worldwidename),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, worldwidename),
     NULL,
     NULL,
     0,             /* flags */
@@ -1790,7 +1838,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, protocolVersion),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, protocolversion),
     NULL,
     NULL,
     0,             /* flags */
@@ -1802,7 +1850,7 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, protocolCompilationDate),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, protocolcompilationdate),
     NULL,
     NULL,
     0,             /* flags */
@@ -1814,14 +1862,14 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_STRING,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration, protocolSourceHash),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration, protocolsourcehash),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_configuration__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__configuration__field_indices_by_name[] = {
   7,   /* field[7] = compilationDate */
   4,   /* field[4] = interface */
   1,   /* field[1] = model */
@@ -1836,36 +1884,36 @@ static const unsigned com_seagate_kinetic_proto_command_get_log_configuration__f
   3,   /* field[3] = version */
   9,   /* field[9] = worldWideName */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_configuration__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__configuration__number_ranges[1 + 1] =
 {
   { 5, 0 },
   { 0, 13 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_configuration__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__configuration__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Configuration",
   "Configuration",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Configuration),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration),
   13,
-  com_seagate_kinetic_proto_command_get_log_configuration__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_configuration__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log_configuration__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_configuration__init,
+  com__seagate__kinetic__proto__command__get_log__configuration__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__configuration__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__configuration__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__configuration__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_statistics__field_descriptors[3] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__statistics__field_descriptors[3] =
 {
   {
     "messageType",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics, has_messageType),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics, messageType),
-    &com_seagate_kinetic_proto_command_message_type__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics, has_messagetype),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics, messagetype),
+    &com__seagate__kinetic__proto__command__message_type__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -1875,8 +1923,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics, has_count),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics, count),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics, has_count),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics, count),
     NULL,
     NULL,
     0,             /* flags */
@@ -1887,49 +1935,49 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics, has_bytes),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics, bytes),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics, has_bytes),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics, bytes),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_statistics__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__statistics__field_indices_by_name[] = {
   2,   /* field[2] = bytes */
   1,   /* field[1] = count */
   0,   /* field[0] = messageType */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_statistics__number_ranges[2 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__statistics__number_ranges[2 + 1] =
 {
   { 1, 0 },
   { 4, 1 },
   { 0, 3 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_statistics__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__statistics__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Statistics",
   "Statistics",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Statistics),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics),
   3,
-  com_seagate_kinetic_proto_command_get_log_statistics__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_statistics__field_indices_by_name,
-  2,  com_seagate_kinetic_proto_command_get_log_statistics__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_statistics__init,
+  com__seagate__kinetic__proto__command__get_log__statistics__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__statistics__field_indices_by_name,
+  2,  com__seagate__kinetic__proto__command__get_log__statistics__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__statistics__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_limits__field_descriptors[11] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__limits__field_descriptors[11] =
 {
   {
     "maxKeySize",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxKeySize),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxKeySize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxkeysize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxkeysize),
     NULL,
     NULL,
     0,             /* flags */
@@ -1940,8 +1988,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxValueSize),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxValueSize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxvaluesize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxvaluesize),
     NULL,
     NULL,
     0,             /* flags */
@@ -1952,8 +2000,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxVersionSize),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxVersionSize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxversionsize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxversionsize),
     NULL,
     NULL,
     0,             /* flags */
@@ -1964,8 +2012,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxTagSize),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxTagSize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxtagsize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxtagsize),
     NULL,
     NULL,
     0,             /* flags */
@@ -1976,8 +2024,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxConnections),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxConnections),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxconnections),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxconnections),
     NULL,
     NULL,
     0,             /* flags */
@@ -1988,8 +2036,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     6,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxOutstandingReadRequests),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxOutstandingReadRequests),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxoutstandingreadrequests),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxoutstandingreadrequests),
     NULL,
     NULL,
     0,             /* flags */
@@ -2000,8 +2048,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     7,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxOutstandingWriteRequests),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxOutstandingWriteRequests),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxoutstandingwriterequests),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxoutstandingwriterequests),
     NULL,
     NULL,
     0,             /* flags */
@@ -2012,8 +2060,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     8,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxMessageSize),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxMessageSize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxmessagesize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxmessagesize),
     NULL,
     NULL,
     0,             /* flags */
@@ -2024,8 +2072,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     9,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxKeyRangeCount),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxKeyRangeCount),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxkeyrangecount),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxkeyrangecount),
     NULL,
     NULL,
     0,             /* flags */
@@ -2036,8 +2084,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     10,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxIdentityCount),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxIdentityCount),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxidentitycount),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxidentitycount),
     NULL,
     NULL,
     0,             /* flags */
@@ -2048,15 +2096,15 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     11,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, has_maxPinSize),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits, maxPinSize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxpinsize),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxpinsize),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_limits__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__limits__field_indices_by_name[] = {
   4,   /* field[4] = maxConnections */
   9,   /* field[9] = maxIdentityCount */
   8,   /* field[8] = maxKeyRangeCount */
@@ -2069,80 +2117,80 @@ static const unsigned com_seagate_kinetic_proto_command_get_log_limits__field_in
   1,   /* field[1] = maxValueSize */
   2,   /* field[2] = maxVersionSize */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_limits__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__limits__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 11 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_limits__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__limits__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Limits",
   "Limits",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Limits",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Limits",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Limits),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits),
   11,
-  com_seagate_kinetic_proto_command_get_log_limits__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_limits__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log_limits__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_limits__init,
+  com__seagate__kinetic__proto__command__get_log__limits__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__limits__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__limits__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__limits__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_device__field_descriptors[1] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__device__field_descriptors[1] =
 {
   {
     "name",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Device, has_name),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog_Device, name),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Device, has_name),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Device, name),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log_device__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__device__field_indices_by_name[] = {
   0,   /* field[0] = name */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_device__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__device__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 1 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log_device__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__device__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Device",
   "Device",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Device",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Device",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog_Device),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog__Device),
   1,
-  com_seagate_kinetic_proto_command_get_log_device__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log_device__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log_device__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log_device__init,
+  com__seagate__kinetic__proto__command__get_log__device__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__device__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__device__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__device__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_get_log_type__enum_values_by_number[9] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__get_log__type__enum_values_by_number[9] =
 {
-  { "INVALID_TYPE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE", -1 },
-  { "UTILIZATIONS", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS", 0 },
-  { "TEMPERATURES", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES", 1 },
-  { "CAPACITIES", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES", 2 },
-  { "CONFIGURATION", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CONFIGURATION", 3 },
-  { "STATISTICS", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS", 4 },
-  { "MESSAGES", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES", 5 },
-  { "LIMITS", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS", 6 },
-  { "DEVICE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE", 7 },
+  { "INVALID_TYPE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__INVALID_TYPE", -1 },
+  { "UTILIZATIONS", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__UTILIZATIONS", 0 },
+  { "TEMPERATURES", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__TEMPERATURES", 1 },
+  { "CAPACITIES", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CAPACITIES", 2 },
+  { "CONFIGURATION", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CONFIGURATION", 3 },
+  { "STATISTICS", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__STATISTICS", 4 },
+  { "MESSAGES", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__MESSAGES", 5 },
+  { "LIMITS", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__LIMITS", 6 },
+  { "DEVICE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE", 7 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log_type__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__type__value_ranges[] = {
 {-1, 0},{0, 9}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_get_log_type__enum_values_by_name[9] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__get_log__type__enum_values_by_name[9] =
 {
   { "CAPACITIES", 3 },
   { "CONFIGURATION", 4 },
@@ -2154,31 +2202,31 @@ const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_get_log_type__en
   { "TEMPERATURES", 2 },
   { "UTILIZATIONS", 1 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_get_log_type__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__get_log__type__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog.Type",
   "Type",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog_Type",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog__Type",
   "com.seagate.kinetic.proto",
   9,
-  com_seagate_kinetic_proto_command_get_log_type__enum_values_by_number,
+  com__seagate__kinetic__proto__command__get_log__type__enum_values_by_number,
   9,
-  com_seagate_kinetic_proto_command_get_log_type__enum_values_by_name,
+  com__seagate__kinetic__proto__command__get_log__type__enum_values_by_name,
   1,
-  com_seagate_kinetic_proto_command_get_log_type__value_ranges,
+  com__seagate__kinetic__proto__command__get_log__type__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log__field_descriptors[9] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get_log__field_descriptors[9] =
 {
   {
     "types",
     1,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, n_types),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, types),
-    &com_seagate_kinetic_proto_command_get_log_type__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, n_types),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, types),
+    &com__seagate__kinetic__proto__command__get_log__type__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2188,9 +2236,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     2,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, n_utilizations),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, utilizations),
-    &com_seagate_kinetic_proto_command_get_log_utilization__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, n_utilizations),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, utilizations),
+    &com__seagate__kinetic__proto__command__get_log__utilization__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2200,9 +2248,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     3,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, n_temperatures),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, temperatures),
-    &com_seagate_kinetic_proto_command_get_log_temperature__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, n_temperatures),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, temperatures),
+    &com__seagate__kinetic__proto__command__get_log__temperature__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2213,8 +2261,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, capacity),
-    &com_seagate_kinetic_proto_command_get_log_capacity__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, capacity),
+    &com__seagate__kinetic__proto__command__get_log__capacity__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2225,8 +2273,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, configuration),
-    &com_seagate_kinetic_proto_command_get_log_configuration__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, configuration),
+    &com__seagate__kinetic__proto__command__get_log__configuration__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2236,9 +2284,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     6,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, n_statistics),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, statistics),
-    &com_seagate_kinetic_proto_command_get_log_statistics__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, n_statistics),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, statistics),
+    &com__seagate__kinetic__proto__command__get_log__statistics__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2248,8 +2296,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     7,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, has_messages),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, messages),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, has_messages),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, messages),
     NULL,
     NULL,
     0,             /* flags */
@@ -2261,8 +2309,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, limits),
-    &com_seagate_kinetic_proto_command_get_log_limits__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, limits),
+    &com__seagate__kinetic__proto__command__get_log__limits__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2273,14 +2321,14 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_get_log_
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command_GetLog, device),
-    &com_seagate_kinetic_proto_command_get_log_device__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog, device),
+    &com__seagate__kinetic__proto__command__get_log__device__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_get_log__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__get_log__field_indices_by_name[] = {
   3,   /* field[3] = capacity */
   4,   /* field[4] = configuration */
   8,   /* field[8] = device */
@@ -2291,35 +2339,35 @@ static const unsigned com_seagate_kinetic_proto_command_get_log__field_indices_b
   0,   /* field[0] = types */
   1,   /* field[1] = utilizations */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_get_log__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__get_log__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 9 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_get_log__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.GetLog",
   "GetLog",
-  "Com_Seagate_Kinetic_Proto_Command_GetLog",
+  "Com__Seagate__Kinetic__Proto__Command__GetLog",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_GetLog),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__GetLog),
   9,
-  com_seagate_kinetic_proto_command_get_log__field_descriptors,
-  com_seagate_kinetic_proto_command_get_log__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_get_log__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_get_log__init,
+  com__seagate__kinetic__proto__command__get_log__field_descriptors,
+  com__seagate__kinetic__proto__command__get_log__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__get_log__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__get_log__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security_acl_scope__field_descriptors[4] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__security__acl__scope__field_descriptors[4] =
 {
   {
     "offset",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, has_offset),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, offset),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, has_offset),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, offset),
     NULL,
     NULL,
     0,             /* flags */
@@ -2330,8 +2378,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, has_value),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, value),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, has_value),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, value),
     NULL,
     NULL,
     0,             /* flags */
@@ -2342,9 +2390,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     3,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, n_permission),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, permission),
-    &com_seagate_kinetic_proto_command_security_acl_permission__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, n_permission),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, permission),
+    &com__seagate__kinetic__proto__command__security__acl__permission__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2354,84 +2402,84 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BOOL,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, has_TlsRequired),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope, TlsRequired),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, has_tlsrequired),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope, tlsrequired),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_security_acl_scope__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__security__acl__scope__field_indices_by_name[] = {
   3,   /* field[3] = TlsRequired */
   0,   /* field[0] = offset */
   2,   /* field[2] = permission */
   1,   /* field[1] = value */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_security_acl_scope__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__security__acl__scope__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 4 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_security_acl_scope__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__security__acl__scope__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Security.ACL.Scope",
   "Scope",
-  "Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope",
+  "Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Security_ACL_Scope),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope),
   4,
-  com_seagate_kinetic_proto_command_security_acl_scope__field_descriptors,
-  com_seagate_kinetic_proto_command_security_acl_scope__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_security_acl_scope__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_security_acl_scope__init,
+  com__seagate__kinetic__proto__command__security__acl__scope__field_descriptors,
+  com__seagate__kinetic__proto__command__security__acl__scope__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__security__acl__scope__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__security__acl__scope__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__enum_values_by_number[2] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__enum_values_by_number[2] =
 {
-  { "INVALID_HMAC_ALGORITHM", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM", -1 },
-  { "HmacSHA1", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1", 1 },
+  { "INVALID_HMAC_ALGORITHM", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__INVALID_HMAC_ALGORITHM", -1 },
+  { "HmacSHA1", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1", 1 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__value_ranges[] = {
 {-1, 0},{1, 1},{0, 2}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__enum_values_by_name[2] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__enum_values_by_name[2] =
 {
   { "HmacSHA1", 1 },
   { "INVALID_HMAC_ALGORITHM", 0 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Security.ACL.HMACAlgorithm",
   "HMACAlgorithm",
-  "Com_Seagate_Kinetic_Proto_Command_Security_ACL_HMACAlgorithm",
+  "Com__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm",
   "com.seagate.kinetic.proto",
   2,
-  com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__enum_values_by_number,
+  com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__enum_values_by_number,
   2,
-  com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__enum_values_by_name,
+  com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__enum_values_by_name,
   2,
-  com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__value_ranges,
+  com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_security_acl_permission__enum_values_by_number[9] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__security__acl__permission__enum_values_by_number[9] =
 {
-  { "INVALID_PERMISSION", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION", -1 },
-  { "READ", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_READ", 0 },
-  { "WRITE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_WRITE", 1 },
-  { "DELETE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_DELETE", 2 },
-  { "RANGE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_RANGE", 3 },
-  { "SETUP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SETUP", 4 },
-  { "P2POP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_P2POP", 5 },
-  { "GETLOG", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_GETLOG", 7 },
-  { "SECURITY", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SECURITY", 8 },
+  { "INVALID_PERMISSION", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION", -1 },
+  { "READ", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__READ", 0 },
+  { "WRITE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__WRITE", 1 },
+  { "DELETE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__DELETE", 2 },
+  { "RANGE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__RANGE", 3 },
+  { "SETUP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SETUP", 4 },
+  { "P2POP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__P2POP", 5 },
+  { "GETLOG", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__GETLOG", 7 },
+  { "SECURITY", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SECURITY", 8 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_security_acl_permission__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__security__acl__permission__value_ranges[] = {
 {-1, 0},{7, 7},{0, 9}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_security_acl_permission__enum_values_by_name[9] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__security__acl__permission__enum_values_by_name[9] =
 {
   { "DELETE", 3 },
   { "GETLOG", 7 },
@@ -2443,30 +2491,30 @@ const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_security_acl_per
   { "SETUP", 5 },
   { "WRITE", 2 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_security_acl_permission__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__security__acl__permission__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Security.ACL.Permission",
   "Permission",
-  "Com_Seagate_Kinetic_Proto_Command_Security_ACL_Permission",
+  "Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission",
   "com.seagate.kinetic.proto",
   9,
-  com_seagate_kinetic_proto_command_security_acl_permission__enum_values_by_number,
+  com__seagate__kinetic__proto__command__security__acl__permission__enum_values_by_number,
   9,
-  com_seagate_kinetic_proto_command_security_acl_permission__enum_values_by_name,
+  com__seagate__kinetic__proto__command__security__acl__permission__enum_values_by_name,
   2,
-  com_seagate_kinetic_proto_command_security_acl_permission__value_ranges,
+  com__seagate__kinetic__proto__command__security__acl__permission__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security_acl__field_descriptors[5] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__security__acl__field_descriptors[5] =
 {
   {
     "identity",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_INT64,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, has_identity),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, identity),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, has_identity),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, identity),
     NULL,
     NULL,
     0,             /* flags */
@@ -2477,8 +2525,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     2,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, has_key),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, key),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, has_key),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, key),
     NULL,
     NULL,
     0,             /* flags */
@@ -2489,9 +2537,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, has_hmacAlgorithm),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, hmacAlgorithm),
-    &com_seagate_kinetic_proto_command_security_acl_hmacalgorithm__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, has_hmacalgorithm),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, hmacalgorithm),
+    &com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2501,9 +2549,9 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     4,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, n_scope),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, scope),
-    &com_seagate_kinetic_proto_command_security_acl_scope__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, n_scope),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, scope),
+    &com__seagate__kinetic__proto__command__security__acl__scope__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2513,51 +2561,51 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, has_maxPriority),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security_ACL, maxPriority),
-    &com_seagate_kinetic_proto_command_priority__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, has_maxpriority),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security__ACL, maxpriority),
+    &com__seagate__kinetic__proto__command__priority__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_security_acl__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__security__acl__field_indices_by_name[] = {
   2,   /* field[2] = hmacAlgorithm */
   0,   /* field[0] = identity */
   1,   /* field[1] = key */
   4,   /* field[4] = maxPriority */
   3,   /* field[3] = scope */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_security_acl__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__security__acl__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 5 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_security_acl__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__security__acl__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Security.ACL",
   "ACL",
-  "Com_Seagate_Kinetic_Proto_Command_Security_ACL",
+  "Com__Seagate__Kinetic__Proto__Command__Security__ACL",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Security_ACL),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Security__ACL),
   5,
-  com_seagate_kinetic_proto_command_security_acl__field_descriptors,
-  com_seagate_kinetic_proto_command_security_acl__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_security_acl__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_security_acl__init,
+  com__seagate__kinetic__proto__command__security__acl__field_descriptors,
+  com__seagate__kinetic__proto__command__security__acl__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__security__acl__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__security__acl__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security__field_descriptors[5] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__security__field_descriptors[5] =
 {
   {
     "acl",
     2,
     PROTOBUF_C_LABEL_REPEATED,
     PROTOBUF_C_TYPE_MESSAGE,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, n_acl),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, acl),
-    &com_seagate_kinetic_proto_command_security_acl__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, n_acl),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, acl),
+    &com__seagate__kinetic__proto__command__security__acl__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2567,8 +2615,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     3,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, has_oldLockPIN),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, oldLockPIN),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, has_oldlockpin),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, oldlockpin),
     NULL,
     NULL,
     0,             /* flags */
@@ -2579,8 +2627,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     4,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, has_newLockPIN),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, newLockPIN),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, has_newlockpin),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, newlockpin),
     NULL,
     NULL,
     0,             /* flags */
@@ -2591,8 +2639,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     5,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, has_oldErasePIN),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, oldErasePIN),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, has_olderasepin),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, olderasepin),
     NULL,
     NULL,
     0,             /* flags */
@@ -2603,53 +2651,53 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_security
     6,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_BYTES,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, has_newErasePIN),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_Security, newErasePIN),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, has_newerasepin),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Security, newerasepin),
     NULL,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_security__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__security__field_indices_by_name[] = {
   0,   /* field[0] = acl */
   4,   /* field[4] = newErasePIN */
   2,   /* field[2] = newLockPIN */
   3,   /* field[3] = oldErasePIN */
   1,   /* field[1] = oldLockPIN */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_security__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__security__number_ranges[1 + 1] =
 {
   { 2, 0 },
   { 0, 5 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_security__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__security__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Security",
   "Security",
-  "Com_Seagate_Kinetic_Proto_Command_Security",
+  "Com__Seagate__Kinetic__Proto__Command__Security",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_Security),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Security),
   5,
-  com_seagate_kinetic_proto_command_security__field_descriptors,
-  com_seagate_kinetic_proto_command_security__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_security__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_security__init,
+  com__seagate__kinetic__proto__command__security__field_descriptors,
+  com__seagate__kinetic__proto__command__security__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__security__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__security__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_pin_operation_pin_op_type__enum_values_by_number[5] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__pin_operation__pin_op_type__enum_values_by_number[5] =
 {
-  { "INVALID_PINOP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_INVALID_PINOP", -1 },
-  { "UNLOCK_PINOP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_UNLOCK_PINOP", 1 },
-  { "LOCK_PINOP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_LOCK_PINOP", 2 },
-  { "ERASE_PINOP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_ERASE_PINOP", 3 },
-  { "SECURE_ERASE_PINOP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PIN_OPERATION_PIN_OP_TYPE_SECURE_ERASE_PINOP", 4 },
+  { "INVALID_PINOP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__INVALID_PINOP", -1 },
+  { "UNLOCK_PINOP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__UNLOCK_PINOP", 1 },
+  { "LOCK_PINOP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__LOCK_PINOP", 2 },
+  { "ERASE_PINOP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__ERASE_PINOP", 3 },
+  { "SECURE_ERASE_PINOP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__SECURE_ERASE_PINOP", 4 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_pin_operation_pin_op_type__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__pin_operation__pin_op_type__value_ranges[] = {
 {-1, 0},{1, 1},{0, 5}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_pin_operation_pin_op_type__enum_values_by_name[5] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__pin_operation__pin_op_type__enum_values_by_name[5] =
 {
   { "ERASE_PINOP", 3 },
   { "INVALID_PINOP", 0 },
@@ -2657,103 +2705,103 @@ const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_pin_operation_pi
   { "SECURE_ERASE_PINOP", 4 },
   { "UNLOCK_PINOP", 1 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_pin_operation_pin_op_type__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__pin_operation__pin_op_type__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.PinOperation.PinOpType",
   "PinOpType",
-  "Com_Seagate_Kinetic_Proto_Command_PinOperation_PinOpType",
+  "Com__Seagate__Kinetic__Proto__Command__PinOperation__PinOpType",
   "com.seagate.kinetic.proto",
   5,
-  com_seagate_kinetic_proto_command_pin_operation_pin_op_type__enum_values_by_number,
+  com__seagate__kinetic__proto__command__pin_operation__pin_op_type__enum_values_by_number,
   5,
-  com_seagate_kinetic_proto_command_pin_operation_pin_op_type__enum_values_by_name,
+  com__seagate__kinetic__proto__command__pin_operation__pin_op_type__enum_values_by_name,
   2,
-  com_seagate_kinetic_proto_command_pin_operation_pin_op_type__value_ranges,
+  com__seagate__kinetic__proto__command__pin_operation__pin_op_type__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command_pin_operation__field_descriptors[1] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__pin_operation__field_descriptors[1] =
 {
   {
     "pinOpType",
     1,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_ENUM,
-    offsetof(Com_Seagate_Kinetic_Proto_Command_PinOperation, has_pinOpType),
-    offsetof(Com_Seagate_Kinetic_Proto_Command_PinOperation, pinOpType),
-    &com_seagate_kinetic_proto_command_pin_operation_pin_op_type__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__PinOperation, has_pinoptype),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__PinOperation, pinoptype),
+    &com__seagate__kinetic__proto__command__pin_operation__pin_op_type__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command_pin_operation__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__pin_operation__field_indices_by_name[] = {
   0,   /* field[0] = pinOpType */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_pin_operation__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__pin_operation__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 1 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command_pin_operation__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__pin_operation__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.PinOperation",
   "PinOperation",
-  "Com_Seagate_Kinetic_Proto_Command_PinOperation",
+  "Com__Seagate__Kinetic__Proto__Command__PinOperation",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command_PinOperation),
+  sizeof(Com__Seagate__Kinetic__Proto__Command__PinOperation),
   1,
-  com_seagate_kinetic_proto_command_pin_operation__field_descriptors,
-  com_seagate_kinetic_proto_command_pin_operation__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command_pin_operation__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command_pin_operation__init,
+  com__seagate__kinetic__proto__command__pin_operation__field_descriptors,
+  com__seagate__kinetic__proto__command__pin_operation__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__pin_operation__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__pin_operation__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_synchronization__enum_values_by_number[4] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__synchronization__enum_values_by_number[4] =
 {
-  { "INVALID_SYNCHRONIZATION", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION", -1 },
-  { "WRITETHROUGH", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH", 1 },
-  { "WRITEBACK", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK", 2 },
-  { "FLUSH", "COM_SEAGATE_KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH", 3 },
+  { "INVALID_SYNCHRONIZATION", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__INVALID_SYNCHRONIZATION", -1 },
+  { "WRITETHROUGH", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITETHROUGH", 1 },
+  { "WRITEBACK", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITEBACK", 2 },
+  { "FLUSH", "COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__FLUSH", 3 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_synchronization__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__synchronization__value_ranges[] = {
 {-1, 0},{1, 1},{0, 4}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_synchronization__enum_values_by_name[4] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__synchronization__enum_values_by_name[4] =
 {
   { "FLUSH", 3 },
   { "INVALID_SYNCHRONIZATION", 0 },
   { "WRITEBACK", 2 },
   { "WRITETHROUGH", 1 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_synchronization__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__synchronization__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Synchronization",
   "Synchronization",
-  "Com_Seagate_Kinetic_Proto_Command_Synchronization",
+  "Com__Seagate__Kinetic__Proto__Command__Synchronization",
   "com.seagate.kinetic.proto",
   4,
-  com_seagate_kinetic_proto_command_synchronization__enum_values_by_number,
+  com__seagate__kinetic__proto__command__synchronization__enum_values_by_number,
   4,
-  com_seagate_kinetic_proto_command_synchronization__enum_values_by_name,
+  com__seagate__kinetic__proto__command__synchronization__enum_values_by_name,
   2,
-  com_seagate_kinetic_proto_command_synchronization__value_ranges,
+  com__seagate__kinetic__proto__command__synchronization__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_priority__enum_values_by_number[5] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__priority__enum_values_by_number[5] =
 {
-  { "LOWEST", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PRIORITY_LOWEST", 1 },
-  { "LOWER", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PRIORITY_LOWER", 3 },
-  { "NORMAL", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PRIORITY_NORMAL", 5 },
-  { "HIGHER", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PRIORITY_HIGHER", 7 },
-  { "HIGHEST", "COM_SEAGATE_KINETIC_PROTO_COMMAND_PRIORITY_HIGHEST", 9 },
+  { "LOWEST", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__LOWEST", 1 },
+  { "LOWER", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__LOWER", 3 },
+  { "NORMAL", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__NORMAL", 5 },
+  { "HIGHER", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__HIGHER", 7 },
+  { "HIGHEST", "COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__HIGHEST", 9 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_priority__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__priority__value_ranges[] = {
 {1, 0},{3, 1},{5, 2},{7, 3},{9, 4},{0, 5}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_priority__enum_values_by_name[5] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__priority__enum_values_by_name[5] =
 {
   { "HIGHER", 3 },
   { "HIGHEST", 4 },
@@ -2761,34 +2809,34 @@ const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_priority__enum_v
   { "LOWEST", 0 },
   { "NORMAL", 2 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_priority__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__priority__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Priority",
   "Priority",
-  "Com_Seagate_Kinetic_Proto_Command_Priority",
+  "Com__Seagate__Kinetic__Proto__Command__Priority",
   "com.seagate.kinetic.proto",
   5,
-  com_seagate_kinetic_proto_command_priority__enum_values_by_number,
+  com__seagate__kinetic__proto__command__priority__enum_values_by_number,
   5,
-  com_seagate_kinetic_proto_command_priority__enum_values_by_name,
+  com__seagate__kinetic__proto__command__priority__enum_values_by_name,
   5,
-  com_seagate_kinetic_proto_command_priority__value_ranges,
+  com__seagate__kinetic__proto__command__priority__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_algorithm__enum_values_by_number[6] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__algorithm__enum_values_by_number[6] =
 {
-  { "INVALID_ALGORITHM", "COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM", -1 },
-  { "SHA1", "COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_SHA1", 1 },
-  { "SHA2", "COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_SHA2", 2 },
-  { "SHA3", "COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_SHA3", 3 },
-  { "CRC32", "COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_CRC32", 4 },
-  { "CRC64", "COM_SEAGATE_KINETIC_PROTO_COMMAND_ALGORITHM_CRC64", 5 },
+  { "INVALID_ALGORITHM", "COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__INVALID_ALGORITHM", -1 },
+  { "SHA1", "COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1", 1 },
+  { "SHA2", "COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA2", 2 },
+  { "SHA3", "COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA3", 3 },
+  { "CRC32", "COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC32", 4 },
+  { "CRC64", "COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC64", 5 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_algorithm__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__algorithm__value_ranges[] = {
 {-1, 0},{1, 1},{0, 6}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_algorithm__enum_values_by_name[6] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__algorithm__enum_values_by_name[6] =
 {
   { "CRC32", 4 },
   { "CRC64", 5 },
@@ -2797,61 +2845,61 @@ const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_algorithm__enum_
   { "SHA2", 2 },
   { "SHA3", 3 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_algorithm__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__algorithm__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.Algorithm",
   "Algorithm",
-  "Com_Seagate_Kinetic_Proto_Command_Algorithm",
+  "Com__Seagate__Kinetic__Proto__Command__Algorithm",
   "com.seagate.kinetic.proto",
   6,
-  com_seagate_kinetic_proto_command_algorithm__enum_values_by_number,
+  com__seagate__kinetic__proto__command__algorithm__enum_values_by_number,
   6,
-  com_seagate_kinetic_proto_command_algorithm__enum_values_by_name,
+  com__seagate__kinetic__proto__command__algorithm__enum_values_by_name,
   2,
-  com_seagate_kinetic_proto_command_algorithm__value_ranges,
+  com__seagate__kinetic__proto__command__algorithm__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-const ProtobufCEnumValue com_seagate_kinetic_proto_command_message_type__enum_values_by_number[33] =
+const ProtobufCEnumValue com__seagate__kinetic__proto__command__message_type__enum_values_by_number[33] =
 {
-  { "INVALID_MESSAGE_TYPE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_INVALID_MESSAGE_TYPE", -1 },
-  { "GET_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET_RESPONSE", 1 },
-  { "GET", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GET", 2 },
-  { "PUT_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT_RESPONSE", 3 },
-  { "PUT", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PUT", 4 },
-  { "DELETE_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE_RESPONSE", 5 },
-  { "DELETE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_DELETE", 6 },
-  { "GETNEXT_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT_RESPONSE", 7 },
-  { "GETNEXT", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETNEXT", 8 },
-  { "GETPREVIOUS_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS_RESPONSE", 9 },
-  { "GETPREVIOUS", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETPREVIOUS", 10 },
-  { "GETKEYRANGE_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE_RESPONSE", 11 },
-  { "GETKEYRANGE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETKEYRANGE", 12 },
-  { "GETVERSION_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETVERSION_RESPONSE", 15 },
-  { "GETVERSION", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETVERSION", 16 },
-  { "SETUP_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP_RESPONSE", 21 },
-  { "SETUP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SETUP", 22 },
-  { "GETLOG_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG_RESPONSE", 23 },
-  { "GETLOG", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_GETLOG", 24 },
-  { "SECURITY_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY_RESPONSE", 25 },
-  { "SECURITY", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_SECURITY", 26 },
-  { "PEER2PEERPUSH_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE", 27 },
-  { "PEER2PEERPUSH", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PEER2PEERPUSH", 28 },
-  { "NOOP_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP_RESPONSE", 29 },
-  { "NOOP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_NOOP", 30 },
-  { "FLUSHALLDATA_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE", 31 },
-  { "FLUSHALLDATA", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_FLUSHALLDATA", 32 },
-  { "PINOP_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP_RESPONSE", 35 },
-  { "PINOP", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_PINOP", 36 },
-  { "MEDIASCAN_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIASCAN_RESPONSE", 37 },
-  { "MEDIASCAN", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIASCAN", 38 },
-  { "MEDIAOPTIMIZE_RESPONSE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE", 39 },
-  { "MEDIAOPTIMIZE", "COM_SEAGATE_KINETIC_PROTO_COMMAND_MESSAGE_TYPE_MEDIAOPTIMIZE", 40 },
+  { "INVALID_MESSAGE_TYPE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__INVALID_MESSAGE_TYPE", -1 },
+  { "GET_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GET_RESPONSE", 1 },
+  { "GET", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GET", 2 },
+  { "PUT_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PUT_RESPONSE", 3 },
+  { "PUT", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PUT", 4 },
+  { "DELETE_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__DELETE_RESPONSE", 5 },
+  { "DELETE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__DELETE", 6 },
+  { "GETNEXT_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETNEXT_RESPONSE", 7 },
+  { "GETNEXT", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETNEXT", 8 },
+  { "GETPREVIOUS_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETPREVIOUS_RESPONSE", 9 },
+  { "GETPREVIOUS", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETPREVIOUS", 10 },
+  { "GETKEYRANGE_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETKEYRANGE_RESPONSE", 11 },
+  { "GETKEYRANGE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETKEYRANGE", 12 },
+  { "GETVERSION_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETVERSION_RESPONSE", 15 },
+  { "GETVERSION", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETVERSION", 16 },
+  { "SETUP_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP_RESPONSE", 21 },
+  { "SETUP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP", 22 },
+  { "GETLOG_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETLOG_RESPONSE", 23 },
+  { "GETLOG", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETLOG", 24 },
+  { "SECURITY_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY_RESPONSE", 25 },
+  { "SECURITY", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY", 26 },
+  { "PEER2PEERPUSH_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PEER2PEERPUSH_RESPONSE", 27 },
+  { "PEER2PEERPUSH", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PEER2PEERPUSH", 28 },
+  { "NOOP_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__NOOP_RESPONSE", 29 },
+  { "NOOP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__NOOP", 30 },
+  { "FLUSHALLDATA_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__FLUSHALLDATA_RESPONSE", 31 },
+  { "FLUSHALLDATA", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__FLUSHALLDATA", 32 },
+  { "PINOP_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP_RESPONSE", 35 },
+  { "PINOP", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP", 36 },
+  { "MEDIASCAN_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIASCAN_RESPONSE", 37 },
+  { "MEDIASCAN", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIASCAN", 38 },
+  { "MEDIAOPTIMIZE_RESPONSE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIAOPTIMIZE_RESPONSE", 39 },
+  { "MEDIAOPTIMIZE", "COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIAOPTIMIZE", 40 },
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command_message_type__value_ranges[] = {
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__message_type__value_ranges[] = {
 {-1, 0},{1, 1},{15, 13},{21, 15},{35, 27},{0, 33}
 };
-const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_message_type__enum_values_by_name[33] =
+const ProtobufCEnumValueIndex com__seagate__kinetic__proto__command__message_type__enum_values_by_name[33] =
 {
   { "DELETE", 6 },
   { "DELETE_RESPONSE", 5 },
@@ -2887,22 +2935,22 @@ const ProtobufCEnumValueIndex com_seagate_kinetic_proto_command_message_type__en
   { "SETUP", 16 },
   { "SETUP_RESPONSE", 15 },
 };
-const ProtobufCEnumDescriptor com_seagate_kinetic_proto_command_message_type__descriptor =
+const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__message_type__descriptor =
 {
   PROTOBUF_C__ENUM_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command.MessageType",
   "MessageType",
-  "Com_Seagate_Kinetic_Proto_Command_MessageType",
+  "Com__Seagate__Kinetic__Proto__Command__MessageType",
   "com.seagate.kinetic.proto",
   33,
-  com_seagate_kinetic_proto_command_message_type__enum_values_by_number,
+  com__seagate__kinetic__proto__command__message_type__enum_values_by_number,
   33,
-  com_seagate_kinetic_proto_command_message_type__enum_values_by_name,
+  com__seagate__kinetic__proto__command__message_type__enum_values_by_name,
   5,
-  com_seagate_kinetic_proto_command_message_type__value_ranges,
+  com__seagate__kinetic__proto__command__message_type__value_ranges,
   NULL,NULL,NULL,NULL   /* reserved[1234] */
 };
-static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command__field_descriptors[3] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__field_descriptors[3] =
 {
   {
     "header",
@@ -2910,8 +2958,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command__field_d
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command, header),
-    &com_seagate_kinetic_proto_command_header__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command, header),
+    &com__seagate__kinetic__proto__command__header__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2922,8 +2970,8 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command__field_d
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command, body),
-    &com_seagate_kinetic_proto_command_body__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command, body),
+    &com__seagate__kinetic__proto__command__body__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
@@ -2934,35 +2982,35 @@ static const ProtobufCFieldDescriptor com_seagate_kinetic_proto_command__field_d
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_MESSAGE,
     0,   /* quantifier_offset */
-    offsetof(Com_Seagate_Kinetic_Proto_Command, status),
-    &com_seagate_kinetic_proto_command_status__descriptor,
+    offsetof(Com__Seagate__Kinetic__Proto__Command, status),
+    &com__seagate__kinetic__proto__command__status__descriptor,
     NULL,
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
 };
-static const unsigned com_seagate_kinetic_proto_command__field_indices_by_name[] = {
+static const unsigned com__seagate__kinetic__proto__command__field_indices_by_name[] = {
   1,   /* field[1] = body */
   0,   /* field[0] = header */
   2,   /* field[2] = status */
 };
-static const ProtobufCIntRange com_seagate_kinetic_proto_command__number_ranges[1 + 1] =
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__number_ranges[1 + 1] =
 {
   { 1, 0 },
   { 0, 3 }
 };
-const ProtobufCMessageDescriptor com_seagate_kinetic_proto_command__descriptor =
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__descriptor =
 {
   PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
   "com.seagate.kinetic.proto.Command",
   "Command",
-  "Com_Seagate_Kinetic_Proto_Command",
+  "Com__Seagate__Kinetic__Proto__Command",
   "com.seagate.kinetic.proto",
-  sizeof(Com_Seagate_Kinetic_Proto_Command),
+  sizeof(Com__Seagate__Kinetic__Proto__Command),
   3,
-  com_seagate_kinetic_proto_command__field_descriptors,
-  com_seagate_kinetic_proto_command__field_indices_by_name,
-  1,  com_seagate_kinetic_proto_command__number_ranges,
-  (ProtobufCMessageInit) com_seagate_kinetic_proto_command__init,
+  com__seagate__kinetic__proto__command__field_descriptors,
+  com__seagate__kinetic__proto__command__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
