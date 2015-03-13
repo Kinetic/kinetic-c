@@ -72,6 +72,8 @@ void setUp(void) {
     memset(&Listener, 0, sizeof(Listener));
     l = &Listener;
     l->bus = &B;
+    l->tracked_fds = 0;
+    l->inactive_fds = 0;
     for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
         rx_info_t *info = &l->rx_info[i];
         info->state = RIS_INACTIVE;
@@ -83,6 +85,37 @@ void setUp(void) {
 
 void tearDown(void) {}
 
+void test_ListenerIO_AttemptRecv_should_handle_hangups_single_fd(void) {
+    rx_info_t *info1 = &l->rx_info[1];
+    info1->state = RIS_HOLD;
+    info1->u.hold.fd = 5;  // non-matching FD, should be skipped
+
+    l->fds[0 + INCOMING_MSG_PIPE].fd = 5;  // match
+    l->fds[0 + INCOMING_MSG_PIPE].events = POLLIN;
+    l->fds[0 + INCOMING_MSG_PIPE].revents = POLLHUP;  // hangup
+
+    connection_info ci0 = {
+        .fd = 5,
+    };
+    l->fd_info[0] = &ci0;
+
+    l->tracked_fds = 1;
+    l->inactive_fds = 0;
+    l->rx_info_max_used = 1;
+
+    ListenerIO_AttemptRecv(l, 1);
+    
+    // socket with error (5) should get moved to end
+    TEST_ASSERT_EQUAL(5, l->fds[0 + INCOMING_MSG_PIPE].fd);
+    TEST_ASSERT_EQUAL(1, l->inactive_fds);
+
+    // should no longer attempt to read socket; timeout will close it
+    TEST_ASSERT_EQUAL(0, l->fds[0 + INCOMING_MSG_PIPE].events);
+
+    /* HOLD message should be marked with error */
+    TEST_ASSERT_EQUAL(RX_ERROR_POLLHUP, info1->u.hold.error);
+}
+
 void test_ListenerIO_AttemptRecv_should_handle_hangups(void) {
     rx_info_t *info1 = &l->rx_info[1];
     info1->state = RIS_HOLD;
@@ -92,29 +125,36 @@ void test_ListenerIO_AttemptRecv_should_handle_hangups(void) {
     info2->state = RIS_HOLD;
     info2->u.hold.fd = 5; // matching FD
 
-    l->fds[0 + INCOMING_MSG_PIPE].fd = 100;
+    l->fds[0 + INCOMING_MSG_PIPE].fd = 5;  // match
     l->fds[0 + INCOMING_MSG_PIPE].events = POLLIN;
+    l->fds[0 + INCOMING_MSG_PIPE].revents = POLLHUP;  // hangup
+
+    l->fds[1 + INCOMING_MSG_PIPE].fd = 100;
+    l->fds[1 + INCOMING_MSG_PIPE].events = POLLIN;
     l->fds[1 + INCOMING_MSG_PIPE].revents = 0;  // no event
 
-    l->fds[1 + INCOMING_MSG_PIPE].fd = 5;  // match
-    l->fds[1 + INCOMING_MSG_PIPE].events = POLLIN;
-    l->fds[1 + INCOMING_MSG_PIPE].revents = POLLHUP;  // hangup
-
     connection_info ci0 = {
-        .fd = 100,
+        .fd = 5,
     };
     l->fd_info[0] = &ci0;
 
     connection_info ci1 = {
-        .fd = 5,
+        .fd = 100,
     };
     l->fd_info[1] = &ci1;
 
     l->tracked_fds = 2;
+    l->inactive_fds = 0;
     l->rx_info_max_used = 2;
 
     ListenerIO_AttemptRecv(l, 1);
     
+    // socket with error (5) should get moved to end
+    TEST_ASSERT_EQUAL(100, l->fds[0 + INCOMING_MSG_PIPE].fd);
+    TEST_ASSERT_EQUAL(5, l->fds[1 + INCOMING_MSG_PIPE].fd);
+
+    TEST_ASSERT_EQUAL(1, l->inactive_fds);
+
     // should no longer attempt to read socket; timeout will close it
     TEST_ASSERT_EQUAL(0, l->fds[1 + INCOMING_MSG_PIPE].events);
 
@@ -131,32 +171,41 @@ void test_ListenerIO_AttemptRecv_should_handle_socket_errors(void) {
     info2->state = RIS_HOLD;
     info2->u.hold.fd = 5; // matching FD
 
-    l->fds[0 + INCOMING_MSG_PIPE].fd = 100;
+    l->fds[0 + INCOMING_MSG_PIPE].fd = 5;  // match
     l->fds[0 + INCOMING_MSG_PIPE].events = POLLIN;
+    l->fds[0 + INCOMING_MSG_PIPE].revents = POLLERR;  // socket error
+
+    l->fds[1 + INCOMING_MSG_PIPE].fd = 100;
+    l->fds[1 + INCOMING_MSG_PIPE].events = POLLIN;
     l->fds[1 + INCOMING_MSG_PIPE].revents = 0;  // no event
 
-    l->fds[1 + INCOMING_MSG_PIPE].fd = 5;  // match
-    l->fds[1 + INCOMING_MSG_PIPE].events = POLLIN;
-    l->fds[1 + INCOMING_MSG_PIPE].revents = POLLERR;  // socket error
-
     connection_info ci0 = {
-        .fd = 100,
+        .fd = 5,
     };
     l->fd_info[0] = &ci0;
 
     connection_info ci1 = {
-        .fd = 5,
+        .fd = 100,
     };
     l->fd_info[1] = &ci1;
 
     l->tracked_fds = 2;
+    l->inactive_fds = 0;
     l->rx_info_max_used = 2;
 
     ListenerIO_AttemptRecv(l, 1);
+
+    // socket with error (5) should get moved to end
+    TEST_ASSERT_EQUAL(100, l->fds[0 + INCOMING_MSG_PIPE].fd);
+    TEST_ASSERT_EQUAL(5, l->fds[1 + INCOMING_MSG_PIPE].fd);
+
+    TEST_ASSERT_EQUAL(1, l->inactive_fds);    
     
     // should no longer attempt to read socket; timeout will close it
     TEST_ASSERT_EQUAL(0, l->fds[1 + INCOMING_MSG_PIPE].events);
-    TEST_ASSERT_EQUAL(RX_ERROR_POLLERR, info2->u.hold.error);
+
+    // HOLD message should be marked with error
+    TEST_ASSERT_EQUAL(RX_ERROR_POLLERR, info1->u.hold.error);
 }
 
 static uint8_t the_result[1];
@@ -395,6 +444,7 @@ void test_ListenerIO_AttemptRecv_should_handle_socket_hangup_during_read(void) {
     };
     l->fd_info[0] = &ci;
     l->tracked_fds = 1;
+    l->inactive_fds = 0;
     l->rx_info_max_used = 1;
 
     l->read_buf = calloc(256, sizeof(uint8_t));
@@ -408,10 +458,11 @@ void test_ListenerIO_AttemptRecv_should_handle_socket_hangup_during_read(void) {
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, -1);
     errno = ECONNRESET;
     Util_IsResumableIOError_ExpectAndReturn(errno, false);
-    //save error status: RX_ERROR_READ_FAILURE
     ListenerIO_AttemptRecv(l, 1);
 
     TEST_ASSERT_EQUAL(0, l->fds[0 + INCOMING_MSG_PIPE].events & POLLIN);
+    TEST_ASSERT_EQUAL(1, l->inactive_fds);
+    TEST_ASSERT_EQUAL(RX_ERROR_READ_FAILURE, ci.error);
 }
 
 void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack_message_over_SSL(void) {

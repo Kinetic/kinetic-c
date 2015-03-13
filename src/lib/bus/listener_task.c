@@ -32,7 +32,6 @@ struct timeval now;
 struct timeval cur;
 size_t backpressure = 0;
 int poll_res = 0;
-
 #define WHILE if
 #else
 #define WHILE while
@@ -76,7 +75,9 @@ void *ListenerTask_MainLoop(void *arg) {
         int poll_res = 0;
         #endif
 
-        poll_res = syscall_poll(self->fds, self->tracked_fds + INCOMING_MSG_PIPE, delay);
+        int to_poll = self->tracked_fds - self->inactive_fds + INCOMING_MSG_PIPE;
+
+        poll_res = syscall_poll(self->fds, to_poll, delay);
         BUS_LOG_SNPRINTF(b, (poll_res == 0 ? 6 : 4), LOG_LISTENER, b->udata, 64,
             "poll res %d", poll_res);
 

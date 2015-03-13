@@ -66,6 +66,7 @@ void setUp(void)
     l->shutdown_notify_fd = LISTENER_NO_FD;
     l->is_idle = false;
     l->tracked_fds = 0;
+    l->inactive_fds = 0;
     l->read_buf = NULL;
     box = &Box;
     l->msgs_in_use = 0;
@@ -80,6 +81,8 @@ void setUp(void)
     last_seq_id = BUS_NO_SEQ_ID;
     last_bus_udata = NULL;
     last_socket_udata = NULL;
+    memset(&now, 0, sizeof(now));
+    memset(&cur, 0, sizeof(cur));
 }
 
 void tearDown(void) {}
@@ -262,6 +265,22 @@ void test_ListenerTask_MainLoop_should_retry_and_clean_up_DONE_messages(void)
     ListenerTask_MainLoop((void *)l);
     TEST_ASSERT_EQUAL(false, l->is_idle);
     TEST_ASSERT_EQUAL(RIS_INACTIVE, info0->state);
+}
+
+void test_ListenerTask_MainLoop_should_not_poll_inactive_fds(void)
+{
+    l->tracked_fds = 1;
+    l->inactive_fds = 1;
+    l->rx_info_max_used = 1;
+    rx_info_t *info0 = &l->rx_info[0];
+    info0->state = RIS_INACTIVE;
+
+    now.tv_sec = -1;   // skip tick_handler
+    Util_Timestamp_ExpectAndReturn(&now, true, true);
+
+    syscall_poll_ExpectAndReturn(l->fds, l->tracked_fds - l->inactive_fds + INCOMING_MSG_PIPE,
+        LISTENER_TASK_TIMEOUT_DELAY, 0);
+    ListenerTask_MainLoop((void *)l);
 }
 
 void test_ListenerTask_MainLoop_should_retry_and_expire_errored_messages(void)

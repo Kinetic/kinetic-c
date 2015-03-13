@@ -151,10 +151,26 @@ typedef struct listener {
 
     size_t upstream_backpressure;
 
-    uint16_t tracked_fds;
-    /* tracked_fds + incoming_msg_pipe */
+    uint16_t tracked_fds;       ///< FDs currently tracked by listener
+    /** File descriptors that are inactive due to errors, but have not
+     * yet been explicitly removed/closed by the client. */
+    uint16_t inactive_fds;
+
+    /** Tracked file descriptors, for polling.
+     * 
+     * fds[INCOMING_MSG_PIPE_ID (0)] is the incoming_msg_pipe, so the
+     * listener's poll is awakened by incoming commands. fds[1] through
+     * fds[l->tracked_fds - l->inactive_fds] are the file descriptors
+     * which should be polled, and the remaining ones (if any) have been
+     * moved to the end so poll() will not touch them. */
     struct pollfd fds[MAX_FDS + 1];
+
+    /** The connection info, corresponding to the the file descriptors tracked in
+     * l->fds. Unlike l->fds, these are not offset by one for the incoming message
+     * pipe, i.e. l->fd_info[3] correspons to l->fds[3 + INCOMING_MSG_PIPE]. */
     connection_info *fd_info[MAX_FDS];
+
+    bool error_occured;         ///< Flag indicating post-poll handling is necessary.
 
     /* Read buffer and it's size. Will be grown on demand. */
     size_t read_buf_size;

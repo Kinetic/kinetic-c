@@ -39,6 +39,7 @@ static void set_error_for_socket(listener *l, int id,
     int fd, rx_error_t err);
 static void process_unpacked_message(listener *l,
     connection_info *ci, bus_unpack_cb_res_t result);
+static void move_errored_active_sockets_to_end(listener *l);
 
 void ListenerIO_AttemptRecv(listener *l, int available) {
     /*   --> failure --> set 'closed' error on socket, don't die */
@@ -103,6 +104,13 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
             set_error_for_socket(l, i, ci->fd, RX_ERROR_POLLHUP);
         }
     }
+
+    if (l->error_occured) {  // only conditionally do this to avoid wasting CPU
+        /* This is done outside of the polling loop, to avoid erroneously repeat-polling
+         * or skipping any individual file descriptors. */
+        move_errored_active_sockets_to_end(l);
+        l->error_occured = false;
+    }        
 }
     
 static ssize_t socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
@@ -255,6 +263,8 @@ static bool sink_socket_read(struct bus *b,
 }
 
 static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
+    l->error_occured = true;
+
     /* Mark all pending messages on this socket as being failed due to error. */
     struct bus *b = l->bus;
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
@@ -287,8 +297,38 @@ static void set_error_for_socket(listener *l, int id, int fd, rx_error_t err) {
             BUS_ASSERT(b, b->udata, false);
         }
         }
-    }    
-    l->fds[id + INCOMING_MSG_PIPE].events &= ~POLLIN;
+    }
+
+    connection_info *newly_inactive_ci = l->fd_info[id];
+    newly_inactive_ci->error = err;
+}
+
+static void move_errored_active_sockets_to_end(listener *l) {
+    for (uint16_t id = 0; id < l->tracked_fds - l->inactive_fds; id++) {
+        connection_info *ci = l->fd_info[id];
+        struct pollfd *pfd = &l->fds[id + INCOMING_MSG_PIPE];
+        int fd = pfd->fd;
+        if (ci->error < 0 && pfd->events & POLLIN) {
+            pfd->events &= ~POLLIN;
+            /* move socket to end, so it won't be poll'd and get repeated POLLHUP. */
+            int last_active = l->tracked_fds - l->inactive_fds - 1;
+            if (id != last_active) {
+                fprintf(stderr, "swapping %u and %u\n", id, last_active);
+                assert(l->fds[last_active + INCOMING_MSG_PIPE].fd != fd);
+                struct pollfd newly_inactive_fd = l->fds[id + INCOMING_MSG_PIPE];
+                struct pollfd last_active_fd = l->fds[last_active + INCOMING_MSG_PIPE];
+                connection_info *last_active_ci = l->fd_info[last_active];
+                /* Swap pollfds */
+                l->fds[id + INCOMING_MSG_PIPE] = last_active_fd;
+                l->fds[last_active + INCOMING_MSG_PIPE] = newly_inactive_fd;
+                /* Swap connection_info pointers */
+                l->fd_info[last_active] = ci;
+                l->fd_info[id] = last_active_ci;
+            }
+            l->inactive_fds++;
+            assert(l->inactive_fds <= l->tracked_fds);
+        }
+    }
 }
 
 static void process_unpacked_message(listener *l,
