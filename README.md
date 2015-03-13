@@ -9,7 +9,11 @@ The [project Makefile](Makefile) can be used as a reference for developing a Mak
 
 Kinetic Protocol Support
 ------------------------
-Built using [Kinetic Protocol v3.0.5](https://github.com/Seagate/kinetic-protocol/tree/3.0.5)
+Built using:
+
+* [Kinetic Protocol v3.0.5](https://github.com/Seagate/kinetic-protocol/tree/3.0.5)
+* [ProtoBuf-C v1.1.0](https://github.com/protobuf-c/protobuf-c)
+* [Google ProtoBuf v2.6.0](https://developers.google.com/protocol-buffers/docs/downloads)
 
 Prerequisites
 -------------
