@@ -58,9 +58,9 @@ void test_KineticACL_LoadFromFile_ex1_should_parse_file_as_expected(void)
     TEST_ASSERT_TRUE(acl->has_identity);
     TEST_ASSERT_EQUAL(1, acl->identity);
 
-    TEST_ASSERT_TRUE(acl->has_hmacAlgorithm);
+    TEST_ASSERT_TRUE(acl->has_hmacalgorithm);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1,
-        acl->hmacAlgorithm);
+        acl->hmacalgorithm);
 
     TEST_ASSERT_TRUE(acl->has_key);
     TEST_ASSERT_EQUAL(64, acl->key.len);
@@ -69,12 +69,12 @@ void test_KineticACL_LoadFromFile_ex1_should_parse_file_as_expected(void)
 
     TEST_ASSERT_EQUAL(2, acl->n_scope);
 
-    Com__Seagate__Kinetic__Proto__Command__Security__ACL_Scope *sc0 = acl->scope[0];
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *sc0 = acl->scope[0];
     TEST_ASSERT_EQUAL(1, sc0->n_permission);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__READ,
         sc0->permission[0]);
 
-    Com__Seagate__Kinetic__Proto__Command__Security__ACL_Scope *sc1 = acl->scope[1];
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *sc1 = acl->scope[1];
     TEST_ASSERT_TRUE(sc1->has_offset);
     TEST_ASSERT_EQUAL(0, sc1->offset);
     TEST_ASSERT_EQUAL(1, sc1->n_permission);
@@ -99,20 +99,20 @@ void test_KineticACL_LoadFromFile_ex2_should_parse_file_as_expected(void)
     TEST_ASSERT_TRUE(acl->has_identity);
     TEST_ASSERT_EQUAL(2, acl->identity);
 
-    TEST_ASSERT_TRUE(acl->has_hmacAlgorithm);
+    TEST_ASSERT_TRUE(acl->has_hmacalgorithm);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1,
-        acl->hmacAlgorithm);
+        acl->hmacalgorithm);
 
     TEST_ASSERT_TRUE(acl->has_key);
     TEST_ASSERT_EQUAL(64, acl->key.len);
     TEST_ASSERT_EQUAL(0, strcmp((const char *)acl->key.data,
             "13010b8d8acdbe6abc005840aad1dc5dedb4345e681ed4e3c4645d891241d6b2"));
 
-    Com__Seagate__Kinetic__Proto__Command__Security__ACL_Scope *sc0 = acl->scope[0];
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *sc0 = acl->scope[0];
     TEST_ASSERT_EQUAL(1, sc0->n_permission);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SECURITY,
         sc0->permission[0]);
-    TEST_ASSERT_EQUAL(true, sc0->TlsRequired);
+    TEST_ASSERT_EQUAL(true, sc0->tlsrequired);
 
     KineticACL_Free(acls);
 }
@@ -134,9 +134,9 @@ void test_KineticACL_LoadFromFile_should_recognize_all_permission_types(void)
     TEST_ASSERT_TRUE(acl->has_identity);
     TEST_ASSERT_EQUAL(3, acl->identity);
 
-    TEST_ASSERT_TRUE(acl->has_hmacAlgorithm);
+    TEST_ASSERT_TRUE(acl->has_hmacalgorithm);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1,
-        acl->hmacAlgorithm);
+        acl->hmacalgorithm);
 
     TEST_ASSERT_TRUE(acl->has_key);
     TEST_ASSERT_EQUAL(64, acl->key.len);
@@ -195,9 +195,9 @@ void test_acl_should_handle_multiple_JSON_objects(void)
     TEST_ASSERT_TRUE(acl->has_identity);
     TEST_ASSERT_EQUAL(1, acl->identity);
 
-    TEST_ASSERT_TRUE(acl->has_hmacAlgorithm);
+    TEST_ASSERT_TRUE(acl->has_hmacalgorithm);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1,
-        acl->hmacAlgorithm);
+        acl->hmacalgorithm);
 
     TEST_ASSERT_TRUE(acl->has_key);
     TEST_ASSERT_EQUAL(64, acl->key.len);
@@ -206,13 +206,13 @@ void test_acl_should_handle_multiple_JSON_objects(void)
 
     TEST_ASSERT_EQUAL(2, acl->n_scope);
 
-    Com__Seagate__Kinetic__Proto__Command__Security__ACL_Scope *sc0 = acl->scope[0];
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *sc0 = acl->scope[0];
     TEST_ASSERT_FALSE(sc0->has_offset);
     TEST_ASSERT_EQUAL(1, sc0->n_permission);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__READ,
         sc0->permission[0]);
 
-    Com__Seagate__Kinetic__Proto__Command__Security__ACL_Scope *sc1 = acl->scope[1];
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *sc1 = acl->scope[1];
     TEST_ASSERT_TRUE(sc1->has_offset);
     TEST_ASSERT_EQUAL(0, sc1->offset);
     TEST_ASSERT_EQUAL(1, sc1->n_permission);
@@ -228,9 +228,9 @@ void test_acl_should_handle_multiple_JSON_objects(void)
     TEST_ASSERT_TRUE(acl2->has_identity);
     TEST_ASSERT_EQUAL(2, acl2->identity);
 
-    TEST_ASSERT_TRUE(acl2->has_hmacAlgorithm);
+    TEST_ASSERT_TRUE(acl2->has_hmacalgorithm);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1,
-        acl2->hmacAlgorithm);
+        acl2->hmacalgorithm);
 
     TEST_ASSERT_TRUE(acl2->has_key);
     TEST_ASSERT_EQUAL(64, acl2->key.len);
@@ -241,7 +241,7 @@ void test_acl_should_handle_multiple_JSON_objects(void)
     TEST_ASSERT_EQUAL(1, acl2->scope[0]->n_permission);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SECURITY,
         acl2->scope[0]->permission[0]);
-    TEST_ASSERT_EQUAL(true, acl2->scope[0]->TlsRequired);
+    TEST_ASSERT_EQUAL(true, acl2->scope[0]->tlsrequired);
 
     KineticACL_Free(acls);
 }

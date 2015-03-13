@@ -44,16 +44,16 @@ size_t KineticRequest_PackCommand(KineticRequest* request)
         LOGF0("Failed to allocate command bytes: %zd", expectedLen);
         return KINETIC_REQUEST_PACK_FAILURE;
     }
-    request->message.message.commandBytes.data = cmdBuf;
+    request->message.message.commandbytes.data = cmdBuf;
 
     size_t packedLen = com__seagate__kinetic__proto__command__pack(
         &request->message.command, cmdBuf);
     KINETIC_ASSERT(packedLen == expectedLen);
-    request->message.message.commandBytes.len = packedLen;
-    request->message.message.has_commandBytes = true;
-    KineticLogger_LogByteArray(3, "commandBytes", (ByteArray){
-        .data = request->message.message.commandBytes.data,
-        .len = request->message.message.commandBytes.len,
+    request->message.message.commandbytes.len = packedLen;
+    request->message.message.has_commandbytes = true;
+    KineticLogger_LogByteArray(3, "commandbytes", (ByteArray){
+        .data = request->message.message.commandbytes.data,
+        .len = request->message.message.commandbytes.len,
     });
 
     return packedLen;
@@ -112,7 +112,7 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
         (void*)operation->session, (void*)operation->session->messageBus,
         operation->session->socket, (long long)request->message.header.sequence,
         header.protobufLength, header.valueLength,
-        (void*)operation, request->message.header.messageType);
+        (void*)operation, request->message.header.messagetype);
     KineticLogger_LogHeader(3, &header);
     KineticLogger_LogProtobuf(3, proto);
     #endif

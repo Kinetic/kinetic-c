@@ -26,7 +26,7 @@
 
 // Type mapping from from public to internal protobuf status type
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
-    Com__Seagate__Kinetic__Proto__Command__Status_StatusCode protoStatus)
+    Com__Seagate__Kinetic__Proto__Command__Status__StatusCode protoStatus)
 {
     KineticStatus status;
 
@@ -92,10 +92,10 @@ KineticStatus KineticProtoStatusCode_to_KineticStatus(
     return status;
 }
 
-Com__Seagate__Kinetic__Proto__Command_Synchronization Com_Seagate_Kinetic_Proto_Command_Synchronization_from_KineticSynchronization(
+Com__Seagate__Kinetic__Proto__Command__Synchronization Com__Seagate__Kinetic__Proto__Command__Synchronization_from_KineticSynchronization(
     KineticSynchronization sync_mode)
 {
-    Com__Seagate__Kinetic__Proto__Command_Synchronization protoSyncMode;
+    Com__Seagate__Kinetic__Proto__Command__Synchronization protoSyncMode;
     switch (sync_mode) {
     case KINETIC_SYNCHRONIZATION_WRITETHROUGH:
         protoSyncMode = COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITETHROUGH;
@@ -114,8 +114,8 @@ Com__Seagate__Kinetic__Proto__Command_Synchronization Com_Seagate_Kinetic_Proto_
     return protoSyncMode;
 }
 
-KineticSynchronization KineticSynchronization_from_Com__Seagate__Kinetic__Proto__Command_Synchronization(
-    Com__Seagate__Kinetic__Proto__Command_Synchronization sync_mode)
+KineticSynchronization KineticSynchronization_from_Com__Seagate__Kinetic__Proto__Command__Synchronization(
+    Com__Seagate__Kinetic__Proto__Command__Synchronization sync_mode)
 {
     KineticSynchronization kineticSyncMode;
     switch (sync_mode) {
@@ -137,10 +137,10 @@ KineticSynchronization KineticSynchronization_from_Com__Seagate__Kinetic__Proto_
 }
 
 // Type mapping from public to internal types
-Com__Seagate__Kinetic__Proto__Command_Algorithm Com_Seagate_Kinetic_Proto_Command_Algorithm_from_KineticAlgorithm(
+Com__Seagate__Kinetic__Proto__Command__Algorithm Com__Seagate__Kinetic__Proto__Command__Algorithm_from_KineticAlgorithm(
     KineticAlgorithm kinteicAlgorithm)
 {
-    Com__Seagate__Kinetic__Proto__Command_Algorithm protoAlgorithm;
+    Com__Seagate__Kinetic__Proto__Command__Algorithm protoAlgorithm;
     switch (kinteicAlgorithm) {
     case KINETIC_ALGORITHM_SHA1:
         protoAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1;
@@ -168,8 +168,8 @@ Com__Seagate__Kinetic__Proto__Command_Algorithm Com_Seagate_Kinetic_Proto_Comman
 
 
 // Type mapping from internal types
-KineticAlgorithm KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command_Algorithm(
-    Com__Seagate__Kinetic__Proto__Command_Algorithm protoAlgorithm)
+KineticAlgorithm KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command__Algorithm(
+    Com__Seagate__Kinetic__Proto__Command__Algorithm protoAlgorithm)
 {
     KineticAlgorithm kineticAlgorithm;
     switch (protoAlgorithm) {
@@ -223,58 +223,58 @@ bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData
 }
 
 
-bool Copy_Com__Seagate__Kinetic__Proto__Command__KeyValue_to_KineticEntry(Com__Seagate__Kinetic__Proto__Command_KeyValue* keyValue, KineticEntry* entry)
+bool Copy_Com__Seagate__Kinetic__Proto__Command__KeyValue_to_KineticEntry(Com__Seagate__Kinetic__Proto__Command__KeyValue* key_value, KineticEntry* entry)
 {
     bool bufferOverflow = false;
 
-    if (keyValue != NULL && entry != NULL) {
+    if (key_value != NULL && entry != NULL) {
         ByteBuffer_Reset(&entry->dbVersion);
-        if (keyValue->has_dbVersion && keyValue->dbVersion.len > 0) {
-            if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < keyValue->dbVersion.len) {
-                entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
+        if (key_value->has_dbversion && key_value->dbversion.len > 0) {
+            if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < key_value->dbversion.len) {
+                entry->dbVersion.bytesUsed = key_value->dbversion.len;
                 LOG1(" BUFFER_OVERRUN: dbVersion");
                 bufferOverflow = true;
             }
             else {
-                ByteBuffer_Append(&entry->dbVersion, keyValue->dbVersion.data, keyValue->dbVersion.len);
+                ByteBuffer_Append(&entry->dbVersion, key_value->dbversion.data, key_value->dbversion.len);
             }
         }
 
         ByteBuffer_Reset(&entry->key);
-        if (keyValue->has_key && keyValue->key.len > 0) {
-            if (entry->key.array.data == NULL || entry->key.array.len < keyValue->key.len) {
-                entry->key.bytesUsed = keyValue->key.len;
+        if (key_value->has_key && key_value->key.len > 0) {
+            if (entry->key.array.data == NULL || entry->key.array.len < key_value->key.len) {
+                entry->key.bytesUsed = key_value->key.len;
                 LOG1(" BUFFER_OVERRUN: key");
                 bufferOverflow = true;
             }
             else {
-                ByteBuffer_Append(&entry->key, keyValue->key.data, keyValue->key.len);
+                ByteBuffer_Append(&entry->key, key_value->key.data, key_value->key.len);
             }
         }
 
         ByteBuffer_Reset(&entry->tag);
-        if (keyValue->has_tag && keyValue->tag.len > 0) {
-            if (entry->tag.array.data == NULL || entry->tag.array.len < keyValue->tag.len) {
-                entry->tag.bytesUsed = keyValue->tag.len;
+        if (key_value->has_tag && key_value->tag.len > 0) {
+            if (entry->tag.array.data == NULL || entry->tag.array.len < key_value->tag.len) {
+                entry->tag.bytesUsed = key_value->tag.len;
                 LOG1(" BUFFER_OVERRUN: tag");
                 bufferOverflow = true;
             }
             else {
-                ByteBuffer_Append(&entry->tag, keyValue->tag.data, keyValue->tag.len);
+                ByteBuffer_Append(&entry->tag, key_value->tag.data, key_value->tag.len);
             }
         }
 
-        if (keyValue->has_algorithm) {
+        if (key_value->has_algorithm) {
             entry->algorithm =
-                KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command_Algorithm(
-                    keyValue->algorithm);
+                KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command__Algorithm(
+                    key_value->algorithm);
         }
     }
 
     return !bufferOverflow;
 }
 
-bool Copy_Com__Seagate__Kinetic__Proto__Command__Range_to_ByteBufferArray(Com__Seagate__Kinetic__Proto__Command_Range* keyRange, ByteBufferArray* keys)
+bool Copy_Com__Seagate__Kinetic__Proto__Command__Range_to_ByteBufferArray(Com__Seagate__Kinetic__Proto__Command__Range* keyRange, ByteBufferArray* keys)
 {
     bool bufferOverflow = false;
     LOGF2("Copying: keyRange=0x%0llX, keys=0x%0llX, max_keys=%lld", keyRange, keys->buffers, keys->count);
@@ -350,9 +350,9 @@ int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b)
     return (a.tv_sec == b.tv_sec) ? cmp_suseconds_t(a.tv_usec, b.tv_usec) : ((a.tv_sec > b.tv_sec) ? 1 : -1);
 }
 
-Com__Seagate__Kinetic__Proto__Command__GetLog_Type KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command_GetLog_Type(KineticLogInfo_Type type)
+Com__Seagate__Kinetic__Proto__Command__GetLog__Type KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog__Type(KineticLogInfo_Type type)
 {
-    Com__Seagate__Kinetic__Proto__Command__GetLog_Type protoType;
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Type protoType;
 
     switch(type) {
     case KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS:
@@ -376,7 +376,7 @@ Com__Seagate__Kinetic__Proto__Command__GetLog_Type KineticLogInfo_Type_to_Com__S
     return protoType;
 }
 
-KineticMessageType Com__Seagate__Kinetic__Proto__Command_MessageType_to_KineticMessageType(Com_Seagate_Kinetic_Proto_Command_MessageType type)
+KineticMessageType Com__Seagate__Kinetic__Proto__Command__MessageType_to_KineticMessageType(Com__Seagate__Kinetic__Proto__Command__MessageType type)
 {
     return (KineticMessageType)type;
 }
@@ -417,11 +417,11 @@ static void KineticMessage_HeaderInit(Com__Seagate__Kinetic__Proto__Command__Hea
     KINETIC_ASSERT(hdr != NULL);
     KINETIC_ASSERT(session != NULL);
     *hdr = (Com__Seagate__Kinetic__Proto__Command__Header) {
-        .base = PROTOBUF_C_MESSAGE_INIT(&com_seagate_kinetic_proto_command_header__descriptor),
-        .has_clusterVersion = true,
-        .clusterVersion = session->config.clusterVersion,
-        .has_connectionID = true,
-        .connectionID = session->connectionID,
+        .base = PROTOBUF_C_MESSAGE_INIT(&com__seagate__kinetic__proto__command__header__descriptor),
+        .has_clusterversion = true,
+        .clusterversion = session->config.clusterVersion,
+        .has_connectionid = true,
+        .connectionid = session->connectionID,
         .has_sequence = true,
         .sequence = KINETIC_SEQUENCE_NOT_YET_BOUND,
     };

@@ -25,7 +25,7 @@
 #include "kinetic.pb-c.h"
 
 void KineticHMAC_Init(KineticHMAC* hmac,
-                      Com__Seagate__Kinetic__Proto__Command__Security__ACL_HMACAlgorithm algorithm);
+                      Com__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm algorithm);
 
 void KineticHMAC_Populate(KineticHMAC* hmac,
                           Com__Seagate__Kinetic__Proto__Message* msg,

@@ -1340,7 +1340,7 @@ typedef void (*Com__Seagate__Kinetic__Proto__Command__Header_Closure)
 typedef void (*Com__Seagate__Kinetic__Proto__Command__Body_Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__Body *message,
                   void *closure_data);
-typedef void (*Com__Seagate__Kinetic__Proto__Command__Status_Closure)
+typedef void (*Com__Seagate__Kinetic__Proto__Command__Status__Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__Status *message,
                   void *closure_data);
 typedef void (*Com__Seagate__Kinetic__Proto__Command__KeyValue_Closure)
@@ -1385,13 +1385,13 @@ typedef void (*Com__Seagate__Kinetic__Proto__Command__GetLog__Limits_Closure)
 typedef void (*Com__Seagate__Kinetic__Proto__Command__GetLog__Device_Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__GetLog__Device *message,
                   void *closure_data);
-typedef void (*Com__Seagate__Kinetic__Proto__Command__GetLog_Closure)
+typedef void (*Com__Seagate__Kinetic__Proto__Command__GetLog__Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__GetLog *message,
                   void *closure_data);
 typedef void (*Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope_Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *message,
                   void *closure_data);
-typedef void (*Com__Seagate__Kinetic__Proto__Command__Security__ACL_Closure)
+typedef void (*Com__Seagate__Kinetic__Proto__Command__Security__ACL__Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__Security__ACL *message,
                   void *closure_data);
 typedef void (*Com__Seagate__Kinetic__Proto__Command__Security_Closure)
@@ -1400,7 +1400,7 @@ typedef void (*Com__Seagate__Kinetic__Proto__Command__Security_Closure)
 typedef void (*Com__Seagate__Kinetic__Proto__Command__PinOperation_Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__PinOperation *message,
                   void *closure_data);
-typedef void (*Com__Seagate__Kinetic__Proto__Command_Closure)
+typedef void (*Com__Seagate__Kinetic__Proto__Command__Closure)
                  (const Com__Seagate__Kinetic__Proto__Command *message,
                   void *closure_data);
 

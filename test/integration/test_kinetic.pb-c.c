@@ -104,13 +104,13 @@ void test_KinetiProto_double_packing_should_work(void)
     actualPackedLen = com__seagate__kinetic__proto__message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
-    msg.has_authType = true;
+    msg.has_authtype = true;
     expectedPackedLen = com__seagate__kinetic__proto__message__get_packed_size(&msg);
     TEST_ASSERT_TRUE(com__seagate__kinetic__proto__message__get_packed_size(&msg) > 0);
     actualPackedLen = com__seagate__kinetic__proto__message__pack(&msg, packBuf);
     TEST_ASSERT_EQUAL(expectedPackedLen, actualPackedLen);
 
-    msg.authType = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH;
+    msg.authtype = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH;
     expectedPackedLen = com__seagate__kinetic__proto__message__get_packed_size(&msg);
     TEST_ASSERT_TRUE(com__seagate__kinetic__proto__message__get_packed_size(&msg) > 0);
     actualPackedLen = com__seagate__kinetic__proto__message__pack(&msg, packBuf);
@@ -118,7 +118,7 @@ void test_KinetiProto_double_packing_should_work(void)
 
     Com__Seagate__Kinetic__Proto__Message__HMACauth hmacAuth;
     com__seagate__kinetic__proto__message__hmacauth__init(&hmacAuth);
-    msg.hmacAuth = &hmacAuth;
+    msg.hmacauth = &hmacAuth;
     expectedPackedLen = com__seagate__kinetic__proto__message__get_packed_size(&msg);
     TEST_ASSERT_TRUE(com__seagate__kinetic__proto__message__get_packed_size(&msg) > 0);
     actualPackedLen = com__seagate__kinetic__proto__message__pack(&msg, packBuf);

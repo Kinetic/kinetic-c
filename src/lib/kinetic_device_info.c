@@ -103,8 +103,8 @@ static KineticLogInfo_Capacity *KineticLogInfo_GetCapacity(
 {
     KineticLogInfo_Capacity *cap = calloc(1, sizeof(*cap));
     if (cap && getLog->capacity) {
-        cap->nominalCapacityInBytes = getLog->capacity->nominalCapacityInBytes;
-        cap->portionFull = getLog->capacity->portionFull;
+        cap->nominalCapacityInBytes = getLog->capacity->nominalcapacityinbytes;
+        cap->portionFull = getLog->capacity->portionfull;
     }
     return cap;
 }
@@ -116,10 +116,10 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
 
     KineticLogInfo_Configuration *cfg = calloc(1, sizeof(*cfg));
     if (cfg) {
-        if (gcfg->has_serialNumber) {
+        if (gcfg->has_serialnumber) {
             cfg->serialNumber = (ByteArray){0, 0};
         }
-        if (gcfg->has_worldWideName) {
+        if (gcfg->has_worldwidename) {
             cfg->worldWideName = (ByteArray){0, 0};
         }
 
@@ -129,15 +129,15 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
         if (cfg->model == NULL) { goto cleanup; }
         cfg->version = copy_str(gcfg->version);
         if (cfg->version == NULL) { goto cleanup; }
-        cfg->compilationDate = copy_str(gcfg->compilationDate);
+        cfg->compilationDate = copy_str(gcfg->compilationdate);
         if (cfg->compilationDate == NULL) { goto cleanup; }
-        cfg->sourceHash = copy_str(gcfg->sourceHash);
+        cfg->sourceHash = copy_str(gcfg->sourcehash);
         if (cfg->sourceHash == NULL) { goto cleanup; }
-        cfg->protocolVersion = copy_str(gcfg->protocolVersion);
+        cfg->protocolVersion = copy_str(gcfg->protocolversion);
         if (cfg->protocolVersion == NULL) { goto cleanup; }
-        cfg->protocolCompilationDate = copy_str(gcfg->protocolCompilationDate);
+        cfg->protocolCompilationDate = copy_str(gcfg->protocolcompilationdate);
         if (cfg->protocolCompilationDate == NULL) { goto cleanup; }
-        cfg->protocolSourceHash = copy_str(gcfg->protocolSourceHash);
+        cfg->protocolSourceHash = copy_str(gcfg->protocolsourcehash);
         if (cfg->protocolSourceHash == NULL) { goto cleanup; }
 
         cfg->numInterfaces = gcfg->n_interface;
@@ -148,21 +148,21 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
             inf->name = copy_str(gcfg->interface[i]->name);
             if (inf->name == NULL) { goto cleanup; }
 
-            if (gcfg->interface[i]->has_MAC) {
-                inf->MAC = copy_to_byte_array((uint8_t *)gcfg->interface[i]->MAC.data,
-                    gcfg->interface[i]->MAC.len);
+            if (gcfg->interface[i]->has_mac) {
+                inf->MAC = copy_to_byte_array((uint8_t *)gcfg->interface[i]->mac.data,
+                    gcfg->interface[i]->mac.len);
                 if (inf->MAC.data == NULL) { goto cleanup; }
             }
 
-            if (gcfg->interface[i]->has_ipv4Address) {
-                inf->ipv4Address = copy_to_byte_array(gcfg->interface[i]->ipv4Address.data,
-                    gcfg->interface[i]->ipv4Address.len);
+            if (gcfg->interface[i]->has_ipv4address) {
+                inf->ipv4Address = copy_to_byte_array(gcfg->interface[i]->ipv4address.data,
+                    gcfg->interface[i]->ipv4address.len);
                 if (inf->ipv4Address.data == NULL) { goto cleanup; }
             }
 
-            if (gcfg->interface[i]->has_ipv6Address) {
-                inf->ipv6Address = copy_to_byte_array(gcfg->interface[i]->ipv6Address.data,
-                    gcfg->interface[i]->ipv6Address.len);
+            if (gcfg->interface[i]->has_ipv6address) {
+                inf->ipv6Address = copy_to_byte_array(gcfg->interface[i]->ipv6address.data,
+                    gcfg->interface[i]->ipv6address.len);
                 if (inf->ipv6Address.data == NULL) { goto cleanup; }
             }
         }
@@ -201,7 +201,7 @@ static KineticLogInfo_Statistics *KineticLogInfo_GetStatistics(
     *numStatistics = 0;
     if (stats) {
         for (size_t i = 0; i < num_stats; i++) {
-            stats[i].messageType = getLog->statistics[i]->messageType;
+            stats[i].messageType = getLog->statistics[i]->messagetype;
             if (getLog->statistics[i]->has_count) {
                 stats[i].count = getLog->statistics[i]->count;
             }
@@ -226,17 +226,17 @@ static KineticLogInfo_Limits * KineticLogInfo_GetLimits(
 {
     KineticLogInfo_Limits * limits = calloc(1, sizeof(*limits));
     if (limits) {
-        limits->maxKeySize = getLog->limits->maxKeySize;
-        limits->maxValueSize = getLog->limits->maxValueSize;
-        limits->maxVersionSize = getLog->limits->maxVersionSize;
-        limits->maxTagSize = getLog->limits->maxTagSize;
-        limits->maxConnections = getLog->limits->maxConnections;
-        limits->maxOutstandingReadRequests = getLog->limits->maxOutstandingReadRequests;
-        limits->maxOutstandingWriteRequests = getLog->limits->maxOutstandingWriteRequests;
-        limits->maxMessageSize = getLog->limits->maxMessageSize;
-        limits->maxKeyRangeCount = getLog->limits->maxKeyRangeCount;
-        limits->maxIdentityCount = getLog->limits->maxIdentityCount;
-        limits->maxPinSize = getLog->limits->maxPinSize;
+        limits->maxKeySize = getLog->limits->maxkeysize;
+        limits->maxValueSize = getLog->limits->maxvaluesize;
+        limits->maxVersionSize = getLog->limits->maxversionsize;
+        limits->maxTagSize = getLog->limits->maxtagsize;
+        limits->maxConnections = getLog->limits->maxconnections;
+        limits->maxOutstandingReadRequests = getLog->limits->maxoutstandingreadrequests;
+        limits->maxOutstandingWriteRequests = getLog->limits->maxoutstandingwriterequests;
+        limits->maxMessageSize = getLog->limits->maxmessagesize;
+        limits->maxKeyRangeCount = getLog->limits->maxkeyrangecount;
+        limits->maxIdentityCount = getLog->limits->maxidentitycount;
+        limits->maxPinSize = getLog->limits->maxpinsize;
     }
     return limits;
 }

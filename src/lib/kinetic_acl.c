@@ -27,7 +27,7 @@
 #include "json.h"
 
 typedef struct {
-    Com__Seagate__Kinetic__Proto__Command__Security__ACL_Permission permission;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission permission;
     const char *string;
 } permission_pair;
 
@@ -43,15 +43,17 @@ static permission_pair permission_table[] = {
     { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SECURITY, "SECURITY" },
 };
 
-#define PERM_TABLE_ROWS sizeof(permission_table)/sizeof(permission_table)[0]
+#define PERM_TABLE_ROWS (sizeof(permission_table)/sizeof(permission_table)[0])
 
 static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
     size_t offset, size_t *new_offset, struct json_tokener *tokener,
     Com__Seagate__Kinetic__Proto__Command__Security__ACL **instance);
 static KineticACLLoadResult unpack_scopes(Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl,
     int scope_count, json_object *scopes);
+static KineticACLLoadResult acl_of_string(const char *buf, size_t buf_size, struct ACL **instance);
 
-static const char *str_of_permission(Com__Seagate__Kinetic__Proto__Command__Security__ACL_Permission perm) {
+static const char *str_of_permission(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission perm)
+{
     for (size_t i = 0; i < PERM_TABLE_ROWS; i++) {
         permission_pair *pp = &permission_table[i];
         if (pp->permission == perm) { return pp->string; }
@@ -59,7 +61,8 @@ static const char *str_of_permission(Com__Seagate__Kinetic__Proto__Command__Secu
     return "INVALID";
 }
 
-static Com__Seagate__Kinetic__Proto__Command__Security__ACL_Permission permission_of_str(const char *str) {
+static Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission permission_of_str(const char *str)
+{
     for (size_t i = 0; i < PERM_TABLE_ROWS; i++) {
         permission_pair *pp = &permission_table[i];
         if (0 == strcmp(str, pp->string)) { return pp->permission; }
@@ -68,7 +71,8 @@ static Com__Seagate__Kinetic__Proto__Command__Security__ACL_Permission permissio
 }
 
 KineticACLLoadResult
-KineticACL_LoadFromFile(const char *path, struct ACL **instance) {
+KineticACL_LoadFromFile(const char *path, struct ACL **instance)
+{
     if (path == NULL || instance == NULL) {
         return ACL_ERROR_NULL;
     }
@@ -123,8 +127,8 @@ cleanup:
     return res;
 }
 
-KineticACLLoadResult
-acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
+static KineticACLLoadResult acl_of_string(const char *buf, size_t buf_size, struct ACL **instance)
+{
     KineticACLLoadResult res = ACL_ERROR_MEMORY;
     struct ACL *acl_group = NULL;
     Com__Seagate__Kinetic__Proto__Command__Security__ACL **acl_array = NULL;
@@ -193,7 +197,8 @@ cleanup:
 
 static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         size_t offset, size_t *new_offset,
-        struct json_tokener *tokener, Com__Seagate__Kinetic__Proto__Command__Security__ACL **instance) {
+        struct json_tokener *tokener, Com__Seagate__Kinetic__Proto__Command__Security__ACL **instance)
+{
     struct json_object *obj = json_tokener_parse_ex(tokener,
         &buf[offset], buf_size - offset);
     if (obj == NULL) {
@@ -238,8 +243,8 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         const char *key = json_object_get_string(val);
         size_t len = strlen(key);
 
-        acl->has_hmacAlgorithm = true;
-        acl->hmacAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1;
+        acl->has_hmacalgorithm = true;
+        acl->hmacalgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1;
 
         acl->key.len = len;
         data = calloc(1, len + 1);
@@ -279,10 +284,11 @@ cleanup:
 }
 
 static KineticACLLoadResult unpack_scopes(Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl,
-        int scope_count, json_object *scopes) {
+        int scope_count, json_object *scopes)
+{
     KineticACLLoadResult res = ACL_ERROR_MEMORY;
     Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope **scope_array = NULL;
-    Com__Seagate__Kinetic__Proto__Command__Security__ACL_Permission *perm_array = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission *perm_array = NULL;
     Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *scope = NULL;
     uint8_t *data = NULL;
 
@@ -345,7 +351,7 @@ static KineticACLLoadResult unpack_scopes(Com__Seagate__Kinetic__Proto__Command_
                     int count = json_object_array_length(val);
                     for (int i = 0; i < count; i++) {
                         struct json_object *jperm = json_object_array_get_idx(val, i);
-                        Com__Seagate__Kinetic__Proto__Command__Security__ACL_Permission p;
+                        Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission p;
                         p = permission_of_str(json_object_get_string(jperm));
                         if (p == COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION) {
                             return ACL_ERROR_INVALID_FIELD;
@@ -359,8 +365,8 @@ static KineticACLLoadResult unpack_scopes(Com__Seagate__Kinetic__Proto__Command_
                 }
             }
             if (json_object_object_get_ex(cur_scope, "TlsRequired", &val)) {
-                scope->TlsRequired = json_object_get_boolean(val);
-                scope->has_TlsRequired = true;
+                scope->tlsrequired = json_object_get_boolean(val);
+                scope->has_tlsrequired = true;
             }
 
             acl->scope[acl->n_scope] = scope;
@@ -379,7 +385,8 @@ cleanup:
     return res;
 }
 
-void KineticACL_Print(FILE *f, struct ACL *ACLs) {
+void KineticACL_Print(FILE *f, struct ACL *ACLs)
+{
     if (ACLs == NULL) {
         fprintf(f, "NULL\n");
         return;
@@ -419,8 +426,8 @@ void KineticACL_Print(FILE *f, struct ACL *ACLs) {
                     str_of_permission(scope->permission[pi]));
             }
 
-            if (scope->has_TlsRequired) {
-                fprintf(f, "      TlsRequired: %d\n", scope->TlsRequired);
+            if (scope->has_tlsrequired) {
+                fprintf(f, "      tlsrequired: %d\n", scope->tlsrequired);
             }
         }
     }

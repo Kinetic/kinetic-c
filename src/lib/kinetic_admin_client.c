@@ -188,8 +188,8 @@ KineticStatus KineticAdminClient_GetLog(KineticSession * const session,
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(info != NULL);
 
-    Com__Seagate__Kinetic__Proto__Command__GetLog_Type protoType =
-        KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog_Type(type);
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Type protoType =
+        KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog__Type(type);
     if (protoType == COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__INVALID_TYPE) {
         return KINETIC_STATUS_INVALID_LOG_TYPE;
     }

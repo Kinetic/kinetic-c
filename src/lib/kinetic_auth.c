@@ -42,28 +42,28 @@ KineticStatus KineticAuth_PopulateHmac(KineticSessionConfig const * const config
     Com__Seagate__Kinetic__Proto__Message* msg = &pdu->message.message;
 
     // Add HMAC authentication struct
-    msg->hmacAuth = &pdu->message.hmacAuth;
-    com__seagate__kinetic__proto__message__hmacauth__init(msg->hmacAuth);
-    msg->hmacAuth = msg->hmacAuth;
-    msg->pinAuth = NULL;
-    msg->authType = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH;
-    msg->has_authType = true;
+    msg->hmacauth = &pdu->message.hmacAuth;
+    com__seagate__kinetic__proto__message__hmacauth__init(msg->hmacauth);
+    msg->hmacauth = msg->hmacauth;
+    msg->pinauth = NULL;
+    msg->authtype = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH;
+    msg->has_authtype = true;
 
     // Configure HMAC support
     ByteArray const * const hmacKey = &config->hmacKey;
     KINETIC_ASSERT(hmacKey->len <= KINETIC_HMAC_MAX_LEN);  // NOCOMMIT
     KINETIC_ASSERT(hmacKey->data != NULL);
 
-    msg->hmacAuth = &pdu->message.hmacAuth;
+    msg->hmacauth = &pdu->message.hmacAuth;
 
-    msg->hmacAuth->hmac = (ProtobufCBinaryData) {
+    msg->hmacauth->hmac = (ProtobufCBinaryData) {
         .data = pdu->message.hmacData,
         .len = KINETIC_HMAC_SHA1_LEN,
     };
 
-    msg->hmacAuth->has_hmac = true;
-    msg->hmacAuth->identity = config->identity;
-    msg->hmacAuth->has_identity = true;
+    msg->hmacauth->has_hmac = true;
+    msg->hmacauth->identity = config->identity;
+    msg->hmacauth->has_identity = true;
 
     // Populate with hashed HMAC
     KineticHMAC hmac;
@@ -86,20 +86,20 @@ KineticStatus KineticAuth_PopulatePin(KineticSessionConfig const * const config,
 
     // Add PIN authentication struct
     com__seagate__kinetic__proto__message__pinauth__init(&msg->pinAuth);
-    msg->message.pinAuth = &msg->pinAuth;
-    msg->message.hmacAuth = NULL;
-    msg->message.authType = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__PINAUTH;
-    msg->message.has_authType = true;
+    msg->message.pinauth = &msg->pinAuth;
+    msg->message.hmacauth = NULL;
+    msg->message.authtype = COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__PINAUTH;
+    msg->message.has_authtype = true;
     msg->command.header = &msg->header;
     
     // Configure PIN support
     KINETIC_ASSERT(pin.len <= KINETIC_PIN_MAX_LEN);
     if (pin.len > 0) { KINETIC_ASSERT(pin.data != NULL); }
-    msg->message.pinAuth->pin = (ProtobufCBinaryData) {
+    msg->message.pinauth->pin = (ProtobufCBinaryData) {
         .data = pin.data,
         .len = pin.len,
     };
-    msg->message.pinAuth->has_pin = true;
+    msg->message.pinauth->has_pin = true;
 
     return KINETIC_STATUS_SUCCESS;
 }

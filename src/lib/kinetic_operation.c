@@ -99,9 +99,9 @@ static KineticStatus send_request_in_lock(KineticOperation* const op)
     if (expectedLen == KINETIC_REQUEST_PACK_FAILURE) {
         return KINETIC_STATUS_MEMORY_ERROR;
     }
-    uint8_t * commandData = request->message.message.commandBytes.data;
+    uint8_t * commandData = request->message.message.commandbytes.data;
 
-    log_request_seq_id(op->session->socket, seq_id, request->message.header.messageType);
+    log_request_seq_id(op->session->socket, seq_id, request->message.header.messagetype);
 
     KineticSession *session = op->session;
     KineticStatus status = KineticRequest_PopulateAuthentication(&session->config,

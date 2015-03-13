@@ -176,12 +176,12 @@ KineticStatus KineticCallbacks_P2POperation(KineticOperation* const operation, K
         if ((operation->response != NULL) &&
             (operation->response->command != NULL) &&
             (operation->response->command->body != NULL) &&
-            (operation->response->command->body->p2pOperation != NULL)) {
-            populateP2PStatusCodes(p2pOp, operation->response->command->body->p2pOperation);
+            (operation->response->command->body->p2poperation != NULL)) {
+            populateP2PStatusCodes(p2pOp, operation->response->command->body->p2poperation);
         }
     }
 
-    KineticAllocator_FreeP2PProtobuf(operation->request->command->body->p2pOperation);
+    KineticAllocator_FreeP2PProtobuf(operation->request->command->body->p2poperation);
 
     return status;
 }
@@ -201,11 +201,11 @@ KineticStatus KineticCallbacks_GetLog(KineticOperation* const operation, Kinetic
     {
         KINETIC_ASSERT(operation->response != NULL);
         // Copy the data from the response protobuf into a new info struct
-        if (operation->response->command->body->getLog == NULL) {
+        if (operation->response->command->body->getlog == NULL) {
             return KINETIC_STATUS_OPERATION_FAILED;
         }
         else {
-            *operation->deviceInfo = KineticLogInfo_Create(operation->response->command->body->getLog);
+            *operation->deviceInfo = KineticLogInfo_Create(operation->response->command->body->getlog);
             return KINETIC_STATUS_SUCCESS;
         }
     }

@@ -310,7 +310,7 @@ void test_unpack_cb_should_skip_empty_commands(void)
 
     Com__Seagate__Kinetic__Proto__Message Proto;
     memset(&Proto, 0, sizeof(Proto));
-    Proto.has_commandBytes = false;
+    Proto.has_commandbytes = false;
 
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
@@ -344,9 +344,9 @@ void test_unpack_cb_should_unpack_command_bytes(void)
 
     Com__Seagate__Kinetic__Proto__Message Proto;
     memset(&Proto, 0, sizeof(Proto));
-    Proto.has_commandBytes = true;
-    Proto.commandBytes.data = (uint8_t *)"data";
-    Proto.commandBytes.len = 4;
+    Proto.has_commandbytes = true;
+    Proto.commandbytes.data = (uint8_t *)"data";
+    Proto.commandbytes.len = 4;
 
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
@@ -357,10 +357,10 @@ void test_unpack_cb_should_unpack_command_bytes(void)
     memset(&Header, 0, sizeof(Header));
     Command.header = &Header;
     response->header.valueLength = 1;
-    Header.ackSequence = 0x12345678;
+    Header.acksequence = 0x12345678;
 
-    KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandBytes.len,
-        Proto.commandBytes.data, &Command);
+    KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandbytes.len,
+        Proto.commandbytes.data, &Command);
 
     bus_unpack_cb_res_t res = unpack_cb(si, &Session);
 

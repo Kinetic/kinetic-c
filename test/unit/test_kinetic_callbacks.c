@@ -24,6 +24,17 @@
 #include "kinetic.pb-c.h"
 #include "kinetic_logger.h"
 #include "kinetic_types_internal.h"
+#include "mock_kinetic_operation.h"
+#include "mock_kinetic_controller.h"
+#include "mock_kinetic_session.h"
+#include "mock_kinetic_message.h"
+#include "mock_kinetic_bus.h"
+#include "mock_kinetic_response.h"
+#include "mock_kinetic_device_info.h"
+#include "mock_kinetic_allocator.h"
+#include "mock_kinetic_request.h"
+#include "mock_kinetic_acl.h"
+#include "kinetic_callbacks.h"
 
 void test_kinetic_callbacks_needs_testing(void)
 {

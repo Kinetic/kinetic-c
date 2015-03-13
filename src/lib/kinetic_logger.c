@@ -396,7 +396,7 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                             Com__Seagate__Kinetic__Proto__Command * cmd = com__seagate__kinetic__proto__command__unpack(NULL, value->len, value->data);
                             log_protobuf_message(log_level, &cmd->base, log_indent);
                             log_proto_level_end();
-                            com__seagate__kinetic__proto__command__free_unpacked](cmd, NULL);
+                            com__seagate__kinetic__proto__command__free_unpacked(cmd, NULL);
                         }
                     }
                     else {
@@ -439,7 +439,7 @@ void KineticLogger_LogStatus(int log_level, Com__Seagate__Kinetic__Proto__Comman
     }
 
     ProtobufCMessage* protoMessage = &status->base;
-    Com__Seagate__Kinetic__Proto__Command__Status_StatusCode code = status->code;
+    Com__Seagate__Kinetic__Proto__Command__Status__StatusCode code = status->code;
 
     if (code == COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SUCCESS) {
         KineticLogger_LogPrintf(log_level, "Operation completed successfully\n");
@@ -460,17 +460,17 @@ void KineticLogger_LogStatus(int log_level, Com__Seagate__Kinetic__Proto__Comman
                                 statusCodeDescriptor->name, code, eStatusCodeVal->name);
 
         // Output status message, if supplied
-        if (status->statusMessage) {
+        if (status->statusmessage) {
             const ProtobufCFieldDescriptor* statusMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "statusMessage");
             const ProtobufCMessageDescriptor* statusMsgDescriptor =
                 (ProtobufCMessageDescriptor*)statusMsgFieldDescriptor->descriptor;
 
-            KineticLogger_LogPrintf(log_level, "  %s: '%s'", statusMsgDescriptor->name, status->statusMessage);
+            KineticLogger_LogPrintf(log_level, "  %s: '%s'", statusMsgDescriptor->name, status->statusmessage);
         }
 
         // Output detailed message, if supplied
-        if (status->has_detailedMessage) {
+        if (status->has_detailedmessage) {
             char tmp[8], msg[256];
             const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(
@@ -480,8 +480,8 @@ void KineticLogger_LogStatus(int log_level, Com__Seagate__Kinetic__Proto__Comman
                 statusDetailedMsgFieldDescriptor->descriptor;
 
             sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
-            for (size_t i = 0; i < status->detailedMessage.len; i++) {
-                sprintf(tmp, "%02hhX", status->detailedMessage.data[i]);
+            for (size_t i = 0; i < status->detailedmessage.len; i++) {
+                sprintf(tmp, "%02hhX", status->detailedmessage.data[i]);
                 strcat(msg, tmp);
             }
             KineticLogger_LogPrintf(log_level, "  %s", msg);

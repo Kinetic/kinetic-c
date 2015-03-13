@@ -94,21 +94,21 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.command.body->keyValue);
+    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.command.body->keyvalue);
 
     // Validate keyValue fields
-    TEST_ASSERT_TRUE(message.keyValue.has_newVersion);
-    TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.newVersion, entry.newVersion);
+    TEST_ASSERT_TRUE(message.keyValue.has_newversion);
+    TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.newversion, entry.newVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_key);
     TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.key, entry.key);
-    TEST_ASSERT_TRUE(message.keyValue.has_dbVersion);
-    TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.dbVersion, entry.dbVersion);
+    TEST_ASSERT_TRUE(message.keyValue.has_dbversion);
+    TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.dbversion, entry.dbVersion);
     TEST_ASSERT_TRUE(message.keyValue.has_tag);
     TEST_ASSERT_ByteArray_EQUALS_ByteBuffer(message.keyValue.tag, entry.tag);
     TEST_ASSERT_TRUE(message.keyValue.has_algorithm);
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1, message.keyValue.algorithm);
-    TEST_ASSERT_TRUE(message.keyValue.has_metadataOnly);
-    TEST_ASSERT_TRUE(message.keyValue.metadataOnly);
+    TEST_ASSERT_TRUE(message.keyValue.has_metadataonly);
+    TEST_ASSERT_TRUE(message.keyValue.metadataonly);
     TEST_ASSERT_TRUE(message.keyValue.has_force);
     TEST_ASSERT_TRUE(message.keyValue.force);
     TEST_ASSERT_TRUE(message.keyValue.has_synchronization);
@@ -125,15 +125,15 @@ void test_KineticMessage_ConfigureKeyValue_should_configure_Body_KeyValue_and_ad
 
     // Validate that message keyValue and body container are enabled in protobuf
     TEST_ASSERT_EQUAL_PTR(&message.body, message.command.body);
-    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.command.body->keyValue);
+    TEST_ASSERT_EQUAL_PTR(&message.keyValue, message.command.body->keyvalue);
 
     // Validate keyValue fields
-    TEST_ASSERT_FALSE(message.keyValue.has_newVersion);
+    TEST_ASSERT_FALSE(message.keyValue.has_newversion);
     TEST_ASSERT_FALSE(message.keyValue.has_key);
-    TEST_ASSERT_FALSE(message.keyValue.has_dbVersion);
+    TEST_ASSERT_FALSE(message.keyValue.has_dbversion);
     TEST_ASSERT_FALSE(message.keyValue.has_tag);
     TEST_ASSERT_FALSE(message.keyValue.has_algorithm);
-    TEST_ASSERT_FALSE(message.keyValue.has_metadataOnly);
+    TEST_ASSERT_FALSE(message.keyValue.has_metadataonly);
     TEST_ASSERT_FALSE(message.keyValue.has_force);
     TEST_ASSERT_FALSE(message.keyValue.has_synchronization);
 }
@@ -171,18 +171,18 @@ void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticPro
     TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.command.body->range);
 
     // Validate range fields
-    TEST_ASSERT_TRUE(message.command.body->range->has_startKey);
-    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startKey.data);
-    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startKey.len);
-    TEST_ASSERT_TRUE(message.command.body->range->has_endKey);
-    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endKey.data);
-    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endKey.len);
-    TEST_ASSERT_TRUE(message.command.body->range->has_startKeyInclusive);
-    TEST_ASSERT_TRUE(message.command.body->range->startKeyInclusive);
-    TEST_ASSERT_TRUE(message.command.body->range->has_endKeyInclusive);
-    TEST_ASSERT_TRUE(message.command.body->range->endKeyInclusive);
-    TEST_ASSERT_TRUE(message.command.body->range->has_maxReturned);
-    TEST_ASSERT_EQUAL(numKeysInRange, message.command.body->range->maxReturned);
+    TEST_ASSERT_TRUE(message.command.body->range->has_startkey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startkey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startkey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endkey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endkey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endkey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_startkeyinclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->startkeyinclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endkeyinclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->endkeyinclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_maxreturned);
+    TEST_ASSERT_EQUAL(numKeysInRange, message.command.body->range->maxreturned);
     TEST_ASSERT_TRUE(message.command.body->range->has_reverse);
     TEST_ASSERT_TRUE(message.command.body->range->reverse);
     TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
@@ -208,16 +208,16 @@ void test_KineticMessage_ConfigureKeyRange_should_add_and_configure_a_KineticPro
     TEST_ASSERT_EQUAL_PTR(&message.keyRange, message.command.body->range);
 
     // Validate range fields
-    TEST_ASSERT_TRUE(message.command.body->range->has_startKey);
-    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startKey.data);
-    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startKey.len);
-    TEST_ASSERT_TRUE(message.command.body->range->has_endKey);
-    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endKey.data);
-    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endKey.len);
-    TEST_ASSERT_FALSE(message.command.body->range->has_startKeyInclusive);
-    TEST_ASSERT_FALSE(message.command.body->range->has_endKeyInclusive);
-    TEST_ASSERT_TRUE(message.command.body->range->has_maxReturned);
-    TEST_ASSERT_EQUAL(1, message.command.body->range->maxReturned);
+    TEST_ASSERT_TRUE(message.command.body->range->has_startkey);
+    TEST_ASSERT_EQUAL_PTR(startKey.array.data, message.command.body->range->startkey.data);
+    TEST_ASSERT_EQUAL(startKey.bytesUsed, message.command.body->range->startkey.len);
+    TEST_ASSERT_TRUE(message.command.body->range->has_endkey);
+    TEST_ASSERT_EQUAL_PTR(endKey.array.data, message.command.body->range->endkey.data);
+    TEST_ASSERT_EQUAL(endKey.bytesUsed, message.command.body->range->endkey.len);
+    TEST_ASSERT_FALSE(message.command.body->range->has_startkeyinclusive);
+    TEST_ASSERT_FALSE(message.command.body->range->has_endkeyinclusive);
+    TEST_ASSERT_TRUE(message.command.body->range->has_maxreturned);
+    TEST_ASSERT_EQUAL(1, message.command.body->range->maxreturned);
     TEST_ASSERT_FALSE(message.command.body->range->has_reverse);
     TEST_ASSERT_EQUAL(0, message.command.body->range->n_keys);
     TEST_ASSERT_NULL(message.command.body->range->keys);

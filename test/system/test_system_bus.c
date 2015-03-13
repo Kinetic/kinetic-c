@@ -198,12 +198,12 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         payload->header = si->header;
         payload->protoBuf = com__seagate__kinetic__proto__message__unpack(NULL,
             si->header.protobufLength, si->buf);
-        if (payload->protoBuf->has_commandBytes &&
-            payload->protoBuf->commandBytes.data != NULL &&
-            payload->protoBuf->commandBytes.len > 0)
+        if (payload->protoBuf->has_commandbytes &&
+            payload->protoBuf->commandbytes.data != NULL &&
+            payload->protoBuf->commandbytes.len > 0)
         {
             payload->command = com__seagate__kinetic__proto__command__unpack(NULL,
-                payload->protoBuf->commandBytes.len, payload->protoBuf->commandBytes.data);
+                payload->protoBuf->commandbytes.len, payload->protoBuf->commandbytes.data);
         } else {
             payload->command = NULL;
         }
@@ -216,7 +216,7 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         bus_unpack_cb_res_t res = {
             .ok = true,
             .u.success = {
-                .seq_id = payload->command->header->ackSequence,
+                .seq_id = payload->command->header->acksequence,
                 .msg = payload,
             },
         };

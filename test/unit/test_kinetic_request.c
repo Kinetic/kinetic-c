@@ -80,8 +80,8 @@ void test_KineticRequest_PackCommand_should_return_size_when_packing_command(voi
         cmdBuf, 12345);
     TEST_ASSERT_EQUAL(12345, KineticRequest_PackCommand(&request));
 
-    TEST_ASSERT_EQUAL(12345, request.message.message.commandBytes.len);
-    TEST_ASSERT_TRUE(request.message.message.has_commandBytes);
+    TEST_ASSERT_EQUAL(12345, request.message.message.commandbytes.len);
+    TEST_ASSERT_TRUE(request.message.message.has_commandbytes);
 }
 
 void test_KineticRequest_PopulateAuthentication_should_use_PIN_if_provided(void)
