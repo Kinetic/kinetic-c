@@ -33,19 +33,17 @@ end
 
 HERE = File.expand_path(File.dirname(__FILE__))
 VENDOR_PATH = File.join(HERE, 'vendor')
-PROTOBUF_CORE = File.join(VENDOR_PATH, 'protobuf-2.5.0')
+PROTOBUF_CORE = File.join(VENDOR_PATH, 'protobuf-2.6.0')
 PROTOBUF_C = File.join(VENDOR_PATH, 'protobuf-c')
 PROTO_IN = File.join(VENDOR_PATH, 'kinetic-protocol')
 BUILD_ARTIFACTS = File.join(HERE, 'build', 'artifacts', 'release')
 TEST_ARTIFACTS = File.join(HERE, 'build', 'artifacts', 'test')
-PROTO_OUT = TEST_ARTIFACTS
+PROTO_OUT = File.join(HERE, 'src', 'lib')
 TEST_TEMP = File.join(HERE, 'build', 'test', 'temp')
 DOCS_PATH = File.join(HERE, 'docs/api')
 
 directory DOCS_PATH
 CLOBBER.include DOCS_PATH
-directory PROTO_OUT
-CLOBBER.include PROTO_OUT
 directory TEST_TEMP
 CLOBBER.include TEST_TEMP
 
@@ -85,12 +83,12 @@ task :default => ['report_toolchain', 'test:delta']
 desc "Generate protocol buffers"
 task :proto => [PROTO_OUT] do
 
-  report_banner "Building protobuf v2.5.0"
+  report_banner "Building/installing #{PROTOBUF_CORE}"
   cd PROTOBUF_CORE do
     execute_command "./configure --disable-shared; make; make check; sudo make install"
   end
 
-  report_banner "Building protobuf-c and installing protoc-c"
+  report_banner "Building/installing #{PROTOBUF_C}"
   cd PROTOBUF_C do
     execute_command "./autogen.sh && ./configure && make && sudo make install"
     protoc_c = `which protoc-c`
@@ -105,13 +103,13 @@ task :proto => [PROTO_OUT] do
     report
   end
 
-  report_banner "Generating Kinetic C protocol buffers"
+  report_banner "Generating Kinetic C protocol buffers from #{"#{PROTO_IN}/kinetic.proto"}"
   cd PROTO_OUT do
-    rm Dir["*.h", "*.c", "*.proto"]
     cp "#{PROTO_IN}/kinetic.proto", "."
     execute_command "protoc-c --c_out=. kinetic.proto"
-    report "Generated #{Dir['*.h', '*.c'].join(', ')}\n\n"
+    rm "kinetic.proto"
   end
+  report "Generated #{Dir["#{PROTO_OUT}/kinetic.pb-c.*"]}\n\n"
 
 end
 

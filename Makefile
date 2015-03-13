@@ -69,7 +69,7 @@ LIB_OBJS = \
 	$(OUT_DIR)/kinetic_bus.o \
 	$(OUT_DIR)/kinetic_auth.o \
 	$(OUT_DIR)/kinetic_pdu_unpack.o \
-	$(OUT_DIR)/kinetic_proto.o \
+	$(OUT_DIR)/kinetic.pb-c.o \
 	$(OUT_DIR)/kinetic_socket.o \
 	$(OUT_DIR)/kinetic_message.o \
 	$(OUT_DIR)/kinetic_logger.o \
@@ -123,8 +123,11 @@ clean: makedirs
 	cd ${LIB_DIR}/bus && make clean
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make clean; fi;
 
+# Setup version info generation and corresponding dependencies
 $(VERSION_INFO): $(VERSION_FILE)
 	@ruby scripts/generate_version_info.rb
+$(OUT_DIR)/kinetic_logger.o: $(VERSION_INFO)
+$(OUT_DIR)/kinetic_client.o: $(VERSION_INFO)
 
 config: makedirs update_git_submodules
 
@@ -227,7 +230,7 @@ test: Rakefile $(LIB_OBJS)
 	@echo Testing $(PROJECT)
 	@echo --------------------------------------------------------------------------------
 	bundle install
-	bundle exec rake test_all
+	bundle exec rake test:delta
 
 JAVA_HOME ?= /usr
 JAVA_BIN = $(JAVA_HOME)/bin/java
@@ -310,7 +313,7 @@ uninstall:
 	$(RM) -f $(PREFIX)/include/kinetic_types.h
 	$(RM) -f $(PREFIX)/include/kinetic_semaphore.h
 	$(RM) -f $(PREFIX)/include/byte_array.h
-	$(RM) -f $(PREFIX)/include/kinetic_proto.h
+	$(RM) -f $(PREFIX)/include/kinetic.pb-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c/protobuf-c.h
 	$(RM) -f $(PREFIX)/include/protobuf-c.h
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make uninstall; fi;

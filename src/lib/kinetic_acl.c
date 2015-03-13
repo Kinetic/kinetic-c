@@ -27,31 +27,33 @@
 #include "json.h"
 
 typedef struct {
-    KineticProto_Command_Security_ACL_Permission permission;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission permission;
     const char *string;
 } permission_pair;
 
 static permission_pair permission_table[] = {
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION, "INVALID" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_READ, "READ" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_WRITE, "WRITE" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_DELETE, "DELETE" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_RANGE, "RANGE" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SETUP, "SETUP" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_P2POP, "P2POP" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_GETLOG, "GETLOG" },
-    { KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_SECURITY, "SECURITY" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION, "INVALID" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__READ, "READ" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__WRITE, "WRITE" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__DELETE, "DELETE" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__RANGE, "RANGE" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SETUP, "SETUP" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__P2POP, "P2POP" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__GETLOG, "GETLOG" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SECURITY, "SECURITY" },
 };
 
-#define PERM_TABLE_ROWS sizeof(permission_table)/sizeof(permission_table)[0]
+#define PERM_TABLE_ROWS (sizeof(permission_table)/sizeof(permission_table)[0])
 
 static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
     size_t offset, size_t *new_offset, struct json_tokener *tokener,
-    KineticProto_Command_Security_ACL **instance);
-static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl,
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL **instance);
+static KineticACLLoadResult unpack_scopes(Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl,
     int scope_count, json_object *scopes);
+static KineticACLLoadResult acl_of_string(const char *buf, size_t buf_size, struct ACL **instance);
 
-static const char *str_of_permission(KineticProto_Command_Security_ACL_Permission perm) {
+static const char *str_of_permission(Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission perm)
+{
     for (size_t i = 0; i < PERM_TABLE_ROWS; i++) {
         permission_pair *pp = &permission_table[i];
         if (pp->permission == perm) { return pp->string; }
@@ -59,16 +61,18 @@ static const char *str_of_permission(KineticProto_Command_Security_ACL_Permissio
     return "INVALID";
 }
 
-static KineticProto_Command_Security_ACL_Permission permission_of_str(const char *str) {
+static Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission permission_of_str(const char *str)
+{
     for (size_t i = 0; i < PERM_TABLE_ROWS; i++) {
         permission_pair *pp = &permission_table[i];
         if (0 == strcmp(str, pp->string)) { return pp->permission; }
     }
-    return KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION;
+    return COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION;
 }
 
 KineticACLLoadResult
-KineticACL_LoadFromFile(const char *path, struct ACL **instance) {
+KineticACL_LoadFromFile(const char *path, struct ACL **instance)
+{
     if (path == NULL || instance == NULL) {
         return ACL_ERROR_NULL;
     }
@@ -123,17 +127,17 @@ cleanup:
     return res;
 }
 
-KineticACLLoadResult
-acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
+static KineticACLLoadResult acl_of_string(const char *buf, size_t buf_size, struct ACL **instance)
+{
     KineticACLLoadResult res = ACL_ERROR_MEMORY;
     struct ACL *acl_group = NULL;
-    KineticProto_Command_Security_ACL **acl_array = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL **acl_array = NULL;
     struct json_tokener* tokener = NULL;
 
     acl_group = calloc(1, sizeof(*acl_group));
     if (acl_group == NULL) { goto cleanup; }
 
-    acl_group->ACLs = calloc(1, sizeof(KineticProto_Command_Security_ACL *));
+    acl_group->ACLs = calloc(1, sizeof(Com__Seagate__Kinetic__Proto__Command__Security__ACL *));
     if (acl_group->ACLs == NULL) { goto cleanup; }
     acl_group->ACL_ceil = 1;
     acl_group->ACL_count = 0;
@@ -145,7 +149,7 @@ acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
 
     while (buf_size - offset > 0) {
         size_t offset_out = 0;
-        KineticProto_Command_Security_ACL *new_acl = NULL;
+        Com__Seagate__Kinetic__Proto__Command__Security__ACL *new_acl = NULL;
 #ifndef TEST
         LOGF2(" -- reading next ACL at offset %zd, rem %zd", offset, buf_size - offset);
 #endif
@@ -158,7 +162,7 @@ acl_of_string(const char *buf, size_t buf_size, struct ACL **instance) {
         if (res == ACL_OK) {
             if (acl_group->ACL_count == acl_group->ACL_ceil) {  /* grow */
                 size_t nsz = 2 * acl_group->ACL_ceil * sizeof(acl_group->ACLs[0]);
-                KineticProto_Command_Security_ACL **nACLs = realloc(acl_group->ACLs, nsz);
+                Com__Seagate__Kinetic__Proto__Command__Security__ACL **nACLs = realloc(acl_group->ACLs, nsz);
                 if (nACLs == NULL) {
                     goto cleanup;
                 } else {
@@ -193,7 +197,8 @@ cleanup:
 
 static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         size_t offset, size_t *new_offset,
-        struct json_tokener *tokener, KineticProto_Command_Security_ACL **instance) {
+        struct json_tokener *tokener, Com__Seagate__Kinetic__Proto__Command__Security__ACL **instance)
+{
     struct json_object *obj = json_tokener_parse_ex(tokener,
         &buf[offset], buf_size - offset);
     if (obj == NULL) {
@@ -208,7 +213,7 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
     *new_offset = tokener->char_offset;
     
     KineticACLLoadResult res = ACL_ERROR_MEMORY;
-    KineticProto_Command_Security_ACL *acl = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl = NULL;
     uint8_t *data = NULL;
 
     int scope_count = 0;
@@ -224,7 +229,7 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
     acl = calloc(1, alloc_sz);
     if (acl == NULL) { goto cleanup; }
 
-    KineticProto_command_security_acl__init(acl);    
+    com__seagate__kinetic__proto__command__security__acl__init(acl);    
 
     /* Copy fields */
     if (json_object_object_get_ex(obj, "identity", &val)) {
@@ -238,8 +243,8 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         const char *key = json_object_get_string(val);
         size_t len = strlen(key);
 
-        acl->has_hmacAlgorithm = true;
-        acl->hmacAlgorithm = KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1;
+        acl->has_hmacalgorithm = true;
+        acl->hmacalgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1;
 
         acl->key.len = len;
         data = calloc(1, len + 1);
@@ -278,12 +283,13 @@ cleanup:
     return res;
 }
 
-static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl,
-        int scope_count, json_object *scopes) {
+static KineticACLLoadResult unpack_scopes(Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl,
+        int scope_count, json_object *scopes)
+{
     KineticACLLoadResult res = ACL_ERROR_MEMORY;
-    KineticProto_Command_Security_ACL_Scope **scope_array = NULL;
-    KineticProto_Command_Security_ACL_Permission *perm_array = NULL;
-    KineticProto_Command_Security_ACL_Scope *scope = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope **scope_array = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission *perm_array = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *scope = NULL;
     uint8_t *data = NULL;
 
     scope_array = calloc(scope_count, sizeof(*scope_array));
@@ -296,7 +302,7 @@ static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl
         if (cur_scope) {
             scope = calloc(1, sizeof(*scope));
             if (scope == NULL) { goto cleanup; }
-            KineticProto_command_security_acl_scope__init(scope);
+            com__seagate__kinetic__proto__command__security__acl__scope__init(scope);
     
             struct json_object *val = NULL;
             if (json_object_object_get_ex(cur_scope, "offset", &val)) {
@@ -336,7 +342,7 @@ static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl
                 enum json_type perm_type = json_object_get_type(val);
                 if (perm_type == json_type_string) {
                     scope->permission[0] = permission_of_str(json_object_get_string(val));
-                    if (scope->permission[0] == KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION) {
+                    if (scope->permission[0] == COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION) {
                         return ACL_ERROR_INVALID_FIELD;
                     } else {
                         scope->n_permission++;
@@ -345,9 +351,9 @@ static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl
                     int count = json_object_array_length(val);
                     for (int i = 0; i < count; i++) {
                         struct json_object *jperm = json_object_array_get_idx(val, i);
-                        KineticProto_Command_Security_ACL_Permission p;
+                        Com__Seagate__Kinetic__Proto__Command__Security__ACL__Permission p;
                         p = permission_of_str(json_object_get_string(jperm));
-                        if (p == KINETIC_PROTO_COMMAND_SECURITY_ACL_PERMISSION_INVALID_PERMISSION) {
+                        if (p == COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION) {
                             return ACL_ERROR_INVALID_FIELD;
                         } else {
                             scope->permission[scope->n_permission] = p;
@@ -359,8 +365,8 @@ static KineticACLLoadResult unpack_scopes(KineticProto_Command_Security_ACL *acl
                 }
             }
             if (json_object_object_get_ex(cur_scope, "TlsRequired", &val)) {
-                scope->TlsRequired = json_object_get_boolean(val);
-                scope->has_TlsRequired = true;
+                scope->tlsrequired = json_object_get_boolean(val);
+                scope->has_tlsrequired = true;
             }
 
             acl->scope[acl->n_scope] = scope;
@@ -379,7 +385,8 @@ cleanup:
     return res;
 }
 
-void KineticACL_Print(FILE *f, struct ACL *ACLs) {
+void KineticACL_Print(FILE *f, struct ACL *ACLs)
+{
     if (ACLs == NULL) {
         fprintf(f, "NULL\n");
         return;
@@ -388,7 +395,7 @@ void KineticACL_Print(FILE *f, struct ACL *ACLs) {
     fprintf(f, "ACLs [%zd]:\n", ACLs->ACL_count);
     
     for (size_t ai = 0; ai < ACLs->ACL_count; ai++) {
-        KineticProto_Command_Security_ACL *acl = ACLs->ACLs[ai];
+        Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl = ACLs->ACLs[ai];
         if (acl == NULL) { continue; }
         if (ai > 0) { fprintf(f, "\n"); }
 
@@ -404,7 +411,7 @@ void KineticACL_Print(FILE *f, struct ACL *ACLs) {
         fprintf(f, "  scopes: (%zd)\n", acl->n_scope);
         
         for (size_t si = 0; si < acl->n_scope; si++) {
-            KineticProto_Command_Security_ACL_Scope *scope = acl->scope[si];
+            Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *scope = acl->scope[si];
             if (si > 0) { fprintf(f, "\n"); }
             fprintf(f, "    scope %zd:\n", si);
             if (scope->has_offset) {
@@ -419,8 +426,8 @@ void KineticACL_Print(FILE *f, struct ACL *ACLs) {
                     str_of_permission(scope->permission[pi]));
             }
 
-            if (scope->has_TlsRequired) {
-                fprintf(f, "      TlsRequired: %d\n", scope->TlsRequired);
+            if (scope->has_tlsrequired) {
+                fprintf(f, "      tlsrequired: %d\n", scope->tlsrequired);
             }
         }
     }
@@ -429,10 +436,10 @@ void KineticACL_Print(FILE *f, struct ACL *ACLs) {
 void KineticACL_Free(struct ACL *ACLs) {
     if (ACLs) {
         for (size_t ai = 0; ai < ACLs->ACL_count; ai++) {
-            KineticProto_Command_Security_ACL *acl = ACLs->ACLs[ai];
+            Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl = ACLs->ACLs[ai];
             if (acl) {
                 for (size_t si = 0; si < acl->n_scope; si++) {
-                    KineticProto_Command_Security_ACL_Scope *scope = acl->scope[si];
+                    Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *scope = acl->scope[si];
                     if (scope->has_value && scope->value.data) {
                         free(scope->value.data);
                     }

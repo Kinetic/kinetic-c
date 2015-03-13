@@ -393,10 +393,10 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                         ProtobufCBinaryData* value = (ProtobufCBinaryData*)(void*)&pMsg[fieldDesc->offset];
                         if ((value->data != NULL) && (value->len > 0)) {
                             log_proto_level_start(fieldDesc->name);
-                            KineticProto_Command * cmd = KineticProto_command__unpack(NULL, value->len, value->data);
+                            Com__Seagate__Kinetic__Proto__Command * cmd = com__seagate__kinetic__proto__command__unpack(NULL, value->len, value->data);
                             log_protobuf_message(log_level, &cmd->base, log_indent);
                             log_proto_level_end();
-                            KineticProto_command__free_unpacked(cmd, NULL);
+                            com__seagate__kinetic__proto__command__free_unpacked(cmd, NULL);
                         }
                     }
                     else {
@@ -420,7 +420,7 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
     }
 }
 
-void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
+void KineticLogger_LogProtobuf(int log_level, const Com__Seagate__Kinetic__Proto__Message* msg)
 {
     if (msg == NULL || !is_level_enabled(log_level)) {
         return;
@@ -432,19 +432,19 @@ void KineticLogger_LogProtobuf(int log_level, const KineticProto_Message* msg)
     log_protobuf_message(log_level, &msg->base, indent);
 }
 
-void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
+void KineticLogger_LogStatus(int log_level, Com__Seagate__Kinetic__Proto__Command__Status* status)
 {
     if (status == NULL || !is_level_enabled(log_level)) {
         return;
     }
 
     ProtobufCMessage* protoMessage = &status->base;
-    KineticProto_Command_Status_StatusCode code = status->code;
+    Com__Seagate__Kinetic__Proto__Command__Status__StatusCode code = status->code;
 
-    if (code == KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS) {
+    if (code == COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SUCCESS) {
         KineticLogger_LogPrintf(log_level, "Operation completed successfully\n");
     }
-    else if (code == KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE) {
+    else if (code == COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_STATUS_CODE) {
         KineticLogger_LogPrintf(log_level, "Operation was aborted!\n");
     }
     else {
@@ -460,17 +460,17 @@ void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
                                 statusCodeDescriptor->name, code, eStatusCodeVal->name);
 
         // Output status message, if supplied
-        if (status->statusMessage) {
+        if (status->statusmessage) {
             const ProtobufCFieldDescriptor* statusMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(protoMessageDescriptor, "statusMessage");
             const ProtobufCMessageDescriptor* statusMsgDescriptor =
                 (ProtobufCMessageDescriptor*)statusMsgFieldDescriptor->descriptor;
 
-            KineticLogger_LogPrintf(log_level, "  %s: '%s'", statusMsgDescriptor->name, status->statusMessage);
+            KineticLogger_LogPrintf(log_level, "  %s: '%s'", statusMsgDescriptor->name, status->statusmessage);
         }
 
         // Output detailed message, if supplied
-        if (status->has_detailedMessage) {
+        if (status->has_detailedmessage) {
             char tmp[8], msg[256];
             const ProtobufCFieldDescriptor* statusDetailedMsgFieldDescriptor =
                 protobuf_c_message_descriptor_get_field_by_name(
@@ -480,8 +480,8 @@ void KineticLogger_LogStatus(int log_level, KineticProto_Command_Status* status)
                 statusDetailedMsgFieldDescriptor->descriptor;
 
             sprintf(msg, "  %s: ", statusDetailedMsgDescriptor->name);
-            for (size_t i = 0; i < status->detailedMessage.len; i++) {
-                sprintf(tmp, "%02hhX", status->detailedMessage.data[i]);
+            for (size_t i = 0; i < status->detailedmessage.len; i++) {
+                sprintf(tmp, "%02hhX", status->detailedmessage.data[i]);
                 strcat(msg, tmp);
             }
             KineticLogger_LogPrintf(log_level, "  %s", msg);

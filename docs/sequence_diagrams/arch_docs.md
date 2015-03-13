@@ -10,6 +10,28 @@ This boxed_msg goes from the Client thread to the Listener thread, then the call
 Socket connections must be registered with the message bus, via `bus_register_socket`. This defines whether they should use SSL or not, and binds other protocol-specific data to them. When a socket is disconnected, `bus_release_socket` will free the internal resources.
 
 
+# Diagrams
+
+A full request/response cycle flowing through the library.
+
+![](request_response.png?raw=true)
+
+
+A message going through the message bus, with no errors.
+
+![](msg_handling-no_errors.png?raw=true)
+
+
+A message going through the message bus, with no reply (a time-out error).
+
+![](msg_handling-no_reply.wsd?raw=true)
+
+
+A message going through the message bus, with a hang-up error while sending.
+
+![](msg_handling-send_error.wsd?raw=true)
+
+
 # Entities
 
 ## Client Thread

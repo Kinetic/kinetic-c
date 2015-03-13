@@ -24,7 +24,7 @@
 #include "kinetic_socket.h"
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_nbo.h"
 #include "kinetic_allocator.h"
 #include "kinetic_controller.h"
@@ -65,32 +65,32 @@ int64_t KineticResponse_GetConnectionID(KineticResponse * response)
     int64_t id = 0;
     KINETIC_ASSERT(response);
     KINETIC_ASSERT(response->proto);
-    if (response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS &&
+    if (response->proto->authtype == COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS &&
         response->command != NULL &&
         response->command->header != NULL &&
-        response->command->header->has_connectionID)
+        response->command->header->has_connectionid)
     {
-        id = response->command->header->connectionID;
+        id = response->command->header->connectionid;
     }
     return id;
 }
 
-KineticProto_Command_KeyValue* KineticResponse_GetKeyValue(KineticResponse * response)
+Com__Seagate__Kinetic__Proto__Command__KeyValue* KineticResponse_GetKeyValue(KineticResponse * response)
 {
-    KineticProto_Command_KeyValue* keyValue = NULL;
+    Com__Seagate__Kinetic__Proto__Command__KeyValue* keyValue = NULL;
 
     if (response != NULL &&
         response->command != NULL &&
         response->command->body != NULL)
     {
-        keyValue = response->command->body->keyValue;
+        keyValue = response->command->body->keyvalue;
     }
     return keyValue;
 }
 
-KineticProto_Command_Range* KineticResponse_GetKeyRange(KineticResponse * response)
+Com__Seagate__Kinetic__Proto__Command__Range* KineticResponse_GetKeyRange(KineticResponse * response)
 {
-    KineticProto_Command_Range* range = NULL;
+    Com__Seagate__Kinetic__Proto__Command__Range* range = NULL;
     if (response != NULL &&
         response->proto != NULL &&
         response->command != NULL &&

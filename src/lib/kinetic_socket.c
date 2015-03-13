@@ -21,7 +21,7 @@
 #include "kinetic_socket.h"
 #include "kinetic_logger.h"
 #include "kinetic_types_internal.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "protobuf-c/protobuf-c.h"
 
 #include <stdlib.h>

@@ -31,7 +31,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_device_info.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_allocator.h"
 #include "kinetic_message.h"
 #include "kinetic_bus.h"
@@ -155,8 +155,8 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *sock
 struct kinetic_response_payload
 {
     KineticPDUHeader header;
-    KineticProto_Message* protoBuf;
-    KineticProto_Command* command;
+    Com__Seagate__Kinetic__Proto__Message* protoBuf;
+    Com__Seagate__Kinetic__Proto__Command* command;
     uint8_t value[];
 };
 
@@ -196,12 +196,14 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         return res;
     } else {
         payload->header = si->header;
-        payload->protoBuf = KineticProto_Message__unpack(NULL, si->header.protobufLength, si->buf);
-        if (payload->protoBuf->has_commandBytes &&
-            payload->protoBuf->commandBytes.data != NULL &&
-            payload->protoBuf->commandBytes.len > 0)
+        payload->protoBuf = com__seagate__kinetic__proto__message__unpack(NULL,
+            si->header.protobufLength, si->buf);
+        if (payload->protoBuf->has_commandbytes &&
+            payload->protoBuf->commandbytes.data != NULL &&
+            payload->protoBuf->commandbytes.len > 0)
         {
-            payload->command = KineticProto_command__unpack(NULL, payload->protoBuf->commandBytes.len, payload->protoBuf->commandBytes.data);
+            payload->command = com__seagate__kinetic__proto__command__unpack(NULL,
+                payload->protoBuf->commandbytes.len, payload->protoBuf->commandbytes.data);
         } else {
             payload->command = NULL;
         }
@@ -214,7 +216,7 @@ static bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         bus_unpack_cb_res_t res = {
             .ok = true,
             .u.success = {
-                .seq_id = payload->command->header->ackSequence,
+                .seq_id = payload->command->header->acksequence,
                 .msg = payload,
             },
         };

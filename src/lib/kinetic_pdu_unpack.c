@@ -20,12 +20,12 @@
 
 #include "kinetic_pdu_unpack.h"
 
-KineticProto_Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
+Com__Seagate__Kinetic__Proto__Command *KineticPDU_unpack_command(ProtobufCAllocator* allocator,
         size_t len, const uint8_t* data) {
-    return KineticProto_command__unpack(allocator, len, data);
+    return com__seagate__kinetic__proto__command__unpack(allocator, len, data);
 }
 
-KineticProto_Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
+Com__Seagate__Kinetic__Proto__Message* KineticPDU_unpack_message(ProtobufCAllocator* allocator,
         size_t len, const uint8_t* data) {
-    return KineticProto_Message__unpack(allocator, len, data);
+    return com__seagate__kinetic__proto__message__unpack(allocator, len, data);
 }

@@ -24,7 +24,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_bus.h"
 #include "kinetic_nbo.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_logger.h"
 #include "mock_kinetic_session.h"
 #include "mock_kinetic_message.h"
@@ -308,9 +308,9 @@ void test_unpack_cb_should_skip_empty_commands(void)
 
     KineticAllocator_NewKineticResponse_ExpectAndReturn(1, response);
 
-    KineticProto_Message Proto;
+    Com__Seagate__Kinetic__Proto__Message Proto;
     memset(&Proto, 0, sizeof(Proto));
-    Proto.has_commandBytes = false;
+    Proto.has_commandbytes = false;
 
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
@@ -342,25 +342,25 @@ void test_unpack_cb_should_unpack_command_bytes(void)
 
     KineticAllocator_NewKineticResponse_ExpectAndReturn(8, response);
 
-    KineticProto_Message Proto;
+    Com__Seagate__Kinetic__Proto__Message Proto;
     memset(&Proto, 0, sizeof(Proto));
-    Proto.has_commandBytes = true;
-    Proto.commandBytes.data = (uint8_t *)"data";
-    Proto.commandBytes.len = 4;
+    Proto.has_commandbytes = true;
+    Proto.commandbytes.data = (uint8_t *)"data";
+    Proto.commandbytes.len = 4;
 
     KineticPDU_unpack_message_ExpectAndReturn(NULL, si->header.protobufLength,
         si->buf, &Proto);
 
-    KineticProto_Command Command;
+    Com__Seagate__Kinetic__Proto__Command Command;
     memset(&Command, 0, sizeof(Command));
-    KineticProto_Command_Header Header;
+    Com__Seagate__Kinetic__Proto__Command__Header Header;
     memset(&Header, 0, sizeof(Header));
     Command.header = &Header;
     response->header.valueLength = 1;
-    Header.ackSequence = 0x12345678;
+    Header.acksequence = 0x12345678;
 
-    KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandBytes.len,
-        Proto.commandBytes.data, &Command);
+    KineticPDU_unpack_command_ExpectAndReturn(NULL, Proto.commandbytes.len,
+        Proto.commandbytes.data, &Command);
 
     bus_unpack_cb_res_t res = unpack_cb(si, &Session);
 

@@ -23,7 +23,7 @@
 #include "unity.h"
 #include "unity_helper.h"
 #include "kinetic_logger.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "protobuf-c.h"
 #include <stdlib.h>
 #include <pthread.h>

@@ -26,66 +26,65 @@
 
 // Type mapping from from public to internal protobuf status type
 KineticStatus KineticProtoStatusCode_to_KineticStatus(
-    KineticProto_Command_Status_StatusCode protoStatus)
+    Com__Seagate__Kinetic__Proto__Command__Status__StatusCode protoStatus)
 {
     KineticStatus status;
 
     switch (protoStatus) {
 
     // Start one-to-one status mappings
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SUCCESS:
         status = KINETIC_STATUS_SUCCESS;
         break;
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__REMOTE_CONNECTION_ERROR:
         status = KINETIC_STATUS_CONNECTION_ERROR;
         break;
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SERVICE_BUSY:
         status = KINETIC_STATUS_DEVICE_BUSY;
         break;
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_FAILURE:
         status = KINETIC_STATUS_CLUSTER_MISMATCH;
         break;
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_MISMATCH:
         status = KINETIC_STATUS_VERSION_MISMATCH;
         break;
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_FOUND:
         status = KINETIC_STATUS_NOT_FOUND;
         break;
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HMAC_FAILURE:
         status = KINETIC_STATUS_HMAC_FAILURE;
         break;
     // End one-to-one mappings
 
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_REQUEST:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_ATTEMPTED:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HEADER_REQUIRED:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SUCH_HMAC_ALGORITHM:
         status = KINETIC_STATUS_INVALID_REQUEST;
         break;
 
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DATA_ERROR:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__PERM_DATA_ERROR:
         status = KINETIC_STATUS_DATA_ERROR;
         break;
 
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INTERNAL_ERROR:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__EXPIRED:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SPACE:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NESTED_OPERATION_ERRORS:
         status = KINETIC_STATUS_OPERATION_FAILED;
         break;
 
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_AUTHORIZED:
         status = KINETIC_STATUS_NOT_AUTHORIZED;
         break;
 
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DEVICE_LOCKED:
         status = KINETIC_STATUS_DEVICE_LOCKED;
         break;
 
     default:
-    case KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE:
-    case _KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_IS_INT_SIZE:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_STATUS_CODE:
         status = KINETIC_STATUS_INVALID;
         break;
     }
@@ -93,44 +92,44 @@ KineticStatus KineticProtoStatusCode_to_KineticStatus(
     return status;
 }
 
-KineticProto_Command_Synchronization KineticProto_Command_Synchronization_from_KineticSynchronization(
+Com__Seagate__Kinetic__Proto__Command__Synchronization Com__Seagate__Kinetic__Proto__Command__Synchronization_from_KineticSynchronization(
     KineticSynchronization sync_mode)
 {
-    KineticProto_Command_Synchronization protoSyncMode;
+    Com__Seagate__Kinetic__Proto__Command__Synchronization protoSyncMode;
     switch (sync_mode) {
     case KINETIC_SYNCHRONIZATION_WRITETHROUGH:
-        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH;
+        protoSyncMode = COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITETHROUGH;
         break;
     case KINETIC_SYNCHRONIZATION_WRITEBACK:
-        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK;
+        protoSyncMode = COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITEBACK;
         break;
     case KINETIC_SYNCHRONIZATION_FLUSH:
-        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH;
+        protoSyncMode = COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__FLUSH;
         break;
     default:
     case KINETIC_SYNCHRONIZATION_INVALID:
-        protoSyncMode = KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION;
+        protoSyncMode = COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__INVALID_SYNCHRONIZATION;
         break;
     };
     return protoSyncMode;
 }
 
-KineticSynchronization KineticSynchronization_from_KineticProto_Command_Synchronization(
-    KineticProto_Command_Synchronization sync_mode)
+KineticSynchronization KineticSynchronization_from_Com__Seagate__Kinetic__Proto__Command__Synchronization(
+    Com__Seagate__Kinetic__Proto__Command__Synchronization sync_mode)
 {
     KineticSynchronization kineticSyncMode;
     switch (sync_mode) {
-    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITETHROUGH:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
         break;
-    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITEBACK:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_WRITEBACK;
         break;
-    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__FLUSH:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_FLUSH;
         break;
     default:
-    case KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__INVALID_SYNCHRONIZATION:
         kineticSyncMode = KINETIC_SYNCHRONIZATION_INVALID;
         break;
     };
@@ -138,29 +137,29 @@ KineticSynchronization KineticSynchronization_from_KineticProto_Command_Synchron
 }
 
 // Type mapping from public to internal types
-KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgorithm(
+Com__Seagate__Kinetic__Proto__Command__Algorithm Com__Seagate__Kinetic__Proto__Command__Algorithm_from_KineticAlgorithm(
     KineticAlgorithm kinteicAlgorithm)
 {
-    KineticProto_Command_Algorithm protoAlgorithm;
+    Com__Seagate__Kinetic__Proto__Command__Algorithm protoAlgorithm;
     switch (kinteicAlgorithm) {
     case KINETIC_ALGORITHM_SHA1:
-        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_SHA1;
+        protoAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1;
         break;
     case KINETIC_ALGORITHM_SHA2:
-        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_SHA2;
+        protoAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA2;
         break;
     case KINETIC_ALGORITHM_SHA3:
-        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_SHA3;
+        protoAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA3;
         break;
     case KINETIC_ALGORITHM_CRC32:
-        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_CRC32;
+        protoAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC32;
         break;
     case KINETIC_ALGORITHM_CRC64:
-        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_CRC64;
+        protoAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC64;
         break;
     case KINETIC_ALGORITHM_INVALID:
     default:
-        protoAlgorithm = KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM;
+        protoAlgorithm = COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__INVALID_ALGORITHM;
         break;
     };
     return protoAlgorithm;
@@ -169,27 +168,27 @@ KineticProto_Command_Algorithm KineticProto_Command_Algorithm_from_KineticAlgori
 
 
 // Type mapping from internal types
-KineticAlgorithm KineticAlgorithm_from_KineticProto_Command_Algorithm(
-    KineticProto_Command_Algorithm protoAlgorithm)
+KineticAlgorithm KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command__Algorithm(
+    Com__Seagate__Kinetic__Proto__Command__Algorithm protoAlgorithm)
 {
     KineticAlgorithm kineticAlgorithm;
     switch (protoAlgorithm) {
-    case KINETIC_PROTO_COMMAND_ALGORITHM_SHA1:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1:
         kineticAlgorithm = KINETIC_ALGORITHM_SHA1;
         break;
-    case KINETIC_PROTO_COMMAND_ALGORITHM_SHA2:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA2:
         kineticAlgorithm = KINETIC_ALGORITHM_SHA2;
         break;
-    case KINETIC_PROTO_COMMAND_ALGORITHM_SHA3:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA3:
         kineticAlgorithm = KINETIC_ALGORITHM_SHA3;
         break;
-    case KINETIC_PROTO_COMMAND_ALGORITHM_CRC32:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC32:
         kineticAlgorithm = KINETIC_ALGORITHM_CRC32;
         break;
-    case KINETIC_PROTO_COMMAND_ALGORITHM_CRC64:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC64:
         kineticAlgorithm = KINETIC_ALGORITHM_CRC64;
         break;
-    case KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM:
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__INVALID_ALGORITHM:
     default:
         kineticAlgorithm = KINETIC_ALGORITHM_INVALID;
         break;
@@ -224,58 +223,58 @@ bool Copy_ProtobufCBinaryData_to_ByteBuffer(ByteBuffer dest, ProtobufCBinaryData
 }
 
 
-bool Copy_KineticProto_Command_KeyValue_to_KineticEntry(KineticProto_Command_KeyValue* keyValue, KineticEntry* entry)
+bool Copy_Com__Seagate__Kinetic__Proto__Command__KeyValue_to_KineticEntry(Com__Seagate__Kinetic__Proto__Command__KeyValue* key_value, KineticEntry* entry)
 {
     bool bufferOverflow = false;
 
-    if (keyValue != NULL && entry != NULL) {
+    if (key_value != NULL && entry != NULL) {
         ByteBuffer_Reset(&entry->dbVersion);
-        if (keyValue->has_dbVersion && keyValue->dbVersion.len > 0) {
-            if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < keyValue->dbVersion.len) {
-                entry->dbVersion.bytesUsed = keyValue->dbVersion.len;
+        if (key_value->has_dbversion && key_value->dbversion.len > 0) {
+            if (entry->dbVersion.array.data == NULL || entry->dbVersion.array.len < key_value->dbversion.len) {
+                entry->dbVersion.bytesUsed = key_value->dbversion.len;
                 LOG1(" BUFFER_OVERRUN: dbVersion");
                 bufferOverflow = true;
             }
             else {
-                ByteBuffer_Append(&entry->dbVersion, keyValue->dbVersion.data, keyValue->dbVersion.len);
+                ByteBuffer_Append(&entry->dbVersion, key_value->dbversion.data, key_value->dbversion.len);
             }
         }
 
         ByteBuffer_Reset(&entry->key);
-        if (keyValue->has_key && keyValue->key.len > 0) {
-            if (entry->key.array.data == NULL || entry->key.array.len < keyValue->key.len) {
-                entry->key.bytesUsed = keyValue->key.len;
+        if (key_value->has_key && key_value->key.len > 0) {
+            if (entry->key.array.data == NULL || entry->key.array.len < key_value->key.len) {
+                entry->key.bytesUsed = key_value->key.len;
                 LOG1(" BUFFER_OVERRUN: key");
                 bufferOverflow = true;
             }
             else {
-                ByteBuffer_Append(&entry->key, keyValue->key.data, keyValue->key.len);
+                ByteBuffer_Append(&entry->key, key_value->key.data, key_value->key.len);
             }
         }
 
         ByteBuffer_Reset(&entry->tag);
-        if (keyValue->has_tag && keyValue->tag.len > 0) {
-            if (entry->tag.array.data == NULL || entry->tag.array.len < keyValue->tag.len) {
-                entry->tag.bytesUsed = keyValue->tag.len;
+        if (key_value->has_tag && key_value->tag.len > 0) {
+            if (entry->tag.array.data == NULL || entry->tag.array.len < key_value->tag.len) {
+                entry->tag.bytesUsed = key_value->tag.len;
                 LOG1(" BUFFER_OVERRUN: tag");
                 bufferOverflow = true;
             }
             else {
-                ByteBuffer_Append(&entry->tag, keyValue->tag.data, keyValue->tag.len);
+                ByteBuffer_Append(&entry->tag, key_value->tag.data, key_value->tag.len);
             }
         }
 
-        if (keyValue->has_algorithm) {
+        if (key_value->has_algorithm) {
             entry->algorithm =
-                KineticAlgorithm_from_KineticProto_Command_Algorithm(
-                    keyValue->algorithm);
+                KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command__Algorithm(
+                    key_value->algorithm);
         }
     }
 
     return !bufferOverflow;
 }
 
-bool Copy_KineticProto_Command_Range_to_ByteBufferArray(KineticProto_Command_Range* keyRange, ByteBufferArray* keys)
+bool Copy_Com__Seagate__Kinetic__Proto__Command__Range_to_ByteBufferArray(Com__Seagate__Kinetic__Proto__Command__Range* keyRange, ByteBufferArray* keys)
 {
     bool bufferOverflow = false;
     LOGF2("Copying: keyRange=0x%0llX, keys=0x%0llX, max_keys=%lld", keyRange, keys->buffers, keys->count);
@@ -351,33 +350,33 @@ int Kinetic_TimevalCmp(struct timeval const a, struct timeval const b)
     return (a.tv_sec == b.tv_sec) ? cmp_suseconds_t(a.tv_usec, b.tv_usec) : ((a.tv_sec > b.tv_sec) ? 1 : -1);
 }
 
-KineticProto_Command_GetLog_Type KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(KineticLogInfo_Type type)
+Com__Seagate__Kinetic__Proto__Command__GetLog__Type KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog__Type(KineticLogInfo_Type type)
 {
-    KineticProto_Command_GetLog_Type protoType;
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Type protoType;
 
     switch(type) {
     case KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS; break;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__UTILIZATIONS; break;
     case KINETIC_DEVICE_INFO_TYPE_TEMPERATURES:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES; break;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__TEMPERATURES; break;
     case KINETIC_DEVICE_INFO_TYPE_CAPACITIES:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES; break;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CAPACITIES; break;
     case KINETIC_DEVICE_INFO_TYPE_CONFIGURATION:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION; break;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CONFIGURATION; break;
     case KINETIC_DEVICE_INFO_TYPE_STATISTICS:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS; break;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__STATISTICS; break;
     case KINETIC_DEVICE_INFO_TYPE_MESSAGES:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES; break;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__MESSAGES; break;
     case KINETIC_DEVICE_INFO_TYPE_LIMITS:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS; break;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__LIMITS; break;
     default:
-        protoType = KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE;
+        protoType = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__INVALID_TYPE;
     };
 
     return protoType;
 }
 
-KineticMessageType KineticProto_Command_MessageType_to_KineticMessageType(KineticProto_Command_MessageType type)
+KineticMessageType Com__Seagate__Kinetic__Proto__Command__MessageType_to_KineticMessageType(Com__Seagate__Kinetic__Proto__Command__MessageType type)
 {
     return (KineticMessageType)type;
 }
@@ -397,32 +396,32 @@ void KineticMessage_Init(KineticMessage* const message)
 {
     KINETIC_ASSERT(message != NULL);
 
-    KineticProto_Message__init(&message->message);
-    KineticProto_command__init(&message->command);
-    KineticProto_Message_hmacauth__init(&message->hmacAuth);
-    KineticProto_Message_pinauth__init(&message->pinAuth);
-    KineticProto_command_header__init(&message->header);
-    KineticProto_command_status__init(&message->status);
-    KineticProto_command_body__init(&message->body);
-    KineticProto_command_key_value__init(&message->keyValue);
-    KineticProto_command_range__init(&message->keyRange);
-    KineticProto_command_setup__init(&message->setup);
-    KineticProto_command_get_log__init(&message->getLog);
-    KineticProto_command_get_log_device__init(&message->getLogDevice);
-    KineticProto_command_security__init(&message->security);
-    KineticProto_command_pin_operation__init(&message->pinOp);
+    com__seagate__kinetic__proto__message__init(&message->message);
+    com__seagate__kinetic__proto__command__init(&message->command);
+    com__seagate__kinetic__proto__message__hmacauth__init(&message->hmacAuth);
+    com__seagate__kinetic__proto__message__pinauth__init(&message->pinAuth);
+    com__seagate__kinetic__proto__command__header__init(&message->header);
+    com__seagate__kinetic__proto__command__status__init(&message->status);
+    com__seagate__kinetic__proto__command__body__init(&message->body);
+    com__seagate__kinetic__proto__command__key_value__init(&message->keyValue);
+    com__seagate__kinetic__proto__command__range__init(&message->keyRange);
+    com__seagate__kinetic__proto__command__setup__init(&message->setup);
+    com__seagate__kinetic__proto__command__get_log__init(&message->getLog);
+    com__seagate__kinetic__proto__command__get_log__device__init(&message->getLogDevice);
+    com__seagate__kinetic__proto__command__security__init(&message->security);
+    com__seagate__kinetic__proto__command__pin_operation__init(&message->pinOp);
 }
 
-static void KineticMessage_HeaderInit(KineticProto_Command_Header* hdr, KineticSession const * const session)
+static void KineticMessage_HeaderInit(Com__Seagate__Kinetic__Proto__Command__Header* hdr, KineticSession const * const session)
 {
     KINETIC_ASSERT(hdr != NULL);
     KINETIC_ASSERT(session != NULL);
-    *hdr = (KineticProto_Command_Header) {
-        .base = PROTOBUF_C_MESSAGE_INIT(&KineticProto_command_header__descriptor),
-        .has_clusterVersion = true,
-        .clusterVersion = session->config.clusterVersion,
-        .has_connectionID = true,
-        .connectionID = session->connectionID,
+    *hdr = (Com__Seagate__Kinetic__Proto__Command__Header) {
+        .base = PROTOBUF_C_MESSAGE_INIT(&com__seagate__kinetic__proto__command__header__descriptor),
+        .has_clusterversion = true,
+        .clusterversion = session->config.clusterVersion,
+        .has_connectionid = true,
+        .connectionid = session->connectionID,
         .has_sequence = true,
         .sequence = KINETIC_SEQUENCE_NOT_YET_BOUND,
     };

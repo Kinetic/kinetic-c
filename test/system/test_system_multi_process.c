@@ -52,7 +52,7 @@ static void child_task(void) {
 
     srand(time(NULL) + getpid()); // re-randomize this process
 
-    const size_t num_ops = 500;
+    const size_t num_ops = 200;
     const size_t obj_size = KINETIC_OBJ_SIZE;
 
     KineticClientConfig config = {
@@ -351,5 +351,11 @@ void test_kinetic_client_stress_multiple_processes(void)
     for (int i = 0; i < MaxDaemons; i++) {
         int stat_loc = 0;
         wait(&stat_loc);
+        if (WIFEXITED(stat_loc)) {
+            uint8_t exit_status = WEXITSTATUS(stat_loc);
+            char err[64];
+            sprintf(err, "Forked process %d of %d exited with error!", i+1, MaxDaemons);
+            TEST_ASSERT_EQUAL_MESSAGE(0u, exit_status, err);
+        }
     }
 }

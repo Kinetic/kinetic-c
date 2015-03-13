@@ -21,15 +21,11 @@
 #define KINETIC_ACL_H
 
 #include "kinetic_acl_types.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 
 /* Attempt to instantiate an ACL structure based on the JSON data
  * contained in PATH. */
-KineticACLLoadResult
-KineticACL_LoadFromFile(const char *path, struct ACL **instance);
-
-KineticACLLoadResult
-acl_of_string(const char *buf, size_t buf_size, struct ACL **instance);
+KineticACLLoadResult KineticACL_LoadFromFile(const char *path, struct ACL **instance);
 
 /* Print an ACL struct to the specified file. */
 void KineticACL_Print(FILE *f, struct ACL *acl);

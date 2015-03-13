@@ -21,18 +21,18 @@
 #include "kinetic_logger.h"
 
 // e.g. CONFIG_FIELD_BYTE_BUFFER(key, message->keyValue, entry)
-#define CONFIG_FIELD_BYTE_BUFFER(_name, _field, _entry) { \
+#define CONFIG_FIELD_BYTE_BUFFER(_name, _proto_name, _field, _entry) { \
     if ((_entry)->_name.array.data != NULL \
         && (_entry)->_name.array.len > 0 \
         && (_entry)->_name.bytesUsed > 0 \
         && (_entry)->_name.bytesUsed <= (_entry)->_name.array.len) \
     { \
-        (_field)._name.data = (_entry)->_name.array.data; \
-        (_field)._name.len = (_entry)->_name.bytesUsed; \
-        (_field).has_ ## _name = true; \
+        (_field)._proto_name.data = (_entry)->_name.array.data; \
+        (_field)._proto_name.len = (_entry)->_name.bytesUsed; \
+        (_field).has_ ## _proto_name = true; \
     } \
     else { \
-        (_field).has_ ## _name = false; \
+        (_field).has_ ## _proto_name = false; \
     } \
 }
 
@@ -45,13 +45,13 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     // Enable command body and keyValue fields by pointing at
     // pre-allocated elements in message
     message->command.body = &message->body;
-    message->command.body->keyValue = &message->keyValue;
+    message->command.body->keyvalue = &message->keyValue;
 
     // Set keyValue fields appropriately
-    CONFIG_FIELD_BYTE_BUFFER(key,        message->keyValue, entry);
-    CONFIG_FIELD_BYTE_BUFFER(newVersion, message->keyValue, entry);
-    CONFIG_FIELD_BYTE_BUFFER(dbVersion,  message->keyValue, entry);
-    CONFIG_FIELD_BYTE_BUFFER(tag,        message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(key,        key,        message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(newVersion, newversion, message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(dbVersion,  dbversion,  message->keyValue, entry);
+    CONFIG_FIELD_BYTE_BUFFER(tag,        tag,        message->keyValue, entry);
 
     message->keyValue.has_force = (bool)((int)entry->force);
     if (message->keyValue.has_force) {
@@ -61,17 +61,17 @@ void KineticMessage_ConfigureKeyValue(KineticMessage* const message,
     message->keyValue.has_algorithm = (bool)((int)entry->algorithm > 0);
     if (message->keyValue.has_algorithm) {
         message->keyValue.algorithm =
-            KineticProto_Command_Algorithm_from_KineticAlgorithm(entry->algorithm);
+            Com__Seagate__Kinetic__Proto__Command__Algorithm_from_KineticAlgorithm(entry->algorithm);
     }
-    message->keyValue.has_metadataOnly = entry->metadataOnly;
-    if (message->keyValue.has_metadataOnly) {
-        message->keyValue.metadataOnly = entry->metadataOnly;
+    message->keyValue.has_metadataonly = entry->metadataOnly;
+    if (message->keyValue.has_metadataonly) {
+        message->keyValue.metadataonly = entry->metadataOnly;
     }
 
     message->keyValue.has_synchronization = (entry->synchronization > 0);
     if (message->keyValue.has_synchronization) {
         message->keyValue.synchronization =
-            KineticProto_Command_Synchronization_from_KineticSynchronization(
+            Com__Seagate__Kinetic__Proto__Command__Synchronization_from_KineticSynchronization(
                 entry->synchronization);
     }
 }
@@ -94,20 +94,20 @@ void KineticMessage_ConfigureKeyRange(KineticMessage* const message,
     message->command.body->range = &message->keyRange;
 
     // Populate startKey, if supplied
-    message->command.body->range->has_startKey = 
+    message->command.body->range->has_startkey = 
         (range->startKey.array.data != NULL);
-    if (message->command.body->range->has_startKey) {
-        message->command.body->range->startKey = (ProtobufCBinaryData) {
+    if (message->command.body->range->has_startkey) {
+        message->command.body->range->startkey = (ProtobufCBinaryData) {
             .data = range->startKey.array.data,
             .len = range->startKey.bytesUsed,
         };
     }
 
     // Populate endKey, if supplied
-    message->command.body->range->has_endKey = 
+    message->command.body->range->has_endkey = 
         (range->endKey.array.data != NULL);
-    if (message->command.body->range->has_endKey) {
-        message->command.body->range->endKey = (ProtobufCBinaryData) {
+    if (message->command.body->range->has_endkey) {
+        message->command.body->range->endkey = (ProtobufCBinaryData) {
             .data = range->endKey.array.data,
             .len = range->endKey.bytesUsed,
         };
@@ -115,17 +115,17 @@ void KineticMessage_ConfigureKeyRange(KineticMessage* const message,
 
     // Populate start/end key inclusive flags, if specified
     if (range->startKeyInclusive) {
-        message->command.body->range->startKeyInclusive = range->startKeyInclusive;
+        message->command.body->range->startkeyinclusive = range->startKeyInclusive;
     }
-    message->command.body->range->has_startKeyInclusive = range->startKeyInclusive;
+    message->command.body->range->has_startkeyinclusive = range->startKeyInclusive;
     if (range->endKeyInclusive) {
-        message->command.body->range->endKeyInclusive = range->endKeyInclusive;
+        message->command.body->range->endkeyinclusive = range->endKeyInclusive;
     }
-    message->command.body->range->has_endKeyInclusive = range->endKeyInclusive;
+    message->command.body->range->has_endkeyinclusive = range->endKeyInclusive;
 
     // Populate max keys to return
-    message->command.body->range->maxReturned = range->maxReturned;
-    message->command.body->range->has_maxReturned = true;
+    message->command.body->range->maxreturned = range->maxReturned;
+    message->command.body->range->has_maxreturned = true;
 
     // Populate reverse flag (return keys in reverse order)
     if (range->reverse) {

@@ -24,7 +24,7 @@
 #include "kinetic_socket.h"
 #include "kinetic_hmac.h"
 #include "kinetic_logger.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "kinetic_nbo.h"
 #include "kinetic_allocator.h"
 #include "kinetic_controller.h"
@@ -197,12 +197,12 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         response->header = si->header;
         
         response->proto = KineticPDU_unpack_message(NULL, si->header.protobufLength, si->buf);
-        if (response->proto->has_commandBytes &&
-            response->proto->commandBytes.data != NULL &&
-            response->proto->commandBytes.len > 0)
+        if (response->proto->has_commandbytes &&
+            response->proto->commandbytes.data != NULL &&
+            response->proto->commandbytes.len > 0)
         {
             response->command = KineticPDU_unpack_command(NULL,
-                response->proto->commandBytes.len, response->proto->commandBytes.data);
+                response->proto->commandbytes.len, response->proto->commandbytes.data);
         } else {
             response->command = NULL;
         }
@@ -216,14 +216,14 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         if (response->command != NULL &&
             response->command->header != NULL)
         {
-            if (response->proto->has_authType &&
-                response->proto->authType == KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS
+            if (response->proto->has_authtype &&
+                response->proto->authtype == COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS
                 && KineticSession_GetConnectionID(session) == 0)
             {
                 /* Ignore the unsolicited status message on connect. */
                 seq_id = BUS_NO_SEQ_ID;
             } else {
-                seq_id = response->command->header->ackSequence;
+                seq_id = response->command->header->acksequence;
             }
             log_response_seq_id(session->socket, seq_id);
         }

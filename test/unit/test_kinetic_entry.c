@@ -25,7 +25,7 @@
 #include "kinetic_types_internal.h"
 #include "kinetic_controller.h"
 #include "kinetic_logger.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "mock_kinetic_allocator.h"
 #include "mock_kinetic_operation.h"
 #include "mock_kinetic_resourcewaiter.h"

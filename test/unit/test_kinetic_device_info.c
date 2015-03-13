@@ -22,7 +22,7 @@
 #include "kinetic_types.h"
 #include "kinetic_types_internal.h"
 #include "kinetic_logger.h"
-#include "kinetic_proto.h"
+#include "kinetic.pb-c.h"
 #include "byte_array.h"
 #include "protobuf-c/protobuf-c.h"
 #include "unity_helper.h"
@@ -59,11 +59,11 @@ void test_KineticLogInfo_Create_should_allocate_and_populate_device_info_with_ut
 {
     size_t expectedSize = sizeof(KineticLogInfo);
     const int numUtilizations = 2;
-    KineticProto_Command_GetLog_Utilization utilizations[] = {
-        KINETIC_PROTO_COMMAND_GET_LOG_UTILIZATION__INIT,
-        KINETIC_PROTO_COMMAND_GET_LOG_UTILIZATION__INIT,
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization utilizations[] = {
+        COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__UTILIZATION__INIT,
+        COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__UTILIZATION__INIT,
     };
-    KineticProto_Command_GetLog getLog = KINETIC_PROTO_COMMAND_GET_LOG__INIT;
+    Com__Seagate__Kinetic__Proto__Command__GetLog getLog = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__INIT;
     getLog.n_utilizations = numUtilizations;
     char* names[] = {"fo", "shizzle"};
     
@@ -77,7 +77,7 @@ void test_KineticLogInfo_Create_should_allocate_and_populate_device_info_with_ut
     utilizations[1].value = 2.3f;
     expectedSize += sizeof(KineticLogInfo_Utilization) + GetPaddedLength(strlen(utilizations[1].name)+1);
 
-    KineticProto_Command_GetLog_Utilization* pUtilizations[] = {
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization* pUtilizations[] = {
         &utilizations[0], &utilizations[1]
     };
     getLog.utilizations = pUtilizations;

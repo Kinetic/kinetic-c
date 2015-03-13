@@ -87,9 +87,9 @@ KineticStatus KineticCallbacks_Get(KineticOperation* const operation, KineticSta
     {
         KINETIC_ASSERT(operation->response != NULL);
         // Update the entry upon success
-        KineticProto_Command_KeyValue* keyValue = KineticResponse_GetKeyValue(operation->response);
+        Com__Seagate__Kinetic__Proto__Command__KeyValue* keyValue = KineticResponse_GetKeyValue(operation->response);
         if (keyValue != NULL) {
-            if (!Copy_KineticProto_Command_KeyValue_to_KineticEntry(keyValue, operation->entry)) {
+            if (!Copy_Com__Seagate__Kinetic__Proto__Command__KeyValue_to_KineticEntry(keyValue, operation->entry)) {
                 return KINETIC_STATUS_BUFFER_OVERRUN;
             }
         }
@@ -126,9 +126,9 @@ KineticStatus KineticCallbacks_GetKeyRange(KineticOperation* const operation, Ki
     {
         KINETIC_ASSERT(operation->response != NULL);
         // Report the key list upon success
-        KineticProto_Command_Range* keyRange = KineticResponse_GetKeyRange(operation->response);
+        Com__Seagate__Kinetic__Proto__Command__Range* keyRange = KineticResponse_GetKeyRange(operation->response);
         if (keyRange != NULL) {
-            if (!Copy_KineticProto_Command_Range_to_ByteBufferArray(keyRange, operation->buffers)) {
+            if (!Copy_Com__Seagate__Kinetic__Proto__Command__Range_to_ByteBufferArray(keyRange, operation->buffers)) {
                 return KINETIC_STATUS_BUFFER_OVERRUN;
             }
         }
@@ -136,7 +136,7 @@ KineticStatus KineticCallbacks_GetKeyRange(KineticOperation* const operation, Ki
     return status;
 }
 
-static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, KineticProto_Command_P2POperation const * const p2pOperation)
+static void populateP2PStatusCodes(KineticP2P_Operation* const p2pOp, Com__Seagate__Kinetic__Proto__Command__P2POperation const * const p2pOperation)
 {
     if (p2pOperation == NULL) { return; }
     for(size_t i = 0; i < p2pOp->numOperations; i++)
@@ -176,12 +176,12 @@ KineticStatus KineticCallbacks_P2POperation(KineticOperation* const operation, K
         if ((operation->response != NULL) &&
             (operation->response->command != NULL) &&
             (operation->response->command->body != NULL) &&
-            (operation->response->command->body->p2pOperation != NULL)) {
-            populateP2PStatusCodes(p2pOp, operation->response->command->body->p2pOperation);
+            (operation->response->command->body->p2poperation != NULL)) {
+            populateP2PStatusCodes(p2pOp, operation->response->command->body->p2poperation);
         }
     }
 
-    KineticAllocator_FreeP2PProtobuf(operation->request->command->body->p2pOperation);
+    KineticAllocator_FreeP2PProtobuf(operation->request->command->body->p2poperation);
 
     return status;
 }
@@ -201,11 +201,11 @@ KineticStatus KineticCallbacks_GetLog(KineticOperation* const operation, Kinetic
     {
         KINETIC_ASSERT(operation->response != NULL);
         // Copy the data from the response protobuf into a new info struct
-        if (operation->response->command->body->getLog == NULL) {
+        if (operation->response->command->body->getlog == NULL) {
             return KINETIC_STATUS_OPERATION_FAILED;
         }
         else {
-            *operation->deviceInfo = KineticLogInfo_Create(operation->response->command->body->getLog);
+            *operation->deviceInfo = KineticLogInfo_Create(operation->response->command->body->getlog);
             return KINETIC_STATUS_SUCCESS;
         }
     }

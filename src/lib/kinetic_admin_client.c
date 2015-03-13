@@ -188,9 +188,9 @@ KineticStatus KineticAdminClient_GetLog(KineticSession * const session,
     KINETIC_ASSERT(session != NULL);
     KINETIC_ASSERT(info != NULL);
 
-    KineticProto_Command_GetLog_Type protoType =
-        KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type(type);
-    if (protoType == KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE) {
+    Com__Seagate__Kinetic__Proto__Command__GetLog__Type protoType =
+        KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog__Type(type);
+    if (protoType == COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__INVALID_TYPE) {
         return KINETIC_STATUS_INVALID_LOG_TYPE;
     }
 
@@ -216,7 +216,7 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession * const ses
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
 
     // Initialize request
-    KineticBuilder_BuildGetLog(operation, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, name, info);
+    KineticBuilder_BuildGetLog(operation, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, name, info);
 
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
