@@ -24,6 +24,10 @@ API Documentation
     * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c
         * e.g. object keys, object value data, etc.
 
+There are also some additional [architectural notes](docs) and time-sequence diagrams.
+
+[docs]: https://github.com/Seagate/kinetic-c/blob/master/docs/sequence_diagrams/arch_docs.md
+
 Common Developer Tasks
 ----------------------
 * Build the library
