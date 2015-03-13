@@ -90,3 +90,27 @@ Adding a new system test
     * System tests link/run against the full kinetic-c static library.
     * A generic test fixure is provided and linked into each system test from: `test/support/system_test_fixture.h/c`
         * See details above for runtime configuration of the system test kinetic devices for running remote simulators or kinetic device hardware.
+
+
+Future development notes
+------------------------
+
+* epoll(2) could be used internally, in place of poll(2) and multiple
+  listener threads. This only matters in a case where there is a large
+  amount of idle listener connections. When there is a small number of
+  file descriptors, it will add overhead, and epoll is only available
+  on Linux.
+
+* The listener can potentially leak memory on shutdown, in the case
+  where responses have been partially received. This has been a low priority. 
+
+* There is room for tuning the total number of messages-in-flight
+  in the listener (controlled by `MAX_PENDING_MESSAGES`), how the
+  backpressure is calculated (in `ListenerTask_GetBackpressure`), and the
+  bit shift applied to the backpressure unit (the third argument to
+  `bus_backpressure_delay`, e.g. `LISTENER_BACKPRESSURE_SHIFT`). These
+  derive the feedback that pushes against actions that overload the
+  system. The current setup has worked well with system/integration
+  tests and a stress test program that attempts to overload the message
+  bus over a loopback connection, but other workloads may have different
+  performance trade-offs.
