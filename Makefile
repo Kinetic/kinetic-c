@@ -123,8 +123,11 @@ clean: makedirs
 	cd ${LIB_DIR}/bus && make clean
 	if [ -f ${JSONC}/Makefile ]; then cd ${JSONC} && make clean; fi;
 
+# Setup version info generation and corresponding dependencies
 $(VERSION_INFO): $(VERSION_FILE)
 	@ruby scripts/generate_version_info.rb
+$(OUT_DIR)/kinetic_logger.o: $(VERSION_INFO)
+$(OUT_DIR)/kinetic_client.o: $(VERSION_INFO)
 
 config: makedirs update_git_submodules
 
@@ -227,7 +230,7 @@ test: Rakefile $(LIB_OBJS)
 	@echo Testing $(PROJECT)
 	@echo --------------------------------------------------------------------------------
 	bundle install
-	bundle exec rake test_all
+	bundle exec rake test:delta
 
 JAVA_HOME ?= /usr
 JAVA_BIN = $(JAVA_HOME)/bin/java

@@ -2,13 +2,16 @@
 kinetic_c_version = `cat config/VERSION`.strip
 commit_hash = `git rev-parse HEAD`.strip
 protocol_version = nil
-File.readlines('src/lib/kinetic.pb-c.c').each do |l|
-    m = l.match /^char com_seagate_kinetic_proto_local_protocol_version_default_value\[\]\s+=\s+\"(.*)\"/
+proto_source = 'src/lib/kinetic.pb-c.c'
+File.readlines(proto_source).each do |l|
+    m = l.match /^char com__seagate__kinetic__proto__local__protocol_version__default_value\[\]\s+=\s+\"(.*)\"/
     if m
-        protocol_version = m[1].strip
-        break
+      protocol_version = m[1].strip
+      break
     end
 end
+
+raise "Unable to parse protocol version from: #{proto_source}" if protocol_version.nil?
 
 info_header_file = "src/lib/kinetic_version_info.h"
 
