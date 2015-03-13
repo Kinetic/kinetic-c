@@ -1,8 +1,11 @@
-.TH "thread_context" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "thread_context" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 thread_context \- 
+.PP
+Thread_info, plus pointer back to main threadpool manager\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -20,17 +23,21 @@ thread_context \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 42 of file threadpool_internals\&.h\&.
+Thread_info, plus pointer back to main threadpool manager\&. 
+
+
+.PP
+Definition at line 44 of file threadpool_internals\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "struct \fBthreadpool\fP* thread_context::t"
 
 .PP
-Definition at line 43 of file threadpool_internals\&.h\&.
+Definition at line 45 of file threadpool_internals\&.h\&.
 .SS "struct \fBthread_info\fP* thread_context::ti"
 
 .PP
-Definition at line 44 of file threadpool_internals\&.h\&.
+Definition at line 46 of file threadpool_internals\&.h\&.
 
 .SH "Author"
 .PP 

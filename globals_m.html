@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -76,6 +76,7 @@
       <li><a href="globals_s.html#index_s"><span>s</span></a></li>
       <li><a href="globals_t.html#index_t"><span>t</span></a></li>
       <li><a href="globals_u.html#index_u"><span>u</span></a></li>
+      <li><a href="globals_v.html#index_v"><span>v</span></a></li>
       <li><a href="globals_w.html#index_w"><span>w</span></a></li>
       <li><a href="globals_y.html#index_y"><span>y</span></a></li>
     </ul>
@@ -93,16 +94,15 @@
 , <a class="el" href="blocking__getnext__getprevious_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">blocking_getnext_getprevious.c</a>
 , <a class="el" href="get__key__range_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">get_key_range.c</a>
 , <a class="el" href="echosrv_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">echosrv.c</a>
-, <a class="el" href="test__yacht_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">test_yacht.c</a>
-, <a class="el" href="get__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">get_nonblocking.c</a>
 , <a class="el" href="test__threadpool_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">test_threadpool.c</a>
+, <a class="el" href="get__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">get_nonblocking.c</a>
 , <a class="el" href="test__threadpool__sequencing_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">test_threadpool_sequencing.c</a>
+, <a class="el" href="test__threadpool__stress_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">test_threadpool_stress.c</a>
 , <a class="el" href="blocking__noop_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">blocking_noop.c</a>
 , <a class="el" href="put__nonblocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">put_nonblocking.c</a>
-, <a class="el" href="test__threadpool__stress_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">test_threadpool_stress.c</a>
 , <a class="el" href="discovery_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">discovery.c</a>
-, <a class="el" href="setup__teardown_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">setup_teardown.c</a>
 , <a class="el" href="main_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main.c</a>
+, <a class="el" href="setup__teardown_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">setup_teardown.c</a>
 , <a class="el" href="blocking__getkeyrange_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">blocking_getkeyrange.c</a>
 , <a class="el" href="blocking__put__delete_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">blocking_put_delete.c</a>
 , <a class="el" href="write__file__blocking_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">write_file_blocking.c</a>
@@ -113,9 +113,6 @@
 </li>
 <li>MAX_CLIENTS
 : <a class="el" href="echosrv_8c.html#a0a8f91f93d75a07f0ae45077db45b3eb">echosrv.c</a>
-</li>
-<li>MAX_DELAY
-: <a class="el" href="listener__internal__types_8h.html#a16027d8acc5301e440cefa086eb9db2a">listener_internal_types.h</a>
 </li>
 <li>MAX_FDS
 : <a class="el" href="listener__internal__types_8h.html#a816ccaf3e5e64cc98f2b5613cc177398">listener_internal_types.h</a>
@@ -143,20 +140,22 @@
 , <a class="el" href="echosrv_8c.html#a85fda3522e69a1bf85f7dcd97b6023a1">echosrv.c</a>
 </li>
 <li>MIN_DELAY
-: <a class="el" href="listener__internal__types_8h.html#ad3b51637a39a4ff75bd979b917cb89ef">listener_internal_types.h</a>
-, <a class="el" href="threadpool_8c.html#ad3b51637a39a4ff75bd979b917cb89ef">threadpool.c</a>
+: <a class="el" href="threadpool_8c.html#ad3b51637a39a4ff75bd979b917cb89ef">threadpool.c</a>
+</li>
+<li>move_errored_active_sockets_to_end()
+: <a class="el" href="listener__io_8c.html#ae9ab87bccf8e69081a3dbe0fb4e9330c">listener_io.c</a>
 </li>
 <li>MSG_ADD_SOCKET
 : <a class="el" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba308d8ae49e69d0b5a2fcf72cfe6d57a2">listener_internal_types.h</a>
 </li>
 <li>MSG_BP_1QTR
-: <a class="el" href="listener__task_8c.html#ac68caa54ad7fc51c8f5815eeb6686f30">listener_task.c</a>
+: <a class="el" href="listener__task__internal_8h.html#ac68caa54ad7fc51c8f5815eeb6686f30">listener_task_internal.h</a>
 </li>
 <li>MSG_BP_3QTR
-: <a class="el" href="listener__task_8c.html#a694eca96dcf9ed929ec1608f9c14c852">listener_task.c</a>
+: <a class="el" href="listener__task__internal_8h.html#a694eca96dcf9ed929ec1608f9c14c852">listener_task_internal.h</a>
 </li>
 <li>MSG_BP_HALF
-: <a class="el" href="listener__task_8c.html#a7acc76219d8588ca99f58c2121988112">listener_task.c</a>
+: <a class="el" href="listener__task__internal_8h.html#a7acc76219d8588ca99f58c2121988112">listener_task_internal.h</a>
 </li>
 <li>MSG_EXPECT_RESPONSE
 : <a class="el" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba5b72678cd2a0c7a469687fcce72875ed">listener_internal_types.h</a>
@@ -165,8 +164,7 @@
 : <a class="el" href="listener__internal__types_8h.html#a86f29ffc383d560855689fdb7abc4093">listener_internal_types.h</a>
 </li>
 <li>msg_handler()
-: <a class="el" href="listener__cmd__internal_8h.html#abff7ce205d94f17798e20b45f8ddd289">listener_cmd_internal.h</a>
-, <a class="el" href="listener__cmd_8c.html#abff7ce205d94f17798e20b45f8ddd289">listener_cmd.c</a>
+: <a class="el" href="listener__cmd_8c.html#abff7ce205d94f17798e20b45f8ddd289">listener_cmd.c</a>
 </li>
 <li>MSG_HOLD_RESPONSE
 : <a class="el" href="listener__internal__types_8h.html#acbbd5f70828660265bd996e23b58ce0ba67fa0a0566922ae758679de9efdc96de">listener_internal_types.h</a>

@@ -1,4 +1,4 @@
-.TH "md__d_e_v_e_l_o_p" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "md__d_e_v_e_l_o_p" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,65 +12,141 @@ md__d_e_v_e_l_o_p \- Kinetic-C Library Developer Reference
 \fCRubyGems\fP (installed w/ `bundle install)
 .IP "  \(bu" 4
 \fCbundler\fP (v1\&.3\&.5 or higher) environment/dependency manager for Ruby projects
+.IP "  \(bu" 4
+Managed gems (installed w/ \fCbundle install\fP)
+.IP "    \(bu" 6
+\fCrake\fP Make-like build system
+.IP "    \(bu" 6
+\fCceedling\fP Build system which extends rake to add support for interaction-based testing
+.IP "      \(bu" 8
+\fCunity\fP Unity C test framework (bundled w/ Ceedling)
+.IP "      \(bu" 8
+\fCcmock\fP CMock auto mock/fake module generator for C (bundle w/ Ceedling)
+.PP
+
+.PP
+
 .PP
 
 .IP "\(bu" 2
-\fCCppCheck\fP for static analysis of source code
-.IP "\(bu" 2
 \fCValgrind\fP for validation of memory usage/management
 .IP "\(bu" 2
-\fCDoxygen\fP and \fCGraphViz\fP for generating API documentation
+\fCDoxygen\fP
+.IP "  \(bu" 4
+\fCGraphViz\fP used by Doxygen for generating visualizations/graphs
+.PP
+
 .PP
 .PP
-.SH "API Documentation "
+.SS "API Documentation "
+.PP
+\fCKinetic-C API Documentation\fP (generated with Doxygen)
+.IP "\(bu" 2
+\fCKinetic-C API\fP
+.IP "\(bu" 2
+\fCKinetic-C types\fP
+.IP "\(bu" 2
+\fCByteArray API\fP
+.IP "  \(bu" 4
+The \fBByteArray\fP and \fBByteBuffer\fP types are used for exchanging variable length byte-arrays with kinetic-c
+.IP "    \(bu" 6
+e\&.g\&. object keys, object value data, etc\&.
+.PP
+
+.PP
+
 .PP
 .PP
-\fCKinetic-C API\fP (generated with Doxygen)
+There are also some additional [architectural notes](docs) and time-sequence diagrams\&.
 .PP
 .SS "Common Developer Tasks "
 .PP
-\fBNOTE: Prefix the following commands with \fCbundle exec\fP so that they execute in the context of the bundle environment setup via \fCbundle install\fP\&.\fP
-.PP
 .IP "\(bu" 2
-List available Rake tasks w/descriptions
+Build the library
 .IP "  \(bu" 4
-\fCrake -T\fP
+\fCmake\fP
+.PP
+
+.IP "\(bu" 2
+Start kinteic-java simulator(s)
+.IP "  \(bu" 4
+\fCmake [NUM_SIMS=N] start_sims # defaults to starting 2 simulators, if NUM_SIMS unspecified\fP
+.PP
+
+.IP "\(bu" 2
+Stop all running kinetic-java simulator(s)
+.IP "  \(bu" 4
+\fCmake stop_sims\fP
 .PP
 
 .IP "\(bu" 2
 Run all tests and build the library and examples
 .IP "  \(bu" 4
-\fCrake\fP
+\fCmake all\fP
 .PP
 
 .IP "\(bu" 2
-Build the library
+Run all unit/integration tests
 .IP "  \(bu" 4
-\fCrake release\fP
+\fCmake test\fP
 .PP
 
 .IP "\(bu" 2
-Run all unit/integration/system/example tests
+Run all system tests
 .IP "  \(bu" 4
-\fCrake test_all\fP
+\fCmake system_tests\fP
 .PP
 
 .IP "\(bu" 2
-Analyze code
+Run a particular system test
 .IP "  \(bu" 4
-\fCrake cppcheck\fP
+make test_system_<module>
+.IP "  \(bu" 4
+Will expect at least 2 simulators running by default (see above)
+.IP "  \(bu" 4
+Uses the following environment vars, which are loaded dynamically at runtime
+.IP "    \(bu" 6
+\fCKINTEIC_HOST[1|2]\fP - Configures the host name/IP for the specified device (default: \fClocalhost\fP)
+.IP "    \(bu" 6
+\fCKINTEIC_PORT[1|2]\fP - Configures the primary port for the specified device (default: \fC8124\fP, \fC8124\fP)
+.IP "    \(bu" 6
+\fCKINTEIC_TLS_PORT[1|2]\fP - Configures the TLS port for the specified device (default: \fC8443\fP, \fC8444\fP)
 .PP
 
-.IP "\(bu" 2
-Generate documentation
-.IP "  \(bu" 4
-\fCrake doxygen:gen\fP
 .PP
 
 .IP "\(bu" 2
 Apply license to source files (skips already licensed files)
 .IP "  \(bu" 4
-\fCrake apply_license\fP
+\fCmake apply_license\fP
+.PP
+
+.PP
+.PP
+.SS "Developer Tasks via Rake "
+.PP
+.IP "\(bu" 2
+List rake tasks w/ descriptions
+.IP "  \(bu" 4
+\fCrake -T\fP
+.PP
+
+.IP "\(bu" 2
+Test a single module (via Ceedling)
+.IP "  \(bu" 4
+\fCrake test:<module_name>\fP
+.PP
+
+.IP "\(bu" 2
+Generate API documentation locally
+.IP "  \(bu" 4
+\fCrake doxygen:gen\fP
+.PP
+
+.IP "\(bu" 2
+Generate and publish public API documentation
+.IP "  \(bu" 4
+\fCrake doxygen:update_public_api\fP
 .PP
 
 .IP "\(bu" 2
@@ -79,11 +155,72 @@ Build/install Google Protocol Buffers support for the Kinetic-Protocol
 \fCrake proto\fP
 .PP
 
+.PP
+.PP
+.SS "Automated Tests "
+.PP
+All test sources are located in \fCtest/\fP, which are additionally broken up into:
 .IP "\(bu" 2
-Enable verbose output (for current Rake run)
+\fCtest/unit\fP - test suites for individual modules
+.IP "\(bu" 2
+\fCtest/integration\fP - test suites which integrate multiple modules
+.IP "\(bu" 2
+\fCtest/system\fP - system tests whick link against the kinetic-c release library
 .IP "  \(bu" 4
-\fCrake verbose <task_A> <task_B>\fP 
+These tests require at least 2 simulator/drives to run against
 .PP
 
+.PP
+.PP
+.SS "Adding a new unit/integration test "
+.PP
+.IP "\(bu" 2
+Create a file named \fCtest_<name>\&.c\fP in either \fCtest/unit\fP or \fCtest/integration\fP
+.IP "  \(bu" 4
+These files will automatically be picked up by the Ceedling and added to the regression suite
+.IP "  \(bu" 4
+Build targets for each module will be generated according to what header files are included in the test suite source\&.
+.IP "    \(bu" 6
+e\&.g\&.
+.IP "      \(bu" 8
+\fC#include 'kinetic_session\&.h'\fP will link \fCkinetic_session\&.o\fP into the test target\&.
+.IP "      \(bu" 8
+\fC#include 'mock_kinetic_session\&.h'\fP will create a CMock mock of \fC\fBkinetic_session\&.h\fP\fP and link \fCmock_kinetic_session\&.o\fP into the test target\&.
+.IP "      \(bu" 8
+\fC#include <some_lib\&.h>\fP will simply include the specified header, assuming it is already available in to the linker\&.
+.PP
+
+.PP
+
+.PP
+
+.PP
+.PP
+.SS "Adding a new system test "
+.PP
+.IP "\(bu" 2
+Create a file named \fCtest_system_<name>\&.c\fP in \fCtest/system\fP
+.IP "  \(bu" 4
+This will create a new system test target invokable via: \fCmake test_system_<name>\fP
+.IP "  \(bu" 4
+System tests link/run against the full kinetic-c static library\&.
+.IP "  \(bu" 4
+A generic test fixure is provided and linked into each system test from: \fCtest/support/system_test_fixture\&.h/c\fP
+.IP "    \(bu" 6
+See details above for runtime configuration of the system test kinetic devices for running remote simulators or kinetic device hardware\&.
+.PP
+
+.PP
+
+.PP
+.PP
+.SS "Future development notes "
+.PP
+.IP "\(bu" 2
+epoll(2) could be used internally, in place of poll(2) and multiple listener threads\&. This only matters in a case where there is a large amount of idle listener connections\&. When there is a small number of file descriptors, it will add overhead, and epoll is only available on Linux\&.
+.IP "\(bu" 2
+The listener can potentially leak memory on shutdown, in the case where responses have been partially received\&. This has been a low priority\&.
+.IP "\(bu" 2
+There is room for tuning the total number of messages-in-flight in the listener (controlled by \fCMAX_PENDING_MESSAGES\fP), how the backpressure is calculated (in \fCListenerTask_GetBackpressure\fP), and the bit shift applied to the backpressure unit (the third argument to \fCbus_backpressure_delay\fP, e\&.g\&. \fCLISTENER_BACKPRESSURE_SHIFT\fP)\&. These derive the feedback that pushes against actions that overload the system\&. The current setup has worked well with system/integration tests and a stress test program that attempts to overload the message bus over a loopback connection, but other workloads may have different performance trade-offs\&. 
 .PP
 

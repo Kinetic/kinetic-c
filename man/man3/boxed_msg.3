@@ -1,4 +1,4 @@
-.TH "boxed_msg" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "boxed_msg" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,27 +14,33 @@ boxed_msg \-
 .ti -1c
 .RI "\fBbus_msg_result_t\fP \fBresult\fP"
 .br
+.RI "\fIResult message, constructed in place after the request/response cycle has completed or failed due to timeout / unrecoverable error\&. \fP"
 .ti -1c
 .RI "time_t \fBtimeout_sec\fP"
 .br
+.RI "\fIMessage send timeout\&. \fP"
 .ti -1c
 .RI "\fBbus_msg_cb\fP * \fBcb\fP"
 .br
+.RI "\fICallback and userdata to which the \fBbus_msg_result_t\fP above will be sunk\&. \fP"
 .ti -1c
 .RI "void * \fBudata\fP"
 .br
 .ti -1c
 .RI "struct timeval \fBtv_send_start\fP"
 .br
+.RI "\fIEvent timestamps to track timeouts\&. \fP"
 .ti -1c
 .RI "struct timeval \fBtv_send_done\fP"
 .br
 .ti -1c
 .RI "int \fBfd\fP"
 .br
+.RI "\fIDestination filename and message body\&. \fP"
 .ti -1c
 .RI "SSL * \fBssl\fP"
 .br
+.RI "\fIvalid pointer or BUS_BOXED_MSG_NO_SSL \fP"
 .ti -1c
 .RI "int64_t \fBout_seq_id\fP"
 .br
@@ -56,13 +62,19 @@ Definition at line 36 of file bus_internal_types\&.h\&.
 .SS "\fBbus_msg_result_t\fP boxed_msg::result"
 
 .PP
+Result message, constructed in place after the request/response cycle has completed or failed due to timeout / unrecoverable error\&. 
+.PP
 Definition at line 40 of file bus_internal_types\&.h\&.
 .SS "time_t boxed_msg::timeout_sec"
 
 .PP
+Message send timeout\&. 
+.PP
 Definition at line 43 of file bus_internal_types\&.h\&.
 .SS "\fBbus_msg_cb\fP* boxed_msg::cb"
 
+.PP
+Callback and userdata to which the \fBbus_msg_result_t\fP above will be sunk\&. 
 .PP
 Definition at line 46 of file bus_internal_types\&.h\&.
 .SS "void* boxed_msg::udata"
@@ -72,6 +84,8 @@ Definition at line 47 of file bus_internal_types\&.h\&.
 .SS "struct timeval boxed_msg::tv_send_start"
 
 .PP
+Event timestamps to track timeouts\&. 
+.PP
 Definition at line 50 of file bus_internal_types\&.h\&.
 .SS "struct timeval boxed_msg::tv_send_done"
 
@@ -80,9 +94,13 @@ Definition at line 51 of file bus_internal_types\&.h\&.
 .SS "int boxed_msg::fd"
 
 .PP
+Destination filename and message body\&. 
+.PP
 Definition at line 54 of file bus_internal_types\&.h\&.
 .SS "SSL* boxed_msg::ssl"
 
+.PP
+valid pointer or BUS_BOXED_MSG_NO_SSL 
 .PP
 Definition at line 55 of file bus_internal_types\&.h\&.
 .SS "int64_t boxed_msg::out_seq_id"

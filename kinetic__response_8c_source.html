@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,7 +55,7 @@
 <div class="contents">
 <a href="kinetic__response_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -79,7 +79,7 @@
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__socket_8h.html">kinetic_socket.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__hmac_8h.html">kinetic_hmac.h</a>&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__logger_8h.html">kinetic_logger.h</a>&quot;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__proto_8h.html">kinetic_proto.h</a>&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic_8pb-c_8h.html">kinetic.pb-c.h</a>&quot;</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__nbo_8h.html">kinetic_nbo.h</a>&quot;</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__allocator_8h.html">kinetic_allocator.h</a>&quot;</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__controller_8h.html">kinetic_controller.h</a>&quot;</span></div>
@@ -87,64 +87,97 @@
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &lt;time.h&gt;</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#a8a952709cd8ea19ae6f086e972d68b3f">   35</a></span>&#160;<a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> <a class="code" href="kinetic__response_8c.html#adc08047406571602d0adbe1dbc8deddd">KineticResponse_GetStatus</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a>* response)</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#ae4ccd1ec59cfcc05294ea852124c81ba">   35</a></span>&#160;uint32_t <a class="code" href="kinetic__response_8c.html#ae4ccd1ec59cfcc05294ea852124c81ba">KineticResponse_GetProtobufLength</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response)</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> status = <a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f">KINETIC_STATUS_INVALID</a>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">if</span> (response != NULL &amp;&amp;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a> != NULL &amp;&amp;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;status != NULL &amp;&amp;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;status-&gt;has_code != <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        status = <a class="code" href="kinetic__types__internal_8c.html#afef6c786c0ae708f69144e01b58a9f09">KineticProtoStatusCode_to_KineticStatus</a>(</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;status-&gt;code);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">return</span> status;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(response);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">return</span> response-&gt;<a class="code" href="struct_kinetic_response.html#af39104124519d310cfa0750c81f70473">header</a>.protobufLength;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#a01297ec80c62c87f09d4c677b5fc42af">   41</a></span>&#160;uint32_t <a class="code" href="kinetic__response_8c.html#a01297ec80c62c87f09d4c677b5fc42af">KineticResponse_GetValueLength</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;{</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(response);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> response-&gt;<a class="code" href="struct_kinetic_response.html#af39104124519d310cfa0750c81f70473">header</a>.valueLength;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#adc08047406571602d0adbe1dbc8deddd">   47</a></span>&#160;<a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> <a class="code" href="kinetic__response_8c.html#adc08047406571602d0adbe1dbc8deddd">KineticResponse_GetStatus</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response)</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;{</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> status = <a class="code" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f">KINETIC_STATUS_INVALID</a>;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#ab8264bee97d3893b395dd3e703141b4e">   51</a></span>&#160;KineticProto_Command_KeyValue* <a class="code" href="kinetic__response_8c.html#a1f37a47006fdd8e7c80c63b976542132">KineticResponse_GetKeyValue</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a>* response)</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    KineticProto_Command_KeyValue* keyValue = NULL;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">if</span> (response != NULL &amp;&amp;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a> != NULL &amp;&amp;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;body != NULL)</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        keyValue = response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;body-&gt;keyValue;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    }</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordflow">return</span> keyValue;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;}</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#ab63daf05b8abcecb2de385f68604c0e6">   64</a></span>&#160;KineticProto_Command_Range* <a class="code" href="kinetic__response_8c.html#a860282f8ff1b501be1d89e093243b9cd">KineticResponse_GetKeyRange</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a>* response)</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;{</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    KineticProto_Command_Range* range = NULL;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">if</span> (response != NULL &amp;&amp;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a2d400c211de3d6da0eea3db4f8eb8dd3">proto</a> != NULL &amp;&amp;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a> != NULL &amp;&amp;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;body != NULL)</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        range = response-&gt;<a class="code" href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">command</a>-&gt;body-&gt;range;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">return</span> range;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">if</span> (response != NULL &amp;&amp;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a> != NULL &amp;&amp;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;status != NULL &amp;&amp;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;status-&gt;has_code != <span class="keyword">false</span>)</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        status = <a class="code" href="kinetic__types__internal_8c.html#a7a2bc7c567b197abcabe4cba9462c96f">KineticProtoStatusCode_to_KineticStatus</a>(</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;status-&gt;code);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">return</span> status;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#a5071a501d9e7cfb5623099f3d2cb8de0">   63</a></span>&#160;int64_t <a class="code" href="kinetic__response_8c.html#a5071a501d9e7cfb5623099f3d2cb8de0">KineticResponse_GetConnectionID</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;{</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    int64_t <span class="keywordtype">id</span> = 0;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(response);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(response-&gt;<a class="code" href="struct_kinetic_response.html#ad366da7c493064d26ed933f6b8806552">proto</a>);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">if</span> (response-&gt;<a class="code" href="struct_kinetic_response.html#ad366da7c493064d26ed933f6b8806552">proto</a>-&gt;authtype == <a class="code" href="kinetic_8pb-c_8h.html#afa9dfa2779e2de5440b932f3a1310bb0af4f6a1a15db704fb0c7171dfca548f73">COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS</a> &amp;&amp;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a> != NULL &amp;&amp;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;header != NULL &amp;&amp;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;header-&gt;has_connectionid)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordtype">id</span> = response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;header-&gt;connectionid;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordflow">return</span> id;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;}</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#a58b134770c09325a69f587b942df3113">   78</a></span>&#160;Com__Seagate__Kinetic__Proto__Command__KeyValue* <a class="code" href="kinetic__response_8c.html#a58b134770c09325a69f587b942df3113">KineticResponse_GetKeyValue</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response)</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;{</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    Com__Seagate__Kinetic__Proto__Command__KeyValue* keyValue = NULL;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">if</span> (response != NULL &amp;&amp;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a> != NULL &amp;&amp;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;body != NULL)</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        keyValue = response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;body-&gt;keyvalue;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordflow">return</span> keyValue;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="kinetic__response_8h.html#a95d075902f78fdd4786d86d8f44ba5d7">   91</a></span>&#160;Com__Seagate__Kinetic__Proto__Command__Range* <a class="code" href="kinetic__response_8c.html#a95d075902f78fdd4786d86d8f44ba5d7">KineticResponse_GetKeyRange</a>(<a class="code" href="struct_kinetic_response.html">KineticResponse</a> * response)</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;{</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    Com__Seagate__Kinetic__Proto__Command__Range* range = NULL;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordflow">if</span> (response != NULL &amp;&amp;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#ad366da7c493064d26ed933f6b8806552">proto</a> != NULL &amp;&amp;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a> != NULL &amp;&amp;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;body != NULL)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        range = response-&gt;<a class="code" href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">command</a>-&gt;body-&gt;range;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">return</span> range;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
+<div class="ttc" id="kinetic__types__internal_8c_html_a7a2bc7c567b197abcabe4cba9462c96f"><div class="ttname"><a href="kinetic__types__internal_8c.html#a7a2bc7c567b197abcabe4cba9462c96f">KineticProtoStatusCode_to_KineticStatus</a></div><div class="ttdeci">KineticStatus KineticProtoStatusCode_to_KineticStatus(Com__Seagate__Kinetic__Proto__Command__Status__StatusCode protoStatus)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8c_source.html#l00028">kinetic_types_internal.c:28</a></div></div>
 <div class="ttc" id="kinetic__session_8h_html"><div class="ttname"><a href="kinetic__session_8h.html">kinetic_session.h</a></div></div>
 <div class="ttc" id="kinetic__logger_8h_html"><div class="ttname"><a href="kinetic__logger_8h.html">kinetic_logger.h</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html"><div class="ttname"><a href="kinetic__proto_8h.html">kinetic_proto.h</a></div></div>
 <div class="ttc" id="kinetic__controller_8h_html"><div class="ttname"><a href="kinetic__controller_8h.html">kinetic_controller.h</a></div></div>
+<div class="ttc" id="struct_kinetic_response_html_ad366da7c493064d26ed933f6b8806552"><div class="ttname"><a href="struct_kinetic_response.html#ad366da7c493064d26ed933f6b8806552">KineticResponse::proto</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Message * proto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00167">kinetic_types_internal.h:167</a></div></div>
+<div class="ttc" id="kinetic_8pb-c_8h_html_afa9dfa2779e2de5440b932f3a1310bb0af4f6a1a15db704fb0c7171dfca548f73"><div class="ttname"><a href="kinetic_8pb-c_8h.html#afa9dfa2779e2de5440b932f3a1310bb0af4f6a1a15db704fb0c7171dfca548f73">COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic_8pb-c_8h_source.html#l00072">kinetic.pb-c.h:72</a></div></div>
+<div class="ttc" id="kinetic__response_8c_html_a01297ec80c62c87f09d4c677b5fc42af"><div class="ttname"><a href="kinetic__response_8c.html#a01297ec80c62c87f09d4c677b5fc42af">KineticResponse_GetValueLength</a></div><div class="ttdeci">uint32_t KineticResponse_GetValueLength(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00041">kinetic_response.c:41</a></div></div>
+<div class="ttc" id="kinetic__response_8c_html_ae4ccd1ec59cfcc05294ea852124c81ba"><div class="ttname"><a href="kinetic__response_8c.html#ae4ccd1ec59cfcc05294ea852124c81ba">KineticResponse_GetProtobufLength</a></div><div class="ttdeci">uint32_t KineticResponse_GetProtobufLength(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00035">kinetic_response.c:35</a></div></div>
 <div class="ttc" id="kinetic__response_8h_html"><div class="ttname"><a href="kinetic__response_8h.html">kinetic_response.h</a></div></div>
 <div class="ttc" id="kinetic__allocator_8h_html"><div class="ttname"><a href="kinetic__allocator_8h.html">kinetic_allocator.h</a></div></div>
-<div class="ttc" id="kinetic__response_8c_html_adc08047406571602d0adbe1dbc8deddd"><div class="ttname"><a href="kinetic__response_8c.html#adc08047406571602d0adbe1dbc8deddd">KineticResponse_GetStatus</a></div><div class="ttdeci">KineticStatus KineticResponse_GetStatus(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00035">kinetic_response.c:35</a></div></div>
-<div class="ttc" id="struct_kinetic_response_html"><div class="ttname"><a href="struct_kinetic_response.html">KineticResponse</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00180">kinetic_types_internal.h:180</a></div></div>
-<div class="ttc" id="kinetic__response_8c_html_a1f37a47006fdd8e7c80c63b976542132"><div class="ttname"><a href="kinetic__response_8c.html#a1f37a47006fdd8e7c80c63b976542132">KineticResponse_GetKeyValue</a></div><div class="ttdeci">KineticProto_Command_KeyValue * KineticResponse_GetKeyValue(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00051">kinetic_response.c:51</a></div></div>
-<div class="ttc" id="struct_kinetic_response_html_a2d400c211de3d6da0eea3db4f8eb8dd3"><div class="ttname"><a href="struct_kinetic_response.html#a2d400c211de3d6da0eea3db4f8eb8dd3">KineticResponse::proto</a></div><div class="ttdeci">KineticProto_Message * proto</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00183">kinetic_types_internal.h:183</a></div></div>
-<div class="ttc" id="kinetic__response_8c_html_a860282f8ff1b501be1d89e093243b9cd"><div class="ttname"><a href="kinetic__response_8c.html#a860282f8ff1b501be1d89e093243b9cd">KineticResponse_GetKeyRange</a></div><div class="ttdeci">KineticProto_Command_Range * KineticResponse_GetKeyRange(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00064">kinetic_response.c:64</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f">KINETIC_STATUS_INVALID</a></div><div class="ttdoc">Status not available (no reponse/status available) </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00167">kinetic_types.h:167</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a></div><div class="ttdeci">KineticStatus</div><div class="ttdoc">Kinetic status codes. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00166">kinetic_types.h:166</a></div></div>
+<div class="ttc" id="kinetic__response_8c_html_adc08047406571602d0adbe1dbc8deddd"><div class="ttname"><a href="kinetic__response_8c.html#adc08047406571602d0adbe1dbc8deddd">KineticResponse_GetStatus</a></div><div class="ttdeci">KineticStatus KineticResponse_GetStatus(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00047">kinetic_response.c:47</a></div></div>
+<div class="ttc" id="kinetic__response_8c_html_a58b134770c09325a69f587b942df3113"><div class="ttname"><a href="kinetic__response_8c.html#a58b134770c09325a69f587b942df3113">KineticResponse_GetKeyValue</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Command__KeyValue * KineticResponse_GetKeyValue(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00078">kinetic_response.c:78</a></div></div>
+<div class="ttc" id="struct_kinetic_response_html"><div class="ttname"><a href="struct_kinetic_response.html">KineticResponse</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00164">kinetic_types_internal.h:164</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_acf451e836c95d6e7ad8afacdbfeb5c7f"><div class="ttname"><a href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a></div><div class="ttdeci">#define KINETIC_ASSERT(cond)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00062">kinetic_logger.h:62</a></div></div>
+<div class="ttc" id="kinetic_8pb-c_8h_html"><div class="ttname"><a href="kinetic_8pb-c_8h.html">kinetic.pb-c.h</a></div></div>
+<div class="ttc" id="kinetic__response_8c_html_a95d075902f78fdd4786d86d8f44ba5d7"><div class="ttname"><a href="kinetic__response_8c.html#a95d075902f78fdd4786d86d8f44ba5d7">KineticResponse_GetKeyRange</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Command__Range * KineticResponse_GetKeyRange(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00091">kinetic_response.c:91</a></div></div>
+<div class="ttc" id="struct_kinetic_response_html_a661e2b771a840535eb00c694e20c0bfc"><div class="ttname"><a href="struct_kinetic_response.html#a661e2b771a840535eb00c694e20c0bfc">KineticResponse::command</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Command * command</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00168">kinetic_types_internal.h:168</a></div></div>
+<div class="ttc" id="struct_kinetic_response_html_af39104124519d310cfa0750c81f70473"><div class="ttname"><a href="struct_kinetic_response.html#af39104124519d310cfa0750c81f70473">KineticResponse::header</a></div><div class="ttdeci">KineticPDUHeader header</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00166">kinetic_types_internal.h:166</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57ad79eb9cbfd3a64deb5a791fdec5cfe6f">KINETIC_STATUS_INVALID</a></div><div class="ttdoc">Status not available (no reponse/status available) </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00156">kinetic_types.h:156</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a></div><div class="ttdeci">KineticStatus</div><div class="ttdoc">Kinetic status codes. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00155">kinetic_types.h:155</a></div></div>
 <div class="ttc" id="kinetic__nbo_8h_html"><div class="ttname"><a href="kinetic__nbo_8h.html">kinetic_nbo.h</a></div></div>
-<div class="ttc" id="kinetic__types__internal_8c_html_afef6c786c0ae708f69144e01b58a9f09"><div class="ttname"><a href="kinetic__types__internal_8c.html#afef6c786c0ae708f69144e01b58a9f09">KineticProtoStatusCode_to_KineticStatus</a></div><div class="ttdeci">KineticStatus KineticProtoStatusCode_to_KineticStatus(KineticProto_Command_Status_StatusCode protoStatus)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8c_source.html#l00028">kinetic_types_internal.c:28</a></div></div>
-<div class="ttc" id="struct_kinetic_response_html_a25436f0924b231ce3f8e60fb68c0821f"><div class="ttname"><a href="struct_kinetic_response.html#a25436f0924b231ce3f8e60fb68c0821f">KineticResponse::command</a></div><div class="ttdeci">KineticProto_Command * command</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00184">kinetic_types_internal.h:184</a></div></div>
 <div class="ttc" id="kinetic__pdu__unpack_8h_html"><div class="ttname"><a href="kinetic__pdu__unpack_8h.html">kinetic_pdu_unpack.h</a></div></div>
+<div class="ttc" id="kinetic__response_8c_html_a5071a501d9e7cfb5623099f3d2cb8de0"><div class="ttname"><a href="kinetic__response_8c.html#a5071a501d9e7cfb5623099f3d2cb8de0">KineticResponse_GetConnectionID</a></div><div class="ttdeci">int64_t KineticResponse_GetConnectionID(KineticResponse *response)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__response_8c_source.html#l00063">kinetic_response.c:63</a></div></div>
 <div class="ttc" id="kinetic__hmac_8h_html"><div class="ttname"><a href="kinetic__hmac_8h.html">kinetic_hmac.h</a></div></div>
 <div class="ttc" id="kinetic__socket_8h_html"><div class="ttname"><a href="kinetic__socket_8h.html">kinetic_socket.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

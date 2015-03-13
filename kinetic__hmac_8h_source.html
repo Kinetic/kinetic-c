@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,7 +55,7 @@
 <div class="contents">
 <a href="kinetic__hmac_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -77,27 +77,27 @@
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define _KINETIC_HMAC_H</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a>&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__proto_8h.html">kinetic_proto.h</a>&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic_8pb-c_8h.html">kinetic.pb-c.h</a>&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8h.html#a560fa368e7286d678faa097df39a5e55">KineticHMAC_Init</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                      <a class="code" href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697">KineticProto_Command_Security_ACL_HMACAlgorithm</a> algorithm);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8h.html#a9f48a285aa0f479466dd2e27d158354c">KineticHMAC_Init</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;                      <a class="code" href="kinetic_8pb-c_8h.html#aee6b3f3f7bb9b9fd052aa8b04e9c199f">Com__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm</a> algorithm);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8h.html#afc2c3f733a1383b02b125f0c6d08e95b">KineticHMAC_Populate</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                          KineticProto_Message* msg,</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__hmac_8h.html#a0af427f3218ac08112847f3f4991b1c9">KineticHMAC_Populate</a>(<a class="code" href="struct_kinetic_h_m_a_c.html">KineticHMAC</a>* hmac,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                          Com__Seagate__Kinetic__Proto__Message* msg,</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                          <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__hmac_8h.html#aa5f262809b134357770fe1b289797fb7">KineticHMAC_Validate</a>(<span class="keyword">const</span> KineticProto_Message* msg,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__hmac_8h.html#abba9a71af0f0c79dc6ec050e7c74335e">KineticHMAC_Validate</a>(<span class="keyword">const</span> Com__Seagate__Kinetic__Proto__Message* msg,</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                          <span class="keyword">const</span> <a class="code" href="struct_byte_array.html">ByteArray</a> key);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#endif  // _KINETIC_HMAC_H</span></div>
 <div class="ttc" id="struct_byte_array_html"><div class="ttname"><a href="struct_byte_array.html">ByteArray</a></div><div class="ttdoc">Structure for handling generic arrays of bytes. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00034">byte_array.h:34</a></div></div>
-<div class="ttc" id="struct_kinetic_h_m_a_c_html"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html">KineticHMAC</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00126">kinetic_types_internal.h:126</a></div></div>
+<div class="ttc" id="struct_kinetic_h_m_a_c_html"><div class="ttname"><a href="struct_kinetic_h_m_a_c.html">KineticHMAC</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00110">kinetic_types_internal.h:110</a></div></div>
 <div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html"><div class="ttname"><a href="kinetic__proto_8h.html">kinetic_proto.h</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html_a675e2ac21e94b34e4d5fd7dbde312697"><div class="ttname"><a href="kinetic__proto_8h.html#a675e2ac21e94b34e4d5fd7dbde312697">KineticProto_Command_Security_ACL_HMACAlgorithm</a></div><div class="ttdeci">KineticProto_Command_Security_ACL_HMACAlgorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8h_source.html#l00113">kinetic_proto.h:113</a></div></div>
-<div class="ttc" id="kinetic__hmac_8h_html_aa5f262809b134357770fe1b289797fb7"><div class="ttname"><a href="kinetic__hmac_8h.html#aa5f262809b134357770fe1b289797fb7">KineticHMAC_Validate</a></div><div class="ttdeci">bool KineticHMAC_Validate(const KineticProto_Message *msg, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00067">kinetic_hmac.c:67</a></div></div>
-<div class="ttc" id="kinetic__hmac_8h_html_a560fa368e7286d678faa097df39a5e55"><div class="ttname"><a href="kinetic__hmac_8h.html#a560fa368e7286d678faa097df39a5e55">KineticHMAC_Init</a></div><div class="ttdeci">void KineticHMAC_Init(KineticHMAC *hmac, KineticProto_Command_Security_ACL_HMACAlgorithm algorithm)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00031">kinetic_hmac.c:31</a></div></div>
-<div class="ttc" id="kinetic__hmac_8h_html_afc2c3f733a1383b02b125f0c6d08e95b"><div class="ttname"><a href="kinetic__hmac_8h.html#afc2c3f733a1383b02b125f0c6d08e95b">KineticHMAC_Populate</a></div><div class="ttdeci">void KineticHMAC_Populate(KineticHMAC *hmac, KineticProto_Message *msg, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00047">kinetic_hmac.c:47</a></div></div>
+<div class="ttc" id="kinetic_8pb-c_8h_html"><div class="ttname"><a href="kinetic_8pb-c_8h.html">kinetic.pb-c.h</a></div></div>
+<div class="ttc" id="kinetic_8pb-c_8h_html_aee6b3f3f7bb9b9fd052aa8b04e9c199f"><div class="ttname"><a href="kinetic_8pb-c_8h.html#aee6b3f3f7bb9b9fd052aa8b04e9c199f">Com__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm</div><div class="ttdef"><b>Definition:</b> <a href="kinetic_8pb-c_8h_source.html#l00176">kinetic.pb-c.h:176</a></div></div>
+<div class="ttc" id="kinetic__hmac_8h_html_abba9a71af0f0c79dc6ec050e7c74335e"><div class="ttname"><a href="kinetic__hmac_8h.html#abba9a71af0f0c79dc6ec050e7c74335e">KineticHMAC_Validate</a></div><div class="ttdeci">bool KineticHMAC_Validate(const Com__Seagate__Kinetic__Proto__Message *msg, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00067">kinetic_hmac.c:67</a></div></div>
+<div class="ttc" id="kinetic__hmac_8h_html_a0af427f3218ac08112847f3f4991b1c9"><div class="ttname"><a href="kinetic__hmac_8h.html#a0af427f3218ac08112847f3f4991b1c9">KineticHMAC_Populate</a></div><div class="ttdeci">void KineticHMAC_Populate(KineticHMAC *hmac, Com__Seagate__Kinetic__Proto__Message *msg, const ByteArray key)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00047">kinetic_hmac.c:47</a></div></div>
+<div class="ttc" id="kinetic__hmac_8h_html_a9f48a285aa0f479466dd2e27d158354c"><div class="ttname"><a href="kinetic__hmac_8h.html#a9f48a285aa0f479466dd2e27d158354c">KineticHMAC_Init</a></div><div class="ttdeci">void KineticHMAC_Init(KineticHMAC *hmac, Com__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm algorithm)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__hmac_8c_source.html#l00031">kinetic_hmac.c:31</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

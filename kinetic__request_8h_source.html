@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,7 +55,7 @@
 <div class="contents">
 <a href="kinetic__request_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -104,19 +104,19 @@
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__request_8h.html#af4443dd94ce141114c37ddfc782967d7">KineticRequest_SendRequest</a>(KineticOperation *operation,</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    uint8_t *msg, <span class="keywordtype">size_t</span> msgSize);</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__request_8h.html#af957f9c9ba08f70e12bff0e97e6b0bce">KineticRequest_LockOperation</a>(KineticOperation *operation);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__request_8h.html#a633cdb1a73a6768566c4b7f9af534652">KineticRequest_UnlockOperation</a>(KineticOperation *operation);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__request_8h.html#ae5b90566134acd37ba05b98220d384e1">KineticRequest_LockSend</a>(KineticSession* session);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="kinetic__request_8h.html#ae1f12eb923f1def5ae922be637f94fd5">KineticRequest_UnlockSend</a>(KineticSession* session);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="kinetic__request_8h_html_af957f9c9ba08f70e12bff0e97e6b0bce"><div class="ttname"><a href="kinetic__request_8h.html#af957f9c9ba08f70e12bff0e97e6b0bce">KineticRequest_LockOperation</a></div><div class="ttdeci">bool KineticRequest_LockOperation(KineticOperation *operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00150">kinetic_request.c:150</a></div></div>
 <div class="ttc" id="struct_byte_array_html"><div class="ttname"><a href="struct_byte_array.html">ByteArray</a></div><div class="ttdoc">Structure for handling generic arrays of bytes. </div><div class="ttdef"><b>Definition:</b> <a href="byte__array_8h_source.html#l00034">byte_array.h:34</a></div></div>
 <div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
 <div class="ttc" id="struct_kinetic_session_config_html"><div class="ttname"><a href="struct_kinetic_session_config.html">KineticSessionConfig</a></div><div class="ttdoc">Structure used to specify the configuration for a session. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00118">kinetic_types.h:118</a></div></div>
+<div class="ttc" id="kinetic__request_8h_html_ae5b90566134acd37ba05b98220d384e1"><div class="ttname"><a href="kinetic__request_8h.html#ae5b90566134acd37ba05b98220d384e1">KineticRequest_LockSend</a></div><div class="ttdeci">bool KineticRequest_LockSend(KineticSession *session)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00150">kinetic_request.c:150</a></div></div>
 <div class="ttc" id="kinetic__request_8h_html_af4443dd94ce141114c37ddfc782967d7"><div class="ttname"><a href="kinetic__request_8h.html#af4443dd94ce141114c37ddfc782967d7">KineticRequest_SendRequest</a></div><div class="ttdeci">bool KineticRequest_SendRequest(KineticOperation *operation, uint8_t *msg, size_t msgSize)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00132">kinetic_request.c:132</a></div></div>
-<div class="ttc" id="kinetic__request_8h_html_a633cdb1a73a6768566c4b7f9af534652"><div class="ttname"><a href="kinetic__request_8h.html#a633cdb1a73a6768566c4b7f9af534652">KineticRequest_UnlockOperation</a></div><div class="ttdeci">bool KineticRequest_UnlockOperation(KineticOperation *operation)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00155">kinetic_request.c:155</a></div></div>
 <div class="ttc" id="kinetic__request_8h_html_a278c7eb32b12868faeb5a861d45e1e53"><div class="ttname"><a href="kinetic__request_8h.html#a278c7eb32b12868faeb5a861d45e1e53">KineticRequest_PackMessage</a></div><div class="ttdeci">KineticStatus KineticRequest_PackMessage(KineticOperation *operation, uint8_t **msg, size_t *msgSize)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00072">kinetic_request.c:72</a></div></div>
 <div class="ttc" id="kinetic__request_8h_html_a22e92e6d39ecb48e2d3fcef993e17ba3"><div class="ttname"><a href="kinetic__request_8h.html#a22e92e6d39ecb48e2d3fcef993e17ba3">KineticRequest_PackCommand</a></div><div class="ttdeci">size_t KineticRequest_PackCommand(KineticRequest *request)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00036">kinetic_request.c:36</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a></div><div class="ttdeci">KineticStatus</div><div class="ttdoc">Kinetic status codes. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00166">kinetic_types.h:166</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_a455d29140e6816c61eba35e8f52b0d57"><div class="ttname"><a href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a></div><div class="ttdeci">KineticStatus</div><div class="ttdoc">Kinetic status codes. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00155">kinetic_types.h:155</a></div></div>
+<div class="ttc" id="kinetic__request_8h_html_ae1f12eb923f1def5ae922be637f94fd5"><div class="ttname"><a href="kinetic__request_8h.html#ae1f12eb923f1def5ae922be637f94fd5">KineticRequest_UnlockSend</a></div><div class="ttdeci">bool KineticRequest_UnlockSend(KineticSession *session)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00156">kinetic_request.c:156</a></div></div>
 <div class="ttc" id="kinetic__request_8h_html_adf6d20f5e4ab9d40ed6f4351a68520c9"><div class="ttname"><a href="kinetic__request_8h.html#adf6d20f5e4ab9d40ed6f4351a68520c9">KineticRequest_PopulateAuthentication</a></div><div class="ttdeci">KineticStatus KineticRequest_PopulateAuthentication(KineticSessionConfig *config, KineticRequest *request, ByteArray *pin)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__request_8c_source.html#l00062">kinetic_request.c:62</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

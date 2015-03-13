@@ -1,4 +1,4 @@
-.TH "kinetic_message.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_message.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,7 +15,7 @@ kinetic_message.c \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBCONFIG_FIELD_BYTE_BUFFER\fP(_name, _field, _entry)"
+.RI "#define \fBCONFIG_FIELD_BYTE_BUFFER\fP(_name, _proto_name, _field, _entry)"
 .br
 .in -1c
 .SS "Functions"
@@ -30,7 +30,7 @@ kinetic_message.c \-
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define CONFIG_FIELD_BYTE_BUFFER(_name, _field, _entry)"
+.SS "#define CONFIG_FIELD_BYTE_BUFFER(_name, _proto_name, _field, _entry)"
 \fBValue:\fP
 .PP
 .nf
@@ -40,12 +40,12 @@ kinetic_message.c \-
         && (_entry)->_name\&.bytesUsed > 0 \
         && (_entry)->_name\&.bytesUsed <= (_entry)->_name\&.array\&.len) \
     { \
-        (_field)\&._name\&.data = (_entry)->_name\&.array\&.data; \
-        (_field)\&._name\&.len = (_entry)->_name\&.bytesUsed; \
-        (_field)\&.has_ ## _name = true; \
+        (_field)\&._proto_name\&.data = (_entry)->_name\&.array\&.data; \
+        (_field)\&._proto_name\&.len = (_entry)->_name\&.bytesUsed; \
+        (_field)\&.has_ ## _proto_name = true; \
     } \
     else { \
-        (_field)\&.has_ ## _name = false; \
+        (_field)\&.has_ ## _proto_name = false; \
     } \
 }
 .fi
@@ -58,7 +58,7 @@ Definition at line 24 of file kinetic_message\&.c\&.
 .PP
 Definition at line 39 of file kinetic_message\&.c\&.
 .PP
-References KineticEntry::algorithm, KineticMessage::body, KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KINETIC_ASSERT, KineticProto_Command_Algorithm_from_KineticAlgorithm(), KineticProto_Command_Synchronization_from_KineticSynchronization(), KineticEntry::metadataOnly, and KineticEntry::synchronization\&.
+References KineticEntry::algorithm, KineticMessage::body, Com__Seagate__Kinetic__Proto__Command__Algorithm_from_KineticAlgorithm(), Com__Seagate__Kinetic__Proto__Command__Synchronization_from_KineticSynchronization(), KineticMessage::command, CONFIG_FIELD_BYTE_BUFFER, KineticEntry::force, KineticMessage::keyValue, KINETIC_ASSERT, KineticEntry::metadataOnly, and KineticEntry::synchronization\&.
 .SS "void KineticMessage_ConfigureKeyRange (\fBKineticMessage\fP *constmessage, const \fBKineticKeyRange\fP *range)"
 
 .PP

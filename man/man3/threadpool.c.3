@@ -1,4 +1,4 @@
-.TH "threadpool.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "threadpool.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -48,27 +48,6 @@ threadpool.c \-
 
 .in +1c
 .ti -1c
-.RI "static void \fBset_defaults\fP (struct \fBthreadpool_config\fP *cfg)"
-.br
-.ti -1c
-.RI "struct \fBthreadpool\fP * \fBthreadpool_init\fP (struct \fBthreadpool_config\fP *cfg)"
-.br
-.ti -1c
-.RI "bool \fBthreadpool_schedule\fP (struct \fBthreadpool\fP *t, struct \fBthreadpool_task\fP *task, size_t *pushback)"
-.br
-.ti -1c
-.RI "static void \fBcommit_current_task\fP (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_t wh)"
-.br
-.ti -1c
-.RI "void \fBthreadpool_stats\fP (struct \fBthreadpool\fP *t, struct \fBthreadpool_info\fP *info)"
-.br
-.ti -1c
-.RI "bool \fBthreadpool_shutdown\fP (struct \fBthreadpool\fP *t, bool kill_all)"
-.br
-.ti -1c
-.RI "void \fBthreadpool_free\fP (struct \fBthreadpool\fP *t)"
-.br
-.ti -1c
 .RI "static void \fBnotify_new_task\fP (struct \fBthreadpool\fP *t)"
 .br
 .ti -1c
@@ -78,11 +57,37 @@ threadpool.c \-
 .RI "static bool \fBspawn\fP (struct \fBthreadpool\fP *t)"
 .br
 .ti -1c
-.RI "static void * \fBthread_task\fP (void *arg)"
+.RI "static void * \fBthread_task\fP (void *\fBthread_info\fP)"
+.br
+.ti -1c
+.RI "static void \fBcommit_current_task\fP (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_t wh)"
 .br
 .ti -1c
 .RI "static void \fBrelease_current_task\fP (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_t rh)"
 .br
+.ti -1c
+.RI "static void \fBset_defaults\fP (struct \fBthreadpool_config\fP *cfg)"
+.br
+.ti -1c
+.RI "struct \fBthreadpool\fP * \fBThreadpool_Init\fP (struct \fBthreadpool_config\fP *cfg)"
+.br
+.RI "\fIInitialize a threadpool, according to a config\&. \fP"
+.ti -1c
+.RI "bool \fBThreadpool_Schedule\fP (struct \fBthreadpool\fP *t, struct \fBthreadpool_task\fP *task, size_t *pushback)"
+.br
+.RI "\fISchedule a task in the threadpool\&. \fP"
+.ti -1c
+.RI "void \fBThreadpool_Stats\fP (struct \fBthreadpool\fP *t, struct \fBthreadpool_info\fP *info)"
+.br
+.RI "\fIIf TI is non-NULL, fill out some statistics about the operating state of the thread pool\&. \fP"
+.ti -1c
+.RI "bool \fBThreadpool_Shutdown\fP (struct \fBthreadpool\fP *t, bool kill_all)"
+.br
+.RI "\fINotify the threadpool's threads that the system is going to shut down soon\&. \fP"
+.ti -1c
+.RI "void \fBThreadpool_Free\fP (struct \fBthreadpool\fP *t)"
+.br
+.RI "\fIFree a threadpool\&. \fP"
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
@@ -108,78 +113,96 @@ Definition at line 34 of file threadpool\&.c\&.
 Definition at line 35 of file threadpool\&.c\&.
 .SH "Function Documentation"
 .PP 
-.SS "static void set_defaults (struct \fBthreadpool_config\fP *cfg)\fC [static]\fP"
-
-.PP
-Definition at line 37 of file threadpool\&.c\&.
-.PP
-References DEFAULT_MAX_DELAY, DEFAULT_MAX_THREADS, DEFAULT_TASK_RINGBUF_SIZE2, threadpool_config::max_delay, threadpool_config::max_threads, and threadpool_config::task_ringbuf_size2\&.
-.SS "struct \fBthreadpool\fP* threadpool_init (struct \fBthreadpool_config\fP *cfg)"
-
-.PP
-Definition at line 46 of file threadpool\&.c\&.
-.PP
-References threadpool_config::max_delay, threadpool::max_delay, threadpool_config::max_threads, threadpool::max_threads, set_defaults(), thread_info::t, threadpool::task_ringbuf_mask, threadpool::task_ringbuf_size, threadpool_config::task_ringbuf_size2, threadpool::task_ringbuf_size2, threadpool::tasks, THREADPOOL_MAX_RINGBUF_SIZE2, and threadpool::threads\&.
-.SS "bool threadpool_schedule (struct \fBthreadpool\fP *t, struct \fBthreadpool_task\fP *task, size_t *pushback)"
-
-.PP
-Definition at line 94 of file threadpool\&.c\&.
-.PP
-References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool_task::cleanup, commit_current_task(), notify_new_task(), threadpool::shutting_down, threadpool_task::task, marked_task::task, threadpool::task_release_head, threadpool::task_reserve_head, threadpool::task_ringbuf_size, threadpool::tasks, threadpool_task::udata, and marked_task::udata\&.
-.SS "static void commit_current_task (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_twh)\fC [static]\fP"
-
-.PP
-Definition at line 131 of file threadpool\&.c\&.
-.PP
-References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::mark, threadpool::task_commit_head, threadpool::task_request_head, threadpool::task_ringbuf_mask, and threadpool::tasks\&.
-.SS "void threadpool_stats (struct \fBthreadpool\fP *t, struct \fBthreadpool_info\fP *info)"
-
-.PP
-Definition at line 145 of file threadpool\&.c\&.
-.PP
-References threadpool_info::active_threads, threadpool_info::backlog_size, threadpool_info::dormant_threads, threadpool::live_threads, thread_info::status, STATUS_AWAKE, threadpool::task_commit_head, threadpool::task_request_head, and threadpool::threads\&.
-.SS "bool threadpool_shutdown (struct \fBthreadpool\fP *t, boolkill_all)"
-
-.PP
-Definition at line 159 of file threadpool\&.c\&.
-.PP
-References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool::live_threads, notify_shutdown(), threadpool::shutting_down, SPIN_ADJ, thread_info::status, STATUS_SHUTDOWN, thread_info::t, threadpool::task_commit_head, threadpool::task_release_head, threadpool::task_request_head, threadpool::task_ringbuf_mask, threadpool::tasks, threadpool::threads, and marked_task::udata\&.
-.SS "void threadpool_free (struct \fBthreadpool\fP *t)"
-
-.PP
-Definition at line 196 of file threadpool\&.c\&.
-.PP
-References threadpool::tasks, and threadpool::threads\&.
 .SS "static void notify_new_task (struct \fBthreadpool\fP *t)\fC [static]\fP"
 
 .PP
-Definition at line 204 of file threadpool\&.c\&.
+Definition at line 208 of file threadpool\&.c\&.
 .PP
 References threadpool::live_threads, threadpool::max_threads, NOTIFY_MSG, NOTIFY_MSG_LEN, thread_info::parent_fd, spawn(), SPIN_ADJ, thread_info::status, STATUS_ASLEEP, and threadpool::threads\&.
 .SS "static bool notify_shutdown (struct \fBthreadpool\fP *t)\fC [static]\fP"
 
 .PP
-Definition at line 229 of file threadpool\&.c\&.
+Definition at line 233 of file threadpool\&.c\&.
 .PP
 References threadpool::live_threads, thread_info::parent_fd, thread_info::status, STATUS_JOINED, STATUS_SHUTDOWN, thread_info::t, and threadpool::threads\&.
 .SS "static bool spawn (struct \fBthreadpool\fP *t)\fC [static]\fP"
 
 .PP
-Definition at line 254 of file threadpool\&.c\&.
+Definition at line 258 of file threadpool\&.c\&.
 .PP
 References thread_info::child_fd, threadpool::live_threads, threadpool::max_threads, thread_info::parent_fd, thread_info::status, STATUS_AWAKE, thread_info::t, thread_context::t, thread_task(), and threadpool::threads\&.
-.SS "static void* thread_task (void *arg)\fC [static]\fP"
+.SS "static void * thread_task (void *thread_info)\fC [static]\fP"
 
 .PP
-Definition at line 288 of file threadpool\&.c\&.
+Definition at line 292 of file threadpool\&.c\&.
 .PP
 References ATOMIC_BOOL_COMPARE_AND_SWAP, thread_info::child_fd, marked_task::cleanup, marked_task::mark, NOTIFY_MSG_LEN, read_buf, release_current_task(), thread_info::status, STATUS_ASLEEP, STATUS_AWAKE, STATUS_SHUTDOWN, thread_context::t, marked_task::task, threadpool::task_commit_head, threadpool::task_request_head, threadpool::task_ringbuf_mask, threadpool::tasks, thread_context::ti, and marked_task::udata\&.
+.SS "static void commit_current_task (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_twh)\fC [static]\fP"
+
+.PP
+Definition at line 135 of file threadpool\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::mark, threadpool::task_commit_head, threadpool::task_request_head, threadpool::task_ringbuf_mask, and threadpool::tasks\&.
 .SS "static void release_current_task (struct \fBthreadpool\fP *t, struct \fBmarked_task\fP *task, size_trh)\fC [static]\fP"
 
 .PP
-Definition at line 346 of file threadpool\&.c\&.
+Definition at line 353 of file threadpool\&.c\&.
 .PP
 References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::mark, threadpool::task_release_head, threadpool::task_ringbuf_mask, and threadpool::tasks\&.
+.SS "static void set_defaults (struct \fBthreadpool_config\fP *cfg)\fC [static]\fP"
+
+.PP
+Definition at line 44 of file threadpool\&.c\&.
+.PP
+References DEFAULT_MAX_THREADS, DEFAULT_TASK_RINGBUF_SIZE2, threadpool_config::max_threads, and threadpool_config::task_ringbuf_size2\&.
+.SS "struct \fBthreadpool\fP* Threadpool_Init (struct \fBthreadpool_config\fP *cfg)"
+
+.PP
+Initialize a threadpool, according to a config\&. Returns NULL on error\&. 
+.PP
+Definition at line 52 of file threadpool\&.c\&.
+.PP
+References threadpool_config::max_threads, threadpool::max_threads, set_defaults(), thread_info::t, threadpool::task_ringbuf_mask, threadpool::task_ringbuf_size, threadpool_config::task_ringbuf_size2, threadpool::task_ringbuf_size2, threadpool::tasks, THREADPOOL_MAX_RINGBUF_SIZE2, and threadpool::threads\&.
+.SS "bool Threadpool_Schedule (struct \fBthreadpool\fP *t, struct \fBthreadpool_task\fP *task, size_t *pushback)"
+
+.PP
+Schedule a task in the threadpool\&. Returns whether the task was successfully registered or not\&. If Threadpool_Shutdown has been called, this function will always return false, due to API misuse\&.
+.PP
+If *pushback is non-NULL, it will be set to the number of tasks in the backlog, so code upstream can provide counterpressure\&.
+.PP
+TASK is copied into the threadpool by value\&. 
+.PP
+Definition at line 99 of file threadpool\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, threadpool_task::cleanup, marked_task::cleanup, commit_current_task(), notify_new_task(), threadpool::shutting_down, threadpool_task::task, marked_task::task, threadpool::task_release_head, threadpool::task_reserve_head, threadpool::task_ringbuf_size, threadpool::tasks, threadpool_task::udata, and marked_task::udata\&.
+.SS "void Threadpool_Stats (struct \fBthreadpool\fP *t, struct \fBthreadpool_info\fP *ti)"
+
+.PP
+If TI is non-NULL, fill out some statistics about the operating state of the thread pool\&. 
+.PP
+Definition at line 149 of file threadpool\&.c\&.
+.PP
+References threadpool_info::active_threads, threadpool_info::backlog_size, threadpool_info::dormant_threads, threadpool::live_threads, thread_info::status, STATUS_AWAKE, threadpool::task_commit_head, threadpool::task_request_head, and threadpool::threads\&.
+.SS "bool Threadpool_Shutdown (struct \fBthreadpool\fP *t, boolkill_all)"
+
+.PP
+Notify the threadpool's threads that the system is going to shut down soon\&. Returns whether all previously active threads have shut down\&.
+.PP
+kill_all will eventually permit immediately shutting down all active threads (possibly with memory leaks), but is not yet implemented\&.
+.PP
+Returns whether everything has halted\&. 
+.PP
+Definition at line 163 of file threadpool\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, marked_task::cleanup, threadpool::live_threads, notify_shutdown(), threadpool::shutting_down, SPIN_ADJ, thread_info::status, STATUS_SHUTDOWN, thread_info::t, threadpool::task_commit_head, threadpool::task_release_head, threadpool::task_request_head, threadpool::task_ringbuf_mask, threadpool::tasks, threadpool::threads, and marked_task::udata\&.
+.SS "void Threadpool_Free (struct \fBthreadpool\fP *t)"
+
+.PP
+Free a threadpool\&. Assumes either \fBThreadpool_Shutdown()\fP has been repeatedly called already, or leaking memory and other resources is acceptable\&. 
+.PP
+Definition at line 200 of file threadpool\&.c\&.
+.PP
+References threadpool::tasks, and threadpool::threads\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

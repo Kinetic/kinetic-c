@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -69,13 +69,13 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2bfa6febab468edb77428e4aa2631381"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="get__key__range_8c.html#a2bfa6febab468edb77428e4aa2631381">create_entries</a> (KineticSession const *const session, const int count)</td></tr>
-<tr class="separator:a2bfa6febab468edb77428e4aa2631381"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae334765e1e51365422bedcb88528493"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="get__key__range_8c.html#aae334765e1e51365422bedcb88528493">create_entries</a> (KineticSession *const session, const int count)</td></tr>
+<tr class="separator:aae334765e1e51365422bedcb88528493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="get__key__range_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a> (int argc, char **argv)</td></tr>
 <tr class="separator:a3c04138a5bfe5d72780bb7e82a18e627"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a2bfa6febab468edb77428e4aa2631381"></a>
+<a class="anchor" id="aae334765e1e51365422bedcb88528493"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -85,7 +85,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">static bool create_entries </td>
           <td>(</td>
-          <td class="paramtype">KineticSession const *const&#160;</td>
+          <td class="paramtype">KineticSession *const&#160;</td>
           <td class="paramname"><em>session</em>, </td>
         </tr>
         <tr>
@@ -109,7 +109,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="get__key__range_8c_source.html#l00117">117</a> of file <a class="el" href="get__key__range_8c_source.html">get_key_range.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8c_source.html#l00221">ByteBuffer_CreateAndAppendFormattedCString()</a>, <a class="el" href="kinetic__types_8h_source.html#l00243">KineticEntry::key</a>, <a class="el" href="kinetic__types_8h_source.html#l00072">KINETIC_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__client_8c_source.html#l00146">KineticClient_Put()</a>.</p>
+<p>References <a class="el" href="byte__array_8c_source.html#l00221">ByteBuffer_CreateAndAppendFormattedCString()</a>, <a class="el" href="kinetic__types_8h_source.html#l00236">KineticEntry::key</a>, <a class="el" href="kinetic__types_8h_source.html#l00075">KINETIC_ALGORITHM_SHA1</a>, <a class="el" href="kinetic__types_8h_source.html#l00158">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__client_8c_source.html#l00156">KineticClient_Put()</a>.</p>
 
 </div>
 </div>
@@ -139,7 +139,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="get__key__range_8c_source.html#l00033">33</a> of file <a class="el" href="get__key__range_8c_source.html">get_key_range.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00059">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8c_source.html#l00038">ByteArray_CreateWithCString()</a>, <a class="el" href="byte__array_8c_source.html#l00068">ByteBuffer_Create()</a>, <a class="el" href="byte__array_8c_source.html#l00097">ByteBuffer_CreateAndAppendCString()</a>, <a class="el" href="get__key__range_8c_source.html#l00117">create_entries()</a>, <a class="el" href="kinetic__types_8h_source.html#l00120">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00063">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00040">KINETIC_PORT</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00063">KineticClient_CreateSession()</a>, <a class="el" href="kinetic__client_8c_source.html#l00115">KineticClient_DestroySession()</a>, <a class="el" href="kinetic__client_8c_source.html#l00288">KineticClient_GetKeyRange()</a>, <a class="el" href="kinetic__client_8c_source.html#l00034">KineticClient_Init()</a>, <a class="el" href="kinetic__client_8c_source.html#l00056">KineticClient_Shutdown()</a>, <a class="el" href="kinetic__types_8h_source.html#l00459">KineticClientConfig::logFile</a>, <a class="el" href="kinetic__types_8h_source.html#l00265">KineticKeyRange::startKey</a>, and <a class="el" href="byte__array_8h_source.html#l00061">ByteBufferArray::used</a>.</p>
+<p>References <a class="el" href="byte__array_8h_source.html#l00059">ByteBufferArray::buffers</a>, <a class="el" href="byte__array_8c_source.html#l00038">ByteArray_CreateWithCString()</a>, <a class="el" href="byte__array_8c_source.html#l00068">ByteBuffer_Create()</a>, <a class="el" href="byte__array_8c_source.html#l00097">ByteBuffer_CreateAndAppendCString()</a>, <a class="el" href="get__key__range_8c_source.html#l00117">create_entries()</a>, <a class="el" href="kinetic__types_8h_source.html#l00120">KineticSessionConfig::host</a>, <a class="el" href="kinetic__types_8c_source.html#l00067">Kinetic_GetStatusDescription()</a>, <a class="el" href="kinetic__types_8h_source.html#l00040">KINETIC_PORT</a>, <a class="el" href="kinetic__types_8h_source.html#l00158">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__client_8c_source.html#l00076">KineticClient_CreateSession()</a>, <a class="el" href="kinetic__client_8c_source.html#l00126">KineticClient_DestroySession()</a>, <a class="el" href="kinetic__client_8c_source.html#l00291">KineticClient_GetKeyRange()</a>, <a class="el" href="kinetic__client_8c_source.html#l00047">KineticClient_Init()</a>, <a class="el" href="kinetic__client_8c_source.html#l00069">KineticClient_Shutdown()</a>, <a class="el" href="kinetic__types_8h_source.html#l00501">KineticClientConfig::logFile</a>, <a class="el" href="kinetic__types_8h_source.html#l00258">KineticKeyRange::startKey</a>, and <a class="el" href="byte__array_8h_source.html#l00061">ByteBufferArray::used</a>.</p>
 
 </div>
 </div>

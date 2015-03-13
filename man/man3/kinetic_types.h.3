@@ -1,4 +1,4 @@
-.TH "kinetic_types.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,6 +35,10 @@ kinetic_types.h \-
 
 .in +1c
 .ti -1c
+.RI "struct \fBKineticVersionInfo\fP"
+.br
+.RI "\fIkinetic-c library version info (returned from \fBKineticClient_Version()\fP) \fP"
+.ti -1c
 .RI "struct \fBKineticSessionConfig\fP"
 .br
 .RI "\fIStructure used to specify the configuration for a session\&. \fP"
@@ -57,30 +61,39 @@ kinetic_types.h \-
 .ti -1c
 .RI "struct \fBKineticLogInfo_Utilization\fP"
 .br
+.RI "\fILog info untilization entry\&. \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo_Temperature\fP"
 .br
+.RI "\fILog info temperature entry\&. \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo_Capacity\fP"
 .br
+.RI "\fILog info capacity entry\&. \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo_Interface\fP"
 .br
+.RI "\fILog info network interface entry\&. \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo_Configuration\fP"
 .br
+.RI "\fILog info device configuration\&. \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo_Statistics\fP"
 .br
+.RI "\fILog info statistics entry\&. \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo_Limits\fP"
 .br
+.RI "\fILog info device limits\&. \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo_Device\fP"
 .br
+.RI "\fILog info device name (used as a key for device-specific log data) \fP"
 .ti -1c
 .RI "struct \fBKineticLogInfo\fP"
 .br
+.RI "\fIBase log info structure which is allocated by client and passed to KineticAdminClient_GetLog\&. \fP"
 .ti -1c
 .RI "struct \fBKineticP2P_Peer\fP"
 .br
@@ -88,9 +101,11 @@ kinetic_types.h \-
 .ti -1c
 .RI "struct \fBKineticP2P_OperationData\fP"
 .br
+.RI "\fIPeer-to-peer operation data structure\&. \fP"
 .ti -1c
 .RI "struct \fBKineticP2P_Operation\fP"
 .br
+.RI "\fIPeer-to-peer opearation instance\&. \fP"
 .ti -1c
 .RI "struct \fBKineticClientConfig\fP"
 .br
@@ -100,49 +115,46 @@ kinetic_types.h \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBKINETIC_HANDLE_INVALID\fP   (0)"
+.RI "#define \fBKINETIC_SOCKET_INVALID\fP   (-1)"
 .br
+.RI "\fIInvalid socket file descriptor value\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_PORT\fP   (8123)"
 .br
+.RI "\fIDefault kinetic port\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_TLS_PORT\fP   (8443)"
 .br
+.RI "\fIDefault kinetic TLS port\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_HMAC_SHA1_LEN\fP   (SHA_DIGEST_LENGTH)"
 .br
+.RI "\fIHMAC secure hash length\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_HMAC_MAX_LEN\fP   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
 .br
+.RI "\fIHMAC max length\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_PIN_MAX_LEN\fP   (1024)"
 .br
+.RI "\fIMax PIN length\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_DEFAULT_KEY_LEN\fP   (1024)"
 .br
+.RI "\fIDefault key length\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_MAX_KEY_LEN\fP   (4096)"
 .br
-.ti -1c
-.RI "#define \fBKINETIC_MAX_VERSION_LEN\fP   (256)"
-.br
+.RI "\fIMax key length\&. \fP"
 .ti -1c
 .RI "#define \fBKINETIC_OBJ_SIZE\fP   (1024 * 1024)"
 .br
+.RI "\fIMax object/value size\&. \fP"
 .ti -1c
 .RI "#define \fB_BSD_SOURCE\fP"
 .br
 .ti -1c
 .RI "#define \fBHOST_NAME_MAX\fP   256"
-.br
-.ti -1c
-.RI "#define \fBLOG_FILE_NAME_MAX\fP   (\fBHOST_NAME_MAX\fP)"
-.br
-.ti -1c
-.RI "#define \fBBOOL_TO_STRING\fP(_bool)   (_bool) ? 'true' : 'false'"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_SESSION_INIT\fP(_session, _host, _clusterVersion, _identity, _hmacKey)"
 .br
 .ti -1c
 .RI "#define \fBKINETIC_P2P_OPERATION_LIMIT\fP   100000"
@@ -161,9 +173,6 @@ kinetic_types.h \-
 .br
 .ti -1c
 .RI "#define \fBKINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS\fP   8"
-.br
-.ti -1c
-.RI "#define \fBKINETIC_DEVICE_INFO_SCRATCH_BUF_LEN\fP   (1024 * 1024 * 4)"
 .br
 .in -1c
 .SS "Typedefs"
@@ -192,9 +201,11 @@ kinetic_types.h \-
 .ti -1c
 .RI "enum \fBKineticLogInfo_Type\fP "
 .br
+.RI "\fILog info type\&. \fP"
 .ti -1c
 .RI "enum \fBKineticMessageType\fP "
 .br
+.RI "\fILog info message types\&. \fP"
 .in -1c
 .SS "Functions"
 
@@ -210,109 +221,94 @@ kinetic_types.h \-
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define KINETIC_HANDLE_INVALID   (0)"
+.SS "#define KINETIC_SOCKET_INVALID   (-1)"
 
+.PP
+Invalid socket file descriptor value\&. 
 .PP
 Definition at line 39 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_PORT   (8123)"
 
 .PP
+Default kinetic port\&. 
+.PP
 Definition at line 40 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_TLS_PORT   (8443)"
 
+.PP
+Default kinetic TLS port\&. 
 .PP
 Definition at line 41 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)"
 
 .PP
+HMAC secure hash length\&. 
+.PP
 Definition at line 42 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_HMAC_MAX_LEN   (\fBKINETIC_HMAC_SHA1_LEN\fP)"
 
+.PP
+HMAC max length\&. 
 .PP
 Definition at line 43 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_PIN_MAX_LEN   (1024)"
 
 .PP
+Max PIN length\&. 
+.PP
 Definition at line 44 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_DEFAULT_KEY_LEN   (1024)"
 
+.PP
+Default key length\&. 
 .PP
 Definition at line 45 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_MAX_KEY_LEN   (4096)"
 
 .PP
-Definition at line 46 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_MAX_VERSION_LEN   (256)"
-
+Max key length\&. 
 .PP
-Definition at line 47 of file kinetic_types\&.h\&.
+Definition at line 46 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_OBJ_SIZE   (1024 * 1024)"
 
 .PP
-Definition at line 48 of file kinetic_types\&.h\&.
+Max object/value size\&. 
+.PP
+Definition at line 47 of file kinetic_types\&.h\&.
 .SS "#define _BSD_SOURCE"
 
 .PP
-Definition at line 53 of file kinetic_types\&.h\&.
+Definition at line 52 of file kinetic_types\&.h\&.
 .SS "#define HOST_NAME_MAX   256"
 
 .PP
-Definition at line 58 of file kinetic_types\&.h\&.
-.SS "#define LOG_FILE_NAME_MAX   (\fBHOST_NAME_MAX\fP)"
-
-.PP
-Definition at line 62 of file kinetic_types\&.h\&.
-.SS "#define BOOL_TO_STRING(_bool)   (_bool) ? 'true' : 'false'"
-
-.PP
-Definition at line 65 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_SESSION_INIT(_session, _host, _clusterVersion, _identity, _hmacKey)"
-\fBValue:\fP
-.PP
-.nf
-{ \
-    (*_session)\&.config = (KineticSessionConfig) { \
-        \&.port = KINETIC_PORT, \
-        \&.clusterVersion = (_clusterVersion), \
-        \&.identity = (_identity), \
-        \&.hmacKey = {\&.data = (_session)->config\&.keyData, \&.len = (_hmacKey)\&.len}, \
-    }; \
-    strcpy((_session)->config\&.host, (_host)); \
-    memcpy((_session)->config\&.hmacKey\&.data, (_hmacKey)\&.data, (_hmacKey)\&.len); \
-}
-.fi
-.PP
-Definition at line 152 of file kinetic_types\&.h\&.
+Definition at line 57 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_P2P_OPERATION_LIMIT   100000"
 
 .PP
 Limit for P2P operations\&. 
 .PP
-Definition at line 437 of file kinetic_types\&.h\&.
+Definition at line 479 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_P2P_MAX_NESTING   1000"
 
 .PP
 Limit for P2P operation nesting\&. 
 .PP
-Definition at line 442 of file kinetic_types\&.h\&.
+Definition at line 484 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CLIENT_DEFAULT_LOG_LEVEL   0"
 
 .PP
 Default values for the \fBKineticClientConfig\fP struct, which will be used if the corresponding field in the struct is 0\&. 
 .PP
-Definition at line 448 of file kinetic_types\&.h\&.
+Definition at line 490 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CLIENT_DEFAULT_READER_THREADS   4"
 
 .PP
-Definition at line 449 of file kinetic_types\&.h\&.
+Definition at line 491 of file kinetic_types\&.h\&.
 .SS "#define KINETIC_CLIENT_DEFAULT_MAX_THREADPOOL_THREADS   8"
 
 .PP
-Definition at line 450 of file kinetic_types\&.h\&.
-.SS "#define KINETIC_DEVICE_INFO_SCRATCH_BUF_LEN   (1024 * 1024 * 4)"
-
-.PP
-Definition at line 474 of file kinetic_types\&.h\&.
+Definition at line 492 of file kinetic_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef void(* KineticCompletionCallback)(\fBKineticCompletionData\fP *kinetic_data, void *client_data)"
@@ -329,7 +325,7 @@ Operation completion callback function prototype\&.
 .PP
 
 .PP
-Definition at line 226 of file kinetic_types\&.h\&.
+Definition at line 219 of file kinetic_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBKineticAlgorithm\fP"
@@ -341,6 +337,7 @@ Enumeration of encryption/checksum key algorithms\&.
 .in +1c
 .TP
 \fB\fIKINETIC_ALGORITHM_INVALID \fP\fP
+Invalid algorithm value\&. 
 .TP
 \fB\fIKINETIC_ALGORITHM_SHA1 \fP\fP
 SHA1\&. 
@@ -357,7 +354,7 @@ CRC32\&.
 \fB\fIKINETIC_ALGORITHM_CRC64 \fP\fP
 CRC64\&. 
 .PP
-Definition at line 70 of file kinetic_types\&.h\&.
+Definition at line 73 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticSynchronization\fP"
 
 .PP
@@ -367,6 +364,7 @@ Enumeration of synchronization types for an operation on a \fC\fBKineticEntry\fP
 .in +1c
 .TP
 \fB\fIKINETIC_SYNCHRONIZATION_INVALID \fP\fP
+Invalid synchronization value\&. 
 .TP
 \fB\fIKINETIC_SYNCHRONIZATION_WRITETHROUGH \fP\fP
 This request is made persistent before returning\&. This does not effect any other pending operations\&. 
@@ -377,7 +375,7 @@ They can be made persistent when the drive chooses, or when a subsequent FLUSH i
 \fB\fIKINETIC_SYNCHRONIZATION_FLUSH \fP\fP
 All pending information that has not been written is pushed to the disk and the command that specifies FLUSH is written last and then returned\&. All WRITEBACK writes that have received ending status will be guaranteed to be written before the FLUSH operation is returned completed\&. 
 .PP
-Definition at line 83 of file kinetic_types\&.h\&.
+Definition at line 86 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticStatus\fP"
 
 .PP
@@ -479,12 +477,26 @@ Specified file does not exist or could not be read/writtten\&.
 \fB\fIKINETIC_STATUS_REQUEST_REJECTED \fP\fP
 No request was attempted\&. 
 .TP
+\fB\fIKINETIC_STATUS_DEVICE_NAME_REQUIRED \fP\fP
+A device name is required, but was empty\&. 
+.TP
+\fB\fIKINETIC_STATUS_INVALID_LOG_TYPE \fP\fP
+The device log type specified was invalid\&. 
+.TP
+\fB\fIKINETIC_STATUS_HMAC_FAILURE \fP\fP
+An HMAC validation error was detected\&. 
+.TP
+\fB\fIKINETIC_STATUS_SESSION_TERMINATED \fP\fP
+The session has been terminated by the Kinetic device\&. 
+.TP
 \fB\fIKINETIC_STATUS_COUNT \fP\fP
 Number of status codes in KineticStatusDescriptor\&. 
 .PP
-Definition at line 166 of file kinetic_types\&.h\&.
+Definition at line 155 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticLogInfo_Type\fP"
 
+.PP
+Log info type\&. 
 .PP
 \fBEnumerator\fP
 .in +1c
@@ -502,12 +514,12 @@ Definition at line 166 of file kinetic_types\&.h\&.
 \fB\fIKINETIC_DEVICE_INFO_TYPE_MESSAGES \fP\fP
 .TP
 \fB\fIKINETIC_DEVICE_INFO_TYPE_LIMITS \fP\fP
-.TP
-\fB\fIKINETIC_DEVICE_INFO_TYPE_DEVICE \fP\fP
 .PP
-Definition at line 292 of file kinetic_types\&.h\&.
+Definition at line 289 of file kinetic_types\&.h\&.
 .SS "enum \fBKineticMessageType\fP"
 
+.PP
+Log info message types\&. 
 .PP
 \fBEnumerator\fP
 .in +1c
@@ -610,7 +622,7 @@ MEDIAOPTIMIZE_RESPONSE\&.
 \fB\fIKINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE \fP\fP
 MEDIAOPTIMIZE\&. 
 .PP
-Definition at line 339 of file kinetic_types\&.h\&.
+Definition at line 359 of file kinetic_types\&.h\&.
 .SH "Function Documentation"
 .PP 
 .SS "const char* Kinetic_GetStatusDescription (\fBKineticStatus\fPstatus)"
@@ -630,7 +642,7 @@ Pointer to the appropriate string representation for the specified status\&.
 .PP
 
 .PP
-Definition at line 63 of file kinetic_types\&.c\&.
+Definition at line 67 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_STATUS_COUNT, KineticStatusDescriptor, and KineticStatusInvalid\&.
 .SS "const char* KineticMessageType_GetName (\fBKineticMessageType\fPtype)"
@@ -650,7 +662,7 @@ Pointer to the appropriate string representation for the specified type\&.
 .PP
 
 .PP
-Definition at line 108 of file kinetic_types\&.c\&.
+Definition at line 112 of file kinetic_types\&.c\&.
 .PP
 References KINETIC_MESSAGE_TYPE_DELETE, KINETIC_MESSAGE_TYPE_DELETE_RESPONSE, KINETIC_MESSAGE_TYPE_FLUSHALLDATA, KINETIC_MESSAGE_TYPE_FLUSHALLDATA_RESPONSE, KINETIC_MESSAGE_TYPE_GET, KINETIC_MESSAGE_TYPE_GET_RESPONSE, KINETIC_MESSAGE_TYPE_GETKEYRANGE, KINETIC_MESSAGE_TYPE_GETKEYRANGE_RESPONSE, KINETIC_MESSAGE_TYPE_GETLOG, KINETIC_MESSAGE_TYPE_GETLOG_RESPONSE, KINETIC_MESSAGE_TYPE_GETNEXT, KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE, KINETIC_MESSAGE_TYPE_GETPREVIOUS, KINETIC_MESSAGE_TYPE_GETPREVIOUS_RESPONSE, KINETIC_MESSAGE_TYPE_GETVERSION, KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE, KINETIC_MESSAGE_TYPE_INVALID, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE, KINETIC_MESSAGE_TYPE_MEDIAOPTIMIZE_RESPONSE, KINETIC_MESSAGE_TYPE_MEDIASCAN, KINETIC_MESSAGE_TYPE_MEDIASCAN_RESPONSE, KINETIC_MESSAGE_TYPE_NOOP, KINETIC_MESSAGE_TYPE_NOOP_RESPONSE, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH, KINETIC_MESSAGE_TYPE_PEER2PEERPUSH_RESPONSE, KINETIC_MESSAGE_TYPE_PINOP, KINETIC_MESSAGE_TYPE_PINOP_RESPONSE, KINETIC_MESSAGE_TYPE_PUT, KINETIC_MESSAGE_TYPE_PUT_RESPONSE, KINETIC_MESSAGE_TYPE_SECURITY, KINETIC_MESSAGE_TYPE_SECURITY_RESPONSE, KINETIC_MESSAGE_TYPE_SETUP, and KINETIC_MESSAGE_TYPE_SETUP_RESPONSE\&.
 .SH "Author"

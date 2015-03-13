@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,6 +52,9 @@
 </div><!--header-->
 <div class="contents">
 
+<p>Internal threadpool state.  
+ <a href="structthreadpool.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -70,8 +73,6 @@ Data Fields</h2></td></tr>
 <tr class="separator:aa3469c98c60fbc135cbb84b3b78f77ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4cb9350b47524d466802dcd7ce3e11e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool.html#aa4cb9350b47524d466802dcd7ce3e11e">task_ringbuf_mask</a></td></tr>
 <tr class="separator:aa4cb9350b47524d466802dcd7ce3e11e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af332f40f8c1eff62baf02447d3611cfa"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool.html#af332f40f8c1eff62baf02447d3611cfa">max_delay</a></td></tr>
-<tr class="separator:af332f40f8c1eff62baf02447d3611cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3acbdc36ee1adfb2db5ce1d19f3aae69"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool.html#a3acbdc36ee1adfb2db5ce1d19f3aae69">task_ringbuf_size2</a></td></tr>
 <tr class="separator:a3acbdc36ee1adfb2db5ce1d19f3aae69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bf60006c3b06823e1f15052d24840ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool.html#a8bf60006c3b06823e1f15052d24840ce">shutting_down</a></td></tr>
@@ -84,8 +85,9 @@ Data Fields</h2></td></tr>
 <tr class="separator:a08723a492a4dc19519f6009b3c238d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00064">64</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<div class="textblock"><p>Internal threadpool state. </p>
+
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00066">66</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a0a285c2de9634418e1d68054a1e9caa5"></a>
 <div class="memitem">
@@ -97,7 +99,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00066">66</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00068">68</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -111,7 +113,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00067">67</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00069">69</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -125,7 +127,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00068">68</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00070">70</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -139,7 +141,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00069">69</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00071">71</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -153,7 +155,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00071">71</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00073">73</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -167,7 +169,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00073">73</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00077">77</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -181,21 +183,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00074">74</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="af332f40f8c1eff62baf02447d3611cfa"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">size_t threadpool::max_delay</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00076">76</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00078">78</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -209,7 +197,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00077">77</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00079">79</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -223,7 +211,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00079">79</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00081">81</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -237,7 +225,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00080">80</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00082">82</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -251,7 +239,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00081">81</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00083">83</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -265,7 +253,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00082">82</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00084">84</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>

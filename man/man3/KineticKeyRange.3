@@ -1,4 +1,4 @@
-.TH "KineticKeyRange" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "KineticKeyRange" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -43,7 +43,7 @@ Kinetic Key Range request structure\&.
 .PP 
 Kinetic Key Range request structure\&. 
 .PP
-Definition at line 262 of file kinetic_types\&.h\&.
+Definition at line 255 of file kinetic_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBByteBuffer\fP KineticKeyRange::startKey"
@@ -51,37 +51,37 @@ Definition at line 262 of file kinetic_types\&.h\&.
 .PP
 Required bytes, the beginning of the requested range\&. 
 .PP
-Definition at line 265 of file kinetic_types\&.h\&.
+Definition at line 258 of file kinetic_types\&.h\&.
 .SS "\fBByteBuffer\fP KineticKeyRange::endKey"
 
 .PP
 Required bytes, the end of the requested range\&. 
 .PP
-Definition at line 268 of file kinetic_types\&.h\&.
+Definition at line 261 of file kinetic_types\&.h\&.
 .SS "bool KineticKeyRange::startKeyInclusive"
 
 .PP
 Optional bool, defaults to false If set, indicates that the start key should be included in the returned range\&. 
 .PP
-Definition at line 272 of file kinetic_types\&.h\&.
+Definition at line 265 of file kinetic_types\&.h\&.
 .SS "bool KineticKeyRange::endKeyInclusive"
 
 .PP
 Optional bool, defaults to false If set, indicates that the end key should be included in the returned range\&. 
 .PP
-Definition at line 276 of file kinetic_types\&.h\&.
+Definition at line 269 of file kinetic_types\&.h\&.
 .SS "int32_t KineticKeyRange::maxReturned"
 
 .PP
 Required int32, must be greater than 0 The maximum number of keys returned, in sorted order\&. 
 .PP
-Definition at line 280 of file kinetic_types\&.h\&.
+Definition at line 273 of file kinetic_types\&.h\&.
 .SS "bool KineticKeyRange::reverse"
 
 .PP
 Optional bool, defaults to false If true, the key range will be returned in reverse order, starting at endKey and moving back to startKey\&. For instance if the search is startKey='j', endKey='k', maxReturned=2, reverse=true and the keys 'k0', 'k1', 'k2' exist the system will return 'k2' and 'k1' in that order\&. 
 .PP
-Definition at line 288 of file kinetic_types\&.h\&.
+Definition at line 281 of file kinetic_types\&.h\&.
 
 .SH "Author"
 .PP 

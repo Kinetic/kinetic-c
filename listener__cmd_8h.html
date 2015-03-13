@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,29 +61,43 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a643355d8f006114f3186791239b7d4ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__cmd_8h.html#a643355d8f006114f3186791239b7d4ec">ListenerCmd_NotifyCaller</a> (int fd)</td></tr>
-<tr class="separator:a643355d8f006114f3186791239b7d4ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa191c3f69235bdb1a5080e8b9c7ae60b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__cmd_8h.html#aa191c3f69235bdb1a5080e8b9c7ae60b">ListenerCmd_NotifyCaller</a> (<a class="el" href="structlistener.html">listener</a> *l, int fd)</td></tr>
+<tr class="memdesc:aa191c3f69235bdb1a5080e8b9c7ae60b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify the listener's caller that a command has completed.  <a href="#aa191c3f69235bdb1a5080e8b9c7ae60b">More...</a><br /></td></tr>
+<tr class="separator:aa191c3f69235bdb1a5080e8b9c7ae60b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3a2e40b666b88497011b99357eec493"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493">ListenerCmd_CheckIncomingMessages</a> (<a class="el" href="structlistener.html">listener</a> *l, int *res)</td></tr>
+<tr class="memdesc:af3a2e40b666b88497011b99357eec493"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process incoming commands, if any.  <a href="#af3a2e40b666b88497011b99357eec493">More...</a><br /></td></tr>
 <tr class="separator:af3a2e40b666b88497011b99357eec493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a643355d8f006114f3186791239b7d4ec"></a>
+<a class="anchor" id="aa191c3f69235bdb1a5080e8b9c7ae60b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void ListenerCmd_NotifyCaller </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>fd</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structlistener.html">listener</a> *&#160;</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__cmd_8c_source.html#l00029">29</a> of file <a class="el" href="listener__cmd_8c_source.html">listener_cmd.c</a>.</p>
+<p>Notify the listener's caller that a command has completed. </p>
 
-<p>References <a class="el" href="bus__internal__types_8h_source.html#l00131">LISTENER_MSG_TAG</a>.</p>
+<p>Definition at line <a class="el" href="listener__cmd_8c_source.html#l00042">42</a> of file <a class="el" href="listener__cmd_8c_source.html">listener_cmd.c</a>.</p>
+
+<p>References <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00059">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__internal__types_8h_source.html#l00129">LISTENER_MSG_TAG</a>, <a class="el" href="listener__task_8c_source.html#l00531">ListenerTask_GetBackpressure()</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_LISTENER</a>, <a class="el" href="syscall_8c_source.html#l00035">syscall_write()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
@@ -111,9 +125,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__cmd_8c_source.html#l00048">48</a> of file <a class="el" href="listener__cmd_8c_source.html">listener_cmd.c</a>.</p>
+<p>Process incoming commands, if any. </p>
 
-<p>References <a class="el" href="listener__internal__types_8h_source.html#l00123">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener__internal__types_8h_source.html#l00151">listener::fds</a>, <a class="el" href="listener__internal__types_8h_source.html#l00030">INCOMING_MSG_PIPE_ID</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="listener__cmd_8c_source.html#l00082">msg_handler()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00142">listener::msgs</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
+<p>Definition at line <a class="el" href="listener__cmd_8c_source.html#l00073">73</a> of file <a class="el" href="listener__cmd_8c_source.html">listener_cmd.c</a>.</p>
+
+<p>References <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00059">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener__internal__types_8h_source.html#l00175">listener::fds</a>, <a class="el" href="listener__internal__types_8h_source.html#l00035">INCOMING_MSG_PIPE_ID</a>, <a class="el" href="listener__cmd__internal_8h_source.html#l00027">LISTENER_CMD_BUF_SIZE</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_LISTENER</a>, <a class="el" href="listener__cmd_8c_source.html#l00112">msg_handler()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00156">listener::msgs</a>, <a class="el" href="syscall_8c_source.html#l00039">syscall_read()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -48,53 +48,143 @@
 <li><a href="https://www.ruby-lang.org">Ruby</a> (v1.9.3 or higher) scripting language</li>
 <li><a href="http://rubygems.org">RubyGems</a> (installed w/ `bundle install)<ul>
 <li><a href="http://bundler.io">bundler</a> (v1.3.5 or higher) environment/dependency manager for Ruby projects</li>
+<li>Managed gems (installed w/ <code>bundle install</code>)<ul>
+<li><a href="https://rubygems.org/gems/rake">rake</a> Make-like build system</li>
+<li><a href="https://github.com/ThrowTheSwitch/Ceedling">ceedling</a> Build system which extends rake to add support for interaction-based testing<ul>
+<li><a href="https://github.com/ThrowTheSwitch/Unity">unity</a> Unity C test framework (bundled w/ Ceedling)</li>
+<li><a href="https://github.com/ThrowTheSwitch/CMock">cmock</a> CMock auto mock/fake module generator for C (bundle w/ Ceedling)</li>
 </ul>
 </li>
-<li><a href="http://cppcheck.sourceforge.net/">CppCheck</a> for static analysis of source code</li>
-<li><a href="http://valgrind.org/">Valgrind</a> for validation of memory usage/management</li>
-<li><a href="https://github.com/doxygen">Doxygen</a> and <a href="http://www.graphviz.org/">GraphViz</a> for generating API documentation</li>
 </ul>
-<h1>API Documentation </h1>
-<p><a href="http://seagate.github.io/kinetic-c/">Kinetic-C API</a> (generated with Doxygen)</p>
+</li>
+</ul>
+</li>
+<li><a href="http://valgrind.org/">Valgrind</a> for validation of memory usage/management</li>
+<li><a href="https://github.com/doxygen">Doxygen</a><ul>
+<li><a href="http://www.graphviz.org/">GraphViz</a> used by Doxygen for generating visualizations/graphs</li>
+</ul>
+</li>
+</ul>
+<h2>API Documentation </h2>
+<p><a href="http://seagate.github.io/kinetic-c/">Kinetic-C API Documentation</a> (generated with Doxygen)</p><ul>
+<li><a href="http://seagate.github.io/kinetic-c/kinetic__client_8h.html">Kinetic-C API</a></li>
+<li><a href="http://seagate.github.io/kinetic-c/kinetic__types_8h.html">Kinetic-C types</a></li>
+<li><a href="http://seagate.github.io/kinetic-c/byte__array_8h.html">ByteArray API</a><ul>
+<li>The <a class="el" href="struct_byte_array.html" title="Structure for handling generic arrays of bytes. ">ByteArray</a> and <a class="el" href="struct_byte_buffer.html" title="Structure for an embedded ByteArray as a buffer. ">ByteBuffer</a> types are used for exchanging variable length byte-arrays with kinetic-c<ul>
+<li>e.g. object keys, object value data, etc.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>There are also some additional [architectural notes](docs) and time-sequence diagrams.</p>
 <h2>Common Developer Tasks </h2>
-<p><b>NOTE: Prefix the following commands with <code>bundle exec</code> so that they execute in the context of the bundle environment setup via <code>bundle install</code>.</b></p>
 <ul>
-<li>List available Rake tasks w/descriptions<ul>
-<li><code>rake -T</code></li>
+<li>Build the library<ul>
+<li><code>make</code></li>
+</ul>
+</li>
+<li>Start kinteic-java simulator(s)<ul>
+<li><code>make [NUM_SIMS=N] start_sims # defaults to starting 2 simulators, if NUM_SIMS unspecified</code></li>
+</ul>
+</li>
+<li>Stop all running kinetic-java simulator(s)<ul>
+<li><code>make stop_sims</code></li>
 </ul>
 </li>
 <li>Run all tests and build the library and examples<ul>
-<li><code>rake</code></li>
+<li><code>make all</code></li>
 </ul>
 </li>
-<li>Build the library<ul>
-<li><code>rake release</code></li>
+<li>Run all unit/integration tests<ul>
+<li><code>make test</code></li>
 </ul>
 </li>
-<li>Run all unit/integration/system/example tests<ul>
-<li><code>rake test_all</code></li>
+<li>Run all system tests<ul>
+<li><code>make system_tests</code></li>
 </ul>
 </li>
-<li>Analyze code<ul>
-<li><code>rake cppcheck</code></li>
+<li>Run a particular system test<ul>
+<li>make test_system_&lt;module&gt;</li>
+<li>Will expect at least 2 simulators running by default (see above)</li>
+<li>Uses the following environment vars, which are loaded dynamically at runtime<ul>
+<li><code>KINTEIC_HOST[1|2]</code> - Configures the host name/IP for the specified device (default: <code>localhost</code>)</li>
+<li><code>KINTEIC_PORT[1|2]</code> - Configures the primary port for the specified device (default: <code>8124</code>, <code>8124</code>)</li>
+<li><code>KINTEIC_TLS_PORT[1|2]</code> - Configures the TLS port for the specified device (default: <code>8443</code>, <code>8444</code>)</li>
 </ul>
 </li>
-<li>Generate documentation<ul>
-<li><code>rake doxygen:gen</code></li>
 </ul>
 </li>
 <li>Apply license to source files (skips already licensed files)<ul>
-<li><code>rake apply_license</code></li>
+<li><code>make apply_license</code></li>
+</ul>
+</li>
+</ul>
+<h2>Developer Tasks via Rake </h2>
+<ul>
+<li>List rake tasks w/ descriptions<ul>
+<li><code>rake -T</code></li>
+</ul>
+</li>
+<li>Test a single module (via Ceedling)<ul>
+<li><code>rake test:&lt;module_name&gt;</code></li>
+</ul>
+</li>
+<li>Generate API documentation locally<ul>
+<li><code>rake doxygen:gen</code></li>
+</ul>
+</li>
+<li>Generate and publish public API documentation<ul>
+<li><code>rake doxygen:update_public_api</code></li>
 </ul>
 </li>
 <li>Build/install Google Protocol Buffers support for the Kinetic-Protocol<ul>
 <li><code>rake proto</code></li>
 </ul>
 </li>
-<li>Enable verbose output (for current Rake run)<ul>
-<li><code>rake verbose &lt;task_A&gt; &lt;task_B&gt;</code> </li>
+</ul>
+<h2>Automated Tests </h2>
+<p>All test sources are located in <code>test/</code>, which are additionally broken up into:</p><ul>
+<li><code>test/unit</code> - test suites for individual modules</li>
+<li><code>test/integration</code> - test suites which integrate multiple modules</li>
+<li><code>test/system</code> - system tests whick link against the kinetic-c release library<ul>
+<li>These tests require at least 2 simulator/drives to run against</li>
 </ul>
 </li>
+</ul>
+<h2>Adding a new unit/integration test </h2>
+<ul>
+<li>Create a file named <code>test_&lt;name&gt;.c</code> in either <code>test/unit</code> or <code>test/integration</code><ul>
+<li>These files will automatically be picked up by the Ceedling and added to the regression suite</li>
+<li>Build targets for each module will be generated according to what header files are included in the test suite source.<ul>
+<li>e.g.<ul>
+<li><code>#include "kinetic_session.h"</code> will link <code>kinetic_session.o</code> into the test target.</li>
+<li><code>#include "mock_kinetic_session.h"</code> will create a CMock mock of <code><a class="el" href="kinetic__session_8h.html">kinetic_session.h</a></code> and link <code>mock_kinetic_session.o</code> into the test target.</li>
+<li><code>#include &lt;some_lib.h&gt;</code> will simply include the specified header, assuming it is already available in to the linker.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>Adding a new system test </h2>
+<ul>
+<li>Create a file named <code>test_system_&lt;name&gt;.c</code> in <code>test/system</code><ul>
+<li>This will create a new system test target invokable via: <code>make test_system_&lt;name&gt;</code></li>
+<li>System tests link/run against the full kinetic-c static library.</li>
+<li>A generic test fixure is provided and linked into each system test from: <code>test/support/system_test_fixture.h/c</code><ul>
+<li>See details above for runtime configuration of the system test kinetic devices for running remote simulators or kinetic device hardware.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>Future development notes </h2>
+<ul>
+<li>epoll(2) could be used internally, in place of poll(2) and multiple listener threads. This only matters in a case where there is a large amount of idle listener connections. When there is a small number of file descriptors, it will add overhead, and epoll is only available on Linux.</li>
+<li>The listener can potentially leak memory on shutdown, in the case where responses have been partially received. This has been a low priority.</li>
+<li>There is room for tuning the total number of messages-in-flight in the listener (controlled by <code>MAX_PENDING_MESSAGES</code>), how the backpressure is calculated (in <code>ListenerTask_GetBackpressure</code>), and the bit shift applied to the backpressure unit (the third argument to <code>bus_backpressure_delay</code>, e.g. <code>LISTENER_BACKPRESSURE_SHIFT</code>). These derive the feedback that pushes against actions that overload the system. The current setup has worked well with system/integration tests and a stress test program that attempts to overload the message bus over a loopback connection, but other workloads may have different performance trade-offs. </li>
 </ul>
 </div></div><!-- contents -->
 <!-- start footer part -->

@@ -1,0 +1,1597 @@
+.TH "kinetic.pb-c.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic.pb-c.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <protobuf-c/protobuf-c\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fB_Com__Seagate__Kinetic__Proto__Local\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Message__HMACauth\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Message__PINauth\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Message\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Header\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Body\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Status\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__KeyValue\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Range\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Setup\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__P2POperation__Operation\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__P2POperation__Peer\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__P2POperation\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Utilization\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Temperature\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Capacity\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Configuration\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Statistics\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Limits\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Device\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__GetLog\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Scope\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__Security\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command__PinOperation\fP"
+.br
+.ti -1c
+.RI "struct \fBCom__Seagate__Kinetic__Proto__Command\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__LOCAL__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__MESSAGE__HMACAUTH__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__MESSAGE__PINAUTH__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__MESSAGE__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__HEADER__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__BODY__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__KEY_VALUE__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__RANGE__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__SETUP__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__OPERATION__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__PEER__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__UTILIZATION__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TEMPERATURE__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CAPACITY__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INTERFACE__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__STATISTICS__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__LIMITS__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__DEVICE__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__SCOPE__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__INIT\fP"
+.br
+.ti -1c
+.RI "#define \fBCOM__SEAGATE__KINETIC__PROTO__COMMAND__INIT\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef 
+.br
+typedefPROTOBUF_C__BEGIN_DECLS 
+.br
+struct 
+.br
+\fB_Com__Seagate__Kinetic__Proto__Local\fP \fBCom__Seagate__Kinetic__Proto__Local\fP"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Local_Closure\fP )(const \fBCom__Seagate__Kinetic__Proto__Local\fP *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Message__HMACauth_Closure\fP )(const Com__Seagate__Kinetic__Proto__Message__HMACauth *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Message__PINauth_Closure\fP )(const Com__Seagate__Kinetic__Proto__Message__PINauth *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Message_Closure\fP )(const Com__Seagate__Kinetic__Proto__Message *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Header_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Header *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Body_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Body *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Status__Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Status *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__KeyValue_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__KeyValue *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Range_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Range *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Setup_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Setup *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__P2POperation__Operation_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__P2POperation__Peer_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__P2POperation_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__P2POperation *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Utilization_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Temperature_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Capacity_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Configuration_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Statistics_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Limits_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Limits *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Device_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog__Device *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__GetLog *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Scope_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Security__ACL *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Security_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__Security *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__PinOperation_Closure\fP )(const Com__Seagate__Kinetic__Proto__Command__PinOperation *message, void *closure_data)"
+.br
+.ti -1c
+.RI "typedef void(* \fBCom__Seagate__Kinetic__Proto__Command__Closure\fP )(const Com__Seagate__Kinetic__Proto__Command *message, void *closure_data)"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Message__AuthType\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__Status__StatusCode\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Permission\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__PinOperation__PinOpType\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__Synchronization\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__Priority\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__Algorithm\fP "
+.br
+.ti -1c
+.RI "enum \fBCom__Seagate__Kinetic__Proto__Command__MessageType\fP "
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__local__init\fP (\fBCom__Seagate__Kinetic__Proto__Local\fP *message)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__local__get_packed_size\fP (const \fBCom__Seagate__Kinetic__Proto__Local\fP *message)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__local__pack\fP (const \fBCom__Seagate__Kinetic__Proto__Local\fP *message, uint8_t *out)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__local__pack_to_buffer\fP (const \fBCom__Seagate__Kinetic__Proto__Local\fP *message, ProtobufCBuffer *buffer)"
+.br
+.ti -1c
+.RI "\fBCom__Seagate__Kinetic__Proto__Local\fP * \fBcom__seagate__kinetic__proto__local__unpack\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__local__free_unpacked\fP (\fBCom__Seagate__Kinetic__Proto__Local\fP *message, ProtobufCAllocator *allocator)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__message__hmacauth__init\fP (Com__Seagate__Kinetic__Proto__Message__HMACauth *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__message__pinauth__init\fP (Com__Seagate__Kinetic__Proto__Message__PINauth *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__message__init\fP (Com__Seagate__Kinetic__Proto__Message *message)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__message__get_packed_size\fP (const Com__Seagate__Kinetic__Proto__Message *message)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__message__pack\fP (const Com__Seagate__Kinetic__Proto__Message *message, uint8_t *out)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__message__pack_to_buffer\fP (const Com__Seagate__Kinetic__Proto__Message *message, ProtobufCBuffer *buffer)"
+.br
+.ti -1c
+.RI "Com__Seagate__Kinetic__Proto__Message * \fBcom__seagate__kinetic__proto__message__unpack\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__message__free_unpacked\fP (Com__Seagate__Kinetic__Proto__Message *message, ProtobufCAllocator *allocator)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__header__init\fP (Com__Seagate__Kinetic__Proto__Command__Header *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__body__init\fP (Com__Seagate__Kinetic__Proto__Command__Body *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__status__init\fP (Com__Seagate__Kinetic__Proto__Command__Status *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__key_value__init\fP (Com__Seagate__Kinetic__Proto__Command__KeyValue *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__range__init\fP (Com__Seagate__Kinetic__Proto__Command__Range *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__setup__init\fP (Com__Seagate__Kinetic__Proto__Command__Setup *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__p2_poperation__operation__init\fP (Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__p2_poperation__peer__init\fP (Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__p2_poperation__init\fP (Com__Seagate__Kinetic__Proto__Command__P2POperation *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__utilization__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__temperature__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__capacity__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__configuration__interface__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__configuration__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__statistics__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__limits__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Limits *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__device__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog__Device *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__get_log__init\fP (Com__Seagate__Kinetic__Proto__Command__GetLog *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__security__acl__scope__init\fP (Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__security__acl__init\fP (Com__Seagate__Kinetic__Proto__Command__Security__ACL *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__security__init\fP (Com__Seagate__Kinetic__Proto__Command__Security *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__pin_operation__init\fP (Com__Seagate__Kinetic__Proto__Command__PinOperation *message)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__init\fP (Com__Seagate__Kinetic__Proto__Command *message)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__command__get_packed_size\fP (const Com__Seagate__Kinetic__Proto__Command *message)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__command__pack\fP (const Com__Seagate__Kinetic__Proto__Command *message, uint8_t *out)"
+.br
+.ti -1c
+.RI "size_t \fBcom__seagate__kinetic__proto__command__pack_to_buffer\fP (const Com__Seagate__Kinetic__Proto__Command *message, ProtobufCBuffer *buffer)"
+.br
+.ti -1c
+.RI "Com__Seagate__Kinetic__Proto__Command * \fBcom__seagate__kinetic__proto__command__unpack\fP (ProtobufCAllocator *allocator, size_t len, const uint8_t *data)"
+.br
+.ti -1c
+.RI "void \fBcom__seagate__kinetic__proto__command__free_unpacked\fP (Com__Seagate__Kinetic__Proto__Command *message, ProtobufCAllocator *allocator)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "char \fBcom__seagate__kinetic__proto__local__protocol_version__default_value\fP []"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__local__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__message__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__message__hmacauth__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__message__pinauth__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__message__auth_type__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__header__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__body__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__status__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__status__status_code__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__key_value__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__range__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__setup__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__p2_poperation__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__p2_poperation__operation__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__p2_poperation__peer__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__utilization__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__temperature__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__capacity__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__configuration__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__configuration__interface__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__statistics__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__limits__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__get_log__device__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__get_log__type__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__security__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__security__acl__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__security__acl__scope__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__security__acl__hmacalgorithm__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__security__acl__permission__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCMessageDescriptor \fBcom__seagate__kinetic__proto__command__pin_operation__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__pin_operation__pin_op_type__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__synchronization__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__priority__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__algorithm__descriptor\fP"
+.br
+.ti -1c
+.RI "const ProtobufCEnumDescriptor \fBcom__seagate__kinetic__proto__command__message_type__descriptor\fP"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define COM__SEAGATE__KINETIC__PROTO__LOCAL__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__local__descriptor) \
+    , com__seagate__kinetic__proto__local__protocol_version__default_value }
+.fi
+.PP
+Definition at line 388 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__MESSAGE__HMACAUTH__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__message__hmacauth__descriptor) \
+    , 0,0, 0,{0,NULL} }
+.fi
+.PP
+Definition at line 411 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__MESSAGE__PINAUTH__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__message__pinauth__descriptor) \
+    , 0,{0,NULL} }
+.fi
+.PP
+Definition at line 428 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__MESSAGE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__message__descriptor) \
+    , 0,0, NULL, NULL, 0,{0,NULL} }
+.fi
+.PP
+Definition at line 460 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__HEADER__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__header__descriptor) \
+    , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
+.fi
+.PP
+Definition at line 540 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__BODY__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__body__descriptor) \
+    , NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+.fi
+.PP
+Definition at line 580 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__status__descriptor) \
+    , 0,0, NULL, 0,{0,NULL} }
+.fi
+.PP
+Definition at line 606 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__KEY_VALUE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__key_value__descriptor) \
+    , 0,{0,NULL}, 0,0, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0 }
+.fi
+.PP
+Definition at line 671 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__RANGE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__range__descriptor) \
+    , 0,{0,NULL}, 0,{0,NULL}, 0,0, 0,0, 0,0, 0,0, 0,NULL }
+.fi
+.PP
+Definition at line 709 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__SETUP__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__setup__descriptor) \
+    , 0,0, 0,0 }
+.fi
+.PP
+Definition at line 737 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__OPERATION__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__p2_poperation__operation__descriptor) \
+    , 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,0, NULL, NULL }
+.fi
+.PP
+Definition at line 777 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__PEER__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__p2_poperation__peer__descriptor) \
+    , NULL, 0,0, 0,0 }
+.fi
+.PP
+Definition at line 791 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__p2_poperation__descriptor) \
+    , NULL, 0,NULL, 0,0 }
+.fi
+.PP
+Definition at line 821 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__UTILIZATION__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__utilization__descriptor) \
+    , NULL, 0,0 }
+.fi
+.PP
+Definition at line 842 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TEMPERATURE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__temperature__descriptor) \
+    , NULL, 0,0, 0,0, 0,0, 0,0 }
+.fi
+.PP
+Definition at line 868 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CAPACITY__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__capacity__descriptor) \
+    , 0,0, 0,0 }
+.fi
+.PP
+Definition at line 887 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INTERFACE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__configuration__interface__descriptor) \
+    , NULL, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL} }
+.fi
+.PP
+Definition at line 906 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__configuration__descriptor) \
+    , NULL, NULL, 0,{0,NULL}, 0,{0,NULL}, NULL, NULL, NULL, NULL, NULL, NULL, 0,NULL, 0,0, 0,0 }
+.fi
+.PP
+Definition at line 961 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__STATISTICS__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__statistics__descriptor) \
+    , 0,0, 0,0, 0,0 }
+.fi
+.PP
+Definition at line 987 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__LIMITS__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__limits__descriptor) \
+    , 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 }
+.fi
+.PP
+Definition at line 1018 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__DEVICE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__device__descriptor) \
+    , 0,{0,NULL} }
+.fi
+.PP
+Definition at line 1039 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__descriptor) \
+    , 0,NULL, 0,NULL, 0,NULL, NULL, NULL, 0,NULL, 0,{0,NULL}, NULL, NULL }
+.fi
+.PP
+Definition at line 1065 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__SCOPE__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__security__acl__scope__descriptor) \
+    , 0,0, 0,{0,NULL}, 0,NULL, 0,0 }
+.fi
+.PP
+Definition at line 1088 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__security__acl__descriptor) \
+    , 0,0, 0,{0,NULL}, 0,0, 0,NULL, 0,0 }
+.fi
+.PP
+Definition at line 1122 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__security__descriptor) \
+    , 0,NULL, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL}, 0,{0,NULL} }
+.fi
+.PP
+Definition at line 1151 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__pin_operation__descriptor) \
+    , 0,0 }
+.fi
+.PP
+Definition at line 1168 of file kinetic\&.pb-c\&.h\&.
+.SS "#define COM__SEAGATE__KINETIC__PROTO__COMMAND__INIT"
+\fBValue:\fP
+.PP
+.nf
+{ PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__descriptor) \
+    , NULL, NULL, NULL }
+.fi
+.PP
+Definition at line 1189 of file kinetic\&.pb-c\&.h\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef typedefPROTOBUF_C__BEGIN_DECLS struct \fB_Com__Seagate__Kinetic__Proto__Local\fP \fBCom__Seagate__Kinetic__Proto__Local\fP"
+
+.PP
+Definition at line 18 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Local_Closure)(const \fBCom__Seagate__Kinetic__Proto__Local\fP *message, void *closure_data)"
+
+.PP
+Definition at line 1326 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Message__HMACauth_Closure)(const Com__Seagate__Kinetic__Proto__Message__HMACauth *message, void *closure_data)"
+
+.PP
+Definition at line 1329 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Message__PINauth_Closure)(const Com__Seagate__Kinetic__Proto__Message__PINauth *message, void *closure_data)"
+
+.PP
+Definition at line 1332 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Message_Closure)(const Com__Seagate__Kinetic__Proto__Message *message, void *closure_data)"
+
+.PP
+Definition at line 1335 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Header_Closure)(const Com__Seagate__Kinetic__Proto__Command__Header *message, void *closure_data)"
+
+.PP
+Definition at line 1338 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Body_Closure)(const Com__Seagate__Kinetic__Proto__Command__Body *message, void *closure_data)"
+
+.PP
+Definition at line 1341 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Status__Closure)(const Com__Seagate__Kinetic__Proto__Command__Status *message, void *closure_data)"
+
+.PP
+Definition at line 1344 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__KeyValue_Closure)(const Com__Seagate__Kinetic__Proto__Command__KeyValue *message, void *closure_data)"
+
+.PP
+Definition at line 1347 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Range_Closure)(const Com__Seagate__Kinetic__Proto__Command__Range *message, void *closure_data)"
+
+.PP
+Definition at line 1350 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Setup_Closure)(const Com__Seagate__Kinetic__Proto__Command__Setup *message, void *closure_data)"
+
+.PP
+Definition at line 1353 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation_Closure)(const Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation *message, void *closure_data)"
+
+.PP
+Definition at line 1356 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer_Closure)(const Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer *message, void *closure_data)"
+
+.PP
+Definition at line 1359 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__P2POperation_Closure)(const Com__Seagate__Kinetic__Proto__Command__P2POperation *message, void *closure_data)"
+
+.PP
+Definition at line 1362 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization *message, void *closure_data)"
+
+.PP
+Definition at line 1365 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature *message, void *closure_data)"
+
+.PP
+Definition at line 1368 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity *message, void *closure_data)"
+
+.PP
+Definition at line 1371 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface *message, void *closure_data)"
+
+.PP
+Definition at line 1374 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration *message, void *closure_data)"
+
+.PP
+Definition at line 1377 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics *message, void *closure_data)"
+
+.PP
+Definition at line 1380 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Limits_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Limits *message, void *closure_data)"
+
+.PP
+Definition at line 1383 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Device_Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog__Device *message, void *closure_data)"
+
+.PP
+Definition at line 1386 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__GetLog__Closure)(const Com__Seagate__Kinetic__Proto__Command__GetLog *message, void *closure_data)"
+
+.PP
+Definition at line 1389 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope_Closure)(const Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *message, void *closure_data)"
+
+.PP
+Definition at line 1392 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Security__ACL__Closure)(const Com__Seagate__Kinetic__Proto__Command__Security__ACL *message, void *closure_data)"
+
+.PP
+Definition at line 1395 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Security_Closure)(const Com__Seagate__Kinetic__Proto__Command__Security *message, void *closure_data)"
+
+.PP
+Definition at line 1398 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__PinOperation_Closure)(const Com__Seagate__Kinetic__Proto__Command__PinOperation *message, void *closure_data)"
+
+.PP
+Definition at line 1401 of file kinetic\&.pb-c\&.h\&.
+.SS "typedef void(* Com__Seagate__Kinetic__Proto__Command__Closure)(const Com__Seagate__Kinetic__Proto__Command *message, void *closure_data)"
+
+.PP
+Definition at line 1404 of file kinetic\&.pb-c\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Message__AuthType\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__INVALID_AUTH_TYPE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__PINAUTH \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS \fP\fP
+.PP
+Definition at line 52 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__Status__StatusCode\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_STATUS_CODE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_ATTEMPTED \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SUCCESS \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HMAC_FAILURE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_AUTHORIZED \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_FAILURE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INTERNAL_ERROR \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HEADER_REQUIRED \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_FOUND \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_MISMATCH \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SERVICE_BUSY \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__EXPIRED \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DATA_ERROR \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__PERM_DATA_ERROR \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__REMOTE_CONNECTION_ERROR \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SPACE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SUCH_HMAC_ALGORITHM \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_REQUEST \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NESTED_OPERATION_ERRORS \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DEVICE_LOCKED \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DEVICE_ALREADY_UNLOCKED \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__CONNECTION_TERMINATED \fP\fP
+.PP
+Definition at line 78 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__INVALID_TYPE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__UTILIZATIONS \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__TEMPERATURES \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CAPACITIES \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CONFIGURATION \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__STATISTICS \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__MESSAGES \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__LIMITS \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE \fP\fP
+.PP
+Definition at line 161 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__INVALID_HMAC_ALGORITHM \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1 \fP\fP
+.PP
+Definition at line 176 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Permission\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__READ \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__WRITE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__DELETE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__RANGE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SETUP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__P2POP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__GETLOG \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SECURITY \fP\fP
+.PP
+Definition at line 190 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__PinOperation__PinOpType\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__INVALID_PINOP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__UNLOCK_PINOP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__LOCK_PINOP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__ERASE_PINOP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__SECURE_ERASE_PINOP \fP\fP
+.PP
+Definition at line 226 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__Synchronization\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__INVALID_SYNCHRONIZATION \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITETHROUGH \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITEBACK \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__FLUSH \fP\fP
+.PP
+Definition at line 253 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__Priority\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__NORMAL \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__LOWEST \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__LOWER \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__HIGHER \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__HIGHEST \fP\fP
+.PP
+Definition at line 263 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__Algorithm\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__INVALID_ALGORITHM \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1 \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA2 \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA3 \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC32 \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC64 \fP\fP
+.PP
+Definition at line 274 of file kinetic\&.pb-c\&.h\&.
+.SS "enum \fBCom__Seagate__Kinetic__Proto__Command__MessageType\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__INVALID_MESSAGE_TYPE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GET \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GET_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PUT \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PUT_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__DELETE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__DELETE_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETNEXT \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETNEXT_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETPREVIOUS \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETPREVIOUS_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETKEYRANGE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETKEYRANGE_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETVERSION \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETVERSION_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETLOG \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETLOG_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PEER2PEERPUSH \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PEER2PEERPUSH_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__NOOP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__NOOP_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__FLUSHALLDATA \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__FLUSHALLDATA_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIASCAN \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIASCAN_RESPONSE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIAOPTIMIZE \fP\fP
+.TP
+\fB\fICOM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIAOPTIMIZE_RESPONSE \fP\fP
+.PP
+Definition at line 304 of file kinetic\&.pb-c\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "void com__seagate__kinetic__proto__local__init (\fBCom__Seagate__Kinetic__Proto__Local\fP *message)"
+
+.PP
+Definition at line 11 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__LOCAL__INIT\&.
+.SS "size_t com__seagate__kinetic__proto__local__get_packed_size (const \fBCom__Seagate__Kinetic__Proto__Local\fP *message)"
+
+.PP
+Definition at line 17 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__local__descriptor\&.
+.SS "size_t com__seagate__kinetic__proto__local__pack (const \fBCom__Seagate__Kinetic__Proto__Local\fP *message, uint8_t *out)"
+
+.PP
+Definition at line 23 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__local__descriptor\&.
+.SS "size_t com__seagate__kinetic__proto__local__pack_to_buffer (const \fBCom__Seagate__Kinetic__Proto__Local\fP *message, ProtobufCBuffer *buffer)"
+
+.PP
+Definition at line 30 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__local__descriptor\&.
+.SS "\fBCom__Seagate__Kinetic__Proto__Local\fP* com__seagate__kinetic__proto__local__unpack (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
+
+.PP
+Definition at line 38 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__local__descriptor\&.
+.SS "void com__seagate__kinetic__proto__local__free_unpacked (\fBCom__Seagate__Kinetic__Proto__Local\fP *message, ProtobufCAllocator *allocator)"
+
+.PP
+Definition at line 47 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__local__descriptor\&.
+.SS "void com__seagate__kinetic__proto__message__hmacauth__init (Com__Seagate__Kinetic__Proto__Message__HMACauth *message)"
+
+.PP
+Definition at line 54 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__MESSAGE__HMACAUTH__INIT\&.
+.SS "void com__seagate__kinetic__proto__message__pinauth__init (Com__Seagate__Kinetic__Proto__Message__PINauth *message)"
+
+.PP
+Definition at line 60 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__MESSAGE__PINAUTH__INIT\&.
+.SS "void com__seagate__kinetic__proto__message__init (Com__Seagate__Kinetic__Proto__Message *message)"
+
+.PP
+Definition at line 66 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__MESSAGE__INIT\&.
+.SS "size_t com__seagate__kinetic__proto__message__get_packed_size (const Com__Seagate__Kinetic__Proto__Message *message)"
+
+.PP
+Definition at line 72 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__message__descriptor\&.
+.SS "size_t com__seagate__kinetic__proto__message__pack (const Com__Seagate__Kinetic__Proto__Message *message, uint8_t *out)"
+
+.PP
+Definition at line 78 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__message__descriptor\&.
+.SS "size_t com__seagate__kinetic__proto__message__pack_to_buffer (const Com__Seagate__Kinetic__Proto__Message *message, ProtobufCBuffer *buffer)"
+
+.PP
+Definition at line 85 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__message__descriptor\&.
+.SS "Com__Seagate__Kinetic__Proto__Message* com__seagate__kinetic__proto__message__unpack (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
+
+.PP
+Definition at line 93 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__message__descriptor\&.
+.SS "void com__seagate__kinetic__proto__message__free_unpacked (Com__Seagate__Kinetic__Proto__Message *message, ProtobufCAllocator *allocator)"
+
+.PP
+Definition at line 102 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__message__descriptor\&.
+.SS "void com__seagate__kinetic__proto__command__header__init (Com__Seagate__Kinetic__Proto__Command__Header *message)"
+
+.PP
+Definition at line 109 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__HEADER__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__body__init (Com__Seagate__Kinetic__Proto__Command__Body *message)"
+
+.PP
+Definition at line 115 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__BODY__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__status__init (Com__Seagate__Kinetic__Proto__Command__Status *message)"
+
+.PP
+Definition at line 121 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__key_value__init (Com__Seagate__Kinetic__Proto__Command__KeyValue *message)"
+
+.PP
+Definition at line 127 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__KEY_VALUE__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__range__init (Com__Seagate__Kinetic__Proto__Command__Range *message)"
+
+.PP
+Definition at line 133 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__RANGE__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__setup__init (Com__Seagate__Kinetic__Proto__Command__Setup *message)"
+
+.PP
+Definition at line 139 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SETUP__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__p2_poperation__operation__init (Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation *message)"
+
+.PP
+Definition at line 145 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__OPERATION__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__p2_poperation__peer__init (Com__Seagate__Kinetic__Proto__Command__P2POperation__Peer *message)"
+
+.PP
+Definition at line 151 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__PEER__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__p2_poperation__init (Com__Seagate__Kinetic__Proto__Command__P2POperation *message)"
+
+.PP
+Definition at line 157 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__P2_POPERATION__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__utilization__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Utilization *message)"
+
+.PP
+Definition at line 163 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__UTILIZATION__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__temperature__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Temperature *message)"
+
+.PP
+Definition at line 169 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TEMPERATURE__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__capacity__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Capacity *message)"
+
+.PP
+Definition at line 175 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CAPACITY__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__configuration__interface__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration__Interface *message)"
+
+.PP
+Definition at line 181 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INTERFACE__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__configuration__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration *message)"
+
+.PP
+Definition at line 187 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__CONFIGURATION__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__statistics__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Statistics *message)"
+
+.PP
+Definition at line 193 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__STATISTICS__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__limits__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Limits *message)"
+
+.PP
+Definition at line 199 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__LIMITS__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__device__init (Com__Seagate__Kinetic__Proto__Command__GetLog__Device *message)"
+
+.PP
+Definition at line 205 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__DEVICE__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__get_log__init (Com__Seagate__Kinetic__Proto__Command__GetLog *message)"
+
+.PP
+Definition at line 211 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__security__acl__scope__init (Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *message)"
+
+.PP
+Definition at line 217 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__SCOPE__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__security__acl__init (Com__Seagate__Kinetic__Proto__Command__Security__ACL *message)"
+
+.PP
+Definition at line 223 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__security__init (Com__Seagate__Kinetic__Proto__Command__Security *message)"
+
+.PP
+Definition at line 229 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__pin_operation__init (Com__Seagate__Kinetic__Proto__Command__PinOperation *message)"
+
+.PP
+Definition at line 235 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__INIT\&.
+.SS "void com__seagate__kinetic__proto__command__init (Com__Seagate__Kinetic__Proto__Command *message)"
+
+.PP
+Definition at line 241 of file kinetic\&.pb-c\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__INIT\&.
+.SS "size_t com__seagate__kinetic__proto__command__get_packed_size (const Com__Seagate__Kinetic__Proto__Command *message)"
+
+.PP
+Definition at line 247 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__command__descriptor\&.
+.SS "size_t com__seagate__kinetic__proto__command__pack (const Com__Seagate__Kinetic__Proto__Command *message, uint8_t *out)"
+
+.PP
+Definition at line 253 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__command__descriptor\&.
+.SS "size_t com__seagate__kinetic__proto__command__pack_to_buffer (const Com__Seagate__Kinetic__Proto__Command *message, ProtobufCBuffer *buffer)"
+
+.PP
+Definition at line 260 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__command__descriptor\&.
+.SS "Com__Seagate__Kinetic__Proto__Command* com__seagate__kinetic__proto__command__unpack (ProtobufCAllocator *allocator, size_tlen, const uint8_t *data)"
+
+.PP
+Definition at line 268 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__command__descriptor\&.
+.SS "void com__seagate__kinetic__proto__command__free_unpacked (Com__Seagate__Kinetic__Proto__Command *message, ProtobufCAllocator *allocator)"
+
+.PP
+Definition at line 277 of file kinetic\&.pb-c\&.c\&.
+.PP
+References com__seagate__kinetic__proto__command__descriptor\&.
+.SH "Variable Documentation"
+.PP 
+.SS "char com__seagate__kinetic__proto__local__protocol_version__default_value[]"
+
+.PP
+Definition at line 283 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__local__descriptor"
+
+.PP
+Definition at line 307 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__message__descriptor"
+
+.PP
+Definition at line 505 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__message__hmacauth__descriptor"
+
+.PP
+Definition at line 358 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__message__pinauth__descriptor"
+
+.PP
+Definition at line 396 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__message__auth_type__descriptor"
+
+.PP
+Definition at line 428 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__descriptor"
+
+.PP
+Definition at line 3002 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__header__descriptor"
+
+.PP
+Definition at line 651 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__body__descriptor"
+
+.PP
+Definition at line 768 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__status__descriptor"
+
+.PP
+Definition at line 900 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__status__status_code__descriptor"
+
+.PP
+Definition at line 836 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__key_value__descriptor"
+
+.PP
+Definition at line 1029 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__range__descriptor"
+
+.PP
+Definition at line 1146 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__setup__descriptor"
+
+.PP
+Definition at line 1198 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__p2_poperation__descriptor"
+
+.PP
+Definition at line 1429 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__p2_poperation__operation__descriptor"
+
+.PP
+Definition at line 1301 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__p2_poperation__peer__descriptor"
+
+.PP
+Definition at line 1365 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__descriptor"
+
+.PP
+Definition at line 2347 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__utilization__descriptor"
+
+.PP
+Definition at line 1480 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__temperature__descriptor"
+
+.PP
+Definition at line 1570 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__capacity__descriptor"
+
+.PP
+Definition at line 1621 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__configuration__descriptor"
+
+.PP
+Definition at line 1892 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__configuration__interface__descriptor"
+
+.PP
+Definition at line 1698 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__statistics__descriptor"
+
+.PP
+Definition at line 1957 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__limits__descriptor"
+
+.PP
+Definition at line 2125 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__get_log__device__descriptor"
+
+.PP
+Definition at line 2163 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__get_log__type__descriptor"
+
+.PP
+Definition at line 2205 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__security__descriptor"
+
+.PP
+Definition at line 2674 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__security__acl__descriptor"
+
+.PP
+Definition at line 2584 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__security__acl__scope__descriptor"
+
+.PP
+Definition at line 2424 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__security__acl__hmacalgorithm__descriptor"
+
+.PP
+Definition at line 2452 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__security__acl__permission__descriptor"
+
+.PP
+Definition at line 2494 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__pin_operation__descriptor"
+
+.PP
+Definition at line 2746 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__pin_operation__pin_op_type__descriptor"
+
+.PP
+Definition at line 2708 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__synchronization__descriptor"
+
+.PP
+Definition at line 2778 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__priority__descriptor"
+
+.PP
+Definition at line 2812 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__algorithm__descriptor"
+
+.PP
+Definition at line 2848 of file kinetic\&.pb-c\&.c\&.
+.SS "const ProtobufCEnumDescriptor com__seagate__kinetic__proto__command__message_type__descriptor"
+
+.PP
+Definition at line 2938 of file kinetic\&.pb-c\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -81,14 +81,14 @@
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
 <li>scope
-: <a class="el" href="struct___kinetic_proto___command___security___a_c_l.html#ae7e310f24581954733d0251ebce42961">KineticProto_Command_Security_ACL</a>
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____security_____a_c_l.html#a6c19db1d6c33793a5d394d558309d010">Com__Seagate__Kinetic__Proto__Command__Security__ACL</a>
 </li>
 <li>security
-: <a class="el" href="struct___kinetic_proto___command___body.html#a34e35f9281822c20aac1a4c40c1a7a57">KineticProto_Command_Body</a>
-, <a class="el" href="struct_kinetic_message.html#a021bd30de081c2941e99840042c2a02b">KineticMessage</a>
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____body.html#a63732aeaa117253d7038820d91f3c8a4">Com__Seagate__Kinetic__Proto__Command__Body</a>
+, <a class="el" href="struct_kinetic_message.html#a48b14efb21244aaf80fc8af89b1c0e60">KineticMessage</a>
 </li>
 <li>sendMutex
-: <a class="el" href="struct___kinetic_connection.html#a7d32a5f6d77c7f62e05a1009c2a33927">KineticConnection</a>
+: <a class="el" href="struct___kinetic_session.html#af9723e234e10ef886d5f0ac10747a31b">KineticSession</a>
 </li>
 <li>seq_id
 : <a class="el" href="structbus__msg__result__t.html#a953afd4f1ed015da9af78a71d2ab034a">bus_msg_result_t</a>
@@ -98,21 +98,22 @@
 , <a class="el" href="structrx__info__t.html#a5e9d8e85630079b079a1b1020a14bdf0">rx_info_t</a>
 </li>
 <li>sequence
-: <a class="el" href="struct___kinetic_connection.html#a9c112933e5183b7b9fde38b012c77d0f">KineticConnection</a>
-, <a class="el" href="struct___kinetic_proto___command___header.html#a183e415b1b345e19fcdd688afab241cc">KineticProto_Command_Header</a>
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____header.html#ad47f7de3ca5c9a4afb5094b2715f9ac3">Com__Seagate__Kinetic__Proto__Command__Header</a>
+, <a class="el" href="struct___kinetic_session.html#a9b523440b01b830ce66c2048cbe52e8d">KineticSession</a>
 , <a class="el" href="struct_kinetic_completion_data.html#a267b62f15b2f3c6e15f108f6e6ae719d">KineticCompletionData</a>
 </li>
+<li>serialnumber
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____get_log_____configuration.html#a89438826d562dd7c635dc862b3914b64">Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration</a>
+</li>
 <li>serialNumber
-: <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#a53e2e27225bc23951fd4ba747edb4ca4">KineticProto_Command_GetLog_Configuration</a>
-, <a class="el" href="struct_kinetic_log_info___configuration.html#a9ce791fbc9fbdbe76e4f505d64a32dad">KineticLogInfo_Configuration</a>
+: <a class="el" href="struct_kinetic_log_info___configuration.html#a9ce791fbc9fbdbe76e4f505d64a32dad">KineticLogInfo_Configuration</a>
+</li>
+<li>session
+: <a class="el" href="struct___kinetic_operation.html#ab64219383a93a26f04f9a0182b4b4fca">KineticOperation</a>
 </li>
 <li>setup
-: <a class="el" href="struct___kinetic_proto___command___body.html#ab62dbb7536eecf16da373dda92ce1351">KineticProto_Command_Body</a>
-, <a class="el" href="structgreatest__run__info.html#a618f8d413324f96724252173853f7cdb">greatest_run_info</a>
-, <a class="el" href="struct_kinetic_message.html#a6f52f09049fa9cddab06da3d7994fa16">KineticMessage</a>
-</li>
-<li>setup_udata
-: <a class="el" href="structgreatest__run__info.html#a3025c97b644c811e7b4d0d6e1c334477">greatest_run_info</a>
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____body.html#a2b94e1284218d1c42f3666798207453b">Com__Seagate__Kinetic__Proto__Command__Body</a>
+, <a class="el" href="struct_kinetic_message.html#ae5b844253b7a9fe3c65f4be1a176ae9c">KineticMessage</a>
 </li>
 <li>shutdown
 : <a class="el" href="structlistener__msg.html#a6d465300533fe5aa78e626247ee36d09">listener_msg</a>
@@ -127,22 +128,23 @@
 : <a class="el" href="structthreadpool.html#a8bf60006c3b06823e1f15052d24840ce">threadpool</a>
 </li>
 <li>si
-: <a class="el" href="struct___kinetic_connection.html#abebbbe645587ab614a203eec2d47be5f">KineticConnection</a>
+: <a class="el" href="struct___kinetic_session.html#a542ead045804b38daa9d23b84b55efd0">KineticSession</a>
 </li>
 <li>sink_cb
 : <a class="el" href="structbus.html#a3f72ca0a4bdb9978a9e012045623f933">bus</a>
 , <a class="el" href="structbus__config.html#ad20a0495c65231d9c50a9493531847a9">bus_config</a>
 </li>
-<li>skipped
-: <a class="el" href="structgreatest__run__info.html#ace42a34e8d8bbc85824a254f36fb5668">greatest_run_info</a>
-, <a class="el" href="structgreatest__suite__info.html#aff2cb54558482b2ae00fa59894804f5a">greatest_suite_info</a>
+<li>size
+: <a class="el" href="structyacht.html#a3d524e001230090f0239d4f77741a2a0">yacht</a>
 </li>
 <li>socket
-: <a class="el" href="struct___kinetic_connection.html#a65428b0886df3645114237f15f91e461">KineticConnection</a>
+: <a class="el" href="struct___kinetic_session.html#a6093772bffe6345a2b7579c8c267b2d6">KineticSession</a>
+</li>
+<li>sourcehash
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____get_log_____configuration.html#a9732c0082f19c5eed63bf7918d7813d2">Com__Seagate__Kinetic__Proto__Command__GetLog__Configuration</a>
 </li>
 <li>sourceHash
-: <a class="el" href="struct___kinetic_proto___command___get_log___configuration.html#af76fc6d31978691993dffbf0de852484">KineticProto_Command_GetLog_Configuration</a>
-, <a class="el" href="struct_kinetic_log_info___configuration.html#ae407656b1647e37bd1f6b4d30c362472">KineticLogInfo_Configuration</a>
+: <a class="el" href="struct_kinetic_log_info___configuration.html#ae407656b1647e37bd1f6b4d30c362472">KineticLogInfo_Configuration</a>
 </li>
 <li>ssl
 : <a class="el" href="structboxed__msg.html#a0aa2362725170c931bb9e0f60a0b7c00">boxed_msg</a>
@@ -151,44 +153,42 @@
 <li>ssl_ctx
 : <a class="el" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">bus</a>
 </li>
+<li>startkey
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____range.html#a03d4e5666a133cedf6134a2bae20fb2e">Com__Seagate__Kinetic__Proto__Command__Range</a>
+</li>
 <li>startKey
-: <a class="el" href="struct___kinetic_proto___command___range.html#a3d61b0a8cd015fb558d8427c5bc6131e">KineticProto_Command_Range</a>
-, <a class="el" href="struct_kinetic_key_range.html#a368aca257ec76a040d2c9b11aafc7a11">KineticKeyRange</a>
+: <a class="el" href="struct_kinetic_key_range.html#a368aca257ec76a040d2c9b11aafc7a11">KineticKeyRange</a>
+</li>
+<li>startkeyinclusive
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____range.html#a33b194b0f3de251abd4b86f4b308b09d">Com__Seagate__Kinetic__Proto__Command__Range</a>
 </li>
 <li>startKeyInclusive
-: <a class="el" href="struct___kinetic_proto___command___range.html#a7ddb8baa7cbe5a3d7c0070ebc6809c3e">KineticProto_Command_Range</a>
-, <a class="el" href="struct_kinetic_key_range.html#acddb7d7cc3a47f798631aaf127bea6ef">KineticKeyRange</a>
+: <a class="el" href="struct_kinetic_key_range.html#acddb7d7cc3a47f798631aaf127bea6ef">KineticKeyRange</a>
 </li>
 <li>state
 : <a class="el" href="structrx__info__t.html#a9058ba46056d660e88ddc829b4e2b6c0">rx_info_t</a>
 </li>
 <li>statistics
-: <a class="el" href="struct___kinetic_proto___command___get_log.html#a508addf72097cdd0d20bffc525142592">KineticProto_Command_GetLog</a>
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____get_log.html#ab802805f59c98d4d97184ed079c019bf">Com__Seagate__Kinetic__Proto__Command__GetLog</a>
 , <a class="el" href="struct_kinetic_log_info.html#a4dc7589a418451ae869bb3b45723bc14">KineticLogInfo</a>
 </li>
 <li>status
-: <a class="el" href="struct___kinetic_proto___command.html#a004233355fdf146f8d1563167eb80657">KineticProto_Command</a>
-, <a class="el" href="struct___kinetic_proto___command___p2_p_operation___operation.html#a9d180d77f807dfb4fdf499d87ad862c3">KineticProto_Command_P2POperation_Operation</a>
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command.html#ab00f4c27b78c5643bb180f77068416c4">Com__Seagate__Kinetic__Proto__Command</a>
+, <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____p2_p_operation_____operation.html#a7e7d9ce5e198d6fd2ca5257722bf5b3c">Com__Seagate__Kinetic__Proto__Command__P2POperation__Operation</a>
 , <a class="el" href="structbus__msg__result__t.html#a36104df5573606bc88588a136b014d87">bus_msg_result_t</a>
-, <a class="el" href="structbus__result.html#a3257dd0f3116387d8a2b65159605f984">bus_result</a>
+, <a class="el" href="structbus__result.html#aa8b641e2659a38f5da19d82d717bfb24">bus_result</a>
 , <a class="el" href="struct_kinetic_completion_data.html#ad749176d32531079604c1dcc2cc40597">KineticCompletionData</a>
-, <a class="el" href="struct_kinetic_message.html#a19fb4523d8bfc1e88bede8125f35f415">KineticMessage</a>
+, <a class="el" href="struct_kinetic_message.html#a18ea65675212f29b001d2a9457a86418">KineticMessage</a>
 , <a class="el" href="structthread__info.html#ae45698b2009fe513c6afdcd56480e815">thread_info</a>
 </li>
-<li>statusMessage
-: <a class="el" href="struct___kinetic_proto___command___status.html#a12d3ad792330c701b6322c7387007ef7">KineticProto_Command_Status</a>
+<li>statusmessage
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____status.html#a134c020009835fa9c9c429fe0e836161">Com__Seagate__Kinetic__Proto__Command__Status</a>
 </li>
 <li>success
 : <a class="el" href="structbus__unpack__cb__res__t.html#afbc0af45e948a59f8bf182d3559a3066">bus_unpack_cb_res_t</a>
 </li>
-<li>suite
-: <a class="el" href="structgreatest__run__info.html#a4e2f63a565cb7cfac717b996614b9a85">greatest_run_info</a>
-</li>
-<li>suite_filter
-: <a class="el" href="structgreatest__run__info.html#ab686057e43662e2868f32bc341eda8ff">greatest_run_info</a>
-</li>
 <li>synchronization
-: <a class="el" href="struct___kinetic_proto___command___key_value.html#ac46945226d40d8dd9374752ba73ef763">KineticProto_Command_KeyValue</a>
+: <a class="el" href="struct___com_____seagate_____kinetic_____proto_____command_____key_value.html#a84d94ead2502faebcefe488743b329c8">Com__Seagate__Kinetic__Proto__Command__KeyValue</a>
 , <a class="el" href="struct_kinetic_entry.html#ac7d04e1dcbfc7794823542c61698b777">KineticEntry</a>
 </li>
 </ul>

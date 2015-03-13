@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="send__internal_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -77,29 +77,11 @@
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="send_8h.html">send.h</a>&quot;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">   25</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51">   26</a></span>&#160;    <a class="code" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51">HW_OK</a>,</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91">   27</a></span>&#160;    <a class="code" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91">HW_DONE</a>,</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157">   28</a></span>&#160;    <a class="code" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157">HW_ERROR</a> = -1,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;} <a class="code" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">handle_write_res</a>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">static</span> <a class="code" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">handle_write_res</a> <a class="code" href="send__internal_8h.html#a6664eefee5b7a9db746a8c9a76a5d764">handle_write</a>(<a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structboxed__msg.html">boxed_msg</a> *box);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="send__internal_8h.html#ae31cb52695b7c4b86ad52413e7cf4966">handle_failure</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structboxed__msg.html">boxed_msg</a> *box, <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a> status);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="send__internal_8h.html#a0a3d5df230238208188a316c900123c4">attempt_to_enqueue_sending_request_message_to_listener</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">int</span> fd, int64_t seq_id, int16_t timeout_sec);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="send__internal_8h_html_ae31cb52695b7c4b86ad52413e7cf4966"><div class="ttname"><a href="send__internal_8h.html#ae31cb52695b7c4b86ad52413e7cf4966">handle_failure</a></div><div class="ttdeci">static void handle_failure(struct bus *b, boxed_msg *box, bus_send_status_t status)</div></div>
-<div class="ttc" id="send__internal_8h_html_a0a3d5df230238208188a316c900123c4"><div class="ttname"><a href="send__internal_8h.html#a0a3d5df230238208188a316c900123c4">attempt_to_enqueue_sending_request_message_to_listener</a></div><div class="ttdeci">static bool attempt_to_enqueue_sending_request_message_to_listener(struct bus *b, int fd, int64_t seq_id, int16_t timeout_sec)</div></div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="send__internal_8h.html#a2ac0191583cd2ec8e5c415a6fdadbd09">   25</a></span>&#160;<span class="preprocessor">#define SEND_NOTIFY_LISTENER_RETRIES 10</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="send__internal_8h.html#ad747971f2f8f7a93312f55d01df00236">   26</a></span>&#160;<span class="preprocessor">#define SEND_NOTIFY_LISTENER_RETRY_DELAY 5</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="send_8h_html"><div class="ttname"><a href="send_8h.html">send.h</a></div></div>
-<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00072">bus_internal_types.h:72</a></div></div>
-<div class="ttc" id="send__internal_8h_html_a7528f5ce68462632ca7a9d3eb600c8dc"><div class="ttname"><a href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">handle_write_res</a></div><div class="ttdeci">handle_write_res</div><div class="ttdef"><b>Definition:</b> <a href="send__internal_8h_source.html#l00025">send_internal.h:25</a></div></div>
-<div class="ttc" id="send__internal_8h_html_a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91"><div class="ttname"><a href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91">HW_DONE</a></div><div class="ttdef"><b>Definition:</b> <a href="send__internal_8h_source.html#l00027">send_internal.h:27</a></div></div>
-<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76a"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a></div><div class="ttdeci">bus_send_status_t</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00192">bus_types.h:192</a></div></div>
-<div class="ttc" id="send__internal_8h_html_a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51"><div class="ttname"><a href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51">HW_OK</a></div><div class="ttdef"><b>Definition:</b> <a href="send__internal_8h_source.html#l00026">send_internal.h:26</a></div></div>
-<div class="ttc" id="structboxed__msg_html"><div class="ttname"><a href="structboxed__msg.html">boxed_msg</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00036">bus_internal_types.h:36</a></div></div>
-<div class="ttc" id="send__internal_8h_html_a6664eefee5b7a9db746a8c9a76a5d764"><div class="ttname"><a href="send__internal_8h.html#a6664eefee5b7a9db746a8c9a76a5d764">handle_write</a></div><div class="ttdeci">static handle_write_res handle_write(bus *b, boxed_msg *box)</div></div>
-<div class="ttc" id="send__internal_8h_html_a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157"><div class="ttname"><a href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157">HW_ERROR</a></div><div class="ttdef"><b>Definition:</b> <a href="send__internal_8h_source.html#l00028">send_internal.h:28</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

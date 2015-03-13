@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,6 +52,9 @@
 </div><!--header-->
 <div class="contents">
 
+<p>Receiver of responses.  
+ <a href="structlistener.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -74,8 +77,8 @@ Data Fields</h2></td></tr>
 <tr class="separator:ac89de9e149ba59813be0e77f010eb591"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a944a9d2c8ddf511f930e2fff830e98a8"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a944a9d2c8ddf511f930e2fff830e98a8">rx_info_max_used</a></td></tr>
 <tr class="separator:a944a9d2c8ddf511f930e2fff830e98a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ff96652f9daeb33875953b93fb516fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlistener__msg.html">listener_msg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a6ff96652f9daeb33875953b93fb516fc">msgs</a> [32]</td></tr>
-<tr class="separator:a6ff96652f9daeb33875953b93fb516fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5502c1d34aca5a35e4dad9a041feb8a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlistener__msg.html">listener_msg</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a5502c1d34aca5a35e4dad9a041feb8a9">msgs</a> [(32)]</td></tr>
+<tr class="separator:a5502c1d34aca5a35e4dad9a041feb8a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09910b5c7a88c50e18a46921e623293d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structlistener__msg.html">listener_msg</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a09910b5c7a88c50e18a46921e623293d">msg_freelist</a></td></tr>
 <tr class="separator:a09910b5c7a88c50e18a46921e623293d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa293e29d12cdc066ef04b49ca19451ef"><td class="memItemLeft" align="right" valign="top">int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#aa293e29d12cdc066ef04b49ca19451ef">msgs_in_use</a></td></tr>
@@ -85,19 +88,29 @@ Data Fields</h2></td></tr>
 <tr class="memitem:a5a195c5e0ef1a2aaa14bab318f1451f8"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a5a195c5e0ef1a2aaa14bab318f1451f8">upstream_backpressure</a></td></tr>
 <tr class="separator:a5a195c5e0ef1a2aaa14bab318f1451f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5883abca1bdd50fcf2e0d5675f9216ad"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a5883abca1bdd50fcf2e0d5675f9216ad">tracked_fds</a></td></tr>
+<tr class="memdesc:a5883abca1bdd50fcf2e0d5675f9216ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">FDs currently tracked by listener.  <a href="#a5883abca1bdd50fcf2e0d5675f9216ad">More...</a><br /></td></tr>
 <tr class="separator:a5883abca1bdd50fcf2e0d5675f9216ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2a73469e3bf5fb55ab0edb3699cc50e"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#ad2a73469e3bf5fb55ab0edb3699cc50e">inactive_fds</a></td></tr>
+<tr class="memdesc:ad2a73469e3bf5fb55ab0edb3699cc50e"><td class="mdescLeft">&#160;</td><td class="mdescRight">File descriptors that are inactive due to errors, but have not yet been explicitly removed/closed by the client.  <a href="#ad2a73469e3bf5fb55ab0edb3699cc50e">More...</a><br /></td></tr>
+<tr class="separator:ad2a73469e3bf5fb55ab0edb3699cc50e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae15ac7bbebd8900e4441f15fdca4c535"><td class="memItemLeft" align="right" valign="top">struct pollfd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#ae15ac7bbebd8900e4441f15fdca4c535">fds</a> [1000+1]</td></tr>
+<tr class="memdesc:ae15ac7bbebd8900e4441f15fdca4c535"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tracked file descriptors, for polling.  <a href="#ae15ac7bbebd8900e4441f15fdca4c535">More...</a><br /></td></tr>
 <tr class="separator:ae15ac7bbebd8900e4441f15fdca4c535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66e7d5a3179530bd3658e758f11be642"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structconnection__info.html">connection_info</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a66e7d5a3179530bd3658e758f11be642">fd_info</a> [1000]</td></tr>
+<tr class="memdesc:a66e7d5a3179530bd3658e758f11be642"><td class="mdescLeft">&#160;</td><td class="mdescRight">The connection info, corresponding to the the file descriptors tracked in l-&gt;fds.  <a href="#a66e7d5a3179530bd3658e758f11be642">More...</a><br /></td></tr>
 <tr class="separator:a66e7d5a3179530bd3658e758f11be642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29f384b2884d1f3e6ac11093890e052b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a29f384b2884d1f3e6ac11093890e052b">error_occured</a></td></tr>
+<tr class="memdesc:a29f384b2884d1f3e6ac11093890e052b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating post-poll handling is necessary.  <a href="#a29f384b2884d1f3e6ac11093890e052b">More...</a><br /></td></tr>
+<tr class="separator:a29f384b2884d1f3e6ac11093890e052b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78f69f0cfcea46e590a71e1fccf81b92"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#a78f69f0cfcea46e590a71e1fccf81b92">read_buf_size</a></td></tr>
 <tr class="separator:a78f69f0cfcea46e590a71e1fccf81b92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada742987f7ce7758fc4422a290948d97"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html#ada742987f7ce7758fc4422a290948d97">read_buf</a></td></tr>
 <tr class="separator:ada742987f7ce7758fc4422a290948d97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00122">122</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<div class="textblock"><p>Receiver of responses. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00136">136</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a3b774e2e0ad1e58c3a0bdf7207cabbb6"></a>
 <div class="memitem">
@@ -109,7 +122,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00123">123</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00137">137</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -123,7 +136,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00130">130</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00144">144</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -137,7 +150,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00133">133</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00147">147</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -151,7 +164,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00134">134</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00148">148</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -165,7 +178,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00135">135</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00149">149</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -179,7 +192,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00137">137</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00151">151</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -193,7 +206,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00138">138</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00152">152</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -207,7 +220,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00139">139</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00153">153</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -221,21 +234,21 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00140">140</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00154">154</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a6ff96652f9daeb33875953b93fb516fc"></a>
+<a class="anchor" id="a5502c1d34aca5a35e4dad9a041feb8a9"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structlistener__msg.html">listener_msg</a> listener::msgs[32]</td>
+          <td class="memname"><a class="el" href="structlistener__msg.html">listener_msg</a> listener::msgs[(32)]</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00142">142</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00156">156</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -249,7 +262,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00143">143</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00157">157</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -263,7 +276,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00144">144</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00158">158</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -277,7 +290,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00145">145</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00159">159</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -291,7 +304,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00147">147</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00161">161</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -305,7 +318,25 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00149">149</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>FDs currently tracked by listener. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00163">163</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad2a73469e3bf5fb55ab0edb3699cc50e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t listener::inactive_fds</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>File descriptors that are inactive due to errors, but have not yet been explicitly removed/closed by the client. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00166">166</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -319,7 +350,10 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00151">151</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Tracked file descriptors, for polling. </p>
+<p>fds[INCOMING_MSG_PIPE_ID (0)] is the incoming_msg_pipe, so the listener's poll is awakened by incoming commands. fds[1] through fds[l-&gt;tracked_fds - l-&gt;inactive_fds] are the file descriptors which should be polled, and the remaining ones (if any) have been moved to the end so poll() will not touch them. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00175">175</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -333,7 +367,26 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00152">152</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>The connection info, corresponding to the the file descriptors tracked in l-&gt;fds. </p>
+<p>Unlike l-&gt;fds, these are not offset by one for the incoming message pipe, i.e. l-&gt;fd_info[3] correspons to l-&gt;fds[3 + INCOMING_MSG_PIPE]. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00180">180</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a29f384b2884d1f3e6ac11093890e052b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool listener::error_occured</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Flag indicating post-poll handling is necessary. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00182">182</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -347,7 +400,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00155">155</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00185">185</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -361,7 +414,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00156">156</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00186">186</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>

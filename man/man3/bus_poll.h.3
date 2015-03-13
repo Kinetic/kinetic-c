@@ -1,0 +1,34 @@
+.TH "bus_poll.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_poll.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include 'bus_types\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBBusPoll_OnCompletion\fP (struct \fBbus\fP *b, int fd)"
+.br
+.RI "\fIPoll on fd until complete, return true on success or false on IO error\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "bool BusPoll_OnCompletion (struct \fBbus\fP *b, intfd)"
+
+.PP
+Poll on fd until complete, return true on success or false on IO error\&. (This is mostly in a distinct module to add a testing seam\&.) 
+.PP
+Definition at line 35 of file bus_poll\&.c\&.
+.PP
+References Bus_BackpressureDelay(), BUS_LOG, BUS_LOG_SNPRINTF, LISTENER_BACKPRESSURE_SHIFT, LISTENER_MSG_TAG, LOG_SENDING_REQUEST, read_buf, syscall_poll(), syscall_read(), bus::udata, and Util_IsResumableIOError()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

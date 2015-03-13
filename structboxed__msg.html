@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -57,20 +57,26 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a3ba93e50d6ae6093e131696a1f10c924"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structbus__msg__result__t.html">bus_msg_result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a3ba93e50d6ae6093e131696a1f10c924">result</a></td></tr>
+<tr class="memdesc:a3ba93e50d6ae6093e131696a1f10c924"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result message, constructed in place after the request/response cycle has completed or failed due to timeout / unrecoverable error.  <a href="#a3ba93e50d6ae6093e131696a1f10c924">More...</a><br /></td></tr>
 <tr class="separator:a3ba93e50d6ae6093e131696a1f10c924"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6853ac26895f628959a9728a6d56d35c"><td class="memItemLeft" align="right" valign="top">time_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a6853ac26895f628959a9728a6d56d35c">timeout_sec</a></td></tr>
+<tr class="memdesc:a6853ac26895f628959a9728a6d56d35c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message send timeout.  <a href="#a6853ac26895f628959a9728a6d56d35c">More...</a><br /></td></tr>
 <tr class="separator:a6853ac26895f628959a9728a6d56d35c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26aeab33d3d6055c2abb84d6bad2b567"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__types_8h.html#a331766b45e83957173b8367a7c19b2d6">bus_msg_cb</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a26aeab33d3d6055c2abb84d6bad2b567">cb</a></td></tr>
+<tr class="memdesc:a26aeab33d3d6055c2abb84d6bad2b567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback and userdata to which the <a class="el" href="structbus__msg__result__t.html">bus_msg_result_t</a> above will be sunk.  <a href="#a26aeab33d3d6055c2abb84d6bad2b567">More...</a><br /></td></tr>
 <tr class="separator:a26aeab33d3d6055c2abb84d6bad2b567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55d3b66bacb768d909a046a20269b8f9"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a55d3b66bacb768d909a046a20269b8f9">udata</a></td></tr>
 <tr class="separator:a55d3b66bacb768d909a046a20269b8f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20694646677145e1e15d29fee973b4d"><td class="memItemLeft" align="right" valign="top">struct timeval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#ab20694646677145e1e15d29fee973b4d">tv_send_start</a></td></tr>
+<tr class="memdesc:ab20694646677145e1e15d29fee973b4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Event timestamps to track timeouts.  <a href="#ab20694646677145e1e15d29fee973b4d">More...</a><br /></td></tr>
 <tr class="separator:ab20694646677145e1e15d29fee973b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49ec8ddc4c8afaf6253712c6a3d41637"><td class="memItemLeft" align="right" valign="top">struct timeval&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a49ec8ddc4c8afaf6253712c6a3d41637">tv_send_done</a></td></tr>
 <tr class="separator:a49ec8ddc4c8afaf6253712c6a3d41637"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9725c9490a7e20cba9d649dea8c5d48"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#af9725c9490a7e20cba9d649dea8c5d48">fd</a></td></tr>
+<tr class="memdesc:af9725c9490a7e20cba9d649dea8c5d48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destination filename and message body.  <a href="#af9725c9490a7e20cba9d649dea8c5d48">More...</a><br /></td></tr>
 <tr class="separator:af9725c9490a7e20cba9d649dea8c5d48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0aa2362725170c931bb9e0f60a0b7c00"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#a0aa2362725170c931bb9e0f60a0b7c00">ssl</a></td></tr>
+<tr class="memdesc:a0aa2362725170c931bb9e0f60a0b7c00"><td class="mdescLeft">&#160;</td><td class="mdescRight">valid pointer or BUS_BOXED_MSG_NO_SSL  <a href="#a0aa2362725170c931bb9e0f60a0b7c00">More...</a><br /></td></tr>
 <tr class="separator:a0aa2362725170c931bb9e0f60a0b7c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af95824a6049596447b014c9ad0666aaa"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html#af95824a6049596447b014c9ad0666aaa">out_seq_id</a></td></tr>
 <tr class="separator:af95824a6049596447b014c9ad0666aaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -95,6 +101,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Result message, constructed in place after the request/response cycle has completed or failed due to timeout / unrecoverable error. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00040">40</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
@@ -109,6 +117,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Message send timeout. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00043">43</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
@@ -122,6 +132,8 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Callback and userdata to which the <a class="el" href="structbus__msg__result__t.html">bus_msg_result_t</a> above will be sunk. </p>
 
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00046">46</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
@@ -151,6 +163,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Event timestamps to track timeouts. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00050">50</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
@@ -179,6 +193,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Destination filename and message body. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00054">54</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
@@ -192,6 +208,8 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>valid pointer or BUS_BOXED_MSG_NO_SSL </p>
 
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00055">55</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 

@@ -1,4 +1,4 @@
-.TH "listener_task_internal.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener_task_internal.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,32 +13,64 @@ listener_task_internal.h \-
 \fC#include 'listener_internal_types\&.h'\fP
 .br
 
-.SS "Functions"
+.SS "Macros"
 
 .in +1c
 .ti -1c
-.RI "static void \fBtick_handler\fP (\fBlistener\fP *l)"
+.RI "#define \fBMSG_BP_1QTR\fP   (0\&.25)"
+.br
+.RI "\fICoefficients for backpressure based on certain conditions\&. \fP"
+.ti -1c
+.RI "#define \fBMSG_BP_HALF\fP   (0\&.5)"
 .br
 .ti -1c
-.RI "static void \fBclean_up_completed_info\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
+.RI "#define \fBMSG_BP_3QTR\fP   (2\&.0)"
 .br
 .ti -1c
-.RI "static void \fBretry_delivery\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
+.RI "#define \fBRX_INFO_BP_1QTR\fP   (0\&.5)"
 .br
 .ti -1c
-.RI "static void \fBobserve_backpressure\fP (\fBlistener\fP *l, size_t backpressure)"
+.RI "#define \fBRX_INFO_BP_HALF\fP   (0\&.5)"
+.br
+.ti -1c
+.RI "#define \fBRX_INFO_BP_3QTR\fP   (2\&.0)"
+.br
+.ti -1c
+.RI "#define \fBTHREADPOOL_BP\fP   (1\&.0)"
 .br
 .in -1c
-.SH "Function Documentation"
+.SH "Macro Definition Documentation"
 .PP 
-.SS "static void tick_handler (\fBlistener\fP *l)\fC [static]\fP"
+.SS "#define MSG_BP_1QTR   (0\&.25)"
 
-.SS "static void clean_up_completed_info (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
+.PP
+Coefficients for backpressure based on certain conditions\&. 
+.PP
+Definition at line 28 of file listener_task_internal\&.h\&.
+.SS "#define MSG_BP_HALF   (0\&.5)"
 
-.SS "static void retry_delivery (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
+.PP
+Definition at line 29 of file listener_task_internal\&.h\&.
+.SS "#define MSG_BP_3QTR   (2\&.0)"
 
-.SS "static void observe_backpressure (\fBlistener\fP *l, size_tbackpressure)\fC [static]\fP"
+.PP
+Definition at line 30 of file listener_task_internal\&.h\&.
+.SS "#define RX_INFO_BP_1QTR   (0\&.5)"
 
+.PP
+Definition at line 31 of file listener_task_internal\&.h\&.
+.SS "#define RX_INFO_BP_HALF   (0\&.5)"
+
+.PP
+Definition at line 32 of file listener_task_internal\&.h\&.
+.SS "#define RX_INFO_BP_3QTR   (2\&.0)"
+
+.PP
+Definition at line 33 of file listener_task_internal\&.h\&.
+.SS "#define THREADPOOL_BP   (1\&.0)"
+
+.PP
+Definition at line 34 of file listener_task_internal\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

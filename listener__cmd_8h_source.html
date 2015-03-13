@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="listener__cmd_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -77,18 +77,15 @@
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="listener__internal__types_8h.html">listener_internal_types.h</a>&quot;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">/* Notify the listener&#39;s caller that a command has completed. */</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="listener__cmd_8h.html#a643355d8f006114f3186791239b7d4ec">ListenerCmd_NotifyCaller</a>(<span class="keywordtype">int</span> <a class="code" href="structrx__info__t.html#ad785820c779b544430751de5f28e2c1c">fd</a>);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">void</span> <a class="code" href="listener__cmd_8h.html#aa191c3f69235bdb1a5080e8b9c7ae60b">ListenerCmd_NotifyCaller</a>(<a class="code" href="structlistener.html">listener</a> *l, <span class="keywordtype">int</span> fd);</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">/* Process incoming commands, if any. */</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">void</span> <a class="code" href="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493">ListenerCmd_CheckIncomingMessages</a>(<a class="code" href="structlistener.html">listener</a> *l, <span class="keywordtype">int</span> *res);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="structlistener_html"><div class="ttname"><a href="structlistener.html">listener</a></div><div class="ttdef"><b>Definition:</b> <a href="listener__internal__types_8h_source.html#l00122">listener_internal_types.h:122</a></div></div>
-<div class="ttc" id="structrx__info__t_html_ad785820c779b544430751de5f28e2c1c"><div class="ttname"><a href="structrx__info__t.html#ad785820c779b544430751de5f28e2c1c">rx_info_t::fd</a></div><div class="ttdeci">int fd</div><div class="ttdef"><b>Definition:</b> <a href="listener__internal__types_8h_source.html#l00087">listener_internal_types.h:87</a></div></div>
+<div class="ttc" id="listener__cmd_8h_html_aa191c3f69235bdb1a5080e8b9c7ae60b"><div class="ttname"><a href="listener__cmd_8h.html#aa191c3f69235bdb1a5080e8b9c7ae60b">ListenerCmd_NotifyCaller</a></div><div class="ttdeci">void ListenerCmd_NotifyCaller(listener *l, int fd)</div><div class="ttdoc">Notify the listener&#39;s caller that a command has completed. </div><div class="ttdef"><b>Definition:</b> <a href="listener__cmd_8c_source.html#l00042">listener_cmd.c:42</a></div></div>
+<div class="ttc" id="structlistener_html"><div class="ttname"><a href="structlistener.html">listener</a></div><div class="ttdoc">Receiver of responses. </div><div class="ttdef"><b>Definition:</b> <a href="listener__internal__types_8h_source.html#l00136">listener_internal_types.h:136</a></div></div>
 <div class="ttc" id="listener__internal__types_8h_html"><div class="ttname"><a href="listener__internal__types_8h.html">listener_internal_types.h</a></div></div>
-<div class="ttc" id="listener__cmd_8h_html_af3a2e40b666b88497011b99357eec493"><div class="ttname"><a href="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493">ListenerCmd_CheckIncomingMessages</a></div><div class="ttdeci">void ListenerCmd_CheckIncomingMessages(listener *l, int *res)</div><div class="ttdef"><b>Definition:</b> <a href="listener__cmd_8c_source.html#l00048">listener_cmd.c:48</a></div></div>
-<div class="ttc" id="listener__cmd_8h_html_a643355d8f006114f3186791239b7d4ec"><div class="ttname"><a href="listener__cmd_8h.html#a643355d8f006114f3186791239b7d4ec">ListenerCmd_NotifyCaller</a></div><div class="ttdeci">void ListenerCmd_NotifyCaller(int fd)</div><div class="ttdef"><b>Definition:</b> <a href="listener__cmd_8c_source.html#l00029">listener_cmd.c:29</a></div></div>
+<div class="ttc" id="listener__cmd_8h_html_af3a2e40b666b88497011b99357eec493"><div class="ttname"><a href="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493">ListenerCmd_CheckIncomingMessages</a></div><div class="ttdeci">void ListenerCmd_CheckIncomingMessages(listener *l, int *res)</div><div class="ttdoc">Process incoming commands, if any. </div><div class="ttdef"><b>Definition:</b> <a href="listener__cmd_8c_source.html#l00073">listener_cmd.c:73</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

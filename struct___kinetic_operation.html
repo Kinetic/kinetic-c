@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -56,8 +56,8 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:a9501bcc7cf72e4886300e5eeedb79a0c"><td class="memItemLeft" align="right" valign="top">KineticConnection *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#a9501bcc7cf72e4886300e5eeedb79a0c">connection</a></td></tr>
-<tr class="separator:a9501bcc7cf72e4886300e5eeedb79a0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab64219383a93a26f04f9a0182b4b4fca"><td class="memItemLeft" align="right" valign="top">KineticSession *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#ab64219383a93a26f04f9a0182b4b4fca">session</a></td></tr>
+<tr class="separator:ab64219383a93a26f04f9a0182b4b4fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a170a418c0941f43a6d4f2861b91d2325"><td class="memItemLeft" align="right" valign="top">KineticRequest *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#a170a418c0941f43a6d4f2861b91d2325">request</a></td></tr>
 <tr class="separator:a170a418c0941f43a6d4f2861b91d2325"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0191c99ea2be1e3608c367080d994d71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#a0191c99ea2be1e3608c367080d994d71">response</a></td></tr>
@@ -76,8 +76,8 @@ Data Fields</h2></td></tr>
 <tr class="separator:a0b3bb337fdfa8d4acb8075f07e921792"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1043af5af3efffd0e576a63d8ee4cd1"><td class="memItemLeft" align="right" valign="top">KineticP2P_Operation *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#ad1043af5af3efffd0e576a63d8ee4cd1">p2pOp</a></td></tr>
 <tr class="separator:ad1043af5af3efffd0e576a63d8ee4cd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e76abf58099b6ee378ecce94d723798"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types__internal_8h.html#ad7cb98485e75dd8a5aa4d9a866e3a9d8">KineticOperationCallback</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#a0e76abf58099b6ee378ecce94d723798">callback</a></td></tr>
-<tr class="separator:a0e76abf58099b6ee378ecce94d723798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9b1460e4915141dc494123bc7834622"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types__internal_8h.html#ad7cb98485e75dd8a5aa4d9a866e3a9d8">KineticOperationCallback</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#ab9b1460e4915141dc494123bc7834622">opCallback</a></td></tr>
+<tr class="separator:ab9b1460e4915141dc494123bc7834622"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf2c244091c0989d5028a13d2176a59a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_completion_closure.html">KineticCompletionClosure</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#abf2c244091c0989d5028a13d2176a59a">closure</a></td></tr>
 <tr class="separator:abf2c244091c0989d5028a13d2176a59a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85ffdfd17d3a03bf9d660b2e1f803770"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_byte_array.html">ByteArray</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_operation.html#a85ffdfd17d3a03bf9d660b2e1f803770">value</a></td></tr>
@@ -85,19 +85,19 @@ Data Fields</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00191">191</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00178">178</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
-<a class="anchor" id="a9501bcc7cf72e4886300e5eeedb79a0c"></a>
+<a class="anchor" id="ab64219383a93a26f04f9a0182b4b4fca"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">KineticConnection* KineticOperation::connection</td>
+          <td class="memname">KineticSession* KineticOperation::session</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00192">192</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00179">179</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -111,7 +111,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00193">193</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00180">180</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -125,7 +125,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00194">194</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00181">181</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -139,7 +139,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00195">195</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00182">182</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -153,7 +153,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00196">196</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00183">183</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -167,7 +167,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00197">197</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00184">184</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -181,7 +181,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00198">198</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00185">185</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -195,7 +195,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00199">199</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00186">186</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -209,7 +209,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00200">200</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00187">187</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -223,21 +223,21 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00201">201</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00188">188</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0e76abf58099b6ee378ecce94d723798"></a>
+<a class="anchor" id="ab9b1460e4915141dc494123bc7834622"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="kinetic__types__internal_8h.html#ad7cb98485e75dd8a5aa4d9a866e3a9d8">KineticOperationCallback</a> KineticOperation::callback</td>
+          <td class="memname"><a class="el" href="kinetic__types__internal_8h.html#ad7cb98485e75dd8a5aa4d9a866e3a9d8">KineticOperationCallback</a> KineticOperation::opCallback</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00202">202</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00189">189</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -251,7 +251,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00203">203</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00190">190</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -265,7 +265,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00204">204</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00191">191</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>

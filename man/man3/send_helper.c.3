@@ -1,0 +1,68 @@
+.TH "send_helper.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+send_helper.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'send_helper\&.h'\fP
+.br
+\fC#include 'send_internal\&.h'\fP
+.br
+\fC#include 'listener\&.h'\fP
+.br
+\fC#include 'send\&.h'\fP
+.br
+\fC#include 'syscall\&.h'\fP
+.br
+\fC#include 'util\&.h'\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static ssize_t \fBwrite_plain\fP (struct \fBbus\fP *b, \fBboxed_msg\fP *box)"
+.br
+.ti -1c
+.RI "static ssize_t \fBwrite_ssl\fP (struct \fBbus\fP *b, \fBboxed_msg\fP *box, SSL *ssl)"
+.br
+.ti -1c
+.RI "static bool \fBenqueue_EXPECT_message_to_listener\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+.br
+.ti -1c
+.RI "\fBSendHelper_HandleWrite_res\fP \fBSendHelper_HandleWrite\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "static ssize_t write_plain (struct \fBbus\fP *b, \fBboxed_msg\fP *box)\fC [static]\fP"
+
+.PP
+Definition at line 97 of file send_helper\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, boxed_msg::fd, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_sent_size, syscall_write(), bus::udata, and Util_IsResumableIOError()\&.
+.SS "static ssize_t write_ssl (struct \fBbus\fP *b, \fBboxed_msg\fP *box, SSL *ssl)\fC [static]\fP"
+
+.PP
+Definition at line 132 of file send_helper\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, boxed_msg::fd, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_sent_size, syscall_SSL_get_error(), syscall_SSL_write(), bus::udata, and Util_IsResumableIOError()\&.
+.SS "static bool enqueue_EXPECT_message_to_listener (\fBbus\fP *b, \fBboxed_msg\fP *box)\fC [static]\fP"
+
+.PP
+Definition at line 215 of file send_helper\&.c\&.
+.PP
+References Bus_BackpressureDelay(), Bus_GetListenerForSocket(), BUS_LOG_SNPRINTF, BUS_SEND_REQUEST_COMPLETE, BUS_SEND_UNDEFINED, boxed_msg::fd, LISTENER_EXPECT_BACKPRESSURE_SHIFT, Listener_ExpectResponse(), LOG_SENDER, boxed_msg::out_seq_id, boxed_msg::result, SEND_NOTIFY_LISTENER_RETRIES, SEND_NOTIFY_LISTENER_RETRY_DELAY, bus_msg_result_t::status, syscall_poll(), and bus::udata\&.
+.SS "\fBSendHelper_HandleWrite_res\fP SendHelper_HandleWrite (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+
+.PP
+Definition at line 39 of file send_helper\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, BUS_NO_SSL, BUS_SEND_TIMESTAMP_ERROR, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER, enqueue_EXPECT_message_to_listener(), boxed_msg::fd, LOG_SENDER, boxed_msg::out_msg_size, boxed_msg::out_sent_size, boxed_msg::out_seq_id, Send_HandleFailure(), SHHW_DONE, SHHW_ERROR, SHHW_OK, boxed_msg::ssl, boxed_msg::tv_send_done, bus::udata, Util_Timestamp(), write_plain(), and write_ssl()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,6 +52,9 @@
 </div><!--header-->
 <div class="contents">
 
+<p>Per-socket connection context.  
+ <a href="structconnection__info.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -61,21 +64,24 @@ Data Fields</h2></td></tr>
 <tr class="memitem:a19201693299c03819f5cf5f7d110e8fb"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="bus__types_8h.html#ab12915151d89eb03a41c415c432efee2">bus_socket_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html#a19201693299c03819f5cf5f7d110e8fb">type</a></td></tr>
 <tr class="separator:a19201693299c03819f5cf5f7d110e8fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a848a07967f74e31333fddea49fab9668"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html#a848a07967f74e31333fddea49fab9668">udata</a></td></tr>
+<tr class="memdesc:a848a07967f74e31333fddea49fab9668"><td class="mdescLeft">&#160;</td><td class="mdescRight">user connection data  <a href="#a848a07967f74e31333fddea49fab9668">More...</a><br /></td></tr>
 <tr class="separator:a848a07967f74e31333fddea49fab9668"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0655d6337cf80ac22943323121d118d1"><td class="memItemLeft" align="right" valign="top">SSL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html#a0655d6337cf80ac22943323121d118d1">ssl</a></td></tr>
+<tr class="memdesc:a0655d6337cf80ac22943323121d118d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">SSL handle. Must be valid or BUS_NO_SSL.  <a href="#a0655d6337cf80ac22943323121d118d1">More...</a><br /></td></tr>
 <tr class="separator:a0655d6337cf80ac22943323121d118d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ffb2a7b8d44fcb0405452391ee351b4"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html#a2ffb2a7b8d44fcb0405452391ee351b4">largest_wr_seq_id_seen</a></td></tr>
+<tr class="memdesc:a2ffb2a7b8d44fcb0405452391ee351b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set by client thread.  <a href="#a2ffb2a7b8d44fcb0405452391ee351b4">More...</a><br /></td></tr>
 <tr class="separator:a2ffb2a7b8d44fcb0405452391ee351b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef3103f14c4cabe24a02e72a5ad62a16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__internal__types_8h.html#a0d85374817fef3ee99882033e167b3fa">rx_error_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html#aef3103f14c4cabe24a02e72a5ad62a16">error</a></td></tr>
 <tr class="separator:aef3103f14c4cabe24a02e72a5ad62a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef449f1f96dfb53fd9655ea0cf803480"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html#aef449f1f96dfb53fd9655ea0cf803480">to_read_size</a></td></tr>
 <tr class="separator:aef449f1f96dfb53fd9655ea0cf803480"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab615d35e7a56f24003a371db6343ffe4"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html#ab615d35e7a56f24003a371db6343ffe4">largest_rd_seq_id_seen</a></td></tr>
-<tr class="separator:ab615d35e7a56f24003a371db6343ffe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00112">112</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<div class="textblock"><p>Per-socket connection context. </p>
+<p>(Owned by the listener.) </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00111">111</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a6776f202bed7509222507f0d1db67500"></a>
 <div class="memitem">
@@ -87,7 +93,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00114">114</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00113">113</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -101,7 +107,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00115">115</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00114">114</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -115,7 +121,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00116">116</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>user connection data </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00115">115</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -129,7 +137,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00119">119</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>SSL handle. Must be valid or BUS_NO_SSL. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00118">118</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -143,7 +153,10 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00122">122</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Set by client thread. </p>
+<p>Monotonically increasing max sequence ID. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00121">121</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -157,7 +170,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00125">125</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00124">124</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -171,21 +184,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00126">126</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab615d35e7a56f24003a371db6343ffe4"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int64_t connection_info::largest_rd_seq_id_seen</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00127">127</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00125">125</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>

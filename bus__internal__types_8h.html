@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -72,19 +72,25 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structboxed__msg.html">boxed_msg</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html">bus</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message bus.  <a href="structbus.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structconnection__info.html">connection_info</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-socket connection context.  <a href="structconnection__info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a76bf250ccc8ac3e852f8785c68903a47"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#a76bf250ccc8ac3e852f8785c68903a47">BUS_NO_SSL</a>&#160;&#160;&#160;((SSL *)-2)</td></tr>
+<tr class="memdesc:a76bf250ccc8ac3e852f8785c68903a47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special "NO SSL" value, to distinguish from a NULL SSL handle.  <a href="#a76bf250ccc8ac3e852f8785c68903a47">More...</a><br /></td></tr>
 <tr class="separator:a76bf250ccc8ac3e852f8785c68903a47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82f24c54131d866631239cc371581955"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#a82f24c54131d866631239cc371581955">TIMEOUT_NOT_YET_SET</a>&#160;&#160;&#160;((time_t)(-1))</td></tr>
+<tr class="memdesc:a82f24c54131d866631239cc371581955"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special timeout value indicating UNBOUND.  <a href="#a82f24c54131d866631239cc371581955">More...</a><br /></td></tr>
 <tr class="separator:a82f24c54131d866631239cc371581955"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2614000c9ba78a93265c20646fcc2ae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#ac2614000c9ba78a93265c20646fcc2ae">LISTENER_MSG_TAG</a>&#160;&#160;&#160;0x15</td></tr>
+<tr class="memdesc:ac2614000c9ba78a93265c20646fcc2ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arbitrary byte used to tag writes from the listener.  <a href="#ac2614000c9ba78a93265c20646fcc2ae">More...</a><br /></td></tr>
 <tr class="separator:ac2614000c9ba78a93265c20646fcc2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7129e5f5219981ae2b4d3babdc5f6a73"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bus__internal__types_8h.html#a7129e5f5219981ae2b4d3babdc5f6a73">DEF_FD_SET_SIZE2</a>&#160;&#160;&#160;4</td></tr>
+<tr class="memdesc:a7129e5f5219981ae2b4d3babdc5f6a73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starting size^2 for file descriptor hash table.  <a href="#a7129e5f5219981ae2b4d3babdc5f6a73">More...</a><br /></td></tr>
 <tr class="separator:a7129e5f5219981ae2b4d3babdc5f6a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -105,6 +111,8 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Special "NO SSL" value, to distinguish from a NULL SSL handle. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00063">63</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
@@ -119,7 +127,9 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00099">99</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Special timeout value indicating UNBOUND. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00098">98</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -133,7 +143,9 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00131">131</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Arbitrary byte used to tag writes from the listener. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00129">129</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -147,7 +159,9 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00134">134</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Starting size^2 for file descriptor hash table. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00132">132</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -200,7 +214,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00101">101</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00100">100</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>

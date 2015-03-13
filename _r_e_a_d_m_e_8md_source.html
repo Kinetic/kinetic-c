@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,122 +60,127 @@
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;Kinetic Protocol Support</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;------------------------</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;Built using [Kinetic Protocol v3.0.5](https://github.com/Seagate/kinetic-protocol/tree/3.0.5)</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;Built using:</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;Prerequisites</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;-------------</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;* [Open SSL](https://www.openssl.org/) for security and encryption</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    * Installation (if you don&#39;t already have OpenSSL installed)</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        * Linux (using apt-get)</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            * `&gt; sudo apt-get install openssl`</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        * Linux (using yum)</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            * `&gt; sudo yum install openssl`</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        * OSX (using [Homebrew](http://brew.sh/))</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            * `&gt; brew install openssl`</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;* [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    * Installation</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        * via package manager</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            * Linux (using apt-get)</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;                * `&gt; sudo apt-get install json-c`</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            * Linux (using yum)</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                * `&gt; sudo yum install json-c`</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            * OSX (using [Homebrew](http://brew.sh/))</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                * `&gt; brew install openssl`</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        * via Git submodule (from bundled source)</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            * `&gt; make json`</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            * `&gt; sudo make install_json`</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;A release of OpenSSL that provides TLS 1.1 or newer is required.</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;If the OpenSSL installation is not found, the `OPENSSL_PATH` environment</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;variable may need to be set to its base path, e.g.</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;`export OPENSSL_PATH=/usr/local/openssl/1.0.1k/`.</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;* [Kinetic Protocol v3.0.5](https://github.com/Seagate/kinetic-protocol/tree/3.0.5)</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;* [ProtoBuf-C v1.1.0](https://github.com/protobuf-c/protobuf-c)</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;* [Google ProtoBuf v2.6.0](https://developers.google.com/protocol-buffers/docs/downloads)</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;Prerequisites</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;-------------</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;* [Open SSL](https://www.openssl.org/) for security and encryption</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    * Installation (if you don&#39;t already have OpenSSL installed)</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        * Linux (using apt-get)</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;            * `&gt; sudo apt-get install openssl`</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        * Linux (using yum)</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            * `&gt; sudo yum install openssl`</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        * OSX (using [Homebrew](http://brew.sh/))</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            * `&gt; brew install openssl`</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;* [json-c](https://github.com/json-c/json-c) for JSON-formatted ACL definition files</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    * Installation</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        * via package manager</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;            * Linux (using apt-get)</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                * `&gt; sudo apt-get install json-c`</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            * Linux (using yum)</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                * `&gt; sudo yum install json-c`</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            * OSX (using [Homebrew](http://brew.sh/))</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                * `&gt; brew install openssl`</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        * via Git submodule (from bundled source)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            * `&gt; make json`</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            * `&gt; sudo make install_json`</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;A release of OpenSSL that provides TLS 1.1 or newer is required.</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;Getting Started</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;---------------</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;**Clone the repo**</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    &gt; git clone --recursive https://github.com/seagate/kinetic-c.git</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    &gt; cd kinetic-c</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;**Update to the latest version (previously cloned)**</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    &gt; git pull</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    &gt; make config # ensures all git submodules are up to date</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;**Build and install static library**</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    &gt; make</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    &gt; sudo make install</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;**Clean and uninstall any old versions**</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    &gt; make clean</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    &gt; sudo make uninstall</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;**Build example utility and run tests against Kinetic Device simulator**</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    &gt; make start_sims # starts bundled kinetic-java simulators for testing</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    &gt; make all # this is what Travis-CI build does does for regression testing</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;API Documentation</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;=================</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;[Kinetic-C API Documentation](http://seagate.github.io/kinetic-c/) (generated with Doxygen)</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;* [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;* [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;* [ByteArray API](http://seagate.github.io/kinetic-c/byte__array_8h.html)</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        * e.g. object keys, object value data, etc.</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;**NOTE: Configuration structures `KineticClientConfig` and `KineticSessionConfig` should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure forward/backward compatibility upon changes to these structure definitions!**</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;Client Test Utility</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;===========================</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;* `kinetic-c-util` builds/links against Kinetic C static library (.a)</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;* `kinetic-c-util.x.y.z` builds/links against Kinetic C dynamic library (.so)</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;Usage</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;----------</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    $ cd bin</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    $ ./kinetic-c-util --help</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    Usage: ./kinetic-c-util --&lt;cmd&gt; [options...]</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    ./kinetic-c-util --help</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    ./kinetic-c-util --noop [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    ./kinetic-c-util --put [--key &lt;key&gt;] [--value &lt;value&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    ./kinetic-c-util --get [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    ./kinetic-c-util --getnext [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    ./kinetic-c-util --getprevious [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    ./kinetic-c-util --delete [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    ./kinetic-c-util --setclusterversion &lt;--newclusterversion &lt;newclusterversion&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    ./kinetic-c-util --seterasepin &lt;--pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newerasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    ./kinetic-c-util --instanterase &lt;--pin &lt;erasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    ./kinetic-c-util --secureerase &lt;--pin &lt;erasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    ./kinetic-c-util --setlockpin &lt;--pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    ./kinetic-c-util --lockdevice &lt;--pin &lt;lockpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    ./kinetic-c-util --unlockdevice &lt;--pin &lt;lockpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    ./kinetic-c-util --setacl &lt;--file &lt;acl_json_file&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    ./kinetic-c-util --getlog [--type &lt;utilization|temperature|capacity|configuration|message|statistic|limits&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    ./kinetic-c-util --updatefirmware &lt;--file &lt;file&gt;&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;] [--pin &lt;pin&gt;]</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;Kinetic C Client I/O Examples</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;=============================</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;* [`blocking_put_get`](src/examples/blocking_put_get.c) - Blocking put w/get.</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;* [`blocking_put_delete`](src/examples/blocking_put_delete.c) - Blocking put w/delete.</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;* [`put_nonblocking`](src/examples/put_nonblocking.c) - Single thread, single connection, nonblocking put operation.</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;* [`get_nonblocking`](src/examples/get_nonblocking.c) - Single thread, single connection, nonblocking get operation.</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;* [`get_key_range`](src/examples/get_key_range.c) - Query a range of keys from a device.</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;* [`write_file_blocking`](src/examples/write_file_blocking.c) - Single thread, single connection, blocking operation.</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;* [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;* [`write_file_nonblocking`](src/examples/write_file_nonblocking.c) - Single thread, single connection, multiple non-blocking operations</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;* [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, multiple non-blocking operations.</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;If the OpenSSL installation is not found, the `OPENSSL_PATH` environment</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;variable may need to be set to its base path, e.g.</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;`export OPENSSL_PATH=/usr/local/openssl/1.0.1k/`.</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;Getting Started</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;---------------</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;**Clone the repo**</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    &gt; git clone --recursive https://github.com/seagate/kinetic-c.git</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    &gt; cd kinetic-c</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;**Update to the latest version (previously cloned)**</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    &gt; git pull</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    &gt; make config # ensures all git submodules are up to date</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;**Build and install static library**</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    &gt; make</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    &gt; sudo make install</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;**Clean and uninstall any old versions**</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    &gt; make clean</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    &gt; sudo make uninstall</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;**Build example utility and run tests against Kinetic Device simulator**</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    &gt; make start_sims # starts bundled kinetic-java simulators for testing</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    &gt; make all # this is what Travis-CI build does does for regression testing</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;API Documentation</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;=================</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;[Kinetic-C API Documentation](http://seagate.github.io/kinetic-c/) (generated with Doxygen)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;* [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;* [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;* [ByteArray API](http://seagate.github.io/kinetic-c/byte__array_8h.html)</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        * e.g. object keys, object value data, etc.</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;**NOTE: Configuration structures `KineticClientConfig` and `KineticSessionConfig` should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure forward/backward compatibility upon changes to these structure definitions!**</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;Client Test Utility</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;===========================</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;* `kinetic-c-util` builds/links against Kinetic C static library (.a)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;* `kinetic-c-util.x.y.z` builds/links against Kinetic C dynamic library (.so)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;Usage</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;----------</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    $ cd bin</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    $ ./kinetic-c-util --help</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    Usage: ./bin/kinetic-c-util --&lt;cmd&gt; [options...]</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    ./bin/kinetic-c-util --help</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    ./bin/kinetic-c-util --noop [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    ./bin/kinetic-c-util --put --key &lt;key&gt; --value &lt;value&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    ./bin/kinetic-c-util --get --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    ./bin/kinetic-c-util --getnext --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    ./bin/kinetic-c-util --getprevious --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    ./bin/kinetic-c-util --delete --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    ./bin/kinetic-c-util --getlog --logtype &lt;utilizations|temperatures|capacities|configuration|statistics|messages|limits&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    ./bin/kinetic-c-util --getdevicespecificlog --devicelogname &lt;name|ID&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    ./bin/kinetic-c-util --setclusterversion --newclusterversion &lt;newclusterversion&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    ./bin/kinetic-c-util --seterasepin --pin &lt;oldpin&gt; --newpin &lt;newerasepin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    ./bin/kinetic-c-util --instanterase --pin &lt;erasepin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    ./bin/kinetic-c-util --secureerase --pin &lt;erasepin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    ./bin/kinetic-c-util --setlockpin --pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newpin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    ./bin/kinetic-c-util --lockdevice --pin &lt;lockpin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    ./bin/kinetic-c-util --unlockdevice --pin &lt;lockpin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    ./bin/kinetic-c-util --setacl --file &lt;acl_json_file&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    ./bin/kinetic-c-util --updatefirmware --file &lt;file&gt; --pin &lt;pin&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;Kinetic C Client I/O Examples</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;=============================</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;* [`blocking_put_get`](src/examples/blocking_put_get.c) - Blocking put w/get.</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;* [`blocking_put_delete`](src/examples/blocking_put_delete.c) - Blocking put w/delete.</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;* [`put_nonblocking`](src/examples/put_nonblocking.c) - Single thread, single connection, nonblocking put operation.</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;* [`get_nonblocking`](src/examples/get_nonblocking.c) - Single thread, single connection, nonblocking get operation.</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;* [`get_key_range`](src/examples/get_key_range.c) - Query a range of keys from a device.</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;* [`write_file_blocking`](src/examples/write_file_blocking.c) - Single thread, single connection, blocking operation.</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;* [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, blocking operations.</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;* [`write_file_nonblocking`](src/examples/write_file_nonblocking.c) - Single thread, single connection, multiple non-blocking operations</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;* [`write_file_blocking_threads`](src/examples/write_file_blocking_threads.c) - Multiple threads, single connection, multiple non-blocking operations.</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

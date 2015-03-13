@@ -1,4 +1,4 @@
-.TH "yacht.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "yacht.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,6 +7,8 @@ yacht.c \-
 .br
 .PP
 \fC#include 'yacht\&.h'\fP
+.br
+\fC#include 'yacht_internals\&.h'\fP
 .br
 
 .SS "Macros"
@@ -32,29 +34,35 @@ yacht.c \-
 .RI "static bool \fBinsert\fP (int *buckets, void **values, size_t mask, size_t max_fill, int key, void *value, void **old_value)"
 .br
 .ti -1c
-.RI "static bool \fBgrow\fP (struct yacht *y)"
+.RI "static bool \fBgrow\fP (struct \fByacht\fP *y)"
 .br
 .ti -1c
-.RI "struct yacht * \fByacht_init\fP (uint8_t sz2)"
+.RI "struct \fByacht\fP * \fBYacht_Init\fP (uint8_t sz2)"
 .br
+.RI "\fIInit a hash table with approx\&. \fP"
 .ti -1c
 .RI "static size_t \fBhash\fP (int key)"
 .br
 .ti -1c
-.RI "bool \fByacht_get\fP (struct yacht *y, int key, void **value)"
+.RI "bool \fBYacht_Get\fP (struct \fByacht\fP *y, int key, void **value)"
 .br
+.RI "\fIGet KEY from the table, setting *value if found\&. \fP"
 .ti -1c
-.RI "bool \fByacht_member\fP (struct yacht *y, int key)"
+.RI "bool \fBYacht_Member\fP (struct \fByacht\fP *y, int key)"
 .br
+.RI "\fICheck if KEY is in the table\&. \fP"
 .ti -1c
-.RI "bool \fByacht_set\fP (struct yacht *y, int key, void *value, void **old_value)"
+.RI "bool \fBYacht_Set\fP (struct \fByacht\fP *y, int key, void *value, void **old_value)"
 .br
+.RI "\fISet KEY to VALUE in the table\&. \fP"
 .ti -1c
-.RI "bool \fByacht_remove\fP (struct yacht *y, int key, void **old_value)"
+.RI "bool \fBYacht_Remove\fP (struct \fByacht\fP *y, int key, void **old_value)"
 .br
+.RI "\fIRemove KEY from the table\&. \fP"
 .ti -1c
-.RI "void \fByacht_free\fP (struct yacht *y, \fByacht_free_cb\fP *cb, void *udata)"
+.RI "void \fBYacht_Free\fP (struct \fByacht\fP *y, \fBYacht_Free_cb\fP *cb, void *udata)"
 .br
+.RI "\fIFree the table\&. \fP"
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
@@ -65,71 +73,83 @@ Definition at line 27 of file yacht\&.c\&.
 .SS "#define DEF_SZ2   4"
 
 .PP
-Definition at line 45 of file yacht\&.c\&.
+Definition at line 37 of file yacht\&.c\&.
 .SS "#define MAX_PROBES   16"
 
 .PP
-Definition at line 46 of file yacht\&.c\&.
+Definition at line 38 of file yacht\&.c\&.
 .SS "#define LARGE_PRIME   (4294967291L /* (2 ** 32) - 5 */)"
 
 .PP
-Definition at line 73 of file yacht\&.c\&.
+Definition at line 66 of file yacht\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "static bool insert (int *buckets, void **values, size_tmask, size_tmax_fill, intkey, void *value, void **old_value)\fC [static]\fP"
 
 .PP
-Definition at line 117 of file yacht\&.c\&.
+Definition at line 111 of file yacht\&.c\&.
 .PP
-References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
-.SS "static bool grow (struct yacht *y)\fC [static]\fP"
+References hash(), LOG, yacht::mask, YACHT_DELETED, and YACHT_NO_KEY\&.
+.SS "static bool grow (struct \fByacht\fP *y)\fC [static]\fP"
 
 .PP
-Definition at line 140 of file yacht\&.c\&.
+Definition at line 134 of file yacht\&.c\&.
 .PP
-References insert(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
-.SS "struct yacht* yacht_init (uint8_tsz2)"
+References yacht::buckets, insert(), LOG, yacht::mask, yacht::size, yacht::values, YACHT_DELETED, and YACHT_NO_KEY\&.
+.SS "struct \fByacht\fP* Yacht_Init (uint8_tsz2)"
 
 .PP
-Definition at line 49 of file yacht\&.c\&.
+Init a hash table with approx\&. 2 ** sz2 buckets\&. 
 .PP
-References DEF_SZ2, LOG, and YACHT_NO_KEY\&.
+Definition at line 41 of file yacht\&.c\&.
+.PP
+References yacht::buckets, DEF_SZ2, LOG, yacht::mask, yacht::size, yacht::values, and YACHT_NO_KEY\&.
 .SS "static size_t hash (intkey)\fC [static]\fP"
 
 .PP
-Definition at line 75 of file yacht\&.c\&.
+Definition at line 69 of file yacht\&.c\&.
 .PP
 References LARGE_PRIME\&.
-.SS "bool yacht_get (struct yacht *y, intkey, void **value)"
+.SS "bool Yacht_Get (struct \fByacht\fP *y, intkey, void **value)"
 
 .PP
-Definition at line 79 of file yacht\&.c\&.
+Get KEY from the table, setting *value if found\&. 
 .PP
-References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
-.SS "bool yacht_member (struct yacht *y, intkey)"
+Definition at line 73 of file yacht\&.c\&.
+.PP
+References yacht::buckets, hash(), LOG, yacht::mask, yacht::size, yacht::values, YACHT_DELETED, and YACHT_NO_KEY\&.
+.SS "bool Yacht_Member (struct \fByacht\fP *y, intkey)"
 
+.PP
+Check if KEY is in the table\&. 
+.PP
+Definition at line 91 of file yacht\&.c\&.
+.PP
+References LOG, and Yacht_Get()\&.
+.SS "bool Yacht_Set (struct \fByacht\fP *y, intkey, void *value, void **old_value)"
+
+.PP
+Set KEY to VALUE in the table\&. 
 .PP
 Definition at line 97 of file yacht\&.c\&.
 .PP
-References LOG, and yacht_get()\&.
-.SS "bool yacht_set (struct yacht *y, intkey, void *value, void **old_value)"
+References yacht::buckets, grow(), insert(), LOG, yacht::mask, MAX_PROBES, yacht::size, and yacht::values\&.
+.SS "bool Yacht_Remove (struct \fByacht\fP *y, intkey, void **old_value)"
 
 .PP
-Definition at line 103 of file yacht\&.c\&.
+Remove KEY from the table\&. RetuBus_RegisterSocket the old value in *old_value, if non-NULL\&. 
 .PP
-References grow(), insert(), LOG, and MAX_PROBES\&.
-.SS "bool yacht_remove (struct yacht *y, intkey, void **old_value)"
+Definition at line 174 of file yacht\&.c\&.
+.PP
+References yacht::buckets, hash(), LOG, yacht::mask, yacht::size, yacht::values, YACHT_DELETED, and YACHT_NO_KEY\&.
+.SS "void Yacht_Free (struct \fByacht\fP *y, \fBYacht_Free_cb\fP *cb, void *udata)"
 
 .PP
-Definition at line 180 of file yacht\&.c\&.
+Free the table\&. 
 .PP
-References hash(), LOG, YACHT_DELETED, and YACHT_NO_KEY\&.
-.SS "void yacht_free (struct yacht *y, \fByacht_free_cb\fP *cb, void *udata)"
-
+Definition at line 202 of file yacht\&.c\&.
 .PP
-Definition at line 208 of file yacht\&.c\&.
-.PP
-References YACHT_DELETED, and YACHT_NO_KEY\&.
+References yacht::buckets, yacht::size, yacht::values, YACHT_DELETED, and YACHT_NO_KEY\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

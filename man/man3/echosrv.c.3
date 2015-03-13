@@ -1,4 +1,4 @@
-.TH "echosrv.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "echosrv.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -155,13 +155,13 @@ References LOG, and register_client()\&.
 .PP
 Definition at line 332 of file echosrv\&.c\&.
 .PP
-References BUF_SZ, disconnect_client(), enqueue_write(), LOG, read_buf, and util_is_resumable_io_error()\&.
+References BUF_SZ, disconnect_client(), enqueue_write(), LOG, read_buf, and Util_IsResumableIOError()\&.
 .SS "static void listen_loop_poll (config *cfg)\fC [static]\fP"
 
 .PP
 Definition at line 198 of file echosrv\&.c\&.
 .PP
-References handle_client_io(), handle_incoming_connections(), LOG, MAX_CLIENTS, MAX_TIMEOUT, NO_CLIENT, tick_handler(), util_is_resumable_io_error(), and util_timestamp()\&.
+References handle_client_io(), handle_incoming_connections(), LOG, MAX_CLIENTS, MAX_TIMEOUT, NO_CLIENT, tick_handler(), Util_IsResumableIOError(), and Util_Timestamp()\&.
 .SS "static void register_client (config *cfg, intcfd, struct sockaddr *addr, socklen_taddr_len)\fC [static]\fP"
 
 .PP

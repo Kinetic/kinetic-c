@@ -1,8 +1,11 @@
-.TH "threadpool" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "threadpool" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 threadpool \- 
+.PP
+Internal threadpool state\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -33,9 +36,6 @@ threadpool \-
 .RI "size_t \fBtask_ringbuf_mask\fP"
 .br
 .ti -1c
-.RI "size_t \fBmax_delay\fP"
-.br
-.ti -1c
 .RI "uint8_t \fBtask_ringbuf_size2\fP"
 .br
 .ti -1c
@@ -53,61 +53,61 @@ threadpool \-
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 64 of file threadpool_internals\&.h\&.
+Internal threadpool state\&. 
+
+
+.PP
+Definition at line 66 of file threadpool_internals\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "size_t threadpool::task_reserve_head"
 
 .PP
-Definition at line 66 of file threadpool_internals\&.h\&.
+Definition at line 68 of file threadpool_internals\&.h\&.
 .SS "size_t threadpool::task_commit_head"
 
 .PP
-Definition at line 67 of file threadpool_internals\&.h\&.
+Definition at line 69 of file threadpool_internals\&.h\&.
 .SS "size_t threadpool::task_request_head"
 
 .PP
-Definition at line 68 of file threadpool_internals\&.h\&.
+Definition at line 70 of file threadpool_internals\&.h\&.
 .SS "size_t threadpool::task_release_head"
 
 .PP
-Definition at line 69 of file threadpool_internals\&.h\&.
+Definition at line 71 of file threadpool_internals\&.h\&.
 .SS "struct \fBmarked_task\fP* threadpool::tasks"
 
 .PP
-Definition at line 71 of file threadpool_internals\&.h\&.
+Definition at line 73 of file threadpool_internals\&.h\&.
 .SS "size_t threadpool::task_ringbuf_size"
 
 .PP
-Definition at line 73 of file threadpool_internals\&.h\&.
+Definition at line 77 of file threadpool_internals\&.h\&.
 .SS "size_t threadpool::task_ringbuf_mask"
 
 .PP
-Definition at line 74 of file threadpool_internals\&.h\&.
-.SS "size_t threadpool::max_delay"
-
-.PP
-Definition at line 76 of file threadpool_internals\&.h\&.
+Definition at line 78 of file threadpool_internals\&.h\&.
 .SS "uint8_t threadpool::task_ringbuf_size2"
 
 .PP
-Definition at line 77 of file threadpool_internals\&.h\&.
+Definition at line 79 of file threadpool_internals\&.h\&.
 .SS "bool threadpool::shutting_down"
 
 .PP
-Definition at line 79 of file threadpool_internals\&.h\&.
+Definition at line 81 of file threadpool_internals\&.h\&.
 .SS "uint8_t threadpool::live_threads"
 
 .PP
-Definition at line 80 of file threadpool_internals\&.h\&.
+Definition at line 82 of file threadpool_internals\&.h\&.
 .SS "uint8_t threadpool::max_threads"
 
 .PP
-Definition at line 81 of file threadpool_internals\&.h\&.
+Definition at line 83 of file threadpool_internals\&.h\&.
 .SS "struct \fBthread_info\fP* threadpool::threads"
 
 .PP
-Definition at line 82 of file threadpool_internals\&.h\&.
+Definition at line 84 of file threadpool_internals\&.h\&.
 
 .SH "Author"
 .PP 

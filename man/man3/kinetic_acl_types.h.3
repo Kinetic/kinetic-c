@@ -1,0 +1,99 @@
+.TH "kinetic_acl_types.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_acl_types.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdint\&.h>\fP
+.br
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include 'kinetic\&.pb-c\&.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBhmac_key\fP"
+.br
+.ti -1c
+.RI "struct \fBACL\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBACL_MAX_PERMISSIONS\fP   8"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBhmac_type_t\fP "
+.br
+.ti -1c
+.RI "enum \fBKineticACLLoadResult\fP "
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ACL_MAX_PERMISSIONS   8"
+
+.PP
+Definition at line 46 of file kinetic_acl_types\&.h\&.
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBhmac_type_t\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIHMAC_UNKNOWN \fP\fP
+.TP
+\fB\fIHMAC_SHA1 \fP\fP
+.TP
+\fB\fIHMAC_TYPE_COUNT \fP\fP
+.PP
+Definition at line 28 of file kinetic_acl_types\&.h\&.
+.SS "enum \fBKineticACLLoadResult\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIACL_OK \fP\fP
+Okay\&. 
+.TP
+\fB\fIACL_END_OF_STREAM \fP\fP
+End of stream\&. 
+.TP
+\fB\fIACL_ERROR_NULL \fP\fP
+NULL pointer error\&. 
+.TP
+\fB\fIACL_ERROR_MEMORY \fP\fP
+Memory allocation failure\&. 
+.TP
+\fB\fIACL_ERROR_JSON_FILE \fP\fP
+Unable to open JSON file\&. 
+.TP
+\fB\fIACL_ERROR_BAD_JSON \fP\fP
+Invalid JSON in file\&. 
+.TP
+\fB\fIACL_ERROR_MISSING_FIELD \fP\fP
+Missing required field\&. 
+.TP
+\fB\fIACL_ERROR_INVALID_FIELD \fP\fP
+Invalid field\&. 
+.PP
+Definition at line 48 of file kinetic_acl_types\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

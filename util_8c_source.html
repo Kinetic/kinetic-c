@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="util_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -78,11 +78,11 @@
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="util_8h.html">util.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="util_8h.html#a160b252716d51078cec50bc9f27bc2bc">   26</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a>(<span class="keywordtype">int</span> errno_) {</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="util_8h.html#ad60510cf3104c93a0c31dd81066ecf23">   26</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="util_8c.html#ad60510cf3104c93a0c31dd81066ecf23">Util_IsResumableIOError</a>(<span class="keywordtype">int</span> errno_) {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordflow">return</span> errno_ == EAGAIN || errno_ == EINTR || errno_ == EWOULDBLOCK;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;}</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="util_8h.html#ad63ab11f5adebc0730d970d7742ccfd9">   30</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a>(<span class="keyword">struct</span> timeval *tv, <span class="keywordtype">bool</span> relative) {</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="util_8h.html#ab8571807c46e133d0026df811bf0c6df">   30</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="util_8c.html#ab8571807c46e133d0026df811bf0c6df">Util_Timestamp</a>(<span class="keyword">struct</span> timeval *tv, <span class="keywordtype">bool</span> relative) {</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> (tv == NULL) {</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
@@ -102,9 +102,9 @@
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">return</span> (0 == gettimeofday(tv, NULL));</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
-<div class="ttc" id="util_8c_html_a160b252716d51078cec50bc9f27bc2bc"><div class="ttname"><a href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a></div><div class="ttdeci">bool util_is_resumable_io_error(int errno_)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00026">util.c:26</a></div></div>
+<div class="ttc" id="util_8c_html_ad60510cf3104c93a0c31dd81066ecf23"><div class="ttname"><a href="util_8c.html#ad60510cf3104c93a0c31dd81066ecf23">Util_IsResumableIOError</a></div><div class="ttdeci">bool Util_IsResumableIOError(int errno_)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00026">util.c:26</a></div></div>
 <div class="ttc" id="util_8h_html"><div class="ttname"><a href="util_8h.html">util.h</a></div></div>
-<div class="ttc" id="util_8c_html_ad63ab11f5adebc0730d970d7742ccfd9"><div class="ttname"><a href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a></div><div class="ttdeci">bool util_timestamp(struct timeval *tv, bool relative)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00030">util.c:30</a></div></div>
+<div class="ttc" id="util_8c_html_ab8571807c46e133d0026df811bf0c6df"><div class="ttname"><a href="util_8c.html#ab8571807c46e133d0026df811bf0c6df">Util_Timestamp</a></div><div class="ttdeci">bool Util_Timestamp(struct timeval *tv, bool relative)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00030">util.c:30</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -76,6 +76,7 @@
       <li class="current"><a href="globals_s.html#index_s"><span>s</span></a></li>
       <li><a href="globals_t.html#index_t"><span>t</span></a></li>
       <li><a href="globals_u.html#index_u"><span>u</span></a></li>
+      <li><a href="globals_v.html#index_v"><span>v</span></a></li>
       <li><a href="globals_w.html#index_w"><span>w</span></a></li>
       <li><a href="globals_y.html#index_y"><span>y</span></a></li>
     </ul>
@@ -85,29 +86,48 @@
 <div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div>
 
 <h3><a class="anchor" id="index_s"></a>- s -</h3><ul>
-<li>send_do_blocking_send()
-: <a class="el" href="send_8c.html#a645fe26b9a92bcea62862692048e1d82">send.c</a>
-, <a class="el" href="send_8h.html#a472ea0cb8ac1873fe772996d75745bc6">send.h</a>
+<li>Send_DoBlockingSend()
+: <a class="el" href="send_8c.html#af75a27bc074c38be27861dfda4ff7e18">send.c</a>
+, <a class="el" href="send_8h.html#a749aa0abf9eb827a7b342288e580fa96">send.h</a>
+</li>
+<li>Send_HandleFailure()
+: <a class="el" href="send_8h.html#a91593f7dd060e426a6e3d72be46995b1">send.h</a>
+, <a class="el" href="send_8c.html#a91593f7dd060e426a6e3d72be46995b1">send.c</a>
+</li>
+<li>SEND_NOTIFY_LISTENER_RETRIES
+: <a class="el" href="send__internal_8h.html#a2ac0191583cd2ec8e5c415a6fdadbd09">send_internal.h</a>
+</li>
+<li>SEND_NOTIFY_LISTENER_RETRY_DELAY
+: <a class="el" href="send__internal_8h.html#ad747971f2f8f7a93312f55d01df00236">send_internal.h</a>
+</li>
+<li>send_request_in_lock()
+: <a class="el" href="kinetic__operation_8c.html#a104ba197a852a69477865c83cfbbb073">kinetic_operation.c</a>
+</li>
+<li>SendHelper_HandleWrite()
+: <a class="el" href="send__helper_8c.html#a89b1fc8eb3d4799c4bd25928f0695940">send_helper.c</a>
+, <a class="el" href="send__helper_8h.html#a89b1fc8eb3d4799c4bd25928f0695940">send_helper.h</a>
+</li>
+<li>SendHelper_HandleWrite_res
+: <a class="el" href="send__helper_8h.html#af77a60b5651e3b85075174f8019c1ed8">send_helper.h</a>
 </li>
 <li>set_defaults()
-: <a class="el" href="threadpool_8c.html#a7b680bd2baa44f2e1fea9b7ca7f4cd2d">threadpool.c</a>
-, <a class="el" href="bus_8c.html#aac77f6cd78d2c46f01b5c6e14e1b36ea">bus.c</a>
+: <a class="el" href="bus_8c.html#aac77f6cd78d2c46f01b5c6e14e1b36ea">bus.c</a>
+, <a class="el" href="threadpool_8c.html#a7b680bd2baa44f2e1fea9b7ca7f4cd2d">threadpool.c</a>
 </li>
 <li>set_error_for_socket()
 : <a class="el" href="listener__io_8c.html#affa8fc52abd48c60492b25fae5496d0a">listener_io.c</a>
-, <a class="el" href="listener__io__internal_8h.html#affa8fc52abd48c60492b25fae5496d0a">listener_io_internal.h</a>
 </li>
-<li>SET_SETUP
-: <a class="el" href="threadpool_2greatest_8h.html#ace8a4de708c4a963e7bdea30ce774477">threadpool/greatest.h</a>
-, <a class="el" href="bus_2greatest_8h.html#ace8a4de708c4a963e7bdea30ce774477">bus/greatest.h</a>
+<li>SHHW_DONE
+: <a class="el" href="send__helper_8h.html#af77a60b5651e3b85075174f8019c1ed8aad431ffef1243ddecb08623b43822ae7">send_helper.h</a>
 </li>
-<li>SET_TEARDOWN
-: <a class="el" href="bus_2greatest_8h.html#a628f4d2c70f7cf9417a771dd6da71c7b">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a628f4d2c70f7cf9417a771dd6da71c7b">threadpool/greatest.h</a>
+<li>SHHW_ERROR
+: <a class="el" href="send__helper_8h.html#af77a60b5651e3b85075174f8019c1ed8afec4a28936bb27c7d1ee971eb891dbbe">send_helper.h</a>
+</li>
+<li>SHHW_OK
+: <a class="el" href="send__helper_8h.html#af77a60b5651e3b85075174f8019c1ed8a484980467bb63380cc3b5dcae4464948">send_helper.h</a>
 </li>
 <li>shutdown()
 : <a class="el" href="listener__cmd_8c.html#acb20f311c191ce18331d753f8aa78983">listener_cmd.c</a>
-, <a class="el" href="listener__cmd__internal_8h.html#acb20f311c191ce18331d753f8aa78983">listener_cmd_internal.h</a>
 </li>
 <li>SHUTDOWN_STATE_HALTED
 : <a class="el" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4ea3d7ff9fa774c3ac46f21b11feb359828">bus_internal_types.h</a>
@@ -130,37 +150,25 @@
 </li>
 <li>sink_socket_read()
 : <a class="el" href="listener__io_8c.html#a11b801753f3195b71431c6ae11f4e2b7">listener_io.c</a>
-, <a class="el" href="listener__io__internal_8h.html#a11b801753f3195b71431c6ae11f4e2b7">listener_io_internal.h</a>
-</li>
-<li>SKIP
-: <a class="el" href="bus_2greatest_8h.html#a688a4adbb87520a2b68681bd6bfb199e">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a688a4adbb87520a2b68681bd6bfb199e">threadpool/greatest.h</a>
-</li>
-<li>SKIPm
-: <a class="el" href="bus_2greatest_8h.html#a1f4ab40ccea8bd64bc25a60ee66d9688">bus/greatest.h</a>
-, <a class="el" href="threadpool_2greatest_8h.html#a1f4ab40ccea8bd64bc25a60ee66d9688">threadpool/greatest.h</a>
 </li>
 <li>socket_read_plain()
-: <a class="el" href="listener__io_8c.html#a48e209edcf9421a36f6cd97eca45aa39">listener_io.c</a>
-, <a class="el" href="listener__io__internal_8h.html#a48e209edcf9421a36f6cd97eca45aa39">listener_io_internal.h</a>
+: <a class="el" href="listener__io_8c.html#a3c1bb48082f43c51521ad32af2e83ebe">listener_io.c</a>
 </li>
 <li>socket_read_ssl()
-: <a class="el" href="listener__io_8c.html#a27540bed6e0ee31601a54a31613bd1ee">listener_io.c</a>
-, <a class="el" href="listener__io__internal_8h.html#a27540bed6e0ee31601a54a31613bd1ee">listener_io_internal.h</a>
+: <a class="el" href="listener__io_8c.html#ab887edb5777aa42735c3780389e732c6">listener_io.c</a>
 </li>
 <li>socket_state
-: <a class="el" href="kinetic__types__internal_8h.html#a4a055720116545d1fd52227e417488f8">kinetic_types_internal.h</a>
-, <a class="el" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">bus_example.c</a>
+: <a class="el" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8">bus_example.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a4a055720116545d1fd52227e417488f8">kinetic_types_internal.h</a>
 </li>
 <li>spawn()
 : <a class="el" href="threadpool_8c.html#ac4397bb8f5f8bd5319e041f69500112f">threadpool.c</a>
-, <a class="el" href="threadpool__internals_8h.html#ac4397bb8f5f8bd5319e041f69500112f">threadpool_internals.h</a>
 </li>
 <li>SPIN_ADJ
-: <a class="el" href="atomic_8h.html#a82415ab010832f4e05201f3fe3121a3c">atomic.h</a>
-, <a class="el" href="test__threadpool__sequencing_8c.html#a82415ab010832f4e05201f3fe3121a3c">test_threadpool_sequencing.c</a>
+: <a class="el" href="test__threadpool__sequencing_8c.html#a82415ab010832f4e05201f3fe3121a3c">test_threadpool_sequencing.c</a>
 , <a class="el" href="test__threadpool__stress_8c.html#a82415ab010832f4e05201f3fe3121a3c">test_threadpool_stress.c</a>
 , <a class="el" href="threadpool__internals_8h.html#a82415ab010832f4e05201f3fe3121a3c">threadpool_internals.h</a>
+, <a class="el" href="atomic_8h.html#a82415ab010832f4e05201f3fe3121a3c">atomic.h</a>
 </li>
 <li>start_file_transfer()
 : <a class="el" href="write__file__nonblocking_8c.html#ade333bfe61779fd62ab4e8de17446153">write_file_nonblocking.c</a>
@@ -169,8 +177,8 @@
 : <a class="el" href="bus__example_8c.html#a4b581400c3a7aa504454224ae23fef2e">bus_example.c</a>
 </li>
 <li>STATE_AWAITING_BODY
-: <a class="el" href="kinetic__types__internal_8h.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">kinetic_types_internal.h</a>
-, <a class="el" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">bus_example.c</a>
+: <a class="el" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">bus_example.c</a>
+, <a class="el" href="kinetic__types__internal_8h.html#a4a055720116545d1fd52227e417488f8ae2dc60d7261d2577ce657724cb635e12">kinetic_types_internal.h</a>
 </li>
 <li>STATE_AWAITING_HEADER
 : <a class="el" href="bus__example_8c.html#a4a055720116545d1fd52227e417488f8af29da4d47c00106a326b79a0e0282e5d">bus_example.c</a>
@@ -199,20 +207,50 @@
 : <a class="el" href="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2afe3be2ba8f0a700faab0406f0343865b">threadpool_internals.h</a>
 </li>
 <li>store_data()
-: <a class="el" href="write__file__blocking_8c.html#af4bd70c5ec166142c87bbc3825a4721c">write_file_blocking.c</a>
-, <a class="el" href="write__file__blocking__threads_8c.html#a00a83f21359d473f900cf9dcb394708f">write_file_blocking_threads.c</a>
+: <a class="el" href="write__file__blocking__threads_8c.html#a00a83f21359d473f900cf9dcb394708f">write_file_blocking_threads.c</a>
+, <a class="el" href="write__file__blocking_8c.html#af4bd70c5ec166142c87bbc3825a4721c">write_file_blocking.c</a>
 </li>
 <li>str_of_permission()
-: <a class="el" href="acl_8c.html#af0d190b71e5f1839aa2882d9f85d1332">acl.c</a>
+: <a class="el" href="kinetic__acl_8c.html#ac2ce9faff12a54a0ebff5b4943c76fcd">kinetic_acl.c</a>
 </li>
-<li>SUITE
-: <a class="el" href="bus_2greatest_8h.html#ac259c3f55c7c90396ea276c14641bc01">bus/greatest.h</a>
+<li>swap()
+: <a class="el" href="listener__cmd_8c.html#a8ea126853a26fdd0caa35ec7f38f4ef0">listener_cmd.c</a>
 </li>
-<li>suite()
-: <a class="el" href="test__yacht_8c.html#a887eff6ca48753ca432bec7cf216b727">test_yacht.c</a>
+<li>syscall_close()
+: <a class="el" href="syscall_8h.html#a0a5ce334b90dcf84aa4c5b04009d2123">syscall.h</a>
+, <a class="el" href="syscall_8c.html#a0a5ce334b90dcf84aa4c5b04009d2123">syscall.c</a>
 </li>
-<li>SUITE
-: <a class="el" href="threadpool_2greatest_8h.html#ac259c3f55c7c90396ea276c14641bc01">threadpool/greatest.h</a>
+<li>syscall_poll()
+: <a class="el" href="syscall_8c.html#abbdaca1d9522b61d59bb57049d8c6f7e">syscall.c</a>
+, <a class="el" href="syscall_8h.html#abbdaca1d9522b61d59bb57049d8c6f7e">syscall.h</a>
+</li>
+<li>syscall_pthread_join()
+: <a class="el" href="syscall_8c.html#abf5ebbed436fb783bcb222b321fda4f7">syscall.c</a>
+, <a class="el" href="syscall_8h.html#abf5ebbed436fb783bcb222b321fda4f7">syscall.h</a>
+</li>
+<li>syscall_read()
+: <a class="el" href="syscall_8h.html#aa691afed2d6e410786681690168123d4">syscall.h</a>
+, <a class="el" href="syscall_8c.html#aa691afed2d6e410786681690168123d4">syscall.c</a>
+</li>
+<li>syscall_SSL_get_error()
+: <a class="el" href="syscall_8c.html#ab826a1906b13d1e06cbe462af30fc192">syscall.c</a>
+, <a class="el" href="syscall_8h.html#ab826a1906b13d1e06cbe462af30fc192">syscall.h</a>
+</li>
+<li>syscall_SSL_read()
+: <a class="el" href="syscall_8h.html#a3fb10f0c4056604d8b57fef8ea8093da">syscall.h</a>
+, <a class="el" href="syscall_8c.html#a3fb10f0c4056604d8b57fef8ea8093da">syscall.c</a>
+</li>
+<li>syscall_SSL_write()
+: <a class="el" href="syscall_8c.html#aad8bbf1e110c0acb87e6565cd1481080">syscall.c</a>
+, <a class="el" href="syscall_8h.html#aad8bbf1e110c0acb87e6565cd1481080">syscall.h</a>
+</li>
+<li>syscall_timestamp()
+: <a class="el" href="syscall_8c.html#a2ad7b5cef65c1570fef15694169a1b0b">syscall.c</a>
+, <a class="el" href="syscall_8h.html#a23dd30c3f8b16123111068814613b6a9">syscall.h</a>
+</li>
+<li>syscall_write()
+: <a class="el" href="syscall_8c.html#a4a8311564413dc12dff6d882e31dc163">syscall.c</a>
+, <a class="el" href="syscall_8h.html#a4a8311564413dc12dff6d882e31dc163">syscall.h</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,7 +61,7 @@
 <code>#include &quot;<a class="el" href="kinetic__socket_8h_source.html">kinetic_socket.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__hmac_8h_source.html">kinetic_hmac.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__proto_8h_source.html">kinetic_proto.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic_8pb-c_8h_source.html">kinetic.pb-c.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__allocator_8h_source.html">kinetic_allocator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__controller_8h_source.html">kinetic_controller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="bus_8h_source.html">bus.h</a>&quot;</code><br />
@@ -136,7 +136,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00036">36</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="bus_8c_source.html#l00390">bus_log_event_str()</a>, <a class="el" href="kinetic__logger_8c_source.html#l00094">KineticLogger_Log()</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00058">LOGF0</a>.</p>
+<p>References <a class="el" href="bus_8c_source.html#l00335">Bus_LogEventStr()</a>, and <a class="el" href="kinetic__logger_8c_source.html#l00101">KineticLogger_LogPrintf()</a>.</p>
 
 </div>
 </div>
@@ -162,9 +162,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00050">50</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00042">42</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00086">KineticPDUHeader</a>, <a class="el" href="bus__types_8h_source.html#l00113">bus_sink_cb_res_t::next_read</a>, <a class="el" href="bus__example_8c_source.html#l00054">STATE_AWAITING_HEADER</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00095">UNPACK_ERROR_UNDEFINED</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00073">KineticPDUHeader</a>, <a class="el" href="bus__types_8h_source.html#l00114">bus_sink_cb_res_t::next_read</a>, <a class="el" href="bus__example_8c_source.html#l00054">STATE_AWAITING_HEADER</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00061">UNPACK_ERROR_UNDEFINED</a>.</p>
 
 </div>
 </div>
@@ -206,9 +206,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00062">62</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00054">54</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__nbo_8c_source.html#l00038">KineticNBO_ToHostU32()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00086">KineticPDUHeader</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00160">PDU_PROTO_MAX_LEN</a>.</p>
+<p>References <a class="el" href="kinetic__nbo_8c_source.html#l00038">KineticNBO_ToHostU32()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00073">KineticPDUHeader</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00145">PDU_PROTO_MAX_LEN</a>.</p>
 
 </div>
 </div>
@@ -250,9 +250,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00088">88</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00080">80</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00086">KineticPDUHeader</a>, <a class="el" href="bus__types_8h_source.html#l00113">bus_sink_cb_res_t::next_read</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00159">PDU_HEADER_LEN</a>, <a class="el" href="kinetic__bus_8c_source.html#l00050">reset_transfer()</a>, <a class="el" href="bus__example_8c_source.html#l00055">STATE_AWAITING_BODY</a>, <a class="el" href="bus__example_8c_source.html#l00054">STATE_AWAITING_HEADER</a>, <a class="el" href="bus__example_8c_source.html#l00053">STATE_UNINIT</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00097">UNPACK_ERROR_INVALID_HEADER</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00096">UNPACK_ERROR_SUCCESS</a>, and <a class="el" href="kinetic__bus_8c_source.html#l00062">unpack_header()</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00073">KineticPDUHeader</a>, <a class="el" href="bus__types_8h_source.html#l00114">bus_sink_cb_res_t::next_read</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00144">PDU_HEADER_LEN</a>, <a class="el" href="kinetic__bus_8c_source.html#l00042">reset_transfer()</a>, <a class="el" href="bus__example_8c_source.html#l00055">STATE_AWAITING_BODY</a>, <a class="el" href="bus__example_8c_source.html#l00054">STATE_AWAITING_HEADER</a>, <a class="el" href="bus__example_8c_source.html#l00053">STATE_UNINIT</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00063">UNPACK_ERROR_INVALID_HEADER</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00062">UNPACK_ERROR_SUCCESS</a>, and <a class="el" href="kinetic__bus_8c_source.html#l00054">unpack_header()</a>.</p>
 
 </div>
 </div>
@@ -288,9 +288,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00169">169</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00161">161</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__logger_8h_source.html#l00060">LOGF2</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00059">LOGF2</a>.</p>
 
 </div>
 </div>
@@ -326,9 +326,9 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00181">181</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00173">173</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="bus__types_8h_source.html#l00039">BUS_NO_SEQ_ID</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00184">KineticResponse::command</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00182">KineticResponse::header</a>, <a class="el" href="kinetic__logger_8h_source.html#l00063">KINETIC_ASSERT</a>, <a class="el" href="kinetic__proto_8h_source.html#l00073">KINETIC_PROTO_MESSAGE_AUTH_TYPE_UNSOLICITEDSTATUS</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00080">KineticAllocator_NewKineticResponse()</a>, <a class="el" href="kinetic__pdu__unpack_8c_source.html#l00023">KineticPDU_unpack_command()</a>, <a class="el" href="kinetic__pdu__unpack_8c_source.html#l00028">KineticPDU_unpack_message()</a>, <a class="el" href="kinetic__bus_8c_source.html#l00169">log_response_seq_id()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00183">KineticResponse::proto</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00098">UNPACK_ERROR_PAYLOAD_MALLOC_FAIL</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00096">UNPACK_ERROR_SUCCESS</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00185">KineticResponse::value</a>.</p>
+<p>References <a class="el" href="bus__types_8h_source.html#l00039">BUS_NO_SEQ_ID</a>, <a class="el" href="kinetic_8pb-c_8h_source.html#l00072">COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00168">KineticResponse::command</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00166">KineticResponse::header</a>, <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>, <a class="el" href="kinetic__allocator_8c_source.html#l00062">KineticAllocator_NewKineticResponse()</a>, <a class="el" href="kinetic__pdu__unpack_8c_source.html#l00023">KineticPDU_unpack_command()</a>, <a class="el" href="kinetic__pdu__unpack_8c_source.html#l00028">KineticPDU_unpack_message()</a>, <a class="el" href="kinetic__session_8c_source.html#l00186">KineticSession_GetConnectionID()</a>, <a class="el" href="kinetic__bus_8c_source.html#l00161">log_response_seq_id()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00167">KineticResponse::proto</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00064">UNPACK_ERROR_PAYLOAD_MALLOC_FAIL</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00062">UNPACK_ERROR_SUCCESS</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00169">KineticResponse::value</a>.</p>
 
 </div>
 </div>
@@ -356,9 +356,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00250">250</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00242">242</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__controller_8c_source.html#l00191">KineticController_HandleUnexpectedResponse()</a>, <a class="el" href="kinetic__bus_8c_source.html#l00036">log_cb()</a>, <a class="el" href="bus__types_8h_source.html#l00174">bus_config::log_cb</a>, <a class="el" href="kinetic__types_8h_source.html#l00460">KineticClientConfig::logLevel</a>, <a class="el" href="kinetic__types_8h_source.html#l00462">KineticClientConfig::maxThreadpoolThreads</a>, <a class="el" href="kinetic__types_8h_source.html#l00461">KineticClientConfig::readerThreads</a>, <a class="el" href="kinetic__bus_8c_source.html#l00088">sink_cb()</a>, <a class="el" href="bus__example_8c_source.html#l00233">unexpected_msg_cb()</a>, and <a class="el" href="kinetic__bus_8c_source.html#l00181">unpack_cb()</a>.</p>
+<p>References <a class="el" href="kinetic__controller_8c_source.html#l00179">KineticController_HandleUnexpectedResponse()</a>, <a class="el" href="kinetic__bus_8c_source.html#l00036">log_cb()</a>, <a class="el" href="bus__types_8h_source.html#l00175">bus_config::log_cb</a>, <a class="el" href="kinetic__types_8h_source.html#l00502">KineticClientConfig::logLevel</a>, <a class="el" href="kinetic__types_8h_source.html#l00504">KineticClientConfig::maxThreadpoolThreads</a>, <a class="el" href="kinetic__types_8h_source.html#l00503">KineticClientConfig::readerThreads</a>, <a class="el" href="kinetic__bus_8c_source.html#l00080">sink_cb()</a>, <a class="el" href="bus__example_8c_source.html#l00233">unexpected_msg_cb()</a>, and <a class="el" href="kinetic__bus_8c_source.html#l00173">unpack_cb()</a>.</p>
 
 </div>
 </div>
@@ -376,9 +376,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00276">276</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__bus_8c_source.html#l00268">268</a> of file <a class="el" href="kinetic__bus_8c_source.html">kinetic_bus.c</a>.</p>
 
-<p>References <a class="el" href="bus_8c_source.html#l00639">bus_free()</a>, and <a class="el" href="bus_8c_source.html#l00541">bus_shutdown()</a>.</p>
+<p>References <a class="el" href="bus_8c_source.html#l00599">Bus_Free()</a>, and <a class="el" href="bus_8c_source.html#l00494">Bus_Shutdown()</a>.</p>
 
 </div>
 </div>

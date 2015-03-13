@@ -1,4 +1,4 @@
-.TH "KineticMessage" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "KineticMessage" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,123 +12,130 @@ KineticMessage \-
 
 .in +1c
 .ti -1c
-.RI "KineticProto_Message \fBmessage\fP"
+.RI "Com__Seagate__Kinetic__Proto__Message \fBmessage\fP"
 .br
 .ti -1c
-.RI "KineticProto_Message_HMACauth \fBhmacAuth\fP"
+.RI "Com__Seagate__Kinetic__Proto__Message__HMACauth \fBhmacAuth\fP"
 .br
 .ti -1c
-.RI "KineticProto_Message_PINauth \fBpinAuth\fP"
+.RI "Com__Seagate__Kinetic__Proto__Message__PINauth \fBpinAuth\fP"
 .br
 .ti -1c
 .RI "uint8_t \fBhmacData\fP [\fBKINETIC_HMAC_MAX_LEN\fP]"
 .br
 .ti -1c
-.RI "KineticProto_Command \fBcommand\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command \fBcommand\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_Header \fBheader\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__Header \fBheader\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_Body \fBbody\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__Body \fBbody\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_Status \fBstatus\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__Status \fBstatus\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_Security \fBsecurity\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__Security \fBsecurity\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_Security_ACL \fBacl\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__Security__ACL \fBacl\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_KeyValue \fBkeyValue\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__KeyValue \fBkeyValue\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_Range \fBkeyRange\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__Range \fBkeyRange\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_Setup \fBsetup\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__Setup \fBsetup\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_GetLog \fBgetLog\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__GetLog \fBgetLog\fP"
 .br
 .ti -1c
-.RI "\fBKineticProto_Command_GetLog_Type\fP \fBgetLogType\fP"
+.RI "\fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fP \fBgetLogType\fP"
 .br
 .ti -1c
-.RI "KineticProto_Command_PinOperation \fBpinOp\fP"
+.RI "Com__Seagate__Kinetic__Proto__Command__GetLog__Device \fBgetLogDevice\fP"
+.br
+.ti -1c
+.RI "Com__Seagate__Kinetic__Proto__Command__PinOperation \fBpinOp\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 134 of file kinetic_types_internal\&.h\&.
+Definition at line 118 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
-.SS "KineticProto_Message KineticMessage::message"
+.SS "Com__Seagate__Kinetic__Proto__Message KineticMessage::message"
 
 .PP
-Definition at line 138 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Message_HMACauth KineticMessage::hmacAuth"
+Definition at line 122 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Message__HMACauth KineticMessage::hmacAuth"
 
 .PP
-Definition at line 139 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Message_PINauth KineticMessage::pinAuth"
+Definition at line 123 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Message__PINauth KineticMessage::pinAuth"
 
 .PP
-Definition at line 140 of file kinetic_types_internal\&.h\&.
+Definition at line 124 of file kinetic_types_internal\&.h\&.
 .SS "uint8_t KineticMessage::hmacData[\fBKINETIC_HMAC_MAX_LEN\fP]"
 
 .PP
-Definition at line 141 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command KineticMessage::command"
+Definition at line 125 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command KineticMessage::command"
 
 .PP
-Definition at line 144 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_Header KineticMessage::header"
+Definition at line 128 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__Header KineticMessage::header"
 
 .PP
-Definition at line 145 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_Body KineticMessage::body"
+Definition at line 129 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__Body KineticMessage::body"
 
 .PP
-Definition at line 146 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_Status KineticMessage::status"
+Definition at line 130 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__Status KineticMessage::status"
 
 .PP
-Definition at line 147 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_Security KineticMessage::security"
+Definition at line 131 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__Security KineticMessage::security"
 
 .PP
-Definition at line 148 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_Security_ACL KineticMessage::acl"
+Definition at line 132 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__Security__ACL KineticMessage::acl"
 
 .PP
-Definition at line 149 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_KeyValue KineticMessage::keyValue"
+Definition at line 133 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__KeyValue KineticMessage::keyValue"
 
 .PP
-Definition at line 150 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_Range KineticMessage::keyRange"
+Definition at line 134 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__Range KineticMessage::keyRange"
 
 .PP
-Definition at line 151 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_Setup KineticMessage::setup"
+Definition at line 135 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__Setup KineticMessage::setup"
 
 .PP
-Definition at line 152 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_GetLog KineticMessage::getLog"
+Definition at line 136 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__GetLog KineticMessage::getLog"
 
 .PP
-Definition at line 153 of file kinetic_types_internal\&.h\&.
-.SS "\fBKineticProto_Command_GetLog_Type\fP KineticMessage::getLogType"
+Definition at line 137 of file kinetic_types_internal\&.h\&.
+.SS "\fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fP KineticMessage::getLogType"
 
 .PP
-Definition at line 154 of file kinetic_types_internal\&.h\&.
-.SS "KineticProto_Command_PinOperation KineticMessage::pinOp"
+Definition at line 138 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__GetLog__Device KineticMessage::getLogDevice"
 
 .PP
-Definition at line 155 of file kinetic_types_internal\&.h\&.
+Definition at line 139 of file kinetic_types_internal\&.h\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__PinOperation KineticMessage::pinOp"
+
+.PP
+Definition at line 140 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

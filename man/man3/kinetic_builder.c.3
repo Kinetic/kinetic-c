@@ -1,0 +1,214 @@
+.TH "kinetic_builder.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_builder.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_builder\&.h'\fP
+.br
+\fC#include 'kinetic_operation\&.h'\fP
+.br
+\fC#include 'kinetic_controller\&.h'\fP
+.br
+\fC#include 'kinetic_session\&.h'\fP
+.br
+\fC#include 'kinetic_message\&.h'\fP
+.br
+\fC#include 'kinetic_bus\&.h'\fP
+.br
+\fC#include 'kinetic_response\&.h'\fP
+.br
+\fC#include 'kinetic_device_info\&.h'\fP
+.br
+\fC#include 'kinetic_allocator\&.h'\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include 'kinetic_request\&.h'\fP
+.br
+\fC#include 'kinetic_acl\&.h'\fP
+.br
+\fC#include 'kinetic_callbacks\&.h'\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include <sys/time\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildNoop\fP (KineticOperation *const op)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildPut\fP (KineticOperation *const op, \fBKineticEntry\fP *const entry)"
+.br
+.ti -1c
+.RI "static void \fBbuild_get_command\fP (KineticOperation *const op, \fBKineticEntry\fP *const entry, \fBKineticOperationCallback\fP cb, \fBCom__Seagate__Kinetic__Proto__Command__MessageType\fP command_id)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildGet\fP (KineticOperation *const op, \fBKineticEntry\fP *const entry)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildGetPrevious\fP (KineticOperation *const op, \fBKineticEntry\fP *const entry)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildGetNext\fP (KineticOperation *const op, \fBKineticEntry\fP *const entry)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildFlush\fP (KineticOperation *const op)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildDelete\fP (KineticOperation *const op, \fBKineticEntry\fP *const entry)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildGetKeyRange\fP (KineticOperation *const op, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *buffers)"
+.br
+.ti -1c
+.RI "Com__Seagate__Kinetic__Proto__Command__P2POperation * \fBbuild_p2pOp\fP (uint32_t nestingLevel, KineticP2P_Operation const *const p2pOp)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildP2POperation\fP (KineticOperation *const op, KineticP2P_Operation *const p2pOp)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildGetLog\fP (KineticOperation *const op, \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fP type, \fBByteArray\fP name, \fBKineticLogInfo\fP **info)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildSetPin\fP (KineticOperation *const op, \fBByteArray\fP old_pin, \fBByteArray\fP new_pin, bool lock)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildErase\fP (KineticOperation *const op, bool secure_erase, \fBByteArray\fP *pin)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildLockUnlock\fP (KineticOperation *const op, bool lock, \fBByteArray\fP *pin)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildSetClusterVersion\fP (KineticOperation *op, int64_t new_cluster_version)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildSetACL\fP (KineticOperation *const op, struct \fBACL\fP *ACLs)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticBuilder_BuildUpdateFirmware\fP (KineticOperation *const op, const char *fw_path)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticStatus\fP KineticBuilder_BuildNoop (KineticOperation *constop)"
+
+.PP
+Definition at line 45 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__NOOP, KINETIC_STATUS_SUCCESS, KineticCallbacks_Basic(), and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildPut (KineticOperation *constop, \fBKineticEntry\fP *constentry)"
+
+.PP
+Definition at line 54 of file kinetic_builder\&.c\&.
+.PP
+References ByteBuffer::bytesUsed, COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PUT, KINETIC_OBJ_SIZE, KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_SUCCESS, KineticCallbacks_Put(), KineticMessage_ConfigureKeyValue(), KineticOperation_ValidateOperation(), LOGF2, and KineticEntry::value\&.
+.SS "static void build_get_command (KineticOperation *constop, \fBKineticEntry\fP *constentry, \fBKineticOperationCallback\fPcb, \fBCom__Seagate__Kinetic__Proto__Command__MessageType\fPcommand_id)\fC [static]\fP"
+
+.PP
+Definition at line 77 of file kinetic_builder\&.c\&.
+.PP
+References ByteBuffer_Reset(), KineticMessage_ConfigureKeyValue(), and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildGet (KineticOperation *constop, \fBKineticEntry\fP *constentry)"
+
+.PP
+Definition at line 99 of file kinetic_builder\&.c\&.
+.PP
+References build_get_command(), COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GET, KINETIC_STATUS_SUCCESS, and KineticCallbacks_Get()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildGetPrevious (KineticOperation *constop, \fBKineticEntry\fP *constentry)"
+
+.PP
+Definition at line 108 of file kinetic_builder\&.c\&.
+.PP
+References build_get_command(), COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETPREVIOUS, KINETIC_STATUS_SUCCESS, and KineticCallbacks_Get()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildGetNext (KineticOperation *constop, \fBKineticEntry\fP *constentry)"
+
+.PP
+Definition at line 117 of file kinetic_builder\&.c\&.
+.PP
+References build_get_command(), COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETNEXT, KINETIC_STATUS_SUCCESS, and KineticCallbacks_Get()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildFlush (KineticOperation *constop)"
+
+.PP
+Definition at line 126 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__FLUSHALLDATA, KINETIC_STATUS_SUCCESS, KineticCallbacks_Basic(), and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildDelete (KineticOperation *constop, \fBKineticEntry\fP *constentry)"
+
+.PP
+Definition at line 138 of file kinetic_builder\&.c\&.
+.PP
+References ByteBuffer_Reset(), COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__DELETE, KINETIC_STATUS_SUCCESS, KineticCallbacks_Delete(), KineticMessage_ConfigureKeyValue(), and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildGetKeyRange (KineticOperation *constop, \fBKineticKeyRange\fP *range, \fBByteBufferArray\fP *buffers)"
+
+.PP
+Definition at line 160 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETKEYRANGE, KINETIC_ASSERT, KINETIC_STATUS_SUCCESS, KineticCallbacks_GetKeyRange(), KineticMessage_ConfigureKeyRange(), and KineticOperation_ValidateOperation()\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__P2POperation* build_p2pOp (uint32_tnestingLevel, KineticP2P_Operation const *constp2pOp)"
+
+.PP
+Definition at line 178 of file kinetic_builder\&.c\&.
+.PP
+References ByteBuffer_IsNull(), com__seagate__kinetic__proto__command__p2_poperation__init(), com__seagate__kinetic__proto__command__p2_poperation__operation__init(), com__seagate__kinetic__proto__command__p2_poperation__peer__init(), KINETIC_ASSERT, KINETIC_P2P_MAX_NESTING, KineticAllocator_FreeP2PProtobuf(), and LOGF0\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildP2POperation (KineticOperation *constop, KineticP2P_Operation *constp2pOp)"
+
+.PP
+Definition at line 248 of file kinetic_builder\&.c\&.
+.PP
+References build_p2pOp(), COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PEER2PEERPUSH, KINETIC_P2P_OPERATION_LIMIT, KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_OPERATION_INVALID, KINETIC_STATUS_SUCCESS, KineticCallbacks_P2POperation(), and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildGetLog (KineticOperation *constop, \fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fPtype, \fBByteArray\fPname, \fBKineticLogInfo\fP **info)"
+
+.PP
+Definition at line 278 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__GETLOG, ByteArray::data, KINETIC_STATUS_DEVICE_NAME_REQUIRED, KINETIC_STATUS_SUCCESS, KineticCallbacks_GetLog(), KineticOperation_ValidateOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildSetPin (KineticOperation *constop, \fBByteArray\fPold_pin, \fBByteArray\fPnew_pin, boollock)"
+
+.PP
+Definition at line 307 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY, ByteArray::data, KINETIC_STATUS_SUCCESS, KineticCallbacks_Basic(), KineticOperation_TimeoutSetPin, KineticOperation_ValidateOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildErase (KineticOperation *constop, boolsecure_erase, \fBByteArray\fP *pin)"
+
+.PP
+Definition at line 340 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP, COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__ERASE_PINOP, COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__SECURE_ERASE_PINOP, KINETIC_STATUS_SUCCESS, KineticCallbacks_Basic(), KineticOperation_TimeoutErase, and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildLockUnlock (KineticOperation *constop, boollock, \fBByteArray\fP *pin)"
+
+.PP
+Definition at line 361 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PINOP, COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__LOCK_PINOP, COM__SEAGATE__KINETIC__PROTO__COMMAND__PIN_OPERATION__PIN_OP_TYPE__UNLOCK_PINOP, KINETIC_STATUS_SUCCESS, KineticCallbacks_Basic(), KineticOperation_TimeoutLockUnlock, and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildSetClusterVersion (KineticOperation *op, int64_tnew_cluster_version)"
+
+.PP
+Definition at line 383 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP, KINETIC_STATUS_SUCCESS, KineticCallbacks_SetClusterVersion(), and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildSetACL (KineticOperation *constop, struct \fBACL\fP *ACLs)"
+
+.PP
+Definition at line 401 of file kinetic_builder\&.c\&.
+.PP
+References ACL::ACL_count, ACL::ACLs, COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SECURITY, KINETIC_STATUS_SUCCESS, KineticCallbacks_SetACL(), KineticOperation_TimeoutSetACL, and KineticOperation_ValidateOperation()\&.
+.SS "\fBKineticStatus\fP KineticBuilder_BuildUpdateFirmware (KineticOperation *constop, const char *fw_path)"
+
+.PP
+Definition at line 420 of file kinetic_builder\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP, KINETIC_STATUS_INVALID, KINETIC_STATUS_INVALID_FILE, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticCallbacks_UpdateFirmware(), KineticOperation_ValidateOperation(), LOG0, and LOGF0\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

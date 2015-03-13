@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -50,8 +50,7 @@
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">send_internal.h File Reference</div>  </div>
 </div><!--header-->
@@ -60,161 +59,39 @@
 </div>
 <p><a href="send__internal_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a7528f5ce68462632ca7a9d3eb600c8dc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">handle_write_res</a> </td></tr>
-<tr class="separator:a7528f5ce68462632ca7a9d3eb600c8dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a6664eefee5b7a9db746a8c9a76a5d764"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">handle_write_res</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send__internal_8h.html#a6664eefee5b7a9db746a8c9a76a5d764">handle_write</a> (<a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structboxed__msg.html">boxed_msg</a> *box)</td></tr>
-<tr class="separator:a6664eefee5b7a9db746a8c9a76a5d764"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae31cb52695b7c4b86ad52413e7cf4966"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send__internal_8h.html#ae31cb52695b7c4b86ad52413e7cf4966">handle_failure</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structboxed__msg.html">boxed_msg</a> *box, <a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a> status)</td></tr>
-<tr class="separator:ae31cb52695b7c4b86ad52413e7cf4966"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a3d5df230238208188a316c900123c4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send__internal_8h.html#a0a3d5df230238208188a316c900123c4">attempt_to_enqueue_sending_request_message_to_listener</a> (struct <a class="el" href="structbus.html">bus</a> *b, int fd, int64_t seq_id, int16_t timeout_sec)</td></tr>
-<tr class="separator:a0a3d5df230238208188a316c900123c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a2ac0191583cd2ec8e5c415a6fdadbd09"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send__internal_8h.html#a2ac0191583cd2ec8e5c415a6fdadbd09">SEND_NOTIFY_LISTENER_RETRIES</a>&#160;&#160;&#160;10</td></tr>
+<tr class="separator:a2ac0191583cd2ec8e5c415a6fdadbd09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad747971f2f8f7a93312f55d01df00236"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send__internal_8h.html#ad747971f2f8f7a93312f55d01df00236">SEND_NOTIFY_LISTENER_RETRY_DELAY</a>&#160;&#160;&#160;5</td></tr>
+<tr class="separator:ad747971f2f8f7a93312f55d01df00236"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a class="anchor" id="a7528f5ce68462632ca7a9d3eb600c8dc"></a>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a2ac0191583cd2ec8e5c415a6fdadbd09"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">handle_write_res</a></td>
+          <td class="memname">#define SEND_NOTIFY_LISTENER_RETRIES&#160;&#160;&#160;10</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="a7528f5ce68462632ca7a9d3eb600c8dca57a9d19bb49beb5b04cbc8c22d08ae51"></a>HW_OK&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a7528f5ce68462632ca7a9d3eb600c8dca442060f6d0f0662a10a1cd7462b9cd91"></a>HW_DONE&#160;</td><td class="fielddoc">
-</td></tr>
-<tr><td class="fieldname"><a class="anchor" id="a7528f5ce68462632ca7a9d3eb600c8dca19623c0f565a169fb052d9dcf91a9157"></a>HW_ERROR&#160;</td><td class="fielddoc">
-</td></tr>
-</table>
 
 <p>Definition at line <a class="el" href="send__internal_8h_source.html#l00025">25</a> of file <a class="el" href="send__internal_8h_source.html">send_internal.h</a>.</p>
 
 </div>
 </div>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a6664eefee5b7a9db746a8c9a76a5d764"></a>
+<a class="anchor" id="ad747971f2f8f7a93312f55d01df00236"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="send__internal_8h.html#a7528f5ce68462632ca7a9d3eb600c8dc">handle_write_res</a> handle_write </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structbus.html">bus</a> *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structboxed__msg.html">boxed_msg</a> *&#160;</td>
-          <td class="paramname"><em>box</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">#define SEND_NOTIFY_LISTENER_RETRY_DELAY&#160;&#160;&#160;5</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="ae31cb52695b7c4b86ad52413e7cf4966"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void handle_failure </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structboxed__msg.html">boxed_msg</a> *&#160;</td>
-          <td class="paramname"><em>box</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a>&#160;</td>
-          <td class="paramname"><em>status</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0a3d5df230238208188a316c900123c4"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool attempt_to_enqueue_sending_request_message_to_listener </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>fd</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int64_t&#160;</td>
-          <td class="paramname"><em>seq_id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>timeout_sec</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Definition at line <a class="el" href="send__internal_8h_source.html#l00026">26</a> of file <a class="el" href="send__internal_8h_source.html">send_internal.h</a>.</p>
 
 </div>
 </div>

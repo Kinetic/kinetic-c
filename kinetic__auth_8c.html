@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -57,7 +57,7 @@
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="kinetic__auth_8h_source.html">kinetic_auth.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__hmac_8h_source.html">kinetic_hmac.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__proto_8h_source.html">kinetic_proto.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic_8pb-c_8h_source.html">kinetic.pb-c.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
 </div>
 <p><a href="kinetic__auth_8c_source.html">Go to the source code of this file.</a></p>
@@ -90,7 +90,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__auth_8c_source.html#l00026">26</a> of file <a class="el" href="kinetic__auth_8c_source.html">kinetic_auth.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00192">KINETIC_STATUS_SSL_REQUIRED</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__types_8h_source.html#l00141">KineticSessionConfig::useSsl</a>.</p>
+<p>References <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00181">KINETIC_STATUS_SSL_REQUIRED</a>, <a class="el" href="kinetic__types_8h_source.html#l00158">KINETIC_STATUS_SUCCESS</a>, and <a class="el" href="kinetic__types_8h_source.html#l00141">KineticSessionConfig::useSsl</a>.</p>
 
 </div>
 </div>
@@ -120,7 +120,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__auth_8c_source.html#l00033">33</a> of file <a class="el" href="kinetic__auth_8c_source.html">kinetic_auth.c</a>.</p>
 
-<p>References <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00138">KineticSessionConfig::hmacKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00133">KineticSessionConfig::identity</a>, <a class="el" href="kinetic__types_8h_source.html#l00043">KINETIC_HMAC_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00042">KINETIC_HMAC_SHA1_LEN</a>, <a class="el" href="kinetic__proto_8h_source.html#l00115">KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1</a>, <a class="el" href="kinetic__proto_8h_source.html#l00071">KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH</a>, <a class="el" href="kinetic__types_8h_source.html#l00173">KINETIC_STATUS_HMAC_REQUIRED</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00031">KineticHMAC_Init()</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00047">KineticHMAC_Populate()</a>, <a class="el" href="kinetic__proto_8c_source.html#l00065">KineticProto_Message_hmacauth__init()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00057">LOG3</a>.</p>
+<p>References <a class="el" href="kinetic_8pb-c_8h_source.html#l00187">COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1</a>, <a class="el" href="kinetic_8pb-c_8h_source.html#l00061">COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH</a>, <a class="el" href="kinetic_8pb-c_8c_source.html#l00054">com__seagate__kinetic__proto__message__hmacauth__init()</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types_8h_source.html#l00138">KineticSessionConfig::hmacKey</a>, <a class="el" href="kinetic__types_8h_source.html#l00133">KineticSessionConfig::identity</a>, <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00043">KINETIC_HMAC_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00042">KINETIC_HMAC_SHA1_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00162">KINETIC_STATUS_HMAC_REQUIRED</a>, <a class="el" href="kinetic__types_8h_source.html#l00158">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00031">KineticHMAC_Init()</a>, <a class="el" href="kinetic__hmac_8c_source.html#l00047">KineticHMAC_Populate()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00056">LOG3</a>.</p>
 
 </div>
 </div>
@@ -156,7 +156,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__auth_8c_source.html#l00076">76</a> of file <a class="el" href="kinetic__auth_8c_source.html">kinetic_auth.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00144">KineticMessage::command</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00145">KineticMessage::header</a>, <a class="el" href="kinetic__types_8h_source.html#l00044">KINETIC_PIN_MAX_LEN</a>, <a class="el" href="kinetic__proto_8h_source.html#l00072">KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH</a>, <a class="el" href="kinetic__types_8h_source.html#l00192">KINETIC_STATUS_SSL_REQUIRED</a>, <a class="el" href="kinetic__types_8h_source.html#l00169">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="kinetic__proto_8c_source.html#l00070">KineticProto_Message_pinauth__init()</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00057">LOG3</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00138">KineticMessage::message</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00140">KineticMessage::pinAuth</a>, and <a class="el" href="kinetic__types_8h_source.html#l00141">KineticSessionConfig::useSsl</a>.</p>
+<p>References <a class="el" href="kinetic_8pb-c_8h_source.html#l00067">COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__PINAUTH</a>, <a class="el" href="kinetic_8pb-c_8c_source.html#l00060">com__seagate__kinetic__proto__message__pinauth__init()</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00128">KineticMessage::command</a>, <a class="el" href="byte__array_8h_source.html#l00036">ByteArray::data</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00129">KineticMessage::header</a>, <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>, <a class="el" href="kinetic__types_8h_source.html#l00044">KINETIC_PIN_MAX_LEN</a>, <a class="el" href="kinetic__types_8h_source.html#l00181">KINETIC_STATUS_SSL_REQUIRED</a>, <a class="el" href="kinetic__types_8h_source.html#l00158">KINETIC_STATUS_SUCCESS</a>, <a class="el" href="byte__array_8h_source.html#l00035">ByteArray::len</a>, <a class="el" href="kinetic__logger_8h_source.html#l00056">LOG3</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00122">KineticMessage::message</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00124">KineticMessage::pinAuth</a>, and <a class="el" href="kinetic__types_8h_source.html#l00141">KineticSessionConfig::useSsl</a>.</p>
 
 </div>
 </div>
@@ -192,7 +192,7 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="kinetic__auth_8c_source.html#l00107">107</a> of file <a class="el" href="kinetic__auth_8c_source.html">kinetic_auth.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types_8h_source.html#l00167">KINETIC_STATUS_INVALID</a>.</p>
+<p>References <a class="el" href="kinetic__types_8h_source.html#l00156">KINETIC_STATUS_INVALID</a>.</p>
 
 </div>
 </div>

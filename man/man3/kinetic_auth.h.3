@@ -1,4 +1,4 @@
-.TH "kinetic_auth.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_auth.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -32,19 +32,19 @@ kinetic_auth.h \-
 .PP
 Definition at line 26 of file kinetic_auth\&.c\&.
 .PP
-References KINETIC_STATUS_SSL_REQUIRED, KINETIC_STATUS_SUCCESS, and KineticSessionConfig::useSsl\&.
+References KINETIC_ASSERT, KINETIC_STATUS_SSL_REQUIRED, KINETIC_STATUS_SUCCESS, and KineticSessionConfig::useSsl\&.
 .SS "\fBKineticStatus\fP KineticAuth_PopulateHmac (\fBKineticSessionConfig\fP const *constconfig, KineticRequest *constrequest)"
 
 .PP
 Definition at line 33 of file kinetic_auth\&.c\&.
 .PP
-References ByteArray::data, KineticSessionConfig::hmacKey, KineticSessionConfig::identity, KINETIC_HMAC_MAX_LEN, KINETIC_HMAC_SHA1_LEN, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, KINETIC_STATUS_HMAC_REQUIRED, KINETIC_STATUS_SUCCESS, KineticHMAC_Init(), KineticHMAC_Populate(), KineticProto_Message_hmacauth__init(), ByteArray::len, and LOG3\&.
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1, COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH, com__seagate__kinetic__proto__message__hmacauth__init(), ByteArray::data, KineticSessionConfig::hmacKey, KineticSessionConfig::identity, KINETIC_ASSERT, KINETIC_HMAC_MAX_LEN, KINETIC_HMAC_SHA1_LEN, KINETIC_STATUS_HMAC_REQUIRED, KINETIC_STATUS_SUCCESS, KineticHMAC_Init(), KineticHMAC_Populate(), ByteArray::len, and LOG3\&.
 .SS "\fBKineticStatus\fP KineticAuth_PopulatePin (\fBKineticSessionConfig\fP const *constconfig, KineticRequest *constrequest, \fBByteArray\fPpin)"
 
 .PP
 Definition at line 76 of file kinetic_auth\&.c\&.
 .PP
-References KineticMessage::command, ByteArray::data, KineticMessage::header, KINETIC_PIN_MAX_LEN, KINETIC_PROTO_MESSAGE_AUTH_TYPE_PINAUTH, KINETIC_STATUS_SSL_REQUIRED, KINETIC_STATUS_SUCCESS, KineticProto_Message_pinauth__init(), ByteArray::len, LOG3, KineticMessage::message, KineticMessage::pinAuth, and KineticSessionConfig::useSsl\&.
+References COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__PINAUTH, com__seagate__kinetic__proto__message__pinauth__init(), KineticMessage::command, ByteArray::data, KineticMessage::header, KINETIC_ASSERT, KINETIC_PIN_MAX_LEN, KINETIC_STATUS_SSL_REQUIRED, KINETIC_STATUS_SUCCESS, ByteArray::len, LOG3, KineticMessage::message, KineticMessage::pinAuth, and KineticSessionConfig::useSsl\&.
 .SS "\fBKineticStatus\fP KineticAuth_PopulateTag (\fBByteBuffer\fP *consttag, \fBKineticAlgorithm\fPalgorithm, \fBByteArray\fP const *constkey)"
 
 .PP

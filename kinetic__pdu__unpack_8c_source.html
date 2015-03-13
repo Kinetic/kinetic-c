@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,7 +55,7 @@
 <div class="contents">
 <a href="kinetic__pdu__unpack_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -75,20 +75,20 @@
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__pdu__unpack_8h.html">kinetic_pdu_unpack.h</a>&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="kinetic__pdu__unpack_8h.html#a60eef152fd8a53bf8695d8f7405443ae">   23</a></span>&#160;KineticProto_Command *<a class="code" href="kinetic__pdu__unpack_8c.html#a60eef152fd8a53bf8695d8f7405443ae">KineticPDU_unpack_command</a>(ProtobufCAllocator* allocator,</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="kinetic__pdu__unpack_8h.html#a7979c96e90e9ffd8d52c7255397d3d13">   23</a></span>&#160;Com__Seagate__Kinetic__Proto__Command *<a class="code" href="kinetic__pdu__unpack_8c.html#a7979c96e90e9ffd8d52c7255397d3d13">KineticPDU_unpack_command</a>(ProtobufCAllocator* allocator,</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordtype">size_t</span> len, <span class="keyword">const</span> uint8_t* data) {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="kinetic__proto_8c.html#af4a50347f133627a7536be8c784b35b3">KineticProto_command__unpack</a>(allocator, len, data);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="kinetic_8pb-c_8c.html#ad267eaf4dc7e9b75267e0b6c47f18f06">com__seagate__kinetic__proto__command__unpack</a>(allocator, len, data);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;}</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="kinetic__pdu__unpack_8h.html#accfbd7a3274a6dc76a3b4bd1c8374b80">   28</a></span>&#160;KineticProto_Message* <a class="code" href="kinetic__pdu__unpack_8c.html#accfbd7a3274a6dc76a3b4bd1c8374b80">KineticPDU_unpack_message</a>(ProtobufCAllocator* allocator,</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="kinetic__pdu__unpack_8h.html#a3f397d555f507ecd331d01b54038681d">   28</a></span>&#160;Com__Seagate__Kinetic__Proto__Message* <a class="code" href="kinetic__pdu__unpack_8c.html#a3f397d555f507ecd331d01b54038681d">KineticPDU_unpack_message</a>(ProtobufCAllocator* allocator,</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">size_t</span> len, <span class="keyword">const</span> uint8_t* data) {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="kinetic__proto_8c.html#af2a70dd612b6e627f06d99ec0f39fe19">KineticProto_Message__unpack</a>(allocator, len, data);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="kinetic_8pb-c_8c.html#add43d2eb660720bf1987968da559c70a">com__seagate__kinetic__proto__message__unpack</a>(allocator, len, data);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
-<div class="ttc" id="kinetic__proto_8c_html_af2a70dd612b6e627f06d99ec0f39fe19"><div class="ttname"><a href="kinetic__proto_8c.html#af2a70dd612b6e627f06d99ec0f39fe19">KineticProto_Message__unpack</a></div><div class="ttdeci">KineticProto_Message * KineticProto_Message__unpack(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00097">kinetic_proto.c:97</a></div></div>
-<div class="ttc" id="kinetic__proto_8c_html_af4a50347f133627a7536be8c784b35b3"><div class="ttname"><a href="kinetic__proto_8c.html#af4a50347f133627a7536be8c784b35b3">KineticProto_command__unpack</a></div><div class="ttdeci">KineticProto_Command * KineticProto_command__unpack(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__proto_8c_source.html#l00242">kinetic_proto.c:242</a></div></div>
-<div class="ttc" id="kinetic__pdu__unpack_8c_html_accfbd7a3274a6dc76a3b4bd1c8374b80"><div class="ttname"><a href="kinetic__pdu__unpack_8c.html#accfbd7a3274a6dc76a3b4bd1c8374b80">KineticPDU_unpack_message</a></div><div class="ttdeci">KineticProto_Message * KineticPDU_unpack_message(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu__unpack_8c_source.html#l00028">kinetic_pdu_unpack.c:28</a></div></div>
-<div class="ttc" id="kinetic__pdu__unpack_8c_html_a60eef152fd8a53bf8695d8f7405443ae"><div class="ttname"><a href="kinetic__pdu__unpack_8c.html#a60eef152fd8a53bf8695d8f7405443ae">KineticPDU_unpack_command</a></div><div class="ttdeci">KineticProto_Command * KineticPDU_unpack_command(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu__unpack_8c_source.html#l00023">kinetic_pdu_unpack.c:23</a></div></div>
+<div class="ttc" id="kinetic_8pb-c_8c_html_ad267eaf4dc7e9b75267e0b6c47f18f06"><div class="ttname"><a href="kinetic_8pb-c_8c.html#ad267eaf4dc7e9b75267e0b6c47f18f06">com__seagate__kinetic__proto__command__unpack</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Command * com__seagate__kinetic__proto__command__unpack(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic_8pb-c_8c_source.html#l00268">kinetic.pb-c.c:268</a></div></div>
+<div class="ttc" id="kinetic__pdu__unpack_8c_html_a3f397d555f507ecd331d01b54038681d"><div class="ttname"><a href="kinetic__pdu__unpack_8c.html#a3f397d555f507ecd331d01b54038681d">KineticPDU_unpack_message</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Message * KineticPDU_unpack_message(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu__unpack_8c_source.html#l00028">kinetic_pdu_unpack.c:28</a></div></div>
 <div class="ttc" id="kinetic__pdu__unpack_8h_html"><div class="ttname"><a href="kinetic__pdu__unpack_8h.html">kinetic_pdu_unpack.h</a></div></div>
+<div class="ttc" id="kinetic_8pb-c_8c_html_add43d2eb660720bf1987968da559c70a"><div class="ttname"><a href="kinetic_8pb-c_8c.html#add43d2eb660720bf1987968da559c70a">com__seagate__kinetic__proto__message__unpack</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Message * com__seagate__kinetic__proto__message__unpack(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic_8pb-c_8c_source.html#l00093">kinetic.pb-c.c:93</a></div></div>
+<div class="ttc" id="kinetic__pdu__unpack_8c_html_a7979c96e90e9ffd8d52c7255397d3d13"><div class="ttname"><a href="kinetic__pdu__unpack_8c.html#a7979c96e90e9ffd8d52c7255397d3d13">KineticPDU_unpack_command</a></div><div class="ttdeci">Com__Seagate__Kinetic__Proto__Command * KineticPDU_unpack_command(ProtobufCAllocator *allocator, size_t len, const uint8_t *data)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__pdu__unpack_8c_source.html#l00023">kinetic_pdu_unpack.c:23</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

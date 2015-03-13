@@ -1,4 +1,4 @@
-.TH "send.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "send.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,9 +18,9 @@ send.c \-
 .br
 \fC#include <assert\&.h>\fP
 .br
-\fC#include <poll\&.h>\fP
-.br
 \fC#include 'bus\&.h'\fP
+.br
+\fC#include 'bus_poll\&.h'\fP
 .br
 \fC#include 'bus_types\&.h'\fP
 .br
@@ -28,11 +28,15 @@ send.c \-
 .br
 \fC#include 'listener\&.h'\fP
 .br
+\fC#include 'syscall\&.h'\fP
+.br
 \fC#include 'util\&.h'\fP
 .br
 \fC#include 'atomic\&.h'\fP
 .br
 \fC#include 'yacht\&.h'\fP
+.br
+\fC#include 'send_helper\&.h'\fP
 .br
 \fC#include 'send_internal\&.h'\fP
 .br
@@ -41,71 +45,38 @@ send.c \-
 
 .in +1c
 .ti -1c
-.RI "bool \fBsend_do_blocking_send\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+.RI "static bool \fBattempt_to_enqueue_HOLD_message_to_listener\fP (struct \fBbus\fP *b, int fd, int64_t seq_id, int16_t timeout_sec)"
 .br
 .ti -1c
-.RI "static bool \fBattempt_to_enqueue_sending_request_message_to_listener\fP (struct \fBbus\fP *b, int fd, int64_t seq_id, int16_t timeout_sec)"
+.RI "bool \fBSend_DoBlockingSend\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
 .br
+.RI "\fIDo a blocking send\&. \fP"
 .ti -1c
-.RI "static void \fBhandle_failure\fP (struct \fBbus\fP *b, \fBboxed_msg\fP *box, \fBbus_send_status_t\fP status)"
-.br
-.ti -1c
-.RI "static ssize_t \fBwrite_plain\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
-.br
-.ti -1c
-.RI "static ssize_t \fBwrite_ssl\fP (\fBbus\fP *b, \fBboxed_msg\fP *box, SSL *ssl)"
-.br
-.ti -1c
-.RI "static bool \fBenqueue_request_sent_message_to_listener\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
-.br
-.ti -1c
-.RI "static \fBhandle_write_res\fP \fBhandle_write\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+.RI "void \fBSend_HandleFailure\fP (struct \fBbus\fP *b, \fBboxed_msg\fP *box, \fBbus_send_status_t\fP status)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "bool send_do_blocking_send (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+.SS "static bool attempt_to_enqueue_HOLD_message_to_listener (struct \fBbus\fP *b, intfd, int64_tseq_id, int16_ttimeout_sec)\fC [static]\fP"
 
 .PP
-Definition at line 45 of file send\&.c\&.
+Definition at line 184 of file send\&.c\&.
 .PP
-References attempt_to_enqueue_sending_request_message_to_listener(), BUS_LOG_SNPRINTF, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, BUS_SEND_UNREGISTERED_SOCKET, boxed_msg::fd, handle_failure(), handle_write(), HW_DONE, HW_ERROR, HW_OK, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_sent_size, boxed_msg::out_seq_id, boxed_msg::timeout_sec, boxed_msg::tv_send_start, bus::udata, and util_timestamp()\&.
-.SS "static bool attempt_to_enqueue_sending_request_message_to_listener (struct \fBbus\fP *b, intfd, int64_tseq_id, int16_ttimeout_sec)\fC [static]\fP"
+References Bus_GetListenerForSocket(), BUS_LOG_SNPRINTF, BusPoll_OnCompletion(), Listener_HoldResponse(), LOG_SENDER, SEND_NOTIFY_LISTENER_RETRIES, SEND_NOTIFY_LISTENER_RETRY_DELAY, syscall_poll(), and bus::udata\&.
+.SS "bool Send_DoBlockingSend (struct \fBbus\fP *b, \fBboxed_msg\fP *box)"
 
 .PP
-Definition at line 165 of file send\&.c\&.
+Do a blocking send\&. Returning true indicates that the message has been queued up for delivery, but the request or response may still fail\&. Those errors are handled by giving an error status code to the callback\&. Returning false means that the send was rejected outright, and the callback-based error handling will not be used\&. 
 .PP
-References bus_get_listener_for_socket(), BUS_LOG_SNPRINTF, listener_hold_response(), LOG_SENDER, and bus::udata\&.
-.SS "static void handle_failure (struct \fBbus\fP *b, \fBboxed_msg\fP *box, \fBbus_send_status_t\fPstatus)\fC [static]\fP"
+Definition at line 59 of file send\&.c\&.
+.PP
+References attempt_to_enqueue_HOLD_message_to_listener(), BUS_LOG_SNPRINTF, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT, BUS_SEND_UNREGISTERED_SOCKET, boxed_msg::fd, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_sent_size, boxed_msg::out_seq_id, Send_HandleFailure(), SendHelper_HandleWrite(), SHHW_DONE, SHHW_ERROR, SHHW_OK, syscall_poll(), boxed_msg::timeout_sec, boxed_msg::tv_send_start, bus::udata, and Util_Timestamp()\&.
+.SS "void Send_HandleFailure (struct \fBbus\fP *b, \fBboxed_msg\fP *box, \fBbus_send_status_t\fPstatus)"
 
 .PP
-Definition at line 188 of file send\&.c\&.
+Definition at line 208 of file send\&.c\&.
 .PP
-References bus_backpressure_delay(), BUS_LOG_SNPRINTF, bus_process_boxed_message(), boxed_msg::fd, LISTENER_EXPECT_BACKPRESSURE_SHIFT, LOG_SENDER, boxed_msg::out_seq_id, boxed_msg::result, bus_msg_result_t::status, and bus::udata\&.
-.SS "static ssize_t write_plain (\fBbus\fP *b, \fBboxed_msg\fP *box)\fC [static]\fP"
-
-.PP
-Definition at line 277 of file send\&.c\&.
-.PP
-References BUS_LOG_SNPRINTF, boxed_msg::fd, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_sent_size, bus::udata, and util_is_resumable_io_error()\&.
-.SS "static ssize_t write_ssl (\fBbus\fP *b, \fBboxed_msg\fP *box, SSL *ssl)\fC [static]\fP"
-
-.PP
-Definition at line 312 of file send\&.c\&.
-.PP
-References BUS_LOG_SNPRINTF, boxed_msg::fd, LOG_SENDER, boxed_msg::out_msg, boxed_msg::out_msg_size, boxed_msg::out_sent_size, bus::udata, and util_is_resumable_io_error()\&.
-.SS "static bool enqueue_request_sent_message_to_listener (\fBbus\fP *b, \fBboxed_msg\fP *box)\fC [static]\fP"
-
-.PP
-Definition at line 392 of file send\&.c\&.
-.PP
-References bus_backpressure_delay(), bus_get_listener_for_socket(), BUS_LOG_SNPRINTF, boxed_msg::fd, LISTENER_EXPECT_BACKPRESSURE_SHIFT, listener_expect_response(), LOG_SENDER, boxed_msg::out_seq_id, and bus::udata\&.
-.SS "static \fBhandle_write_res\fP handle_write (\fBbus\fP *b, \fBboxed_msg\fP *box)\fC [static]\fP"
-
-.PP
-Definition at line 224 of file send\&.c\&.
-.PP
-References BUS_LOG_SNPRINTF, BUS_NO_SSL, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER, enqueue_request_sent_message_to_listener(), boxed_msg::fd, handle_failure(), HW_DONE, HW_ERROR, HW_OK, LOG_SENDER, boxed_msg::out_msg_size, boxed_msg::out_sent_size, boxed_msg::out_seq_id, boxed_msg::ssl, boxed_msg::tv_send_done, bus::udata, util_timestamp(), write_plain(), and write_ssl()\&.
+References BUS_ASSERT, Bus_BackpressureDelay(), BUS_LOG_SNPRINTF, Bus_ProcessBoxedMessage(), BUS_SEND_UNDEFINED, boxed_msg::fd, LISTENER_EXPECT_BACKPRESSURE_SHIFT, LOG_SENDER, boxed_msg::out_seq_id, boxed_msg::result, SEND_NOTIFY_LISTENER_RETRY_DELAY, bus_msg_result_t::status, syscall_poll(), and bus::udata\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

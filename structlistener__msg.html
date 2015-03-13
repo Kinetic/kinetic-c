@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -51,6 +51,9 @@
 <div class="title">listener_msg Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>A queue message, with a command in the tagged union.  
+ <a href="structlistener__msg.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>&gt;</code></p>
 <table class="memberdecls">
@@ -86,6 +89,8 @@ Data Fields</h2></td></tr>
 <tr class="separator:a668488ae5a56bca39c370d20132b6757"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0478a2aa1067287d42e0c70de16d6e00"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;int16_t&#160;&#160;&#160;<a class="el" href="structlistener__msg.html#a6ffd4649aca55f63d7e5cd9d58c43f73">timeout_sec</a></td></tr>
 <tr class="separator:a0478a2aa1067287d42e0c70de16d6e00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98272f51baee9a05aad8f8606a92c551"><td class="memItemLeft" >&#160;&#160;&#160;&#160;&#160;&#160;int&#160;&#160;&#160;<a class="el" href="structlistener__msg.html#a6b0ba1341c3e8c74196c0453bf110e36">notify_fd</a></td></tr>
+<tr class="separator:a98272f51baee9a05aad8f8606a92c551"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacc241e44311c8699e3323e14ae60c99"><td class="memItemLeft" valign="top">&#160;&#160;&#160;}&#160;&#160;&#160;<a class="el" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4">hold</a></td></tr>
 <tr class="separator:aacc241e44311c8699e3323e14ae60c99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9419f58e8da9f163f5718af4a9eae701"><td class="memItemLeft" >&#160;&#160;&#160;struct {</td></tr>
@@ -102,8 +107,9 @@ Data Fields</h2></td></tr>
 <tr class="separator:a240d43b579902bc9d783cd86e41302bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00042">42</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<div class="textblock"><p>A queue message, with a command in the tagged union. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00051">51</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a8bb0870834ca5fd0c183192f8748c718"></a>
 <div class="memitem">
@@ -115,7 +121,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00043">43</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00052">52</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -129,7 +135,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00044">44</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00053">53</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -143,7 +149,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00045">45</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00054">54</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -157,7 +163,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00046">46</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00055">55</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -171,7 +177,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00050">50</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00059">59</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -185,7 +191,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00051">51</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00060">60</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -211,7 +217,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00054">54</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00063">63</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -237,7 +243,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00059">59</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00068">68</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -251,7 +257,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00060">60</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00069">69</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -277,7 +283,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00063">63</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00073">73</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="bus__ssl_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -83,26 +83,22 @@
 <div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="bus__ssl_8h.html#a49cb96458b3e449948dbe5f22778664a">   28</a></span>&#160;<span class="preprocessor">#define KINETIC_USE_TLS_1_2 0</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">/* Initialize the SSL library internals for use by the messaging bus. */</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8h.html#ad7097b1068063cc1c875ea76d442b2c6">bus_ssl_init</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8h.html#ae32432c850460bd60669ce51a240d2e1">BusSSL_Init</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">/* Do an SSL / TLS shake for a connection. Blocking. */</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;SSL *<a class="code" href="bus__ssl_8h.html#aa25887b884806027c8cff1aa770072f3">bus_ssl_connect</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <span class="keywordtype">int</span> fd);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;SSL *<a class="code" href="bus__ssl_8h.html#ad4c1d94d8052f0f72aca15280aa0d560">BusSSL_Connect</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <span class="keywordtype">int</span> fd);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">/* Disconnect and free an individual SSL handle. */</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7">bus_ssl_disconnect</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, SSL *ssl);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="bus__ssl_8h.html#a54f72ca932d53f390536b58581223b0a">BusSSL_Disconnect</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, SSL *ssl);</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">/* Free all internal data for using SSL (the SSL_CTX). */</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">void</span> <a class="code" href="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl_ctx_free</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keywordtype">void</span> <a class="code" href="bus__ssl_8h.html#af74d4f394f00a338797bb3d0e441e77d">BusSSL_CtxFree</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b);</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="bus_8h_html"><div class="ttname"><a href="bus_8h.html">bus.h</a></div></div>
-<div class="ttc" id="bus__ssl_8h_html_aa25887b884806027c8cff1aa770072f3"><div class="ttname"><a href="bus__ssl_8h.html#aa25887b884806027c8cff1aa770072f3">bus_ssl_connect</a></div><div class="ttdeci">SSL * bus_ssl_connect(struct bus *b, int fd)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00050">bus_ssl.c:50</a></div></div>
 <div class="ttc" id="bus__internal__types_8h_html"><div class="ttname"><a href="bus__internal__types_8h.html">bus_internal_types.h</a></div></div>
-<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00072">bus_internal_types.h:72</a></div></div>
-<div class="ttc" id="bus__ssl_8h_html_a6a2b616adc201d07b929909393da6ed7"><div class="ttname"><a href="bus__ssl_8h.html#a6a2b616adc201d07b929909393da6ed7">bus_ssl_ctx_free</a></div><div class="ttdeci">void bus_ssl_ctx_free(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00079">bus_ssl.c:79</a></div></div>
-<div class="ttc" id="bus__ssl_8h_html_ae30bd22a904c9649b3727e6a4917e0f7"><div class="ttname"><a href="bus__ssl_8h.html#ae30bd22a904c9649b3727e6a4917e0f7">bus_ssl_disconnect</a></div><div class="ttdeci">bool bus_ssl_disconnect(struct bus *b, SSL *ssl)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00072">bus_ssl.c:72</a></div></div>
-<div class="ttc" id="bus__ssl_8h_html_ad7097b1068063cc1c875ea76d442b2c6"><div class="ttname"><a href="bus__ssl_8h.html#ad7097b1068063cc1c875ea76d442b2c6">bus_ssl_init</a></div><div class="ttdeci">bool bus_ssl_init(struct bus *b)</div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00035">bus_ssl.c:35</a></div></div>
+<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdoc">Message bus. </div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00072">bus_internal_types.h:72</a></div></div>
+<div class="ttc" id="bus__ssl_8h_html_a54f72ca932d53f390536b58581223b0a"><div class="ttname"><a href="bus__ssl_8h.html#a54f72ca932d53f390536b58581223b0a">BusSSL_Disconnect</a></div><div class="ttdeci">bool BusSSL_Disconnect(struct bus *b, SSL *ssl)</div><div class="ttdoc">Disconnect and free an individual SSL handle. </div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00073">bus_ssl.c:73</a></div></div>
+<div class="ttc" id="bus__ssl_8h_html_ad4c1d94d8052f0f72aca15280aa0d560"><div class="ttname"><a href="bus__ssl_8h.html#ad4c1d94d8052f0f72aca15280aa0d560">BusSSL_Connect</a></div><div class="ttdeci">SSL * BusSSL_Connect(struct bus *b, int fd)</div><div class="ttdoc">Do an SSL / TLS shake for a connection. </div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00051">bus_ssl.c:51</a></div></div>
+<div class="ttc" id="bus__ssl_8h_html_af74d4f394f00a338797bb3d0e441e77d"><div class="ttname"><a href="bus__ssl_8h.html#af74d4f394f00a338797bb3d0e441e77d">BusSSL_CtxFree</a></div><div class="ttdeci">void BusSSL_CtxFree(struct bus *b)</div><div class="ttdoc">Free all internal data for using SSL (the SSL_CTX). </div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00080">bus_ssl.c:80</a></div></div>
+<div class="ttc" id="bus__ssl_8h_html_ae32432c850460bd60669ce51a240d2e1"><div class="ttname"><a href="bus__ssl_8h.html#ae32432c850460bd60669ce51a240d2e1">BusSSL_Init</a></div><div class="ttdeci">bool BusSSL_Init(struct bus *b)</div><div class="ttdoc">Initialize the SSL library internals for use by the messaging bus. </div><div class="ttdef"><b>Definition:</b> <a href="bus__ssl_8c_source.html#l00036">bus_ssl.c:36</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

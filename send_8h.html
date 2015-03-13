@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -62,16 +62,19 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a472ea0cb8ac1873fe772996d75745bc6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send_8h.html#a472ea0cb8ac1873fe772996d75745bc6">send_do_blocking_send</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structboxed__msg.html">boxed_msg</a> *box)</td></tr>
-<tr class="separator:a472ea0cb8ac1873fe772996d75745bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a749aa0abf9eb827a7b342288e580fa96"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send_8h.html#a749aa0abf9eb827a7b342288e580fa96">Send_DoBlockingSend</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structboxed__msg.html">boxed_msg</a> *box)</td></tr>
+<tr class="memdesc:a749aa0abf9eb827a7b342288e580fa96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do a blocking send.  <a href="#a749aa0abf9eb827a7b342288e580fa96">More...</a><br /></td></tr>
+<tr class="separator:a749aa0abf9eb827a7b342288e580fa96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91593f7dd060e426a6e3d72be46995b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="send_8h.html#a91593f7dd060e426a6e3d72be46995b1">Send_HandleFailure</a> (struct <a class="el" href="structbus.html">bus</a> *b, <a class="el" href="structboxed__msg.html">boxed_msg</a> *box, <a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a> status)</td></tr>
+<tr class="separator:a91593f7dd060e426a6e3d72be46995b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a472ea0cb8ac1873fe772996d75745bc6"></a>
+<a class="anchor" id="a749aa0abf9eb827a7b342288e580fa96"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool send_do_blocking_send </td>
+          <td class="memname">bool Send_DoBlockingSend </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
           <td class="paramname"><em>b</em>, </td>
@@ -90,9 +93,48 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="send_8c_source.html#l00045">45</a> of file <a class="el" href="send_8c_source.html">send.c</a>.</p>
+<p>Do a blocking send. </p>
+<p>Returning true indicates that the message has been queued up for delivery, but the request or response may still fail. Those errors are handled by giving an error status code to the callback. Returning false means that the send was rejected outright, and the callback-based error handling will not be used. </p>
 
-<p>References <a class="el" href="send_8c_source.html#l00165">attempt_to_enqueue_sending_request_message_to_listener()</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00196">BUS_SEND_TX_FAILURE</a>, <a class="el" href="bus__types_8h_source.html#l00195">BUS_SEND_TX_TIMEOUT</a>, <a class="el" href="bus__types_8h_source.html#l00200">BUS_SEND_UNREGISTERED_SOCKET</a>, <a class="el" href="bus__internal__types_8h_source.html#l00054">boxed_msg::fd</a>, <a class="el" href="send_8c_source.html#l00188">handle_failure()</a>, <a class="el" href="send_8c_source.html#l00224">handle_write()</a>, <a class="el" href="send__internal_8h_source.html#l00027">HW_DONE</a>, <a class="el" href="send__internal_8h_source.html#l00028">HW_ERROR</a>, <a class="el" href="send__internal_8h_source.html#l00026">HW_OK</a>, <a class="el" href="bus__types_8h_source.html#l00100">LOG_SENDER</a>, <a class="el" href="bus__internal__types_8h_source.html#l00057">boxed_msg::out_msg</a>, <a class="el" href="bus__internal__types_8h_source.html#l00058">boxed_msg::out_msg_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00059">boxed_msg::out_sent_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="bus__internal__types_8h_source.html#l00043">boxed_msg::timeout_sec</a>, <a class="el" href="bus__internal__types_8h_source.html#l00050">boxed_msg::tv_send_start</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00030">util_timestamp()</a>.</p>
+<p>Definition at line <a class="el" href="send_8c_source.html#l00059">59</a> of file <a class="el" href="send_8c_source.html">send.c</a>.</p>
+
+<p>References <a class="el" href="send_8c_source.html#l00184">attempt_to_enqueue_HOLD_message_to_listener()</a>, <a class="el" href="bus__types_8h_source.html#l00059">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00198">BUS_SEND_TX_FAILURE</a>, <a class="el" href="bus__types_8h_source.html#l00197">BUS_SEND_TX_TIMEOUT</a>, <a class="el" href="bus__types_8h_source.html#l00202">BUS_SEND_UNREGISTERED_SOCKET</a>, <a class="el" href="bus__internal__types_8h_source.html#l00054">boxed_msg::fd</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_SENDER</a>, <a class="el" href="bus__internal__types_8h_source.html#l00057">boxed_msg::out_msg</a>, <a class="el" href="bus__internal__types_8h_source.html#l00058">boxed_msg::out_msg_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00059">boxed_msg::out_sent_size</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="send_8c_source.html#l00208">Send_HandleFailure()</a>, <a class="el" href="send__helper_8c_source.html#l00039">SendHelper_HandleWrite()</a>, <a class="el" href="send__helper_8h_source.html#l00028">SHHW_DONE</a>, <a class="el" href="send__helper_8h_source.html#l00029">SHHW_ERROR</a>, <a class="el" href="send__helper_8h_source.html#l00027">SHHW_OK</a>, <a class="el" href="syscall_8c_source.html#l00027">syscall_poll()</a>, <a class="el" href="bus__internal__types_8h_source.html#l00043">boxed_msg::timeout_sec</a>, <a class="el" href="bus__internal__types_8h_source.html#l00050">boxed_msg::tv_send_start</a>, <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>, and <a class="el" href="util_8c_source.html#l00030">Util_Timestamp()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a91593f7dd060e426a6e3d72be46995b1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Send_HandleFailure </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
+          <td class="paramname"><em>b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structboxed__msg.html">boxed_msg</a> *&#160;</td>
+          <td class="paramname"><em>box</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a>&#160;</td>
+          <td class="paramname"><em>status</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="send_8c_source.html#l00208">208</a> of file <a class="el" href="send_8c_source.html">send.c</a>.</p>
+
+<p>References <a class="el" href="bus__types_8h_source.html#l00083">BUS_ASSERT</a>, <a class="el" href="bus_8c_source.html#l00551">Bus_BackpressureDelay()</a>, <a class="el" href="bus__types_8h_source.html#l00059">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus_8c_source.html#l00580">Bus_ProcessBoxedMessage()</a>, <a class="el" href="bus__types_8h_source.html#l00194">BUS_SEND_UNDEFINED</a>, <a class="el" href="bus__internal__types_8h_source.html#l00054">boxed_msg::fd</a>, <a class="el" href="listener_8h_source.html#l00032">LISTENER_EXPECT_BACKPRESSURE_SHIFT</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_SENDER</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="bus__internal__types_8h_source.html#l00040">boxed_msg::result</a>, <a class="el" href="send__internal_8h_source.html#l00026">SEND_NOTIFY_LISTENER_RETRY_DELAY</a>, <a class="el" href="bus__types_8h_source.html#l00216">bus_msg_result_t::status</a>, <a class="el" href="syscall_8c_source.html#l00027">syscall_poll()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "send_internal.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "send_internal.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,49 +9,26 @@ send_internal.h \-
 \fC#include 'send\&.h'\fP
 .br
 
-.SS "Enumerations"
+.SS "Macros"
 
 .in +1c
 .ti -1c
-.RI "enum \fBhandle_write_res\fP "
+.RI "#define \fBSEND_NOTIFY_LISTENER_RETRIES\fP   10"
+.br
+.ti -1c
+.RI "#define \fBSEND_NOTIFY_LISTENER_RETRY_DELAY\fP   5"
 .br
 .in -1c
-.SS "Functions"
-
-.in +1c
-.ti -1c
-.RI "static \fBhandle_write_res\fP \fBhandle_write\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
-.br
-.ti -1c
-.RI "static void \fBhandle_failure\fP (struct \fBbus\fP *b, \fBboxed_msg\fP *box, \fBbus_send_status_t\fP status)"
-.br
-.ti -1c
-.RI "static bool \fBattempt_to_enqueue_sending_request_message_to_listener\fP (struct \fBbus\fP *b, int fd, int64_t seq_id, int16_t timeout_sec)"
-.br
-.in -1c
-.SH "Enumeration Type Documentation"
+.SH "Macro Definition Documentation"
 .PP 
-.SS "enum \fBhandle_write_res\fP"
+.SS "#define SEND_NOTIFY_LISTENER_RETRIES   10"
 
-.PP
-\fBEnumerator\fP
-.in +1c
-.TP
-\fB\fIHW_OK \fP\fP
-.TP
-\fB\fIHW_DONE \fP\fP
-.TP
-\fB\fIHW_ERROR \fP\fP
 .PP
 Definition at line 25 of file send_internal\&.h\&.
-.SH "Function Documentation"
-.PP 
-.SS "static \fBhandle_write_res\fP handle_write (\fBbus\fP *b, \fBboxed_msg\fP *box)\fC [static]\fP"
+.SS "#define SEND_NOTIFY_LISTENER_RETRY_DELAY   5"
 
-.SS "static void handle_failure (struct \fBbus\fP *b, \fBboxed_msg\fP *box, \fBbus_send_status_t\fPstatus)\fC [static]\fP"
-
-.SS "static bool attempt_to_enqueue_sending_request_message_to_listener (struct \fBbus\fP *b, intfd, int64_tseq_id, int16_ttimeout_sec)\fC [static]\fP"
-
+.PP
+Definition at line 26 of file send_internal\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

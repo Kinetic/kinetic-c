@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="yacht_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -79,44 +79,40 @@
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="yacht_8h.html#abc750e49ca3e544c9361d83f00266f3e">   27</a></span>&#160;<span class="preprocessor">#define YACHT_NO_KEY ((int)-1)</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="yacht_8h.html#adba1f8c6361348c96ee597560aa4b35b">   28</a></span>&#160;<span class="preprocessor">#define YACHT_DELETED ((int)-2)</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="yacht_8h.html#abc750e49ca3e544c9361d83f00266f3e">   28</a></span>&#160;<span class="preprocessor">#define YACHT_NO_KEY ((int)-1)</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">/* Yet Another C Hash Table - (file descriptor int set) hash table.</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * The key cannot be YACHT_NO_KEY or YACHT_DELETED,</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * which is acceptable for file descriptors. */</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">struct </span>yacht;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">/* Init a hash table with approx. 2 ** sz2 buckets. */</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">struct </span>yacht *<a class="code" href="yacht_8h.html#ae600d53227b9e6873c318db2e8ec2cb5">yacht_init</a>(uint8_t sz2);</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="yacht_8h.html#adba1f8c6361348c96ee597560aa4b35b">   31</a></span>&#160;<span class="preprocessor">#define YACHT_DELETED ((int)-2)</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">struct </span><a class="code" href="structyacht.html">yacht</a>;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">/* Set KEY to VALUE in the table. */</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#a4329e19402c41e3f5b66ff2fa090952f">yacht_set</a>(<span class="keyword">struct</span> yacht *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> *value, <span class="keywordtype">void</span> **old_value);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">struct </span><a class="code" href="structyacht.html">yacht</a> *<a class="code" href="yacht_8h.html#af3cdc8fe35e98d10f196860ac08cf82a">Yacht_Init</a>(uint8_t sz2);</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">/* Get KEY from the table, setting *value if found. */</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#a092cf4699adb37b6909b5055e1b712f6">yacht_get</a>(<span class="keyword">struct</span> yacht *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> **value);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#a68f03f4c73d62d3388f6b9eaa423bef7">Yacht_Set</a>(<span class="keyword">struct</span> <a class="code" href="structyacht.html">yacht</a> *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> *value, <span class="keywordtype">void</span> **old_value);</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">/* Check if KEY is in the table. */</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#a1bc830375ef53847afcf2d39907669c5">yacht_member</a>(<span class="keyword">struct</span> yacht *y, <span class="keywordtype">int</span> key);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#ad267286a768c72b7044485dd4ec38f84">Yacht_Get</a>(<span class="keyword">struct</span> <a class="code" href="structyacht.html">yacht</a> *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> **value);</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">/* Remove KEY from the table. Return the old value in *old_value,</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment"> * if non-NULL. */</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#a0af6b1aa653ad32bef89b3e86e7582ed">yacht_remove</a>(<span class="keyword">struct</span> yacht *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> **old_value);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">/* Callback to free values associated with keys. */</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="yacht_8h.html#ae000cbf4995e80a3c416fe4e100d194b">   52</a></span>&#160;<span class="keyword">typedef</span> void (<a class="code" href="yacht_8h.html#ae000cbf4995e80a3c416fe4e100d194b">yacht_free_cb</a>)(<span class="keywordtype">void</span> *value, <span class="keywordtype">void</span> *udata);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#ad4ceafe1321539e7f4bf79a4efbcdfe9">Yacht_Member</a>(<span class="keyword">struct</span> <a class="code" href="structyacht.html">yacht</a> *y, <span class="keywordtype">int</span> key);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="yacht_8h.html#a96eae3b1e9338bf6be2172a68a9d6ea4">Yacht_Remove</a>(<span class="keyword">struct</span> <a class="code" href="structyacht.html">yacht</a> *y, <span class="keywordtype">int</span> key, <span class="keywordtype">void</span> **old_value);</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">/* Free the table. */</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keywordtype">void</span> <a class="code" href="yacht_8h.html#ad152584d7a1cc234871382e3dd8777ff">yacht_free</a>(<span class="keyword">struct</span> yacht *y, <a class="code" href="yacht_8h.html#ae000cbf4995e80a3c416fe4e100d194b">yacht_free_cb</a> *cb, <span class="keywordtype">void</span> *udata);</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="yacht_8h.html#aa85a90c5fb32af8b0c5881e8d8b0ae9b">   55</a></span>&#160;<span class="keyword">typedef</span> void (<a class="code" href="yacht_8h.html#aa85a90c5fb32af8b0c5881e8d8b0ae9b">Yacht_Free_cb</a>)(<span class="keywordtype">void</span> *value, <span class="keywordtype">void</span> *udata);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="yacht_8h_html_ae000cbf4995e80a3c416fe4e100d194b"><div class="ttname"><a href="yacht_8h.html#ae000cbf4995e80a3c416fe4e100d194b">yacht_free_cb</a></div><div class="ttdeci">void( yacht_free_cb)(void *value, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8h_source.html#l00052">yacht.h:52</a></div></div>
-<div class="ttc" id="yacht_8h_html_a4329e19402c41e3f5b66ff2fa090952f"><div class="ttname"><a href="yacht_8h.html#a4329e19402c41e3f5b66ff2fa090952f">yacht_set</a></div><div class="ttdeci">bool yacht_set(struct yacht *y, int key, void *value, void **old_value)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00103">yacht.c:103</a></div></div>
-<div class="ttc" id="yacht_8h_html_a0af6b1aa653ad32bef89b3e86e7582ed"><div class="ttname"><a href="yacht_8h.html#a0af6b1aa653ad32bef89b3e86e7582ed">yacht_remove</a></div><div class="ttdeci">bool yacht_remove(struct yacht *y, int key, void **old_value)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00180">yacht.c:180</a></div></div>
-<div class="ttc" id="yacht_8h_html_ae600d53227b9e6873c318db2e8ec2cb5"><div class="ttname"><a href="yacht_8h.html#ae600d53227b9e6873c318db2e8ec2cb5">yacht_init</a></div><div class="ttdeci">struct yacht * yacht_init(uint8_t sz2)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00049">yacht.c:49</a></div></div>
-<div class="ttc" id="yacht_8h_html_ad152584d7a1cc234871382e3dd8777ff"><div class="ttname"><a href="yacht_8h.html#ad152584d7a1cc234871382e3dd8777ff">yacht_free</a></div><div class="ttdeci">void yacht_free(struct yacht *y, yacht_free_cb *cb, void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00208">yacht.c:208</a></div></div>
-<div class="ttc" id="yacht_8h_html_a092cf4699adb37b6909b5055e1b712f6"><div class="ttname"><a href="yacht_8h.html#a092cf4699adb37b6909b5055e1b712f6">yacht_get</a></div><div class="ttdeci">bool yacht_get(struct yacht *y, int key, void **value)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00079">yacht.c:79</a></div></div>
-<div class="ttc" id="yacht_8h_html_a1bc830375ef53847afcf2d39907669c5"><div class="ttname"><a href="yacht_8h.html#a1bc830375ef53847afcf2d39907669c5">yacht_member</a></div><div class="ttdeci">bool yacht_member(struct yacht *y, int key)</div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00097">yacht.c:97</a></div></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keywordtype">void</span> <a class="code" href="yacht_8h.html#a4c40b23a2ece88b1789876b3bcf49730">Yacht_Free</a>(<span class="keyword">struct</span> <a class="code" href="structyacht.html">yacht</a> *y, <a class="code" href="yacht_8h.html#aa85a90c5fb32af8b0c5881e8d8b0ae9b">Yacht_Free_cb</a> *cb, <span class="keywordtype">void</span> *udata);</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#ifdef TEST</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="yacht__internals_8h.html">yacht_internals.h</a>&quot;</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="yacht__internals_8h_html"><div class="ttname"><a href="yacht__internals_8h.html">yacht_internals.h</a></div></div>
+<div class="ttc" id="structyacht_html"><div class="ttname"><a href="structyacht.html">yacht</a></div><div class="ttdef"><b>Definition:</b> <a href="yacht__internals_8h_source.html#l00026">yacht_internals.h:26</a></div></div>
+<div class="ttc" id="yacht_8h_html_ad267286a768c72b7044485dd4ec38f84"><div class="ttname"><a href="yacht_8h.html#ad267286a768c72b7044485dd4ec38f84">Yacht_Get</a></div><div class="ttdeci">bool Yacht_Get(struct yacht *y, int key, void **value)</div><div class="ttdoc">Get KEY from the table, setting *value if found. </div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00073">yacht.c:73</a></div></div>
+<div class="ttc" id="yacht_8h_html_a4c40b23a2ece88b1789876b3bcf49730"><div class="ttname"><a href="yacht_8h.html#a4c40b23a2ece88b1789876b3bcf49730">Yacht_Free</a></div><div class="ttdeci">void Yacht_Free(struct yacht *y, Yacht_Free_cb *cb, void *udata)</div><div class="ttdoc">Free the table. </div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00202">yacht.c:202</a></div></div>
+<div class="ttc" id="yacht_8h_html_a96eae3b1e9338bf6be2172a68a9d6ea4"><div class="ttname"><a href="yacht_8h.html#a96eae3b1e9338bf6be2172a68a9d6ea4">Yacht_Remove</a></div><div class="ttdeci">bool Yacht_Remove(struct yacht *y, int key, void **old_value)</div><div class="ttdoc">Remove KEY from the table. </div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00174">yacht.c:174</a></div></div>
+<div class="ttc" id="yacht_8h_html_ad4ceafe1321539e7f4bf79a4efbcdfe9"><div class="ttname"><a href="yacht_8h.html#ad4ceafe1321539e7f4bf79a4efbcdfe9">Yacht_Member</a></div><div class="ttdeci">bool Yacht_Member(struct yacht *y, int key)</div><div class="ttdoc">Check if KEY is in the table. </div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00091">yacht.c:91</a></div></div>
+<div class="ttc" id="yacht_8h_html_aa85a90c5fb32af8b0c5881e8d8b0ae9b"><div class="ttname"><a href="yacht_8h.html#aa85a90c5fb32af8b0c5881e8d8b0ae9b">Yacht_Free_cb</a></div><div class="ttdeci">void( Yacht_Free_cb)(void *value, void *udata)</div><div class="ttdoc">Callback to free values associated with keys. </div><div class="ttdef"><b>Definition:</b> <a href="yacht_8h_source.html#l00055">yacht.h:55</a></div></div>
+<div class="ttc" id="yacht_8h_html_a68f03f4c73d62d3388f6b9eaa423bef7"><div class="ttname"><a href="yacht_8h.html#a68f03f4c73d62d3388f6b9eaa423bef7">Yacht_Set</a></div><div class="ttdeci">bool Yacht_Set(struct yacht *y, int key, void *value, void **old_value)</div><div class="ttdoc">Set KEY to VALUE in the table. </div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00097">yacht.c:97</a></div></div>
+<div class="ttc" id="yacht_8h_html_af3cdc8fe35e98d10f196860ac08cf82a"><div class="ttname"><a href="yacht_8h.html#af3cdc8fe35e98d10f196860ac08cf82a">Yacht_Init</a></div><div class="ttdeci">struct yacht * Yacht_Init(uint8_t sz2)</div><div class="ttdoc">Init a hash table with approx. </div><div class="ttdef"><b>Definition:</b> <a href="yacht_8c_source.html#l00041">yacht.c:41</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

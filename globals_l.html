@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -76,6 +76,7 @@
       <li><a href="globals_s.html#index_s"><span>s</span></a></li>
       <li><a href="globals_t.html#index_t"><span>t</span></a></li>
       <li><a href="globals_u.html#index_u"><span>u</span></a></li>
+      <li><a href="globals_v.html#index_v"><span>v</span></a></li>
       <li><a href="globals_w.html#index_w"><span>w</span></a></li>
       <li><a href="globals_y.html#index_y"><span>y</span></a></li>
     </ul>
@@ -97,34 +98,37 @@
 <li>listen_loop_poll()
 : <a class="el" href="echosrv_8c.html#a49d58a2175f08ad7c1bd27ca146cad86">echosrv.c</a>
 </li>
-<li>listener_add_socket()
-: <a class="el" href="listener_8c.html#ab80e1a8ec62bff3ad6a1b69eca150f1d">listener.c</a>
-, <a class="el" href="listener_8h.html#ab80e1a8ec62bff3ad6a1b69eca150f1d">listener.h</a>
+<li>Listener_AddSocket()
+: <a class="el" href="listener_8c.html#af82382287c3478bfb058a1e8d9e0ed37">listener.c</a>
+, <a class="el" href="listener_8h.html#af82382287c3478bfb058a1e8d9e0ed37">listener.h</a>
 </li>
 <li>LISTENER_BACKPRESSURE_SHIFT
 : <a class="el" href="listener_8h.html#a98cbdaeea07cc02d68f1e960e199e87a">listener.h</a>
 </li>
+<li>LISTENER_CMD_BUF_SIZE
+: <a class="el" href="listener__cmd__internal_8h.html#a96b0681325adc3ff3710ca56700e9017">listener_cmd_internal.h</a>
+</li>
 <li>LISTENER_EXPECT_BACKPRESSURE_SHIFT
 : <a class="el" href="listener_8h.html#a142b7ddbed12a525d556a51b76d074ab">listener.h</a>
 </li>
-<li>listener_expect_response()
-: <a class="el" href="listener_8c.html#ac4ca027f622cf5d1ab731f92f9cb66a8">listener.c</a>
-, <a class="el" href="listener_8h.html#ac4ca027f622cf5d1ab731f92f9cb66a8">listener.h</a>
+<li>Listener_ExpectResponse()
+: <a class="el" href="listener_8c.html#ae97da82cff0ed66aba0dc24b413d2732">listener.c</a>
+, <a class="el" href="listener_8h.html#ae97da82cff0ed66aba0dc24b413d2732">listener.h</a>
 </li>
-<li>listener_free()
-: <a class="el" href="listener_8c.html#ae02746f8c243596cedd386fc1d7630e5">listener.c</a>
-, <a class="el" href="listener_8h.html#ae02746f8c243596cedd386fc1d7630e5">listener.h</a>
+<li>Listener_Free()
+: <a class="el" href="listener_8c.html#a67866e38637966502a09ff5d17a3b88f">listener.c</a>
+, <a class="el" href="listener_8h.html#a67866e38637966502a09ff5d17a3b88f">listener.h</a>
 </li>
-<li>listener_hold_response()
-: <a class="el" href="listener_8c.html#acbec5b5b8251c2787ebdb7ec4f73f20b">listener.c</a>
-, <a class="el" href="listener_8h.html#acbec5b5b8251c2787ebdb7ec4f73f20b">listener.h</a>
+<li>Listener_HoldResponse()
+: <a class="el" href="listener_8c.html#aeb0c06626bfe3748c65a996b73cb0b4f">listener.c</a>
+, <a class="el" href="listener_8h.html#aeb0c06626bfe3748c65a996b73cb0b4f">listener.h</a>
 </li>
 <li>listener_id_of_socket()
 : <a class="el" href="bus_8c.html#a013694e272579d83c87e0039769be8a9">bus.c</a>
 </li>
-<li>listener_init()
-: <a class="el" href="listener_8c.html#a0c3342b1bf0a6cade3e4729f40022ed7">listener.c</a>
-, <a class="el" href="listener_8h.html#a0c3342b1bf0a6cade3e4729f40022ed7">listener.h</a>
+<li>Listener_Init()
+: <a class="el" href="listener_8c.html#af3512cb230ac2de689f22bc5ca126851">listener.c</a>
+, <a class="el" href="listener_8h.html#af3512cb230ac2de689f22bc5ca126851">listener.h</a>
 </li>
 <li>LISTENER_MSG_TAG
 : <a class="el" href="bus__internal__types_8h.html#ac2614000c9ba78a93265c20646fcc2ae">bus_internal_types.h</a>
@@ -132,32 +136,51 @@
 <li>LISTENER_NO_FD
 : <a class="el" href="listener__internal__types_8h.html#a9edc873b66adf46bf716ceb7ab77bb07">listener_internal_types.h</a>
 </li>
-<li>listener_remove_socket()
-: <a class="el" href="listener_8c.html#af3f377ca9b433af51d906a103eee304f">listener.c</a>
-, <a class="el" href="listener_8h.html#af3f377ca9b433af51d906a103eee304f">listener.h</a>
+<li>Listener_RemoveSocket()
+: <a class="el" href="listener_8c.html#a45972b5ad8e14d23bea44f1f87ba7824">listener.c</a>
+, <a class="el" href="listener_8h.html#a45972b5ad8e14d23bea44f1f87ba7824">listener.h</a>
 </li>
-<li>listener_shutdown()
-: <a class="el" href="listener_8c.html#a29137171fd3f0a2f878c450544927c56">listener.c</a>
-, <a class="el" href="listener_8h.html#a29137171fd3f0a2f878c450544927c56">listener.h</a>
+<li>Listener_Shutdown()
+: <a class="el" href="listener_8c.html#af80e3d101f8af017f093691d1b1b50b9">listener.c</a>
+, <a class="el" href="listener_8h.html#af80e3d101f8af017f093691d1b1b50b9">listener.h</a>
 </li>
 <li>LISTENER_SHUTDOWN_COMPLETE_FD
 : <a class="el" href="listener__internal__types_8h.html#a2283299012dd873e0a5e3b77dc417b08">listener_internal_types.h</a>
+</li>
+<li>LISTENER_TASK_TIMEOUT_DELAY
+: <a class="el" href="listener__internal__types_8h.html#ae857792f8fa526e40776f415560fad16">listener_internal_types.h</a>
 </li>
 <li>ListenerCmd_CheckIncomingMessages()
 : <a class="el" href="listener__cmd_8c.html#af3a2e40b666b88497011b99357eec493">listener_cmd.c</a>
 , <a class="el" href="listener__cmd_8h.html#af3a2e40b666b88497011b99357eec493">listener_cmd.h</a>
 </li>
 <li>ListenerCmd_NotifyCaller()
-: <a class="el" href="listener__cmd_8c.html#a643355d8f006114f3186791239b7d4ec">listener_cmd.c</a>
-, <a class="el" href="listener__cmd_8h.html#a643355d8f006114f3186791239b7d4ec">listener_cmd.h</a>
+: <a class="el" href="listener__cmd_8c.html#aa191c3f69235bdb1a5080e8b9c7ae60b">listener_cmd.c</a>
+, <a class="el" href="listener__cmd_8h.html#aa191c3f69235bdb1a5080e8b9c7ae60b">listener_cmd.h</a>
+</li>
+<li>ListenerHelper_FindInfoBySequenceID()
+: <a class="el" href="listener__helper_8h.html#a5ab6745c95e959aff81ef9a6f525e176">listener_helper.h</a>
+, <a class="el" href="listener__helper_8c.html#a5ab6745c95e959aff81ef9a6f525e176">listener_helper.c</a>
+</li>
+<li>ListenerHelper_GetFreeMsg()
+: <a class="el" href="listener__helper_8c.html#a68da1a071173fb8225f7252dcaf425f1">listener_helper.c</a>
+, <a class="el" href="listener__helper_8h.html#a68da1a071173fb8225f7252dcaf425f1">listener_helper.h</a>
+</li>
+<li>ListenerHelper_GetFreeRXInfo()
+: <a class="el" href="listener__helper_8c.html#a366960d233d8cc801207cdc1da5fd273">listener_helper.c</a>
+, <a class="el" href="listener__helper_8h.html#ab35c659becd71eea8ce1ca2c79f602a6">listener_helper.h</a>
+</li>
+<li>ListenerHelper_PushMessage()
+: <a class="el" href="listener__helper_8c.html#a46107f05cc6d99a967477bdc11f275b6">listener_helper.c</a>
+, <a class="el" href="listener__helper_8h.html#a46107f05cc6d99a967477bdc11f275b6">listener_helper.h</a>
 </li>
 <li>ListenerIO_AttemptRecv()
 : <a class="el" href="listener__io_8c.html#a3494b6d56e053563e19231fdda8ce6c8">listener_io.c</a>
 , <a class="el" href="listener__io_8h.html#a3494b6d56e053563e19231fdda8ce6c8">listener_io.h</a>
 </li>
 <li>ListenerTask_AttemptDelivery()
-: <a class="el" href="listener__task_8h.html#a89f2c54c450dd6f6c6d35b9da42b8ab4">listener_task.h</a>
-, <a class="el" href="listener__task_8c.html#a89f2c54c450dd6f6c6d35b9da42b8ab4">listener_task.c</a>
+: <a class="el" href="listener__task_8c.html#a89f2c54c450dd6f6c6d35b9da42b8ab4">listener_task.c</a>
+, <a class="el" href="listener__task_8h.html#a89f2c54c450dd6f6c6d35b9da42b8ab4">listener_task.h</a>
 </li>
 <li>ListenerTask_DumpRXInfoTable()
 : <a class="el" href="listener__task_8c.html#ab7ad0a7cb1818c0849a8e21204d89b0e">listener_task.c</a>
@@ -191,8 +214,8 @@
 : <a class="el" href="kinetic__logger_8c.html#a353b34d0d59ae46697c37e0008602f3d">kinetic_logger.c</a>
 </li>
 <li>LOG
-: <a class="el" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">bus_example.c</a>
-, <a class="el" href="echosrv_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">echosrv.c</a>
+: <a class="el" href="echosrv_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">echosrv.c</a>
+, <a class="el" href="bus__example_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">bus_example.c</a>
 , <a class="el" href="yacht_8c.html#a3577749fb48d57a158b8ac1a0b3ab57e">yacht.c</a>
 </li>
 <li>LOG0
@@ -219,9 +242,6 @@
 </li>
 <li>LOG_EVENT_TYPE_COUNT
 : <a class="el" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9a4d9d25459089ccd8d4be6a734dcf40ed">bus_types.h</a>
-</li>
-<li>LOG_FILE_NAME_MAX
-: <a class="el" href="kinetic__types_8h.html#acae020d3fbf250dee3e33035c261ab9e">kinetic_types.h</a>
 </li>
 <li>LOG_HMAC
 : <a class="el" href="kinetic__hmac_8c.html#ae73a735d2b528cbcb279c9f80b609523">kinetic_hmac.c</a>
@@ -277,6 +297,9 @@
 <li>LOG_SOCKET_REGISTERED
 : <a class="el" href="bus__types_8h.html#a162815a6c98569dab6fa66f218ae63b9ad45ad6ac603b14bdfcc06b65752f98e1">bus_types.h</a>
 </li>
+<li>log_version_info()
+: <a class="el" href="kinetic__logger_8c.html#afcc544a726046d5c9c2da0aee9c2e648">kinetic_logger.c</a>
+</li>
 <li>LOGF0
 : <a class="el" href="kinetic__logger_8h.html#a7a718ac84225eea733516b978b7aafd4">kinetic_logger.h</a>
 </li>
@@ -290,7 +313,7 @@
 : <a class="el" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">kinetic_logger.h</a>
 </li>
 <li>LogUnboxed()
-: <a class="el" href="kinetic__logger_8c.html#a803c36a9b8c2205f0a11fdd49dc2bd69">kinetic_logger.c</a>
+: <a class="el" href="kinetic__logger_8c.html#a1b5149f5b9e350ac43e28b3651618a61">kinetic_logger.c</a>
 </li>
 <li>loop_flag
 : <a class="el" href="bus__example_8c.html#a30f695d6333e56d635a11e44533ff039">bus_example.c</a>

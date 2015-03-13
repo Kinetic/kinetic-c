@@ -1,4 +1,4 @@
-.TH "bus_example.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "bus_example.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -187,7 +187,7 @@ Definition at line 52 of file bus_example\&.c\&.
 .PP
 Definition at line 454 of file bus_example\&.c\&.
 .PP
-References bus_register_socket(), bus_send_request(), BUS_SOCKET_PLAIN, completion_cb(), construct_msg(), DEFAULT_BUF_SIZE, bus_user_msg::fd, get_cur_second(), LOG, open_sockets(), register_signal_handlers(), and tick_handler()\&.
+References Bus_RegisterSocket(), Bus_SendRequest(), BUS_SOCKET_PLAIN, completion_cb(), construct_msg(), DEFAULT_BUF_SIZE, bus_user_msg::fd, get_cur_second(), LOG, open_sockets(), register_signal_handlers(), and tick_handler()\&.
 .SS "static void parse_args (intargc, char **argv, example_state *s)\fC [static]\fP"
 
 .PP
@@ -199,13 +199,13 @@ References DEFAULT_BUF_SIZE, and usage()\&.
 .PP
 Definition at line 446 of file bus_example\&.c\&.
 .PP
-References util_timestamp()\&.
+References Util_Timestamp()\&.
 .SS "static void log_cb (\fBlog_event_t\fPevent, intlog_level, const char *msg, void *udata)\fC [static]\fP"
 
 .PP
 Definition at line 89 of file bus_example\&.c\&.
 .PP
-References bus_log_event_str()\&.
+References Bus_LogEventStr()\&.
 .SS "static \fBbus_sink_cb_res_t\fP reset_transfer (socket_info *si)\fC [static]\fP"
 
 .PP
@@ -231,7 +231,7 @@ Definition at line 233 of file bus_example\&.c\&.
 .PP
 Definition at line 241 of file bus_example\&.c\&.
 .PP
-References bus_result::bus, bus_free(), bus_init(), bus_shutdown(), executable_name, get_cur_second(), LOG, log_cb(), bus_config::log_cb, parse_args(), run_bus(), sink_cb(), state, bus_result::status, unexpected_msg_cb(), and unpack_cb()\&.
+References bus_result::bus, Bus_Free(), Bus_Init(), Bus_Shutdown(), executable_name, get_cur_second(), LOG, log_cb(), bus_config::log_cb, parse_args(), run_bus(), sink_cb(), state, bus_result::status, unexpected_msg_cb(), and unpack_cb()\&.
 .SS "static void signal_handler (intarg)\fC [static]\fP"
 
 .PP

@@ -1,0 +1,68 @@
+.TH "bus_inward.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+bus_inward.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'bus_types\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "const char * \fBBus_LogEventStr\fP (\fBlog_event_t\fP event)"
+.br
+.RI "\fIGet the string key for a log event ID\&. \fP"
+.ti -1c
+.RI "struct \fBlistener\fP * \fBBus_GetListenerForSocket\fP (struct \fBbus\fP *b, int fd)"
+.br
+.RI "\fIFor a given file descriptor, get the listener ID to use\&. \fP"
+.ti -1c
+.RI "bool \fBBus_ProcessBoxedMessage\fP (struct \fBbus\fP *b, struct \fBboxed_msg\fP *box, size_t *backpressure)"
+.br
+.RI "\fIDeliver a boxed message to the thread pool to execute\&. \fP"
+.ti -1c
+.RI "void \fBBus_BackpressureDelay\fP (struct \fBbus\fP *b, size_t backpressure, uint8_t shift)"
+.br
+.RI "\fIProvide backpressure by sleeping for (backpressure >> shift) msec, if the value is greater than 0\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "const char* Bus_LogEventStr (\fBlog_event_t\fPevent)"
+
+.PP
+Get the string key for a log event ID\&. 
+.PP
+Definition at line 335 of file bus\&.c\&.
+.PP
+References LOG_INITIALIZATION, LOG_LISTENER, LOG_MEMORY, LOG_NEW_CLIENT, LOG_SENDER, LOG_SENDING_REQUEST, LOG_SHUTDOWN, and LOG_SOCKET_REGISTERED\&.
+.SS "struct \fBlistener\fP* Bus_GetListenerForSocket (struct \fBbus\fP *b, intfd)"
+
+.PP
+For a given file descriptor, get the listener ID to use\&. This will level sockets between multiple threads\&. 
+.PP
+Definition at line 330 of file bus\&.c\&.
+.PP
+References listener_id_of_socket(), and bus::listeners\&.
+.SS "bool Bus_ProcessBoxedMessage (struct \fBbus\fP *b, struct \fBboxed_msg\fP *box, size_t *backpressure)"
+
+.PP
+Deliver a boxed message to the thread pool to execute\&. 
+.PP
+Definition at line 580 of file bus\&.c\&.
+.PP
+References box_cleanup_cb(), box_execute_cb(), BUS_LOG_SNPRINTF, BUS_SEND_UNDEFINED, LOG_MEMORY, boxed_msg::result, bus_msg_result_t::status, threadpool_task::task, bus::threadpool, Threadpool_Schedule(), and bus::udata\&.
+.SS "void Bus_BackpressureDelay (struct \fBbus\fP *b, size_tbackpressure, uint8_tshift)"
+
+.PP
+Provide backpressure by sleeping for (backpressure >> shift) msec, if the value is greater than 0\&. 
+.PP
+Definition at line 551 of file bus\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, LOG_SENDER, syscall_poll(), and bus::udata\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

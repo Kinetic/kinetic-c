@@ -1,4 +1,4 @@
-.TH "listener_internal_types.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener_internal_types.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,12 +19,15 @@ listener_internal_types.h \-
 .ti -1c
 .RI "struct \fBlistener_msg\fP"
 .br
+.RI "\fIA queue message, with a command in the tagged union\&. \fP"
 .ti -1c
 .RI "struct \fBrx_info_t\fP"
 .br
+.RI "\fIRecord in table for partially processed messages\&. \fP"
 .ti -1c
 .RI "struct \fBlistener\fP"
 .br
+.RI "\fIReceiver of responses\&. \fP"
 .in -1c
 .SS "Macros"
 
@@ -32,33 +35,38 @@ listener_internal_types.h \-
 .ti -1c
 .RI "#define \fBDEFAULT_READ_BUF_SIZE\fP   (1024L * 1024L)"
 .br
-.ti -1c
-.RI "#define \fBINCOMING_MSG_PIPE\fP   1"
-.br
+.RI "\fIDefault size for the read buffer, which will grow on demand\&. \fP"
 .ti -1c
 .RI "#define \fBINCOMING_MSG_PIPE_ID\fP   0"
 .br
+.RI "\fIID of the \fCstruct pollfd\fP for the listener's incoming command pipe\&. \fP"
+.ti -1c
+.RI "#define \fBINCOMING_MSG_PIPE\fP   1"
+.br
+.RI "\fIOffset to account for the first file descriptor being the incoming message pipe\&. \fP"
+.ti -1c
+.RI "#define \fBLISTENER_TASK_TIMEOUT_DELAY\fP   100"
+.br
+.RI "\fIHow long the listener should wait for responses before becoming idle and blocking\&. \fP"
 .ti -1c
 .RI "#define \fBMAX_FDS\fP   1000"
 .br
+.RI "\fIMax number of sockets to monitor\&. \fP"
 .ti -1c
 .RI "#define \fBMAX_PENDING_MESSAGES\fP   (1024)"
 .br
 .ti -1c
-.RI "#define \fBMAX_QUEUE_MESSAGES\fP   32"
+.RI "#define \fBMAX_QUEUE_MESSAGES\fP   (32)"
 .br
-.ti -1c
-.RI "#define \fBMIN_DELAY\fP   10"
-.br
-.ti -1c
-.RI "#define \fBMAX_DELAY\fP   100"
-.br
+.RI "\fIMax number of unprocessed queue messages\&. \fP"
 .ti -1c
 .RI "#define \fBINFINITE_DELAY\fP   (-1)"
 .br
+.RI "\fISpecial value meaning poll should block indefinitely\&. \fP"
 .ti -1c
 .RI "#define \fBLISTENER_NO_FD\fP   (-1)"
 .br
+.RI "\fISentinel values used for \fBlistener\&.shutdown_notify_fd\fP\&. \fP"
 .ti -1c
 .RI "#define \fBLISTENER_SHUTDOWN_COMPLETE_FD\fP   (-2)"
 .br
@@ -85,53 +93,65 @@ listener_internal_types.h \-
 .SS "#define DEFAULT_READ_BUF_SIZE   (1024L * 1024L)"
 
 .PP
-Definition at line 28 of file listener_internal_types\&.h\&.
-.SS "#define INCOMING_MSG_PIPE   1"
-
+Default size for the read buffer, which will grow on demand\&. 
 .PP
 Definition at line 29 of file listener_internal_types\&.h\&.
 .SS "#define INCOMING_MSG_PIPE_ID   0"
 
 .PP
-Definition at line 30 of file listener_internal_types\&.h\&.
+ID of the \fCstruct pollfd\fP for the listener's incoming command pipe\&. This is in the same pollfd array as the sockets being watched so that an incoming command will wake it from its blocking poll\&. 
+.PP
+Definition at line 35 of file listener_internal_types\&.h\&.
+.SS "#define INCOMING_MSG_PIPE   1"
+
+.PP
+Offset to account for the first file descriptor being the incoming message pipe\&. 
+.PP
+Definition at line 39 of file listener_internal_types\&.h\&.
+.SS "#define LISTENER_TASK_TIMEOUT_DELAY   100"
+
+.PP
+How long the listener should wait for responses before becoming idle and blocking\&. 
+.PP
+Definition at line 83 of file listener_internal_types\&.h\&.
 .SS "#define MAX_FDS   1000"
 
 .PP
-Definition at line 102 of file listener_internal_types\&.h\&.
+Max number of sockets to monitor\&. If listening to more sockets than this, use multiple listener threads\&. 
+.PP
+Definition at line 118 of file listener_internal_types\&.h\&.
 .SS "#define MAX_PENDING_MESSAGES   (1024)"
 
 .PP
-Definition at line 106 of file listener_internal_types\&.h\&.
-.SS "#define MAX_QUEUE_MESSAGES   32"
+Definition at line 122 of file listener_internal_types\&.h\&.
+.SS "#define MAX_QUEUE_MESSAGES   (32)"
 
 .PP
-Definition at line 109 of file listener_internal_types\&.h\&.
-.SS "#define MIN_DELAY   10"
-
+Max number of unprocessed queue messages\&. 
 .PP
-Definition at line 113 of file listener_internal_types\&.h\&.
-.SS "#define MAX_DELAY   100"
-
-.PP
-Definition at line 114 of file listener_internal_types\&.h\&.
+Definition at line 125 of file listener_internal_types\&.h\&.
 .SS "#define INFINITE_DELAY   (-1)"
 
 .PP
-Definition at line 115 of file listener_internal_types\&.h\&.
+Special value meaning poll should block indefinitely\&. 
+.PP
+Definition at line 129 of file listener_internal_types\&.h\&.
 .SS "#define LISTENER_NO_FD   (-1)"
 
 .PP
-Definition at line 118 of file listener_internal_types\&.h\&.
+Sentinel values used for \fBlistener\&.shutdown_notify_fd\fP\&. 
+.PP
+Definition at line 132 of file listener_internal_types\&.h\&.
 .SS "#define LISTENER_SHUTDOWN_COMPLETE_FD   (-2)"
 
 .PP
-Definition at line 119 of file listener_internal_types\&.h\&.
+Definition at line 133 of file listener_internal_types\&.h\&.
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef uint32_t \fBmsg_flag_t\fP"
 
 .PP
-Definition at line 110 of file listener_internal_types\&.h\&.
+Definition at line 126 of file listener_internal_types\&.h\&.
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBMSG_TYPE\fP"
@@ -152,7 +172,7 @@ Definition at line 110 of file listener_internal_types\&.h\&.
 .TP
 \fB\fIMSG_SHUTDOWN \fP\fP
 .PP
-Definition at line 32 of file listener_internal_types\&.h\&.
+Definition at line 41 of file listener_internal_types\&.h\&.
 .SS "enum \fBrx_info_state\fP"
 
 .PP
@@ -165,7 +185,7 @@ Definition at line 32 of file listener_internal_types\&.h\&.
 .TP
 \fB\fIRIS_INACTIVE \fP\fP
 .PP
-Definition at line 71 of file listener_internal_types\&.h\&.
+Definition at line 85 of file listener_internal_types\&.h\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

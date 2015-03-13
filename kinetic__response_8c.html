@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -61,7 +61,7 @@
 <code>#include &quot;<a class="el" href="kinetic__socket_8h_source.html">kinetic_socket.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__hmac_8h_source.html">kinetic_hmac.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__logger_8h_source.html">kinetic_logger.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__proto_8h_source.html">kinetic_proto.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="kinetic_8pb-c_8h_source.html">kinetic.pb-c.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__allocator_8h_source.html">kinetic_allocator.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__controller_8h_source.html">kinetic_controller.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="kinetic__pdu__unpack_8h_source.html">kinetic_pdu_unpack.h</a>&quot;</code><br />
@@ -71,14 +71,60 @@
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ae4ccd1ec59cfcc05294ea852124c81ba"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#ae4ccd1ec59cfcc05294ea852124c81ba">KineticResponse_GetProtobufLength</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
+<tr class="separator:ae4ccd1ec59cfcc05294ea852124c81ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01297ec80c62c87f09d4c677b5fc42af"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#a01297ec80c62c87f09d4c677b5fc42af">KineticResponse_GetValueLength</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
+<tr class="separator:a01297ec80c62c87f09d4c677b5fc42af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc08047406571602d0adbe1dbc8deddd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#adc08047406571602d0adbe1dbc8deddd">KineticResponse_GetStatus</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
 <tr class="separator:adc08047406571602d0adbe1dbc8deddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f37a47006fdd8e7c80c63b976542132"><td class="memItemLeft" align="right" valign="top">KineticProto_Command_KeyValue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#a1f37a47006fdd8e7c80c63b976542132">KineticResponse_GetKeyValue</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
-<tr class="separator:a1f37a47006fdd8e7c80c63b976542132"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a860282f8ff1b501be1d89e093243b9cd"><td class="memItemLeft" align="right" valign="top">KineticProto_Command_Range *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#a860282f8ff1b501be1d89e093243b9cd">KineticResponse_GetKeyRange</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
-<tr class="separator:a860282f8ff1b501be1d89e093243b9cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5071a501d9e7cfb5623099f3d2cb8de0"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#a5071a501d9e7cfb5623099f3d2cb8de0">KineticResponse_GetConnectionID</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
+<tr class="separator:a5071a501d9e7cfb5623099f3d2cb8de0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58b134770c09325a69f587b942df3113"><td class="memItemLeft" align="right" valign="top">Com__Seagate__Kinetic__Proto__Command__KeyValue *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#a58b134770c09325a69f587b942df3113">KineticResponse_GetKeyValue</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
+<tr class="separator:a58b134770c09325a69f587b942df3113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95d075902f78fdd4786d86d8f44ba5d7"><td class="memItemLeft" align="right" valign="top">Com__Seagate__Kinetic__Proto__Command__Range *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__response_8c.html#a95d075902f78fdd4786d86d8f44ba5d7">KineticResponse_GetKeyRange</a> (<a class="el" href="struct_kinetic_response.html">KineticResponse</a> *response)</td></tr>
+<tr class="separator:a95d075902f78fdd4786d86d8f44ba5d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ae4ccd1ec59cfcc05294ea852124c81ba"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t KineticResponse_GetProtobufLength </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td>
+          <td class="paramname"><em>response</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00035">35</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00166">KineticResponse::header</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a01297ec80c62c87f09d4c677b5fc42af"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t KineticResponse_GetValueLength </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td>
+          <td class="paramname"><em>response</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00041">41</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00166">KineticResponse::header</a>, and <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="adc08047406571602d0adbe1dbc8deddd"></a>
 <div class="memitem">
 <div class="memproto">
@@ -93,18 +139,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00035">35</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00047">47</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00184">KineticResponse::command</a>, <a class="el" href="kinetic__types_8h_source.html#l00167">KINETIC_STATUS_INVALID</a>, and <a class="el" href="kinetic__types__internal_8c_source.html#l00028">KineticProtoStatusCode_to_KineticStatus()</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00168">KineticResponse::command</a>, <a class="el" href="kinetic__types_8h_source.html#l00156">KINETIC_STATUS_INVALID</a>, and <a class="el" href="kinetic__types__internal_8c_source.html#l00028">KineticProtoStatusCode_to_KineticStatus()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1f37a47006fdd8e7c80c63b976542132"></a>
+<a class="anchor" id="a5071a501d9e7cfb5623099f3d2cb8de0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">KineticProto_Command_KeyValue* KineticResponse_GetKeyValue </td>
+          <td class="memname">int64_t KineticResponse_GetConnectionID </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td>
           <td class="paramname"><em>response</em></td><td>)</td>
@@ -113,18 +159,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00051">51</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00063">63</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00184">KineticResponse::command</a>.</p>
+<p>References <a class="el" href="kinetic_8pb-c_8h_source.html#l00072">COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS</a>, <a class="el" href="kinetic__types__internal_8h_source.html#l00168">KineticResponse::command</a>, <a class="el" href="kinetic__logger_8h_source.html#l00062">KINETIC_ASSERT</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00167">KineticResponse::proto</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a860282f8ff1b501be1d89e093243b9cd"></a>
+<a class="anchor" id="a58b134770c09325a69f587b942df3113"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">KineticProto_Command_Range* KineticResponse_GetKeyRange </td>
+          <td class="memname">Com__Seagate__Kinetic__Proto__Command__KeyValue* KineticResponse_GetKeyValue </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td>
           <td class="paramname"><em>response</em></td><td>)</td>
@@ -133,9 +179,29 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00064">64</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00078">78</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
 
-<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00184">KineticResponse::command</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00183">KineticResponse::proto</a>.</p>
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00168">KineticResponse::command</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a95d075902f78fdd4786d86d8f44ba5d7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Com__Seagate__Kinetic__Proto__Command__Range* KineticResponse_GetKeyRange </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_kinetic_response.html">KineticResponse</a> *&#160;</td>
+          <td class="paramname"><em>response</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="kinetic__response_8c_source.html#l00091">91</a> of file <a class="el" href="kinetic__response_8c_source.html">kinetic_response.c</a>.</p>
+
+<p>References <a class="el" href="kinetic__types__internal_8h_source.html#l00168">KineticResponse::command</a>, and <a class="el" href="kinetic__types__internal_8h_source.html#l00167">KineticResponse::proto</a>.</p>
 
 </div>
 </div>

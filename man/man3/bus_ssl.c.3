@@ -1,4 +1,4 @@
-.TH "bus_ssl.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "bus_ssl.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,6 +11,8 @@ bus_ssl.c \-
 \fC#include <assert\&.h>\fP
 .br
 \fC#include 'bus_ssl\&.h'\fP
+.br
+\fC#include 'syscall\&.h'\fP
 .br
 \fC#include 'util\&.h'\fP
 .br
@@ -41,70 +43,82 @@ bus_ssl.c \-
 .RI "static bool \fBdo_blocking_connection\fP (struct \fBbus\fP *b, SSL *ssl, int fd)"
 .br
 .ti -1c
-.RI "bool \fBbus_ssl_init\fP (struct \fBbus\fP *b)"
+.RI "bool \fBBusSSL_Init\fP (struct \fBbus\fP *b)"
 .br
+.RI "\fIInitialize the SSL library internals for use by the messaging bus\&. \fP"
 .ti -1c
-.RI "SSL * \fBbus_ssl_connect\fP (struct \fBbus\fP *b, int fd)"
+.RI "SSL * \fBBusSSL_Connect\fP (struct \fBbus\fP *b, int fd)"
 .br
+.RI "\fIDo an SSL / TLS shake for a connection\&. \fP"
 .ti -1c
-.RI "bool \fBbus_ssl_disconnect\fP (struct \fBbus\fP *b, SSL *ssl)"
+.RI "bool \fBBusSSL_Disconnect\fP (struct \fBbus\fP *b, SSL *ssl)"
 .br
+.RI "\fIDisconnect and free an individual SSL handle\&. \fP"
 .ti -1c
-.RI "void \fBbus_ssl_ctx_free\fP (struct \fBbus\fP *b)"
+.RI "void \fBBusSSL_CtxFree\fP (struct \fBbus\fP *b)"
 .br
+.RI "\fIFree all internal data for using SSL (the SSL_CTX)\&. \fP"
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
 .SS "#define TIMEOUT_MSEC   100"
 
 .PP
-Definition at line 26 of file bus_ssl\&.c\&.
+Definition at line 27 of file bus_ssl\&.c\&.
 .SS "#define MAX_TIMEOUT   10000"
 
 .PP
-Definition at line 27 of file bus_ssl\&.c\&.
+Definition at line 28 of file bus_ssl\&.c\&.
 .SH "Function Documentation"
 .PP 
 .SS "static bool init_client_SSL_CTX (SSL_CTX **ctx_out)\fC [static]\fP"
 
 .PP
-Definition at line 86 of file bus_ssl\&.c\&.
+Definition at line 87 of file bus_ssl\&.c\&.
 .PP
 References disable_known_bad_ciphers(), and disable_SSL_compression()\&.
 .SS "static void disable_SSL_compression (void)\fC [static]\fP"
 
 .PP
-Definition at line 112 of file bus_ssl\&.c\&.
+Definition at line 113 of file bus_ssl\&.c\&.
 .SS "static void disable_known_bad_ciphers (SSL_CTX *ctx)\fC [static]\fP"
 
 .PP
-Definition at line 121 of file bus_ssl\&.c\&.
+Definition at line 122 of file bus_ssl\&.c\&.
 .SS "static bool do_blocking_connection (struct \fBbus\fP *b, SSL *ssl, intfd)\fC [static]\fP"
 
 .PP
-Definition at line 129 of file bus_ssl\&.c\&.
+Definition at line 130 of file bus_ssl\&.c\&.
 .PP
-References BUS_LOG, BUS_LOG_SNPRINTF, LOG_SOCKET_REGISTERED, MAX_TIMEOUT, TIMEOUT_MSEC, bus::udata, and util_is_resumable_io_error()\&.
-.SS "bool bus_ssl_init (struct \fBbus\fP *b)"
+References BUS_LOG, BUS_LOG_SNPRINTF, LOG_SOCKET_REGISTERED, MAX_TIMEOUT, syscall_poll(), TIMEOUT_MSEC, bus::udata, and Util_IsResumableIOError()\&.
+.SS "bool BusSSL_Init (struct \fBbus\fP *b)"
 
 .PP
-Definition at line 35 of file bus_ssl\&.c\&.
+Initialize the SSL library internals for use by the messaging bus\&. 
+.PP
+Definition at line 36 of file bus_ssl\&.c\&.
 .PP
 References init_client_SSL_CTX(), and bus::ssl_ctx\&.
-.SS "SSL* bus_ssl_connect (struct \fBbus\fP *b, intfd)"
+.SS "SSL* BusSSL_Connect (struct \fBbus\fP *b, intfd)"
 
 .PP
-Definition at line 50 of file bus_ssl\&.c\&.
+Do an SSL / TLS shake for a connection\&. Blocking\&. 
+.PP
+Definition at line 51 of file bus_ssl\&.c\&.
 .PP
 References do_blocking_connection(), and bus::ssl_ctx\&.
-.SS "bool bus_ssl_disconnect (struct \fBbus\fP *b, SSL *ssl)"
+.SS "bool BusSSL_Disconnect (struct \fBbus\fP *b, SSL *ssl)"
 
 .PP
-Definition at line 72 of file bus_ssl\&.c\&.
-.SS "void bus_ssl_ctx_free (struct \fBbus\fP *b)"
+Disconnect and free an individual SSL handle\&. 
+.PP
+Definition at line 73 of file bus_ssl\&.c\&.
+.SS "void BusSSL_CtxFree (struct \fBbus\fP *b)"
 
 .PP
-Definition at line 79 of file bus_ssl\&.c\&.
+Free all internal data for using SSL (the SSL_CTX)\&. 
+.PP
+Definition at line 80 of file bus_ssl\&.c\&.
 .PP
 References bus::ssl_ctx\&.
 .SH "Author"

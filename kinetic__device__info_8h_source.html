@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,7 +55,7 @@
 <div class="contents">
 <a href="kinetic__device__info_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -79,15 +79,15 @@
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__device__info_8h.html">kinetic_device_info.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a>&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<a class="code" href="struct_kinetic_log_info.html">KineticLogInfo</a>* <a class="code" href="kinetic__device__info_8h.html#a412bf88528a63951675982966c220a2b">KineticLogInfo_Create</a>(<span class="keyword">const</span> KineticProto_Command_GetLog* getLog);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<a class="code" href="struct_kinetic_log_info.html">KineticLogInfo</a>* <a class="code" href="kinetic__device__info_8h.html#a8d734c1a36022a099688a07dadef8709">KineticLogInfo_Create</a>(<span class="keyword">const</span> Com__Seagate__Kinetic__Proto__Command__GetLog* getLog);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__device__info_8h.html#a660cad7d076e7dd0101a33efd6dd86a8">KineticLogInfo_Free</a>(<a class="code" href="struct_kinetic_log_info.html">KineticLogInfo</a>* kdi);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif // _KINETIC_LOG_INFO_H</span></div>
 <div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
 <div class="ttc" id="kinetic__device__info_8h_html"><div class="ttname"><a href="kinetic__device__info_8h.html">kinetic_device_info.h</a></div></div>
-<div class="ttc" id="struct_kinetic_log_info_html"><div class="ttname"><a href="struct_kinetic_log_info.html">KineticLogInfo</a></div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00395">kinetic_types.h:395</a></div></div>
+<div class="ttc" id="kinetic__device__info_8h_html_a8d734c1a36022a099688a07dadef8709"><div class="ttname"><a href="kinetic__device__info_8h.html#a8d734c1a36022a099688a07dadef8709">KineticLogInfo_Create</a></div><div class="ttdeci">KineticLogInfo * KineticLogInfo_Create(const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__device__info_8c_source.html#l00257">kinetic_device_info.c:257</a></div></div>
+<div class="ttc" id="struct_kinetic_log_info_html"><div class="ttname"><a href="struct_kinetic_log_info.html">KineticLogInfo</a></div><div class="ttdoc">Base log info structure which is allocated by client and passed to KineticAdminClient_GetLog. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00431">kinetic_types.h:431</a></div></div>
 <div class="ttc" id="kinetic__device__info_8h_html_a660cad7d076e7dd0101a33efd6dd86a8"><div class="ttname"><a href="kinetic__device__info_8h.html#a660cad7d076e7dd0101a33efd6dd86a8">KineticLogInfo_Free</a></div><div class="ttdeci">void KineticLogInfo_Free(KineticLogInfo *kdi)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__device__info_8c_source.html#l00323">kinetic_device_info.c:323</a></div></div>
-<div class="ttc" id="kinetic__device__info_8h_html_a412bf88528a63951675982966c220a2b"><div class="ttname"><a href="kinetic__device__info_8h.html#a412bf88528a63951675982966c220a2b">KineticLogInfo_Create</a></div><div class="ttdeci">KineticLogInfo * KineticLogInfo_Create(const KineticProto_Command_GetLog *getLog)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__device__info_8c_source.html#l00257">kinetic_device_info.c:257</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

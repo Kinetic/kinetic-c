@@ -1,4 +1,4 @@
-.TH "kinetic_types_internal.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_types_internal.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,19 +21,19 @@ kinetic_types_internal.c \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticProtoStatusCode_to_KineticStatus\fP (\fBKineticProto_Command_Status_StatusCode\fP protoStatus)"
+.RI "\fBKineticStatus\fP \fBKineticProtoStatusCode_to_KineticStatus\fP (\fBCom__Seagate__Kinetic__Proto__Command__Status__StatusCode\fP protoStatus)"
 .br
 .ti -1c
-.RI "\fBKineticProto_Command_Synchronization\fP \fBKineticProto_Command_Synchronization_from_KineticSynchronization\fP (\fBKineticSynchronization\fP sync_mode)"
+.RI "\fBCom__Seagate__Kinetic__Proto__Command__Synchronization\fP \fBCom__Seagate__Kinetic__Proto__Command__Synchronization_from_KineticSynchronization\fP (\fBKineticSynchronization\fP sync_mode)"
 .br
 .ti -1c
-.RI "\fBKineticSynchronization\fP \fBKineticSynchronization_from_KineticProto_Command_Synchronization\fP (\fBKineticProto_Command_Synchronization\fP sync_mode)"
+.RI "\fBKineticSynchronization\fP \fBKineticSynchronization_from_Com__Seagate__Kinetic__Proto__Command__Synchronization\fP (\fBCom__Seagate__Kinetic__Proto__Command__Synchronization\fP sync_mode)"
 .br
 .ti -1c
-.RI "\fBKineticProto_Command_Algorithm\fP \fBKineticProto_Command_Algorithm_from_KineticAlgorithm\fP (\fBKineticAlgorithm\fP kinteicAlgorithm)"
+.RI "\fBCom__Seagate__Kinetic__Proto__Command__Algorithm\fP \fBCom__Seagate__Kinetic__Proto__Command__Algorithm_from_KineticAlgorithm\fP (\fBKineticAlgorithm\fP kinteicAlgorithm)"
 .br
 .ti -1c
-.RI "\fBKineticAlgorithm\fP \fBKineticAlgorithm_from_KineticProto_Command_Algorithm\fP (\fBKineticProto_Command_Algorithm\fP protoAlgorithm)"
+.RI "\fBKineticAlgorithm\fP \fBKineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command__Algorithm\fP (\fBCom__Seagate__Kinetic__Proto__Command__Algorithm\fP protoAlgorithm)"
 .br
 .ti -1c
 .RI "\fBByteArray\fP \fBProtobufCBinaryData_to_ByteArray\fP (ProtobufCBinaryData protoData)"
@@ -42,10 +42,10 @@ kinetic_types_internal.c \-
 .RI "bool \fBCopy_ProtobufCBinaryData_to_ByteBuffer\fP (\fBByteBuffer\fP dest, ProtobufCBinaryData src)"
 .br
 .ti -1c
-.RI "bool \fBCopy_KineticProto_Command_KeyValue_to_KineticEntry\fP (KineticProto_Command_KeyValue *keyValue, \fBKineticEntry\fP *entry)"
+.RI "bool \fBCopy_Com__Seagate__Kinetic__Proto__Command__KeyValue_to_KineticEntry\fP (Com__Seagate__Kinetic__Proto__Command__KeyValue *key_value, \fBKineticEntry\fP *entry)"
 .br
 .ti -1c
-.RI "bool \fBCopy_KineticProto_Command_Range_to_ByteBufferArray\fP (KineticProto_Command_Range *keyRange, \fBByteBufferArray\fP *keys)"
+.RI "bool \fBCopy_Com__Seagate__Kinetic__Proto__Command__Range_to_ByteBufferArray\fP (Com__Seagate__Kinetic__Proto__Command__Range *keyRange, \fBByteBufferArray\fP *keys)"
 .br
 .ti -1c
 .RI "int \fBKinetic_GetErrnoDescription\fP (int err_num, char *buf, size_t len)"
@@ -66,28 +66,19 @@ kinetic_types_internal.c \-
 .RI "int \fBKinetic_TimevalCmp\fP (struct timeval const a, struct timeval const b)"
 .br
 .ti -1c
-.RI "\fBKineticProto_Command_GetLog_Type\fP \fBKineticLogInfo_Type_to_KineticProto_Command_GetLog_Type\fP (\fBKineticLogInfo_Type\fP type)"
+.RI "\fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fP \fBKineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog__Type\fP (\fBKineticLogInfo_Type\fP type)"
 .br
 .ti -1c
-.RI "\fBKineticMessageType\fP \fBKineticProto_Command_MessageType_to_KineticMessageType\fP (\fBKineticProto_Command_MessageType\fP type)"
+.RI "\fBKineticMessageType\fP \fBCom__Seagate__Kinetic__Proto__Command__MessageType_to_KineticMessageType\fP (\fBCom__Seagate__Kinetic__Proto__Command__MessageType\fP type)"
 .br
 .ti -1c
 .RI "void \fBKineticSessionConfig_Copy\fP (\fBKineticSessionConfig\fP *dest, \fBKineticSessionConfig\fP *src)"
 .br
 .ti -1c
-.RI "void \fBKineticSession_Init\fP (KineticSession *const session, \fBKineticSessionConfig\fP *const config, KineticConnection *const con)"
-.br
-.ti -1c
-.RI "void \fBKineticConnection_Init\fP (KineticConnection *const con)"
-.br
-.ti -1c
 .RI "void \fBKineticMessage_Init\fP (\fBKineticMessage\fP *const message)"
 .br
 .ti -1c
-.RI "static void \fBKineticMessage_HeaderInit\fP (KineticProto_Command_Header *hdr, KineticSession const *const session)"
-.br
-.ti -1c
-.RI "void \fBKineticOperation_Init\fP (KineticOperation *op, KineticSession const *const session)"
+.RI "static void \fBKineticMessage_HeaderInit\fP (Com__Seagate__Kinetic__Proto__Command__Header *hdr, KineticSession const *const session)"
 .br
 .ti -1c
 .RI "void \fBKineticRequest_Init\fP (KineticRequest *request, KineticSession const *const session)"
@@ -95,136 +86,118 @@ kinetic_types_internal.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticStatus\fP KineticProtoStatusCode_to_KineticStatus (\fBKineticProto_Command_Status_StatusCode\fPprotoStatus)"
+.SS "\fBKineticStatus\fP KineticProtoStatusCode_to_KineticStatus (\fBCom__Seagate__Kinetic__Proto__Command__Status__StatusCode\fPprotoStatus)"
 
 .PP
 Definition at line 28 of file kinetic_types_internal\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DATA_ERROR, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_DEVICE_LOCKED, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_EXPIRED, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HEADER_REQUIRED, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_HMAC_FAILURE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INTERNAL_ERROR, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_REQUEST, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_INVALID_STATUS_CODE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NESTED_OPERATION_ERRORS, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SPACE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NO_SUCH_HMAC_ALGORITHM, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_ATTEMPTED, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_AUTHORIZED, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_NOT_FOUND, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_PERM_DATA_ERROR, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_REMOTE_CONNECTION_ERROR, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SERVICE_BUSY, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_SUCCESS, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_FAILURE, KINETIC_PROTO_COMMAND_STATUS_STATUS_CODE_VERSION_MISMATCH, KINETIC_STATUS_CLUSTER_MISMATCH, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_DATA_ERROR, KINETIC_STATUS_DEVICE_BUSY, KINETIC_STATUS_DEVICE_LOCKED, KINETIC_STATUS_INVALID, KINETIC_STATUS_INVALID_REQUEST, KINETIC_STATUS_NOT_AUTHORIZED, KINETIC_STATUS_NOT_FOUND, KINETIC_STATUS_OPERATION_FAILED, KINETIC_STATUS_SUCCESS, and KINETIC_STATUS_VERSION_MISMATCH\&.
-.SS "\fBKineticProto_Command_Synchronization\fP KineticProto_Command_Synchronization_from_KineticSynchronization (\fBKineticSynchronization\fPsync_mode)"
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DATA_ERROR, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DEVICE_LOCKED, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__EXPIRED, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HEADER_REQUIRED, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__HMAC_FAILURE, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INTERNAL_ERROR, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_REQUEST, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_STATUS_CODE, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NESTED_OPERATION_ERRORS, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SPACE, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NO_SUCH_HMAC_ALGORITHM, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_ATTEMPTED, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_AUTHORIZED, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__NOT_FOUND, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__PERM_DATA_ERROR, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__REMOTE_CONNECTION_ERROR, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SERVICE_BUSY, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__SUCCESS, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_FAILURE, COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__VERSION_MISMATCH, KINETIC_STATUS_CLUSTER_MISMATCH, KINETIC_STATUS_CONNECTION_ERROR, KINETIC_STATUS_DATA_ERROR, KINETIC_STATUS_DEVICE_BUSY, KINETIC_STATUS_DEVICE_LOCKED, KINETIC_STATUS_HMAC_FAILURE, KINETIC_STATUS_INVALID, KINETIC_STATUS_INVALID_REQUEST, KINETIC_STATUS_NOT_AUTHORIZED, KINETIC_STATUS_NOT_FOUND, KINETIC_STATUS_OPERATION_FAILED, KINETIC_STATUS_SUCCESS, and KINETIC_STATUS_VERSION_MISMATCH\&.
+.SS "\fBCom__Seagate__Kinetic__Proto__Command__Synchronization\fP Com__Seagate__Kinetic__Proto__Command__Synchronization_from_KineticSynchronization (\fBKineticSynchronization\fPsync_mode)"
 
 .PP
-Definition at line 96 of file kinetic_types_internal\&.c\&.
+Definition at line 95 of file kinetic_types_internal\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH, KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION, KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK, KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH, KINETIC_SYNCHRONIZATION_FLUSH, KINETIC_SYNCHRONIZATION_INVALID, KINETIC_SYNCHRONIZATION_WRITEBACK, and KINETIC_SYNCHRONIZATION_WRITETHROUGH\&.
-.SS "\fBKineticSynchronization\fP KineticSynchronization_from_KineticProto_Command_Synchronization (\fBKineticProto_Command_Synchronization\fPsync_mode)"
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__FLUSH, COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__INVALID_SYNCHRONIZATION, COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITEBACK, COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITETHROUGH, KINETIC_SYNCHRONIZATION_FLUSH, KINETIC_SYNCHRONIZATION_INVALID, KINETIC_SYNCHRONIZATION_WRITEBACK, and KINETIC_SYNCHRONIZATION_WRITETHROUGH\&.
+.SS "\fBKineticSynchronization\fP KineticSynchronization_from_Com__Seagate__Kinetic__Proto__Command__Synchronization (\fBCom__Seagate__Kinetic__Proto__Command__Synchronization\fPsync_mode)"
 
 .PP
-Definition at line 118 of file kinetic_types_internal\&.c\&.
+Definition at line 117 of file kinetic_types_internal\&.c\&.
 .PP
-References KINETIC_PROTO_COMMAND_SYNCHRONIZATION_FLUSH, KINETIC_PROTO_COMMAND_SYNCHRONIZATION_INVALID_SYNCHRONIZATION, KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITEBACK, KINETIC_PROTO_COMMAND_SYNCHRONIZATION_WRITETHROUGH, KINETIC_SYNCHRONIZATION_FLUSH, KINETIC_SYNCHRONIZATION_INVALID, KINETIC_SYNCHRONIZATION_WRITEBACK, and KINETIC_SYNCHRONIZATION_WRITETHROUGH\&.
-.SS "\fBKineticProto_Command_Algorithm\fP KineticProto_Command_Algorithm_from_KineticAlgorithm (\fBKineticAlgorithm\fPkinteicAlgorithm)"
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__FLUSH, COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__INVALID_SYNCHRONIZATION, COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITEBACK, COM__SEAGATE__KINETIC__PROTO__COMMAND__SYNCHRONIZATION__WRITETHROUGH, KINETIC_SYNCHRONIZATION_FLUSH, KINETIC_SYNCHRONIZATION_INVALID, KINETIC_SYNCHRONIZATION_WRITEBACK, and KINETIC_SYNCHRONIZATION_WRITETHROUGH\&.
+.SS "\fBCom__Seagate__Kinetic__Proto__Command__Algorithm\fP Com__Seagate__Kinetic__Proto__Command__Algorithm_from_KineticAlgorithm (\fBKineticAlgorithm\fPkinteicAlgorithm)"
 
 .PP
-Definition at line 141 of file kinetic_types_internal\&.c\&.
+Definition at line 140 of file kinetic_types_internal\&.c\&.
 .PP
-References KINETIC_ALGORITHM_CRC32, KINETIC_ALGORITHM_CRC64, KINETIC_ALGORITHM_INVALID, KINETIC_ALGORITHM_SHA1, KINETIC_ALGORITHM_SHA2, KINETIC_ALGORITHM_SHA3, KINETIC_PROTO_COMMAND_ALGORITHM_CRC32, KINETIC_PROTO_COMMAND_ALGORITHM_CRC64, KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM, KINETIC_PROTO_COMMAND_ALGORITHM_SHA1, KINETIC_PROTO_COMMAND_ALGORITHM_SHA2, and KINETIC_PROTO_COMMAND_ALGORITHM_SHA3\&.
-.SS "\fBKineticAlgorithm\fP KineticAlgorithm_from_KineticProto_Command_Algorithm (\fBKineticProto_Command_Algorithm\fPprotoAlgorithm)"
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC32, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC64, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__INVALID_ALGORITHM, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA2, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA3, KINETIC_ALGORITHM_CRC32, KINETIC_ALGORITHM_CRC64, KINETIC_ALGORITHM_INVALID, KINETIC_ALGORITHM_SHA1, KINETIC_ALGORITHM_SHA2, and KINETIC_ALGORITHM_SHA3\&.
+.SS "\fBKineticAlgorithm\fP KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command__Algorithm (\fBCom__Seagate__Kinetic__Proto__Command__Algorithm\fPprotoAlgorithm)"
 
 .PP
-Definition at line 172 of file kinetic_types_internal\&.c\&.
+Definition at line 171 of file kinetic_types_internal\&.c\&.
 .PP
-References KINETIC_ALGORITHM_CRC32, KINETIC_ALGORITHM_CRC64, KINETIC_ALGORITHM_INVALID, KINETIC_ALGORITHM_SHA1, KINETIC_ALGORITHM_SHA2, KINETIC_ALGORITHM_SHA3, KINETIC_PROTO_COMMAND_ALGORITHM_CRC32, KINETIC_PROTO_COMMAND_ALGORITHM_CRC64, KINETIC_PROTO_COMMAND_ALGORITHM_INVALID_ALGORITHM, KINETIC_PROTO_COMMAND_ALGORITHM_SHA1, KINETIC_PROTO_COMMAND_ALGORITHM_SHA2, and KINETIC_PROTO_COMMAND_ALGORITHM_SHA3\&.
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC32, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__CRC64, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__INVALID_ALGORITHM, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA1, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA2, COM__SEAGATE__KINETIC__PROTO__COMMAND__ALGORITHM__SHA3, KINETIC_ALGORITHM_CRC32, KINETIC_ALGORITHM_CRC64, KINETIC_ALGORITHM_INVALID, KINETIC_ALGORITHM_SHA1, KINETIC_ALGORITHM_SHA2, and KINETIC_ALGORITHM_SHA3\&.
 .SS "\fBByteArray\fP ProtobufCBinaryData_to_ByteArray (ProtobufCBinaryDataprotoData)"
 
 .PP
-Definition at line 200 of file kinetic_types_internal\&.c\&.
+Definition at line 199 of file kinetic_types_internal\&.c\&.
 .PP
 References ByteArray::data\&.
 .SS "bool Copy_ProtobufCBinaryData_to_ByteBuffer (\fBByteBuffer\fPdest, ProtobufCBinaryDatasrc)"
 
 .PP
-Definition at line 209 of file kinetic_types_internal\&.c\&.
+Definition at line 208 of file kinetic_types_internal\&.c\&.
 .PP
 References ByteBuffer::array, ByteBuffer::bytesUsed, ByteArray::data, and ByteArray::len\&.
-.SS "bool Copy_KineticProto_Command_KeyValue_to_KineticEntry (KineticProto_Command_KeyValue *keyValue, \fBKineticEntry\fP *entry)"
+.SS "bool Copy_Com__Seagate__Kinetic__Proto__Command__KeyValue_to_KineticEntry (Com__Seagate__Kinetic__Proto__Command__KeyValue *key_value, \fBKineticEntry\fP *entry)"
 
 .PP
-Definition at line 227 of file kinetic_types_internal\&.c\&.
+Definition at line 226 of file kinetic_types_internal\&.c\&.
 .PP
-References KineticEntry::algorithm, ByteBuffer::array, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::dbVersion, KineticEntry::key, KineticAlgorithm_from_KineticProto_Command_Algorithm(), ByteArray::len, LOG1, and KineticEntry::tag\&.
-.SS "bool Copy_KineticProto_Command_Range_to_ByteBufferArray (KineticProto_Command_Range *keyRange, \fBByteBufferArray\fP *keys)"
+References KineticEntry::algorithm, ByteBuffer::array, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::dbVersion, KineticEntry::key, KineticAlgorithm_from_Com__Seagate__Kinetic__Proto__Command__Algorithm(), ByteArray::len, LOG1, and KineticEntry::tag\&.
+.SS "bool Copy_Com__Seagate__Kinetic__Proto__Command__Range_to_ByteBufferArray (Com__Seagate__Kinetic__Proto__Command__Range *keyRange, \fBByteBufferArray\fP *keys)"
 
 .PP
-Definition at line 278 of file kinetic_types_internal\&.c\&.
+Definition at line 277 of file kinetic_types_internal\&.c\&.
 .PP
 References ByteBufferArray::buffers, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBufferArray::count, LOGF2, and ByteBufferArray::used\&.
 .SS "int Kinetic_GetErrnoDescription (interr_num, char *buf, size_tlen)"
 
 .PP
-Definition at line 295 of file kinetic_types_internal\&.c\&.
+Definition at line 294 of file kinetic_types_internal\&.c\&.
 .SS "struct timeval Kinetic_TimevalZero (void)"
 
 .PP
-Definition at line 309 of file kinetic_types_internal\&.c\&.
+Definition at line 308 of file kinetic_types_internal\&.c\&.
 .SS "bool Kinetic_TimevalIsZero (struct timeval consttv)"
 
 .PP
-Definition at line 317 of file kinetic_types_internal\&.c\&.
+Definition at line 316 of file kinetic_types_internal\&.c\&.
 .SS "struct timeval Kinetic_TimevalAdd (struct timeval consta, struct timeval constb)"
 
 .PP
-Definition at line 322 of file kinetic_types_internal\&.c\&.
+Definition at line 321 of file kinetic_types_internal\&.c\&.
 .SS "static int cmp_suseconds_t (suseconds_t consta, suseconds_t constb)\fC [static]\fP"
 
 .PP
-Definition at line 336 of file kinetic_types_internal\&.c\&.
+Definition at line 335 of file kinetic_types_internal\&.c\&.
 .SS "int Kinetic_TimevalCmp (struct timeval consta, struct timeval constb)"
 
 .PP
-Definition at line 349 of file kinetic_types_internal\&.c\&.
+Definition at line 348 of file kinetic_types_internal\&.c\&.
 .PP
 References cmp_suseconds_t()\&.
-.SS "\fBKineticProto_Command_GetLog_Type\fP KineticLogInfo_Type_to_KineticProto_Command_GetLog_Type (\fBKineticLogInfo_Type\fPtype)"
+.SS "\fBCom__Seagate__Kinetic__Proto__Command__GetLog__Type\fP KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog__Type (\fBKineticLogInfo_Type\fPtype)"
 
 .PP
-Definition at line 354 of file kinetic_types_internal\&.c\&.
+Definition at line 353 of file kinetic_types_internal\&.c\&.
 .PP
-References KINETIC_DEVICE_INFO_TYPE_CAPACITIES, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, KINETIC_DEVICE_INFO_TYPE_DEVICE, KINETIC_DEVICE_INFO_TYPE_LIMITS, KINETIC_DEVICE_INFO_TYPE_MESSAGES, KINETIC_DEVICE_INFO_TYPE_STATISTICS, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS, KINETIC_PROTO_COMMAND_GET_LOG__INIT_TYPE_CONFIGURATION, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_CAPACITIES, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_DEVICE, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_INVALID_TYPE, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_LIMITS, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_MESSAGES, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_STATISTICS, KINETIC_PROTO_COMMAND_GET_LOG_TYPE_TEMPERATURES, and KINETIC_PROTO_COMMAND_GET_LOG_TYPE_UTILIZATIONS\&.
-.SS "\fBKineticMessageType\fP KineticProto_Command_MessageType_to_KineticMessageType (\fBKineticProto_Command_MessageType\fPtype)"
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CAPACITIES, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__CONFIGURATION, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__INVALID_TYPE, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__LIMITS, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__MESSAGES, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__STATISTICS, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__TEMPERATURES, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__UTILIZATIONS, KINETIC_DEVICE_INFO_TYPE_CAPACITIES, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, KINETIC_DEVICE_INFO_TYPE_LIMITS, KINETIC_DEVICE_INFO_TYPE_MESSAGES, KINETIC_DEVICE_INFO_TYPE_STATISTICS, KINETIC_DEVICE_INFO_TYPE_TEMPERATURES, and KINETIC_DEVICE_INFO_TYPE_UTILIZATIONS\&.
+.SS "\fBKineticMessageType\fP Com__Seagate__Kinetic__Proto__Command__MessageType_to_KineticMessageType (\fBCom__Seagate__Kinetic__Proto__Command__MessageType\fPtype)"
 
 .PP
-Definition at line 382 of file kinetic_types_internal\&.c\&.
+Definition at line 379 of file kinetic_types_internal\&.c\&.
 .SS "void KineticSessionConfig_Copy (\fBKineticSessionConfig\fP *dest, \fBKineticSessionConfig\fP *src)"
 
 .PP
-Definition at line 387 of file kinetic_types_internal\&.c\&.
+Definition at line 384 of file kinetic_types_internal\&.c\&.
 .PP
 References ByteArray::data, KineticSessionConfig::hmacKey, KineticSessionConfig::keyData, KINETIC_ASSERT, and ByteArray::len\&.
-.SS "void KineticSession_Init (KineticSession *constsession, \fBKineticSessionConfig\fP *constconfig, KineticConnection *constcon)"
+.SS "void KineticMessage_Init (\fBKineticMessage\fP *constmessage)"
 
 .PP
-Definition at line 398 of file kinetic_types_internal\&.c\&.
+Definition at line 395 of file kinetic_types_internal\&.c\&.
 .PP
-References KineticSessionConfig::host, KINETIC_ASSERT, KineticConnection_Init(), and KineticSessionConfig_Copy()\&.
-.SS "void KineticConnection_Init (KineticConnection *constcon)"
+References KineticMessage::body, com__seagate__kinetic__proto__command__body__init(), com__seagate__kinetic__proto__command__get_log__device__init(), com__seagate__kinetic__proto__command__get_log__init(), com__seagate__kinetic__proto__command__header__init(), com__seagate__kinetic__proto__command__init(), com__seagate__kinetic__proto__command__key_value__init(), com__seagate__kinetic__proto__command__pin_operation__init(), com__seagate__kinetic__proto__command__range__init(), com__seagate__kinetic__proto__command__security__init(), com__seagate__kinetic__proto__command__setup__init(), com__seagate__kinetic__proto__command__status__init(), com__seagate__kinetic__proto__message__hmacauth__init(), com__seagate__kinetic__proto__message__init(), com__seagate__kinetic__proto__message__pinauth__init(), KineticMessage::command, KineticMessage::getLog, KineticMessage::getLogDevice, KineticMessage::header, KineticMessage::hmacAuth, KineticMessage::keyRange, KineticMessage::keyValue, KINETIC_ASSERT, KineticMessage::message, KineticMessage::pinAuth, KineticMessage::pinOp, KineticMessage::security, KineticMessage::setup, and KineticMessage::status\&.
+.SS "static void KineticMessage_HeaderInit (Com__Seagate__Kinetic__Proto__Command__Header *hdr, KineticSession const *constsession)\fC [static]\fP"
 
 .PP
 Definition at line 415 of file kinetic_types_internal\&.c\&.
 .PP
-References KINETIC_ASSERT\&.
-.SS "void KineticMessage_Init (\fBKineticMessage\fP *constmessage)"
-
-.PP
-Definition at line 424 of file kinetic_types_internal\&.c\&.
-.PP
-References KineticMessage::body, KineticMessage::command, KineticMessage::getLog, KineticMessage::header, KineticMessage::hmacAuth, KineticMessage::keyRange, KineticMessage::keyValue, KINETIC_ASSERT, KineticProto_command__init(), KineticProto_command_body__init(), KineticProto_command_get_log__init(), KineticProto_command_header__init(), KineticProto_command_key_value__init(), KineticProto_command_pin_operation__init(), KineticProto_command_range__init(), KineticProto_command_security__init(), KineticProto_command_setup__init(), KineticProto_command_status__init(), KineticProto_Message__init(), KineticProto_Message_hmacauth__init(), KineticProto_Message_pinauth__init(), KineticMessage::message, KineticMessage::pinAuth, KineticMessage::pinOp, KineticMessage::security, KineticMessage::setup, and KineticMessage::status\&.
-.SS "static void KineticMessage_HeaderInit (KineticProto_Command_Header *hdr, KineticSession const *constsession)\fC [static]\fP"
-
-.PP
-Definition at line 443 of file kinetic_types_internal\&.c\&.
-.PP
-References KINETIC_ASSERT, KINETIC_SEQUENCE_NOT_YET_BOUND, and KineticProto_command_header__descriptor\&.
-.SS "void KineticOperation_Init (KineticOperation *op, KineticSession const *constsession)"
-
-.PP
-Definition at line 459 of file kinetic_types_internal\&.c\&.
-.PP
-References KINETIC_ASSERT\&.
+References com__seagate__kinetic__proto__command__header__descriptor, KINETIC_ASSERT, and KINETIC_SEQUENCE_NOT_YET_BOUND\&.
 .SS "void KineticRequest_Init (KineticRequest *request, KineticSession const *constsession)"
 
 .PP
-Definition at line 470 of file kinetic_types_internal\&.c\&.
+Definition at line 430 of file kinetic_types_internal\&.c\&.
 .PP
 References KINETIC_ASSERT, KineticMessage_HeaderInit(), and KineticMessage_Init()\&.
 .SH "Author"

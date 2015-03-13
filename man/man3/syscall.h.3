@@ -1,0 +1,99 @@
+.TH "syscall.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+syscall.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'bus_internal_types\&.h'\fP
+.br
+\fC#include <poll\&.h>\fP
+.br
+\fC#include <time\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBsyscall_poll\fP (struct pollfd fds[], nfds_t nfds, int timeout)"
+.br
+.RI "\fIWrappers for syscalls, to allow mocking for testing\&. \fP"
+.ti -1c
+.RI "int \fBsyscall_close\fP (int fd)"
+.br
+.ti -1c
+.RI "ssize_t \fBsyscall_write\fP (int fildes, const void *buf, size_t nbyte)"
+.br
+.ti -1c
+.RI "ssize_t \fBsyscall_read\fP (int fildes, void *buf, size_t nbyte)"
+.br
+.ti -1c
+.RI "int \fBsyscall_SSL_write\fP (SSL *ssl, const void *buf, int num)"
+.br
+.RI "\fIWrappers for OpenSSL calls\&. \fP"
+.ti -1c
+.RI "int \fBsyscall_SSL_read\fP (SSL *ssl, void *buf, int num)"
+.br
+.ti -1c
+.RI "int \fBsyscall_SSL_get_error\fP (const SSL *ssl, int ret)"
+.br
+.ti -1c
+.RI "int \fBsyscall_timestamp\fP (struct timeval *restrict tp, bool relative)"
+.br
+.RI "\fIWrapper for gettimeofday and (where available) clock_gettime(CLOCK_MONOTONIC), which is used when RELATIVE is true\&. \fP"
+.ti -1c
+.RI "int \fBsyscall_pthread_join\fP (pthread_t thread, void **value_ptr)"
+.br
+.RI "\fIWrapper for pthread calls\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int syscall_poll (struct pollfdfds[], nfds_tnfds, inttimeout)"
+
+.PP
+Wrappers for syscalls, to allow mocking for testing\&. 
+.PP
+Definition at line 27 of file syscall\&.c\&.
+.SS "int syscall_close (intfd)"
+
+.PP
+Definition at line 31 of file syscall\&.c\&.
+.SS "ssize_t syscall_write (intfildes, const void *buf, size_tnbyte)"
+
+.PP
+Definition at line 35 of file syscall\&.c\&.
+.SS "ssize_t syscall_read (intfildes, void *buf, size_tnbyte)"
+
+.PP
+Definition at line 39 of file syscall\&.c\&.
+.SS "int syscall_SSL_write (SSL *ssl, const void *buf, intnum)"
+
+.PP
+Wrappers for OpenSSL calls\&. 
+.PP
+Definition at line 44 of file syscall\&.c\&.
+.SS "int syscall_SSL_read (SSL *ssl, void *buf, intnum)"
+
+.PP
+Definition at line 48 of file syscall\&.c\&.
+.SS "int syscall_SSL_get_error (const SSL *ssl, intret)"
+
+.PP
+Definition at line 52 of file syscall\&.c\&.
+.SS "int syscall_timestamp (struct timeval *restricttp, boolrelative)"
+
+.PP
+Wrapper for gettimeofday and (where available) clock_gettime(CLOCK_MONOTONIC), which is used when RELATIVE is true\&. 
+.PP
+Definition at line 60 of file syscall\&.c\&.
+.SS "int syscall_pthread_join (pthread_tthread, void **value_ptr)"
+
+.PP
+Wrapper for pthread calls\&. 
+.PP
+Definition at line 77 of file syscall\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -1,4 +1,4 @@
-.TH "kinetic_response.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_response.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,33 +13,60 @@ kinetic_response.h \-
 
 .in +1c
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticResponse_GetStatus\fP (\fBKineticResponse\fP *pdu)"
+.RI "uint32_t \fBKineticResponse_GetProtobufLength\fP (\fBKineticResponse\fP *response)"
 .br
 .ti -1c
-.RI "KineticProto_Command_KeyValue * \fBKineticResponse_GetKeyValue\fP (\fBKineticResponse\fP *pdu)"
+.RI "uint32_t \fBKineticResponse_GetValueLength\fP (\fBKineticResponse\fP *response)"
 .br
 .ti -1c
-.RI "KineticProto_Command_Range * \fBKineticResponse_GetKeyRange\fP (\fBKineticResponse\fP *pdu)"
+.RI "\fBKineticStatus\fP \fBKineticResponse_GetStatus\fP (\fBKineticResponse\fP *response)"
+.br
+.ti -1c
+.RI "int64_t \fBKineticResponse_GetConnectionID\fP (\fBKineticResponse\fP *response)"
+.br
+.ti -1c
+.RI "Com__Seagate__Kinetic__Proto__Command__KeyValue * \fBKineticResponse_GetKeyValue\fP (\fBKineticResponse\fP *response)"
+.br
+.ti -1c
+.RI "Com__Seagate__Kinetic__Proto__Command__Range * \fBKineticResponse_GetKeyRange\fP (\fBKineticResponse\fP *response)"
 .br
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "\fBKineticStatus\fP KineticResponse_GetStatus (\fBKineticResponse\fP *pdu)"
+.SS "uint32_t KineticResponse_GetProtobufLength (\fBKineticResponse\fP *response)"
 
 .PP
 Definition at line 35 of file kinetic_response\&.c\&.
 .PP
-References KineticResponse::command, KINETIC_STATUS_INVALID, and KineticProtoStatusCode_to_KineticStatus()\&.
-.SS "KineticProto_Command_KeyValue* KineticResponse_GetKeyValue (\fBKineticResponse\fP *pdu)"
+References KineticResponse::header, and KINETIC_ASSERT\&.
+.SS "uint32_t KineticResponse_GetValueLength (\fBKineticResponse\fP *response)"
 
 .PP
-Definition at line 51 of file kinetic_response\&.c\&.
+Definition at line 41 of file kinetic_response\&.c\&.
+.PP
+References KineticResponse::header, and KINETIC_ASSERT\&.
+.SS "\fBKineticStatus\fP KineticResponse_GetStatus (\fBKineticResponse\fP *response)"
+
+.PP
+Definition at line 47 of file kinetic_response\&.c\&.
+.PP
+References KineticResponse::command, KINETIC_STATUS_INVALID, and KineticProtoStatusCode_to_KineticStatus()\&.
+.SS "int64_t KineticResponse_GetConnectionID (\fBKineticResponse\fP *response)"
+
+.PP
+Definition at line 63 of file kinetic_response\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__UNSOLICITEDSTATUS, KineticResponse::command, KINETIC_ASSERT, and KineticResponse::proto\&.
+.SS "Com__Seagate__Kinetic__Proto__Command__KeyValue* KineticResponse_GetKeyValue (\fBKineticResponse\fP *response)"
+
+.PP
+Definition at line 78 of file kinetic_response\&.c\&.
 .PP
 References KineticResponse::command\&.
-.SS "KineticProto_Command_Range* KineticResponse_GetKeyRange (\fBKineticResponse\fP *pdu)"
+.SS "Com__Seagate__Kinetic__Proto__Command__Range* KineticResponse_GetKeyRange (\fBKineticResponse\fP *response)"
 
 .PP
-Definition at line 64 of file kinetic_response\&.c\&.
+Definition at line 91 of file kinetic_response\&.c\&.
 .PP
 References KineticResponse::command, and KineticResponse::proto\&.
 .SH "Author"

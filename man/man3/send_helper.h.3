@@ -1,0 +1,53 @@
+.TH "send_helper.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+send_helper.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'bus_types\&.h'\fP
+.br
+\fC#include 'bus_internal_types\&.h'\fP
+.br
+
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBSendHelper_HandleWrite_res\fP "
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSendHelper_HandleWrite_res\fP \fBSendHelper_HandleWrite\fP (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+.br
+.in -1c
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBSendHelper_HandleWrite_res\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fISHHW_OK \fP\fP
+.TP
+\fB\fISHHW_DONE \fP\fP
+.TP
+\fB\fISHHW_ERROR \fP\fP
+.PP
+Definition at line 26 of file send_helper\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "\fBSendHelper_HandleWrite_res\fP SendHelper_HandleWrite (\fBbus\fP *b, \fBboxed_msg\fP *box)"
+
+.PP
+Definition at line 39 of file send_helper\&.c\&.
+.PP
+References BUS_LOG_SNPRINTF, BUS_NO_SSL, BUS_SEND_TIMESTAMP_ERROR, BUS_SEND_TX_FAILURE, BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER, enqueue_EXPECT_message_to_listener(), boxed_msg::fd, LOG_SENDER, boxed_msg::out_msg_size, boxed_msg::out_sent_size, boxed_msg::out_seq_id, Send_HandleFailure(), SHHW_DONE, SHHW_ERROR, SHHW_OK, boxed_msg::ssl, boxed_msg::tv_send_done, bus::udata, Util_Timestamp(), write_plain(), and write_ssl()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

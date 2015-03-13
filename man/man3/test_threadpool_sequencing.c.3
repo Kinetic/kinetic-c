@@ -1,4 +1,4 @@
-.TH "test_threadpool_sequencing.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "test_threadpool_sequencing.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -101,13 +101,13 @@ References threadpool_info::active_threads, threadpool_info::backlog_size, compl
 .PP
 Definition at line 66 of file test_threadpool_sequencing\&.c\&.
 .PP
-References completed_count, limit, SPIN_ADJ, and threadpool_schedule()\&.
+References completed_count, limit, SPIN_ADJ, and Threadpool_Schedule()\&.
 .SS "int main (intargc, char **argv)"
 
 .PP
 Definition at line 84 of file test_threadpool_sequencing\&.c\&.
 .PP
-References completed_count, dump_stats(), limit, MAX_TASKS, threadpool_config::max_threads, threadpool_task::task, task_cb(), threadpool_config::task_ringbuf_size2, threadpool_init(), threadpool_schedule(), and threadpool_stats()\&.
+References completed_count, dump_stats(), limit, MAX_TASKS, threadpool_config::max_threads, threadpool_task::task, task_cb(), threadpool_config::task_ringbuf_size2, Threadpool_Init(), Threadpool_Schedule(), and Threadpool_Stats()\&.
 .SH "Variable Documentation"
 .PP 
 .SS "size_t completed_count = 0\fC [static]\fP"

@@ -1,4 +1,4 @@
-.TH "listener_cmd.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener_cmd.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,26 +13,32 @@ listener_cmd.h \-
 
 .in +1c
 .ti -1c
-.RI "void \fBListenerCmd_NotifyCaller\fP (int fd)"
+.RI "void \fBListenerCmd_NotifyCaller\fP (\fBlistener\fP *l, int fd)"
 .br
+.RI "\fINotify the listener's caller that a command has completed\&. \fP"
 .ti -1c
 .RI "void \fBListenerCmd_CheckIncomingMessages\fP (\fBlistener\fP *l, int *res)"
 .br
+.RI "\fIProcess incoming commands, if any\&. \fP"
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "void ListenerCmd_NotifyCaller (intfd)"
+.SS "void ListenerCmd_NotifyCaller (\fBlistener\fP *l, intfd)"
 
 .PP
-Definition at line 29 of file listener_cmd\&.c\&.
+Notify the listener's caller that a command has completed\&. 
 .PP
-References LISTENER_MSG_TAG\&.
+Definition at line 42 of file listener_cmd\&.c\&.
+.PP
+References listener::bus, BUS_LOG_SNPRINTF, LISTENER_MSG_TAG, ListenerTask_GetBackpressure(), LOG_LISTENER, syscall_write(), and bus::udata\&.
 .SS "void ListenerCmd_CheckIncomingMessages (\fBlistener\fP *l, int *res)"
 
 .PP
-Definition at line 48 of file listener_cmd\&.c\&.
+Process incoming commands, if any\&. 
 .PP
-References listener::bus, BUS_LOG_SNPRINTF, listener::fds, INCOMING_MSG_PIPE_ID, LOG_LISTENER, msg_handler(), listener::msgs, and bus::udata\&.
+Definition at line 73 of file listener_cmd\&.c\&.
+.PP
+References listener::bus, BUS_LOG_SNPRINTF, listener::fds, INCOMING_MSG_PIPE_ID, LISTENER_CMD_BUF_SIZE, LOG_LISTENER, msg_handler(), listener::msgs, syscall_read(), and bus::udata\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

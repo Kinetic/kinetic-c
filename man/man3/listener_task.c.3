@@ -1,4 +1,4 @@
-.TH "listener_task.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener_task.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -11,6 +11,8 @@ listener_task.c \-
 \fC#include 'listener_task_internal\&.h'\fP
 .br
 \fC#include 'util\&.h'\fP
+.br
+\fC#include 'syscall\&.h'\fP
 .br
 \fC#include <assert\&.h>\fP
 .br
@@ -25,185 +27,160 @@ listener_task.c \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBTIMEOUT_DELAY\fP   100"
-.br
-.ti -1c
-.RI "#define \fBMSG_BP_1QTR\fP   (0\&.25)"
-.br
-.ti -1c
-.RI "#define \fBMSG_BP_HALF\fP   (0\&.5)"
-.br
-.ti -1c
-.RI "#define \fBMSG_BP_3QTR\fP   (2\&.0)"
-.br
-.ti -1c
-.RI "#define \fBRX_INFO_BP_1QTR\fP   (0\&.5)"
-.br
-.ti -1c
-.RI "#define \fBRX_INFO_BP_HALF\fP   (0\&.5)"
-.br
-.ti -1c
-.RI "#define \fBRX_INFO_BP_3QTR\fP   (2\&.0)"
-.br
-.ti -1c
-.RI "#define \fBTHREADPOOL_BP\fP   (1\&.0)"
+.RI "#define \fBWHILE\fP   while"
 .br
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "void * \fBListenerTask_MainLoop\fP (void *arg)"
-.br
-.ti -1c
 .RI "static void \fBtick_handler\fP (\fBlistener\fP *l)"
-.br
-.ti -1c
-.RI "void \fBListenerTask_DumpRXInfoTable\fP (\fBlistener\fP *l)"
-.br
-.ti -1c
-.RI "static void \fBretry_delivery\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
 .br
 .ti -1c
 .RI "static void \fBclean_up_completed_info\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
 .br
 .ti -1c
+.RI "static void \fBretry_delivery\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info)"
+.br
+.ti -1c
+.RI "static void \fBobserve_backpressure\fP (\fBlistener\fP *l, size_t backpressure)"
+.br
+.ti -1c
+.RI "void * \fBListenerTask_MainLoop\fP (void *arg)"
+.br
+.RI "\fIListener's main loop -- function pointer for pthread start function\&. \fP"
+.ti -1c
+.RI "void \fBListenerTask_DumpRXInfoTable\fP (\fBlistener\fP *l)"
+.br
+.RI "\fIDump the RX info table\&. \fP"
+.ti -1c
 .RI "void \fBListenerTask_NotifyMessageFailure\fP (\fBlistener\fP *l, \fBrx_info_t\fP *info, \fBbus_send_status_t\fP status)"
 .br
+.RI "\fINotify the client that the event in INFO has failed with STATUS\&. \fP"
 .ti -1c
 .RI "static \fBconnection_info\fP * \fBget_connection_info\fP (struct \fBlistener\fP *l, int fd)"
 .br
 .ti -1c
 .RI "void \fBListenerTask_ReleaseRXInfo\fP (struct \fBlistener\fP *l, \fBrx_info_t\fP *info)"
 .br
+.RI "\fIRelease an INFO to the listener's info pool\&. \fP"
 .ti -1c
 .RI "void \fBListenerTask_ReleaseMsg\fP (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)"
 .br
+.RI "\fIRelease a message to the listener's message pool\&. \fP"
 .ti -1c
 .RI "bool \fBListenerTask_GrowReadBuf\fP (\fBlistener\fP *l, size_t nsize)"
 .br
+.RI "\fIGrow the listener's read buffer to NSIZE\&. \fP"
 .ti -1c
 .RI "void \fBListenerTask_AttemptDelivery\fP (\fBlistener\fP *l, struct \fBrx_info_t\fP *info)"
 .br
-.ti -1c
-.RI "static void \fBobserve_backpressure\fP (\fBlistener\fP *l, size_t backpressure)"
-.br
+.RI "\fIAttempt delivery of the message boxed in INFO\&. \fP"
 .ti -1c
 .RI "uint16_t \fBListenerTask_GetBackpressure\fP (struct \fBlistener\fP *l)"
 .br
+.RI "\fIGet the current backpressure from the listener\&. \fP"
 .in -1c
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define TIMEOUT_DELAY   100"
+.SS "#define WHILE   while"
 
 .PP
-Definition at line 29 of file listener_task\&.c\&.
-.SS "#define MSG_BP_1QTR   (0\&.25)"
-
-.PP
-Definition at line 483 of file listener_task\&.c\&.
-.SS "#define MSG_BP_HALF   (0\&.5)"
-
-.PP
-Definition at line 484 of file listener_task\&.c\&.
-.SS "#define MSG_BP_3QTR   (2\&.0)"
-
-.PP
-Definition at line 485 of file listener_task\&.c\&.
-.SS "#define RX_INFO_BP_1QTR   (0\&.5)"
-
-.PP
-Definition at line 486 of file listener_task\&.c\&.
-.SS "#define RX_INFO_BP_HALF   (0\&.5)"
-
-.PP
-Definition at line 487 of file listener_task\&.c\&.
-.SS "#define RX_INFO_BP_3QTR   (2\&.0)"
-
-.PP
-Definition at line 488 of file listener_task\&.c\&.
-.SS "#define THREADPOOL_BP   (1\&.0)"
-
-.PP
-Definition at line 489 of file listener_task\&.c\&.
+Definition at line 37 of file listener_task\&.c\&.
 .SH "Function Documentation"
 .PP 
-.SS "void* ListenerTask_MainLoop (void *arg)"
-
-.PP
-Definition at line 31 of file listener_task\&.c\&.
-.PP
-References BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, INCOMING_MSG_PIPE, LISTENER_NO_FD, LISTENER_SHUTDOWN_COMPLETE_FD, ListenerCmd_CheckIncomingMessages(), ListenerCmd_NotifyCaller(), ListenerIO_AttemptRecv(), LOG_LISTENER, tick_handler(), TIMEOUT_DELAY, bus::udata, util_is_resumable_io_error(), and util_timestamp()\&.
 .SS "static void tick_handler (\fBlistener\fP *l)\fC [static]\fP"
 
 .PP
-Definition at line 95 of file listener_task\&.c\&.
+Definition at line 119 of file listener_task\&.c\&.
 .PP
-References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, clean_up_completed_info(), rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, listener::is_idle, ListenerTask_DumpRXInfoTable(), ListenerTask_NotifyMessageFailure(), ListenerTask_ReleaseRXInfo(), bus::log_level, LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, listener::msgs, listener::msgs_in_use, boxed_msg::out_seq_id, retry_delivery(), RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, RX_ERROR_NONE, RX_ERROR_READY_FOR_DELIVERY, listener::rx_info, listener::rx_info_in_use, listener::rx_info_max_used, rx_info_t::state, rx_info_t::timeout_sec, listener::tracked_fds, boxed_msg::tv_send_done, boxed_msg::tv_send_start, listener_msg::type, rx_info_t::u, bus::udata, and util_timestamp()\&.
-.SS "void ListenerTask_DumpRXInfoTable (\fBlistener\fP *l)"
-
-.PP
-Definition at line 192 of file listener_task\&.c\&.
-.PP
-References rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, rx_info_t::next, boxed_msg::out_seq_id, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::timeout_sec, and rx_info_t::u\&.
-.SS "static void retry_delivery (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
-
-.PP
-Definition at line 218 of file listener_task\&.c\&.
-.PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), BUS_SEND_SUCCESS, rx_info_t::expect, rx_info_t::id, ListenerTask_ReleaseRXInfo(), LOG_MEMORY, observe_backpressure(), boxed_msg::out_seq_id, boxed_msg::result, RIS_EXPECT, RX_ERROR_DONE, RX_ERROR_READY_FOR_DELIVERY, rx_info_t::state, bus_msg_result_t::status, rx_info_t::u, and bus::udata\&.
+References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SEND_RX_FAILURE, BUS_SEND_RX_TIMEOUT, clean_up_completed_info(), rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, listener::is_idle, ListenerTask_DumpRXInfoTable(), ListenerTask_NotifyMessageFailure(), ListenerTask_ReleaseRXInfo(), bus::log_level, LOG_LISTENER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, listener::msgs, listener::msgs_in_use, boxed_msg::out_seq_id, retry_delivery(), RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, RX_ERROR_NONE, RX_ERROR_READY_FOR_DELIVERY, listener::rx_info, listener::rx_info_in_use, listener::rx_info_max_used, rx_info_t::state, rx_info_t::timeout_sec, listener::tracked_fds, boxed_msg::tv_send_done, boxed_msg::tv_send_start, listener_msg::type, rx_info_t::u, bus::udata, and Util_Timestamp()\&.
 .SS "static void clean_up_completed_info (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
 
 .PP
-Definition at line 246 of file listener_task\&.c\&.
+Definition at line 277 of file listener_task\&.c\&.
 .PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), BUS_SEND_SUCCESS, rx_info_t::expect, boxed_msg::fd, rx_info_t::id, ListenerTask_ReleaseRXInfo(), LOG_MEMORY, observe_backpressure(), boxed_msg::out_msg, boxed_msg::out_seq_id, boxed_msg::result, RIS_EXPECT, RX_ERROR_DONE, rx_info_t::state, bus_msg_result_t::status, rx_info_t::timeout_sec, rx_info_t::u, and bus::udata\&.
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, Bus_ProcessBoxedMessage(), BUS_SEND_SUCCESS, rx_info_t::expect, boxed_msg::fd, rx_info_t::id, ListenerTask_ReleaseRXInfo(), LOG_MEMORY, observe_backpressure(), boxed_msg::out_msg, boxed_msg::out_seq_id, boxed_msg::result, RIS_EXPECT, RX_ERROR_DONE, rx_info_t::state, bus_msg_result_t::status, rx_info_t::timeout_sec, rx_info_t::u, and bus::udata\&.
+.SS "static void retry_delivery (\fBlistener\fP *l, \fBrx_info_t\fP *info)\fC [static]\fP"
+
+.PP
+Definition at line 247 of file listener_task\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, Bus_ProcessBoxedMessage(), BUS_SEND_SUCCESS, rx_info_t::expect, rx_info_t::id, ListenerTask_ReleaseRXInfo(), LOG_MEMORY, observe_backpressure(), boxed_msg::out_seq_id, boxed_msg::result, RIS_EXPECT, RX_ERROR_DONE, RX_ERROR_READY_FOR_DELIVERY, rx_info_t::state, bus_msg_result_t::status, rx_info_t::u, and bus::udata\&.
+.SS "static void observe_backpressure (\fBlistener\fP *l, size_tbackpressure)\fC [static]\fP"
+
+.PP
+Definition at line 525 of file listener_task\&.c\&.
+.PP
+References listener::upstream_backpressure\&.
+.SS "void* ListenerTask_MainLoop (void *arg)"
+
+.PP
+Listener's main loop -- function pointer for pthread start function\&. 
+.PP
+Definition at line 45 of file listener_task\&.c\&.
+.PP
+References BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, INCOMING_MSG_PIPE, INFINITE_DELAY, LISTENER_NO_FD, LISTENER_SHUTDOWN_COMPLETE_FD, LISTENER_TASK_TIMEOUT_DELAY, ListenerCmd_CheckIncomingMessages(), ListenerCmd_NotifyCaller(), ListenerIO_AttemptRecv(), LOG_LISTENER, syscall_poll(), tick_handler(), bus::udata, Util_IsResumableIOError(), Util_Timestamp(), and WHILE\&.
+.SS "void ListenerTask_DumpRXInfoTable (\fBlistener\fP *l)"
+
+.PP
+Dump the RX info table\&. (Debugging only\&.) 
+.PP
+Definition at line 221 of file listener_task\&.c\&.
+.PP
+References rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, rx_info_t::next, boxed_msg::out_seq_id, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::timeout_sec, and rx_info_t::u\&.
 .SS "void ListenerTask_NotifyMessageFailure (\fBlistener\fP *l, \fBrx_info_t\fP *info, \fBbus_send_status_t\fPstatus)"
 
 .PP
-Definition at line 285 of file listener_task\&.c\&.
+Notify the client that the event in INFO has failed with STATUS\&. 
 .PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), rx_info_t::expect, ListenerTask_ReleaseRXInfo(), LOG_MEMORY, observe_backpressure(), RIS_EXPECT, RX_ERROR_DONE, rx_info_t::state, rx_info_t::u, and bus::udata\&.
+Definition at line 319 of file listener_task\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, Bus_ProcessBoxedMessage(), BUS_SEND_UNDEFINED, rx_info_t::expect, ListenerTask_ReleaseRXInfo(), LOG_MEMORY, observe_backpressure(), RIS_EXPECT, RX_ERROR_DONE, rx_info_t::state, rx_info_t::u, and bus::udata\&.
 .SS "static \fBconnection_info\fP* get_connection_info (struct \fBlistener\fP *l, intfd)\fC [static]\fP"
 
 .PP
-Definition at line 312 of file listener_task\&.c\&.
+Definition at line 349 of file listener_task\&.c\&.
 .PP
 References listener::bus, BUS_ASSERT, connection_info::fd, listener::fd_info, listener::tracked_fds, and bus::udata\&.
-.SS "void ListenerTask_ReleaseRXInfo (struct \fBlistener\fP *l, \fBrx_info_t\fP *info)"
+.SS "void ListenerTask_ReleaseRXInfo (\fBlistener\fP *l, struct \fBrx_info_t\fP *info)"
 
 .PP
-Definition at line 322 of file listener_task\&.c\&.
+Release an INFO to the listener's info pool\&. 
+.PP
+Definition at line 359 of file listener_task\&.c\&.
 .PP
 References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, rx_info_t::expect, get_connection_info(), rx_info_t::hold, rx_info_t::id, LOG_LISTENER, MAX_PENDING_MESSAGES, rx_info_t::next, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, listener::rx_info, listener::rx_info_freelist, listener::rx_info_in_use, listener::rx_info_max_used, rx_info_t::state, rx_info_t::u, bus::udata, connection_info::udata, and bus::unexpected_msg_cb\&.
-.SS "void ListenerTask_ReleaseMsg (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg)"
+.SS "void ListenerTask_ReleaseMsg (\fBlistener\fP *l, \fBlistener_msg\fP *msg)"
 
 .PP
-Definition at line 388 of file listener_task\&.c\&.
+Release a message to the listener's message pool\&. 
+.PP
+Definition at line 427 of file listener_task\&.c\&.
 .PP
 References ATOMIC_BOOL_COMPARE_AND_SWAP, listener::bus, BUS_ASSERT, BUS_LOG, listener_msg::id, LOG_LISTENER, MAX_QUEUE_MESSAGES, listener::msg_freelist, MSG_NONE, listener::msgs_in_use, listener_msg::next, listener_msg::type, and bus::udata\&.
 .SS "bool ListenerTask_GrowReadBuf (\fBlistener\fP *l, size_tnsize)"
 
 .PP
-Definition at line 409 of file listener_task\&.c\&.
+Grow the listener's read buffer to NSIZE\&. 
+.PP
+Definition at line 448 of file listener_task\&.c\&.
 .PP
 References listener::bus, BUS_LOG_SNPRINTF, LOG_MEMORY, listener::read_buf, listener::read_buf_size, and bus::udata\&.
 .SS "void ListenerTask_AttemptDelivery (\fBlistener\fP *l, struct \fBrx_info_t\fP *info)"
 
 .PP
-Definition at line 427 of file listener_task\&.c\&.
+Attempt delivery of the message boxed in INFO\&. 
 .PP
-References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, bus_process_boxed_message(), BUS_SEND_SUCCESS, clean_up_completed_info(), rx_info_t::expect, rx_info_t::id, LOG_LISTENER, LOG_MEMORY, observe_backpressure(), bus_unpack_cb_res_t::ok, bus_msg_result_t::response, boxed_msg::result, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, rx_info_t::state, bus_msg_result_t::status, bus_unpack_cb_res_t::success, rx_info_t::u, bus_unpack_cb_res_t::u, bus_msg_result_t::u, and bus::udata\&.
-.SS "static void observe_backpressure (\fBlistener\fP *l, size_tbackpressure)\fC [static]\fP"
-
+Definition at line 466 of file listener_task\&.c\&.
 .PP
-Definition at line 477 of file listener_task\&.c\&.
-.PP
-References listener::upstream_backpressure\&.
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, Bus_ProcessBoxedMessage(), BUS_SEND_REQUEST_COMPLETE, BUS_SEND_SUCCESS, clean_up_completed_info(), rx_info_t::expect, rx_info_t::id, LOG_LISTENER, LOG_MEMORY, observe_backpressure(), bus_unpack_cb_res_t::ok, bus_msg_result_t::response, boxed_msg::result, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, RX_ERROR_DONE, rx_info_t::state, bus_msg_result_t::status, bus_unpack_cb_res_t::success, rx_info_t::u, bus_unpack_cb_res_t::u, bus_msg_result_t::u, and bus::udata\&.
 .SS "uint16_t ListenerTask_GetBackpressure (struct \fBlistener\fP *l)"
 
 .PP
-Definition at line 491 of file listener_task\&.c\&.
+Get the current backpressure from the listener\&. 
+.PP
+Definition at line 531 of file listener_task\&.c\&.
 .PP
 References listener::bus, BUS_LOG_SNPRINTF, LOG_SENDER, MAX_PENDING_MESSAGES, MAX_QUEUE_MESSAGES, MSG_BP_1QTR, MSG_BP_3QTR, MSG_BP_HALF, listener::msgs_in_use, RX_INFO_BP_1QTR, RX_INFO_BP_3QTR, RX_INFO_BP_HALF, listener::rx_info_in_use, THREADPOOL_BP, bus::udata, and listener::upstream_backpressure\&.
 .SH "Author"

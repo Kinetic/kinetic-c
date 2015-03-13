@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -67,33 +67,42 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener__msg.html">listener_msg</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A queue message, with a command in the tagged union.  <a href="structlistener__msg.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrx__info__t.html">rx_info_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Record in table for partially processed messages.  <a href="structrx__info__t.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structlistener.html">listener</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receiver of responses.  <a href="structlistener.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a55c36910fb23a47b98bb7467e508daa5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a55c36910fb23a47b98bb7467e508daa5">DEFAULT_READ_BUF_SIZE</a>&#160;&#160;&#160;(1024L * 1024L)</td></tr>
+<tr class="memdesc:a55c36910fb23a47b98bb7467e508daa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default size for the read buffer, which will grow on demand.  <a href="#a55c36910fb23a47b98bb7467e508daa5">More...</a><br /></td></tr>
 <tr class="separator:a55c36910fb23a47b98bb7467e508daa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15740a5bfc8ef3fb9b927ef0007010bf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a15740a5bfc8ef3fb9b927ef0007010bf">INCOMING_MSG_PIPE</a>&#160;&#160;&#160;1</td></tr>
-<tr class="separator:a15740a5bfc8ef3fb9b927ef0007010bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45f028e5e02538a530e3fe313bfd728a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a45f028e5e02538a530e3fe313bfd728a">INCOMING_MSG_PIPE_ID</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a45f028e5e02538a530e3fe313bfd728a"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID of the <code>struct pollfd</code> for the listener's incoming command pipe.  <a href="#a45f028e5e02538a530e3fe313bfd728a">More...</a><br /></td></tr>
 <tr class="separator:a45f028e5e02538a530e3fe313bfd728a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15740a5bfc8ef3fb9b927ef0007010bf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a15740a5bfc8ef3fb9b927ef0007010bf">INCOMING_MSG_PIPE</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:a15740a5bfc8ef3fb9b927ef0007010bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset to account for the first file descriptor being the incoming message pipe.  <a href="#a15740a5bfc8ef3fb9b927ef0007010bf">More...</a><br /></td></tr>
+<tr class="separator:a15740a5bfc8ef3fb9b927ef0007010bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae857792f8fa526e40776f415560fad16"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#ae857792f8fa526e40776f415560fad16">LISTENER_TASK_TIMEOUT_DELAY</a>&#160;&#160;&#160;100</td></tr>
+<tr class="memdesc:ae857792f8fa526e40776f415560fad16"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the listener should wait for responses before becoming idle and blocking.  <a href="#ae857792f8fa526e40776f415560fad16">More...</a><br /></td></tr>
+<tr class="separator:ae857792f8fa526e40776f415560fad16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a816ccaf3e5e64cc98f2b5613cc177398"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a816ccaf3e5e64cc98f2b5613cc177398">MAX_FDS</a>&#160;&#160;&#160;1000</td></tr>
+<tr class="memdesc:a816ccaf3e5e64cc98f2b5613cc177398"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of sockets to monitor.  <a href="#a816ccaf3e5e64cc98f2b5613cc177398">More...</a><br /></td></tr>
 <tr class="separator:a816ccaf3e5e64cc98f2b5613cc177398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8da6d181eef4debc5b438687fd9804a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#ab8da6d181eef4debc5b438687fd9804a">MAX_PENDING_MESSAGES</a>&#160;&#160;&#160;(1024)</td></tr>
 <tr class="separator:ab8da6d181eef4debc5b438687fd9804a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ee3565e40e9a157decfa328ac562140"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a6ee3565e40e9a157decfa328ac562140">MAX_QUEUE_MESSAGES</a>&#160;&#160;&#160;32</td></tr>
+<tr class="memitem:a6ee3565e40e9a157decfa328ac562140"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a6ee3565e40e9a157decfa328ac562140">MAX_QUEUE_MESSAGES</a>&#160;&#160;&#160;(32)</td></tr>
+<tr class="memdesc:a6ee3565e40e9a157decfa328ac562140"><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of unprocessed queue messages.  <a href="#a6ee3565e40e9a157decfa328ac562140">More...</a><br /></td></tr>
 <tr class="separator:a6ee3565e40e9a157decfa328ac562140"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3b51637a39a4ff75bd979b917cb89ef"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#ad3b51637a39a4ff75bd979b917cb89ef">MIN_DELAY</a>&#160;&#160;&#160;10</td></tr>
-<tr class="separator:ad3b51637a39a4ff75bd979b917cb89ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16027d8acc5301e440cefa086eb9db2a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a16027d8acc5301e440cefa086eb9db2a">MAX_DELAY</a>&#160;&#160;&#160;100</td></tr>
-<tr class="separator:a16027d8acc5301e440cefa086eb9db2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab893de6f8a0ec8b0e6dd8097ff398019"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#ab893de6f8a0ec8b0e6dd8097ff398019">INFINITE_DELAY</a>&#160;&#160;&#160;(-1)</td></tr>
+<tr class="memdesc:ab893de6f8a0ec8b0e6dd8097ff398019"><td class="mdescLeft">&#160;</td><td class="mdescRight">Special value meaning poll should block indefinitely.  <a href="#ab893de6f8a0ec8b0e6dd8097ff398019">More...</a><br /></td></tr>
 <tr class="separator:ab893de6f8a0ec8b0e6dd8097ff398019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9edc873b66adf46bf716ceb7ab77bb07"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a9edc873b66adf46bf716ceb7ab77bb07">LISTENER_NO_FD</a>&#160;&#160;&#160;(-1)</td></tr>
+<tr class="memdesc:a9edc873b66adf46bf716ceb7ab77bb07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sentinel values used for <a class="el" href="structlistener.html#a98d02f437be02437df79939b196d178a">listener.shutdown_notify_fd</a>.  <a href="#a9edc873b66adf46bf716ceb7ab77bb07">More...</a><br /></td></tr>
 <tr class="separator:a9edc873b66adf46bf716ceb7ab77bb07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2283299012dd873e0a5e3b77dc417b08"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener__internal__types_8h.html#a2283299012dd873e0a5e3b77dc417b08">LISTENER_SHUTDOWN_COMPLETE_FD</a>&#160;&#160;&#160;(-2)</td></tr>
 <tr class="separator:a2283299012dd873e0a5e3b77dc417b08"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,19 +130,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00028">28</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a15740a5bfc8ef3fb9b927ef0007010bf"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define INCOMING_MSG_PIPE&#160;&#160;&#160;1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
+<p>Default size for the read buffer, which will grow on demand. </p>
 
 <p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00029">29</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
@@ -149,7 +146,42 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00030">30</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>ID of the <code>struct pollfd</code> for the listener's incoming command pipe. </p>
+<p>This is in the same pollfd array as the sockets being watched so that an incoming command will wake it from its blocking poll. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00035">35</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a15740a5bfc8ef3fb9b927ef0007010bf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INCOMING_MSG_PIPE&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Offset to account for the first file descriptor being the incoming message pipe. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00039">39</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae857792f8fa526e40776f415560fad16"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LISTENER_TASK_TIMEOUT_DELAY&#160;&#160;&#160;100</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>How long the listener should wait for responses before becoming idle and blocking. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00083">83</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -163,7 +195,10 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00102">102</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Max number of sockets to monitor. </p>
+<p>If listening to more sockets than this, use multiple listener threads. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00118">118</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -177,7 +212,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00106">106</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00122">122</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -186,40 +221,14 @@ Enumerations</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MAX_QUEUE_MESSAGES&#160;&#160;&#160;32</td>
+          <td class="memname">#define MAX_QUEUE_MESSAGES&#160;&#160;&#160;(32)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00109">109</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Max number of unprocessed queue messages. </p>
 
-</div>
-</div>
-<a class="anchor" id="ad3b51637a39a4ff75bd979b917cb89ef"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MIN_DELAY&#160;&#160;&#160;10</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00113">113</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a16027d8acc5301e440cefa086eb9db2a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_DELAY&#160;&#160;&#160;100</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00114">114</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00125">125</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -233,7 +242,9 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00115">115</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Special value meaning poll should block indefinitely. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00129">129</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -247,7 +258,9 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00118">118</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Sentinel values used for <a class="el" href="structlistener.html#a98d02f437be02437df79939b196d178a">listener.shutdown_notify_fd</a>. </p>
+
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00132">132</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -261,7 +274,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00119">119</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00133">133</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -276,7 +289,7 @@ Enumerations</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00110">110</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00126">126</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -305,7 +318,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00032">32</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00041">41</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -327,7 +340,7 @@ Enumerations</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00071">71</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="listener__internal__types_8h_source.html#l00085">85</a> of file <a class="el" href="listener__internal__types_8h_source.html">listener_internal_types.h</a>.</p>
 
 </div>
 </div>

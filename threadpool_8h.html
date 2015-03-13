@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -67,10 +67,13 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool__config.html">threadpool_config</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration for thread pool.  <a href="structthreadpool__config.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool__task.html">threadpool_task</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A task.  <a href="structthreadpool__task.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool__info.html">threadpool_info</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Statistics about the current state of the threadpool.  <a href="structthreadpool__info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -81,22 +84,29 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a2b87c05c1baca32f2cc13b36b4e62ba5"><td class="memItemLeft" align="right" valign="top">typedef void(&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a2b87c05c1baca32f2cc13b36b4e62ba5">threadpool_task_cb</a> )(void *udata)</td></tr>
+<tr class="memdesc:a2b87c05c1baca32f2cc13b36b4e62ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback for a task, with an arbitrary user-supplied pointer.  <a href="#a2b87c05c1baca32f2cc13b36b4e62ba5">More...</a><br /></td></tr>
 <tr class="separator:a2b87c05c1baca32f2cc13b36b4e62ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a680c8e1cbaa30a022394126a7b41c6c6"><td class="memItemLeft" align="right" valign="top">typedef void(&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a680c8e1cbaa30a022394126a7b41c6c6">threadpool_task_cleanup_cb</a> )(void *udata)</td></tr>
+<tr class="memdesc:a680c8e1cbaa30a022394126a7b41c6c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to clean up a cancelled task's data, with the arbitrary user-supplied pointer that would have gone to the task.  <a href="#a680c8e1cbaa30a022394126a7b41c6c6">More...</a><br /></td></tr>
 <tr class="separator:a680c8e1cbaa30a022394126a7b41c6c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a9a18a2a6a01f8c9b1f7c191ae999dc87"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a9a18a2a6a01f8c9b1f7c191ae999dc87">threadpool_init</a> (struct <a class="el" href="structthreadpool__config.html">threadpool_config</a> *cfg)</td></tr>
-<tr class="separator:a9a18a2a6a01f8c9b1f7c191ae999dc87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04602c2dcddbb78c630433294c997fa7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a04602c2dcddbb78c630433294c997fa7">threadpool_schedule</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, struct <a class="el" href="structthreadpool__task.html">threadpool_task</a> *task, size_t *pushback)</td></tr>
-<tr class="separator:a04602c2dcddbb78c630433294c997fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92478c7ec9f8711b724fff8a371f4c4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a92478c7ec9f8711b724fff8a371f4c4f">threadpool_stats</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, struct <a class="el" href="structthreadpool__info.html">threadpool_info</a> *ti)</td></tr>
-<tr class="separator:a92478c7ec9f8711b724fff8a371f4c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19960645eea868f0e146f55b4a7fae07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a19960645eea868f0e146f55b4a7fae07">threadpool_shutdown</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, bool kill_all)</td></tr>
-<tr class="separator:a19960645eea868f0e146f55b4a7fae07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ed2977ea33edbee0f6864ccd25992d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a0ed2977ea33edbee0f6864ccd25992d2">threadpool_free</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t)</td></tr>
-<tr class="separator:a0ed2977ea33edbee0f6864ccd25992d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fcf6d5a545e72d8419c1bdf3284840a"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a9fcf6d5a545e72d8419c1bdf3284840a">Threadpool_Init</a> (struct <a class="el" href="structthreadpool__config.html">threadpool_config</a> *cfg)</td></tr>
+<tr class="memdesc:a9fcf6d5a545e72d8419c1bdf3284840a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a threadpool, according to a config.  <a href="#a9fcf6d5a545e72d8419c1bdf3284840a">More...</a><br /></td></tr>
+<tr class="separator:a9fcf6d5a545e72d8419c1bdf3284840a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85ba3ada0281d56f55a313ba711f088e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a85ba3ada0281d56f55a313ba711f088e">Threadpool_Schedule</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, struct <a class="el" href="structthreadpool__task.html">threadpool_task</a> *task, size_t *pushback)</td></tr>
+<tr class="memdesc:a85ba3ada0281d56f55a313ba711f088e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Schedule a task in the threadpool.  <a href="#a85ba3ada0281d56f55a313ba711f088e">More...</a><br /></td></tr>
+<tr class="separator:a85ba3ada0281d56f55a313ba711f088e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4ef4735470cf6d15695897ae4afae8c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#af4ef4735470cf6d15695897ae4afae8c">Threadpool_Stats</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, struct <a class="el" href="structthreadpool__info.html">threadpool_info</a> *ti)</td></tr>
+<tr class="memdesc:af4ef4735470cf6d15695897ae4afae8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">If TI is non-NULL, fill out some statistics about the operating state of the thread pool.  <a href="#af4ef4735470cf6d15695897ae4afae8c">More...</a><br /></td></tr>
+<tr class="separator:af4ef4735470cf6d15695897ae4afae8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa351af7072a8d13cd521035c41883dda"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#aa351af7072a8d13cd521035c41883dda">Threadpool_Shutdown</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, bool kill_all)</td></tr>
+<tr class="memdesc:aa351af7072a8d13cd521035c41883dda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notify the threadpool's threads that the system is going to shut down soon.  <a href="#aa351af7072a8d13cd521035c41883dda">More...</a><br /></td></tr>
+<tr class="separator:aa351af7072a8d13cd521035c41883dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cee1d11d33153a35e343cc1a801dd67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool_8h.html#a5cee1d11d33153a35e343cc1a801dd67">Threadpool_Free</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t)</td></tr>
+<tr class="memdesc:a5cee1d11d33153a35e343cc1a801dd67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free a threadpool.  <a href="#a5cee1d11d33153a35e343cc1a801dd67">More...</a><br /></td></tr>
+<tr class="separator:a5cee1d11d33153a35e343cc1a801dd67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a7cf11dbc2d46adcd7452da62f475c6b4"></a>
@@ -124,6 +134,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Callback for a task, with an arbitrary user-supplied pointer. </p>
+
 <p>Definition at line <a class="el" href="threadpool_8h_source.html#l00041">41</a> of file <a class="el" href="threadpool_8h_source.html">threadpool.h</a>.</p>
 
 </div>
@@ -138,17 +150,19 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Callback to clean up a cancelled task's data, with the arbitrary user-supplied pointer that would have gone to the task. </p>
+
 <p>Definition at line <a class="el" href="threadpool_8h_source.html#l00045">45</a> of file <a class="el" href="threadpool_8h_source.html">threadpool.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a9a18a2a6a01f8c9b1f7c191ae999dc87"></a>
+<a class="anchor" id="a9fcf6d5a545e72d8419c1bdf3284840a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structthreadpool.html">threadpool</a>* threadpool_init </td>
+          <td class="memname">struct <a class="el" href="structthreadpool.html">threadpool</a>* Threadpool_Init </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structthreadpool__config.html">threadpool_config</a> *&#160;</td>
           <td class="paramname"><em>cfg</em></td><td>)</td>
@@ -157,18 +171,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00046">46</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+<p>Initialize a threadpool, according to a config. </p>
+<p>Returns NULL on error. </p>
 
-<p>References <a class="el" href="threadpool_8h_source.html#l00036">threadpool_config::max_delay</a>, <a class="el" href="threadpool__internals_8h_source.html#l00076">threadpool::max_delay</a>, <a class="el" href="threadpool_8h_source.html#l00037">threadpool_config::max_threads</a>, <a class="el" href="threadpool__internals_8h_source.html#l00081">threadpool::max_threads</a>, <a class="el" href="threadpool_8c_source.html#l00037">set_defaults()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00035">thread_info::t</a>, <a class="el" href="threadpool__internals_8h_source.html#l00074">threadpool::task_ringbuf_mask</a>, <a class="el" href="threadpool__internals_8h_source.html#l00073">threadpool::task_ringbuf_size</a>, <a class="el" href="threadpool_8h_source.html#l00035">threadpool_config::task_ringbuf_size2</a>, <a class="el" href="threadpool__internals_8h_source.html#l00077">threadpool::task_ringbuf_size2</a>, <a class="el" href="threadpool__internals_8h_source.html#l00071">threadpool::tasks</a>, <a class="el" href="threadpool_8h_source.html#l00028">THREADPOOL_MAX_RINGBUF_SIZE2</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::threads</a>.</p>
+<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00052">52</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+
+<p>References <a class="el" href="threadpool_8h_source.html#l00037">threadpool_config::max_threads</a>, <a class="el" href="threadpool__internals_8h_source.html#l00083">threadpool::max_threads</a>, <a class="el" href="threadpool_8c_source.html#l00044">set_defaults()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00037">thread_info::t</a>, <a class="el" href="threadpool__internals_8h_source.html#l00078">threadpool::task_ringbuf_mask</a>, <a class="el" href="threadpool__internals_8h_source.html#l00077">threadpool::task_ringbuf_size</a>, <a class="el" href="threadpool_8h_source.html#l00035">threadpool_config::task_ringbuf_size2</a>, <a class="el" href="threadpool__internals_8h_source.html#l00079">threadpool::task_ringbuf_size2</a>, <a class="el" href="threadpool__internals_8h_source.html#l00073">threadpool::tasks</a>, <a class="el" href="threadpool_8h_source.html#l00028">THREADPOOL_MAX_RINGBUF_SIZE2</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00084">threadpool::threads</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a04602c2dcddbb78c630433294c997fa7"></a>
+<a class="anchor" id="a85ba3ada0281d56f55a313ba711f088e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool threadpool_schedule </td>
+          <td class="memname">bool Threadpool_Schedule </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
           <td class="paramname"><em>t</em>, </td>
@@ -193,18 +210,23 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00094">94</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+<p>Schedule a task in the threadpool. </p>
+<p>Returns whether the task was successfully registered or not. If Threadpool_Shutdown has been called, this function will always return false, due to API misuse.</p>
+<p>If *pushback is non-NULL, it will be set to the number of tasks in the backlog, so code upstream can provide counterpressure.</p>
+<p>TASK is copied into the threadpool by value. </p>
 
-<p>References <a class="el" href="atomic_8h_source.html#l00023">ATOMIC_BOOL_COMPARE_AND_SWAP</a>, <a class="el" href="threadpool__internals_8h_source.html#l00050">marked_task::cleanup</a>, <a class="el" href="threadpool_8h_source.html#l00050">threadpool_task::cleanup</a>, <a class="el" href="threadpool_8c_source.html#l00131">commit_current_task()</a>, <a class="el" href="threadpool_8c_source.html#l00204">notify_new_task()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00079">threadpool::shutting_down</a>, <a class="el" href="threadpool_8h_source.html#l00049">threadpool_task::task</a>, <a class="el" href="threadpool__internals_8h_source.html#l00049">marked_task::task</a>, <a class="el" href="threadpool__internals_8h_source.html#l00069">threadpool::task_release_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00066">threadpool::task_reserve_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00073">threadpool::task_ringbuf_size</a>, <a class="el" href="threadpool__internals_8h_source.html#l00071">threadpool::tasks</a>, <a class="el" href="threadpool_8h_source.html#l00051">threadpool_task::udata</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00051">marked_task::udata</a>.</p>
+<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00099">99</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+
+<p>References <a class="el" href="atomic_8h_source.html#l00027">ATOMIC_BOOL_COMPARE_AND_SWAP</a>, <a class="el" href="threadpool_8h_source.html#l00050">threadpool_task::cleanup</a>, <a class="el" href="threadpool__internals_8h_source.html#l00052">marked_task::cleanup</a>, <a class="el" href="threadpool_8c_source.html#l00135">commit_current_task()</a>, <a class="el" href="threadpool_8c_source.html#l00208">notify_new_task()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00081">threadpool::shutting_down</a>, <a class="el" href="threadpool_8h_source.html#l00049">threadpool_task::task</a>, <a class="el" href="threadpool__internals_8h_source.html#l00051">marked_task::task</a>, <a class="el" href="threadpool__internals_8h_source.html#l00071">threadpool::task_release_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00068">threadpool::task_reserve_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00077">threadpool::task_ringbuf_size</a>, <a class="el" href="threadpool__internals_8h_source.html#l00073">threadpool::tasks</a>, <a class="el" href="threadpool_8h_source.html#l00051">threadpool_task::udata</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00053">marked_task::udata</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a92478c7ec9f8711b724fff8a371f4c4f"></a>
+<a class="anchor" id="af4ef4735470cf6d15695897ae4afae8c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void threadpool_stats </td>
+          <td class="memname">void Threadpool_Stats </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
           <td class="paramname"><em>t</em>, </td>
@@ -223,18 +245,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00145">145</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+<p>If TI is non-NULL, fill out some statistics about the operating state of the thread pool. </p>
 
-<p>References <a class="el" href="threadpool_8h_source.html#l00056">threadpool_info::active_threads</a>, <a class="el" href="threadpool_8h_source.html#l00058">threadpool_info::backlog_size</a>, <a class="el" href="threadpool_8h_source.html#l00057">threadpool_info::dormant_threads</a>, <a class="el" href="threadpool__internals_8h_source.html#l00080">threadpool::live_threads</a>, <a class="el" href="threadpool__internals_8h_source.html#l00038">thread_info::status</a>, <a class="el" href="threadpool__internals_8h_source.html#l00028">STATUS_AWAKE</a>, <a class="el" href="threadpool__internals_8h_source.html#l00067">threadpool::task_commit_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00068">threadpool::task_request_head</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::threads</a>.</p>
+<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00149">149</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+
+<p>References <a class="el" href="threadpool_8h_source.html#l00056">threadpool_info::active_threads</a>, <a class="el" href="threadpool_8h_source.html#l00058">threadpool_info::backlog_size</a>, <a class="el" href="threadpool_8h_source.html#l00057">threadpool_info::dormant_threads</a>, <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::live_threads</a>, <a class="el" href="threadpool__internals_8h_source.html#l00040">thread_info::status</a>, <a class="el" href="threadpool__internals_8h_source.html#l00030">STATUS_AWAKE</a>, <a class="el" href="threadpool__internals_8h_source.html#l00069">threadpool::task_commit_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00070">threadpool::task_request_head</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00084">threadpool::threads</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a19960645eea868f0e146f55b4a7fae07"></a>
+<a class="anchor" id="aa351af7072a8d13cd521035c41883dda"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool threadpool_shutdown </td>
+          <td class="memname">bool Threadpool_Shutdown </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
           <td class="paramname"><em>t</em>, </td>
@@ -253,18 +277,23 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00159">159</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+<p>Notify the threadpool's threads that the system is going to shut down soon. </p>
+<p>Returns whether all previously active threads have shut down.</p>
+<p>kill_all will eventually permit immediately shutting down all active threads (possibly with memory leaks), but is not yet implemented.</p>
+<p>Returns whether everything has halted. </p>
 
-<p>References <a class="el" href="atomic_8h_source.html#l00023">ATOMIC_BOOL_COMPARE_AND_SWAP</a>, <a class="el" href="threadpool__internals_8h_source.html#l00050">marked_task::cleanup</a>, <a class="el" href="threadpool__internals_8h_source.html#l00080">threadpool::live_threads</a>, <a class="el" href="threadpool_8c_source.html#l00229">notify_shutdown()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00079">threadpool::shutting_down</a>, <a class="el" href="atomic_8h_source.html#l00027">SPIN_ADJ</a>, <a class="el" href="threadpool__internals_8h_source.html#l00038">thread_info::status</a>, <a class="el" href="threadpool__internals_8h_source.html#l00029">STATUS_SHUTDOWN</a>, <a class="el" href="threadpool__internals_8h_source.html#l00035">thread_info::t</a>, <a class="el" href="threadpool__internals_8h_source.html#l00067">threadpool::task_commit_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00069">threadpool::task_release_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00068">threadpool::task_request_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00074">threadpool::task_ringbuf_mask</a>, <a class="el" href="threadpool__internals_8h_source.html#l00071">threadpool::tasks</a>, <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::threads</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00051">marked_task::udata</a>.</p>
+<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00163">163</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+
+<p>References <a class="el" href="atomic_8h_source.html#l00027">ATOMIC_BOOL_COMPARE_AND_SWAP</a>, <a class="el" href="threadpool__internals_8h_source.html#l00052">marked_task::cleanup</a>, <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::live_threads</a>, <a class="el" href="threadpool_8c_source.html#l00233">notify_shutdown()</a>, <a class="el" href="threadpool__internals_8h_source.html#l00081">threadpool::shutting_down</a>, <a class="el" href="atomic_8h_source.html#l00031">SPIN_ADJ</a>, <a class="el" href="threadpool__internals_8h_source.html#l00040">thread_info::status</a>, <a class="el" href="threadpool__internals_8h_source.html#l00031">STATUS_SHUTDOWN</a>, <a class="el" href="threadpool__internals_8h_source.html#l00037">thread_info::t</a>, <a class="el" href="threadpool__internals_8h_source.html#l00069">threadpool::task_commit_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00071">threadpool::task_release_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00070">threadpool::task_request_head</a>, <a class="el" href="threadpool__internals_8h_source.html#l00078">threadpool::task_ringbuf_mask</a>, <a class="el" href="threadpool__internals_8h_source.html#l00073">threadpool::tasks</a>, <a class="el" href="threadpool__internals_8h_source.html#l00084">threadpool::threads</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00053">marked_task::udata</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a0ed2977ea33edbee0f6864ccd25992d2"></a>
+<a class="anchor" id="a5cee1d11d33153a35e343cc1a801dd67"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void threadpool_free </td>
+          <td class="memname">void Threadpool_Free </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
           <td class="paramname"><em>t</em></td><td>)</td>
@@ -273,9 +302,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00196">196</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+<p>Free a threadpool. </p>
+<p>Assumes either <a class="el" href="threadpool_8h.html#aa351af7072a8d13cd521035c41883dda" title="Notify the threadpool&#39;s threads that the system is going to shut down soon. ">Threadpool_Shutdown()</a> has been repeatedly called already, or leaking memory and other resources is acceptable. </p>
 
-<p>References <a class="el" href="threadpool__internals_8h_source.html#l00071">threadpool::tasks</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00082">threadpool::threads</a>.</p>
+<p>Definition at line <a class="el" href="threadpool_8c_source.html#l00200">200</a> of file <a class="el" href="threadpool_8c_source.html">threadpool.c</a>.</p>
+
+<p>References <a class="el" href="threadpool__internals_8h_source.html#l00073">threadpool::tasks</a>, and <a class="el" href="threadpool__internals_8h_source.html#l00084">threadpool::threads</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
-.TH "kinetic_admin_client.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_admin_client.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -31,49 +31,53 @@ kinetic_admin_client.h \-
 .br
 .RI "\fICloses the connection to a host\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetErasePin\fP (KineticSession const *const session, \fBByteArray\fP old_pin, \fBByteArray\fP new_pin)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetErasePin\fP (KineticSession *const session, \fBByteArray\fP old_pin, \fBByteArray\fP new_pin)"
 .br
 .RI "\fISets the erase PIN of the Kinetic Device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_SecureErase\fP (KineticSession const *const session, \fBByteArray\fP pin)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_SecureErase\fP (KineticSession *const session, \fBByteArray\fP pin)"
 .br
-.RI "\fIExecutes a SecureErase command to erase all data from the Kinetic device\&. \fP"
+.RI "\fIExecutes a \fCSecureErase\fP command to erase all data from the Kinetic device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_InstantErase\fP (KineticSession const *const session, \fBByteArray\fP pin)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_InstantErase\fP (KineticSession *const session, \fBByteArray\fP pin)"
 .br
-.RI "\fIExecutes an InstantErase command to erase all data from the Kinetic device\&. \fP"
+.RI "\fIExecutes an \fCInstantErase\fP operation to erase all data from the Kinetic device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetLockPin\fP (KineticSession const *const session, \fBByteArray\fP old_pin, \fBByteArray\fP new_pin)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetLockPin\fP (KineticSession *const session, \fBByteArray\fP old_pin, \fBByteArray\fP new_pin)"
 .br
 .RI "\fISets the lock PIN of the Kinetic Device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_LockDevice\fP (KineticSession const *const session, \fBByteArray\fP pin)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_LockDevice\fP (KineticSession *const session, \fBByteArray\fP pin)"
 .br
-.RI "\fIExecutes a LOCK command to lock the Kinetic device\&. \fP"
+.RI "\fIExecutes a \fCLOCK\fP operation to lock the Kinetic device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_UnlockDevice\fP (KineticSession const *const session, \fBByteArray\fP pin)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_UnlockDevice\fP (KineticSession *const session, \fBByteArray\fP pin)"
 .br
-.RI "\fIExecutes an UNLOCK command to unlock the Kinetic device\&. \fP"
+.RI "\fIExecutes an \fCUNLOCK\fP operation to unlock the Kinetic device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_GetLog\fP (KineticSession const *const session, \fBKineticLogInfo_Type\fP type, \fBKineticLogInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_GetLog\fP (KineticSession *const session, \fBKineticLogInfo_Type\fP type, \fBKineticLogInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
 .br
-.RI "\fIExecutes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic Device\&. \fP"
+.RI "\fIExecutes a \fCGETLOG\fP operation to retrieve specific configuration and/or operational data from the Kinetic Device\&. \fP"
 .ti -1c
-.RI "void \fBKineticAdminClient_FreeLogInfo\fP (KineticSession const *const session, \fBKineticLogInfo\fP *info)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_GetDeviceSpecificLog\fP (KineticSession *const session, \fBByteArray\fP name, \fBKineticLogInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+.br
+.RI "\fIExecutes a \fCGETLOG\fP operation to retrieve device-specific log info from the Kinetic Device via name/key\&. \fP"
+.ti -1c
+.RI "void \fBKineticAdminClient_FreeLogInfo\fP (KineticSession *const session, \fBKineticLogInfo\fP *info)"
 .br
 .RI "\fIFree the \fBKineticLogInfo\fP result from KineticClient_GetLog\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetClusterVersion\fP (KineticSession const *const session, int64_t version)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetClusterVersion\fP (KineticSession *const session, int64_t version)"
 .br
 .RI "\fIUpdates the cluster version of the Kinetic Device\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetACL\fP (KineticSession const *const session, const char *ACLPath)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_SetACL\fP (KineticSession *const session, const char *ACLPath)"
 .br
-.RI "\fIExecutes a SECURITY operation, setting one or more ACLs\&. \fP"
+.RI "\fIExecutes a \fCSECURITY\fP operation, setting one or more ACLs\&. \fP"
 .ti -1c
-.RI "\fBKineticStatus\fP \fBKineticAdminClient_UpdateFirmware\fP (KineticSession const *const session, char const *const fw_path)"
+.RI "\fBKineticStatus\fP \fBKineticAdminClient_UpdateFirmware\fP (KineticSession *const session, char const *const fw_path)"
 .br
-.RI "\fIExecutes a Firmware Download operation to update the firmware on the Kinetic device\&. \fP"
+.RI "\fIExecutes a \fCFirmware Download\fP operation to update the firmware on the Kinetic device\&. \fP"
 .in -1c
 .SH "Function Documentation"
 .PP 
@@ -89,12 +93,12 @@ Initializes the Kinetic Admin API and configures logging\&.
 .PP
 \fBReturns:\fP
 .RS 4
-Returns a pointer to a \fCKineticClient\fP\&. You need to pass this pointer to \fBKineticClient_CreateSession()\fP to create new connections\&. Once you are finished will the \fCKineticClient\fP, and there are no active connections\&. The pointer should be released with \fBKineticClient_Shutdown()\fP 
+Returns a pointer to a KineticClient\&. You need to pass this pointer to \fBKineticClient_CreateSession()\fP to create new connections\&. Once you are finished will the KineticClient, and there are no active connections\&. The pointer should be released with \fBKineticClient_Shutdown()\fP 
 .RE
 .PP
 
 .PP
-Definition at line 34 of file kinetic_admin_client\&.c\&.
+Definition at line 36 of file kinetic_admin_client\&.c\&.
 .PP
 References KineticClient_Init()\&.
 .SS "void KineticAdminClient_Shutdown (KineticClient *constclient)"
@@ -102,7 +106,7 @@ References KineticClient_Init()\&.
 .PP
 Performs shutdown/cleanup of the kinetic-c client library\&. 
 .PP
-Definition at line 39 of file kinetic_admin_client\&.c\&.
+Definition at line 41 of file kinetic_admin_client\&.c\&.
 .PP
 References KineticClient_Shutdown()\&.
 .SS "\fBKineticStatus\fP KineticAdminClient_CreateSession (\fBKineticSessionConfig\fP *constconfig, KineticClient *constclient, KineticSession **session)"
@@ -112,21 +116,21 @@ Creates a session with the Kinetic Device per specified configuration\&.
 .PP
 \fBParameters:\fP
 .RS 4
-\fIconfig\fP \fC\fBKineticSessionConfig\fP\fP structure which must be configured by the client prior to creating the device connection\&. \&.host Host name or IP address to connect to \&.port Port to establish socket connection on \&.clusterVersion Cluster version to use for the session \&.identity Identity to use for the session \&.hmacKey Key to use for HMAC calculations (NULL-terminated string) \&.pin PIN to use for PIN-based operations 
+\fIconfig\fP \fBKineticSessionConfig\fP structure which must be configured by the client prior to creating the device connection\&. \&.host Host name or IP address to connect to \&.port Port to establish socket connection on \&.clusterVersion Cluster version to use for the session \&.identity Identity to use for the session \&.hmacKey Key to use for HMAC calculations (NULL-terminated string) \&.pin PIN to use for PIN-based operations 
 .br
-\fIclient\fP The \fCKineticClient\fP pointer returned from \fBKineticClient_Init()\fP 
+\fIclient\fP The KineticClient pointer returned from \fBKineticClient_Init()\fP 
 .br
 \fIsession\fP Pointer to a KineticSession pointer that will be populated with the allocated/created session upon success\&.
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-Returns the resulting \fCKineticStatus\fP, and \fCsession\fP will be populated with a pointer to the session instance upon success\&. The client should call \fBKineticClient_DestroySession()\fP in order to shutdown a connection and cleanup resources when done using a \fCKineticSession\fP\&. 
+Returns the resulting KineticStatus, and \fCsession\fP will be populated with a pointer to the session instance upon success\&. The client should call \fBKineticClient_DestroySession()\fP in order to shutdown a connection and cleanup resources when done using a KineticSession\&. 
 .RE
 .PP
 
 .PP
-Definition at line 44 of file kinetic_admin_client\&.c\&.
+Definition at line 46 of file kinetic_admin_client\&.c\&.
 .PP
 References KineticClient_CreateSession()\&.
 .SS "\fBKineticStatus\fP KineticAdminClient_DestroySession (KineticSession *constsession)"
@@ -136,7 +140,7 @@ Closes the connection to a host\&.
 .PP
 \fBParameters:\fP
 .RS 4
-\fIsession\fP The connected \fCKineticSession\fP to close\&. The session instance will be freed by this call after closing the connection, so the pointer should not longer be used\&.
+\fIsession\fP The connected KineticSession to close\&. The session instance will be freed by this call after closing the connection, so the pointer should not longer be used\&.
 .RE
 .PP
 \fBReturns:\fP
@@ -146,17 +150,17 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 50 of file kinetic_admin_client\&.c\&.
+Definition at line 52 of file kinetic_admin_client\&.c\&.
 .PP
 References KineticClient_DestroySession()\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_SetErasePin (KineticSession const *constsession, \fBByteArray\fPold_pin, \fBByteArray\fPnew_pin)"
+.SS "\fBKineticStatus\fP KineticAdminClient_SetErasePin (KineticSession *constsession, \fBByteArray\fPold_pin, \fBByteArray\fPnew_pin)"
 
 .PP
 Sets the erase PIN of the Kinetic Device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIsession\fP The connected \fCKineticSession\fP to close\&. The session instance will be freed by this call after closing the connection, so the pointer should not longer be used\&. 
+\fIsession\fP The connected KineticSession to close\&. The session instance will be freed by this call after closing the connection, so the pointer should not longer be used\&. 
 .br
 \fIold_pin\fP Old erase PIN to change\&. 
 .br
@@ -170,13 +174,13 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 56 of file kinetic_admin_client\&.c\&.
+Definition at line 58 of file kinetic_admin_client\&.c\&.
 .PP
-References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticController_ExecuteOperation(), KineticOperation_BuildSetPin(), and ByteArray::len\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_SecureErase (KineticSession const *constsession, \fBByteArray\fPpin)"
+References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticBuilder_BuildSetPin(), KineticController_ExecuteOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_SecureErase (KineticSession *constsession, \fBByteArray\fPpin)"
 
 .PP
-Executes a SecureErase command to erase all data from the Kinetic device\&. 
+Executes a \fCSecureErase\fP command to erase all data from the Kinetic device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -192,13 +196,13 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 76 of file kinetic_admin_client\&.c\&.
+Definition at line 78 of file kinetic_admin_client\&.c\&.
 .PP
-References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticController_ExecuteOperation(), KineticOperation_BuildErase(), and ByteArray::len\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_InstantErase (KineticSession const *constsession, \fBByteArray\fPpin)"
+References ByteArray::data, KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticBuilder_BuildErase(), KineticController_ExecuteOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_InstantErase (KineticSession *constsession, \fBByteArray\fPpin)"
 
 .PP
-Executes an InstantErase command to erase all data from the Kinetic device\&. 
+Executes an \fCInstantErase\fP operation to erase all data from the Kinetic device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -214,17 +218,17 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 98 of file kinetic_admin_client\&.c\&.
+Definition at line 99 of file kinetic_admin_client\&.c\&.
 .PP
-References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticController_ExecuteOperation(), KineticOperation_BuildErase(), and ByteArray::len\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_SetLockPin (KineticSession const *constsession, \fBByteArray\fPold_pin, \fBByteArray\fPnew_pin)"
+References ByteArray::data, KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticBuilder_BuildErase(), KineticController_ExecuteOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_SetLockPin (KineticSession *constsession, \fBByteArray\fPold_pin, \fBByteArray\fPnew_pin)"
 
 .PP
 Sets the lock PIN of the Kinetic Device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
-\fIsession\fP The connected \fCKineticSession\fP to close\&. The session instance will be freed by this call after closing the connection, so the pointer should not longer be used\&. 
+\fIsession\fP The connected KineticSession to close\&. The session instance will be freed by this call after closing the connection, so the pointer should not longer be used\&. 
 .br
 \fIold_pin\fP Old erase PIN to change\&. 
 .br
@@ -240,11 +244,11 @@ Returns the resulting KineticStatus\&.
 .PP
 Definition at line 121 of file kinetic_admin_client\&.c\&.
 .PP
-References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticController_ExecuteOperation(), KineticOperation_BuildSetPin(), and ByteArray::len\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_LockDevice (KineticSession const *constsession, \fBByteArray\fPpin)"
+References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticBuilder_BuildSetPin(), KineticController_ExecuteOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_LockDevice (KineticSession *constsession, \fBByteArray\fPpin)"
 
 .PP
-Executes a LOCK command to lock the Kinetic device\&. 
+Executes a \fCLOCK\fP operation to lock the Kinetic device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -262,11 +266,11 @@ Returns the resulting KineticStatus\&.
 .PP
 Definition at line 141 of file kinetic_admin_client\&.c\&.
 .PP
-References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticController_ExecuteOperation(), KineticOperation_BuildLockUnlock(), and ByteArray::len\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_UnlockDevice (KineticSession const *constsession, \fBByteArray\fPpin)"
+References ByteArray::data, KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticBuilder_BuildLockUnlock(), KineticController_ExecuteOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_UnlockDevice (KineticSession *constsession, \fBByteArray\fPpin)"
 
 .PP
-Executes an UNLOCK command to unlock the Kinetic device\&. 
+Executes an \fCUNLOCK\fP operation to unlock the Kinetic device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -282,13 +286,13 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 163 of file kinetic_admin_client\&.c\&.
+Definition at line 162 of file kinetic_admin_client\&.c\&.
 .PP
-References ByteArray::data, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticController_ExecuteOperation(), KineticOperation_BuildLockUnlock(), and ByteArray::len\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_GetLog (KineticSession const *constsession, \fBKineticLogInfo_Type\fPtype, \fBKineticLogInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+References ByteArray::data, KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_MISSING_PIN, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticAuth_EnsureSslEnabled(), KineticBuilder_BuildLockUnlock(), KineticController_ExecuteOperation(), and ByteArray::len\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_GetLog (KineticSession *constsession, \fBKineticLogInfo_Type\fPtype, \fBKineticLogInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
 
 .PP
-Executes a GETLOG command to retrieve specific configuration and/or operational data from the Kinetic Device\&. 
+Executes a \fCGETLOG\fP operation to retrieve specific configuration and/or operational data from the Kinetic Device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -296,22 +300,48 @@ Executes a GETLOG command to retrieve specific configuration and/or operational 
 .br
 \fItype\fP KineticLogDataType specifying data type to retrieve\&. 
 .br
-\fIinfo\fP \fBKineticLogInfo\fP pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful\&. The client should call free() on this pointer in order to free the root and any nested structures\&. 
+\fIinfo\fP \fBKineticLogInfo\fP pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful\&. The client should call \fBKineticAdminClient_FreeLogInfo()\fP with this pointer in order to free all allocated memory\&. 
 .br
 \fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-Returns 0 upon success, -1 or the Kinetic status code upon failure 
+Returns the resulting KineticStatus 
 .RE
 .PP
 
 .PP
-Definition at line 185 of file kinetic_admin_client\&.c\&.
+Definition at line 183 of file kinetic_admin_client\&.c\&.
 .PP
-References KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildGetLog()\&.
-.SS "void KineticAdminClient_FreeLogInfo (KineticSession const *constsession, \fBKineticLogInfo\fP *info)"
+References BYTE_ARRAY_NONE, COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__INVALID_TYPE, KINETIC_ASSERT, KINETIC_STATUS_INVALID_LOG_TYPE, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticBuilder_BuildGetLog(), KineticController_ExecuteOperation(), and KineticLogInfo_Type_to_Com__Seagate__Kinetic__Proto__Command__GetLog__Type()\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_GetDeviceSpecificLog (KineticSession *constsession, \fBByteArray\fPname, \fBKineticLogInfo\fP **info, \fBKineticCompletionClosure\fP *closure)"
+
+.PP
+Executes a \fCGETLOG\fP operation to retrieve device-specific log info from the Kinetic Device via name/key\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsession\fP The connected KineticSession to use for the operation 
+.br
+\fIname\fP Device specific name to retrieve info for\&. 
+.br
+\fIinfo\fP \fBKineticLogInfo\fP pointer, which will be assigned to a dynamically allocated structure populated with the requested data, if successful\&. The client should call \fBKineticAdminClient_FreeLogInfo()\fP with this pointer in order to free all allocated memory\&. 
+.br
+\fIclosure\fP Optional closure\&. If specified, operation will be executed in asynchronous mode, and closure callback will be called upon completion in another thread\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Returns the resulting KineticStatus 
+.RE
+.PP
+
+.PP
+Definition at line 207 of file kinetic_admin_client\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__TYPE__DEVICE, KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticBuilder_BuildGetLog(), and KineticController_ExecuteOperation()\&.
+.SS "void KineticAdminClient_FreeLogInfo (KineticSession *constsession, \fBKineticLogInfo\fP *info)"
 
 .PP
 Free the \fBKineticLogInfo\fP result from KineticClient_GetLog\&. 
@@ -324,7 +354,7 @@ Free the \fBKineticLogInfo\fP result from KineticClient_GetLog\&.
 .RE
 .PP
 
-.SS "\fBKineticStatus\fP KineticAdminClient_SetClusterVersion (KineticSession const *constsession, int64_tversion)"
+.SS "\fBKineticStatus\fP KineticAdminClient_SetClusterVersion (KineticSession *constsession, int64_tversion)"
 
 .PP
 Updates the cluster version of the Kinetic Device\&. 
@@ -343,13 +373,13 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 215 of file kinetic_admin_client\&.c\&.
+Definition at line 236 of file kinetic_admin_client\&.c\&.
 .PP
-References KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildSetClusterVersion()\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_SetACL (KineticSession const *constsession, const char *ACLPath)"
+References KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticBuilder_BuildSetClusterVersion(), and KineticController_ExecuteOperation()\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_SetACL (KineticSession *constsession, const char *ACLPath)"
 
 .PP
-Executes a SECURITY operation, setting one or more ACLs\&. 
+Executes a \fCSECURITY\fP operation, setting one or more ACLs\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -360,18 +390,18 @@ Executes a SECURITY operation, setting one or more ACLs\&.
 .PP
 \fBReturns:\fP
 .RS 4
-Returns 0 upon success, -1 or the Kinetic status code upon failure\&. 
+Returns the resulting KineticStatus\&. 
 .RE
 .PP
 
 .PP
-Definition at line 228 of file kinetic_admin_client\&.c\&.
+Definition at line 248 of file kinetic_admin_client\&.c\&.
 .PP
-References acl_of_file(), ACL_OK, KINETIC_STATUS_ACL_ERROR, KINETIC_STATUS_INVALID_REQUEST, KINETIC_STATUS_MEMORY_ERROR, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildSetACL()\&.
-.SS "\fBKineticStatus\fP KineticAdminClient_UpdateFirmware (KineticSession const *constsession, char const *constfw_path)"
+References ACL_OK, KINETIC_ASSERT, KINETIC_STATUS_ACL_ERROR, KINETIC_STATUS_INVALID_REQUEST, KINETIC_STATUS_MEMORY_ERROR, KineticACL_LoadFromFile(), KineticAllocator_NewOperation(), KineticBuilder_BuildSetACL(), and KineticController_ExecuteOperation()\&.
+.SS "\fBKineticStatus\fP KineticAdminClient_UpdateFirmware (KineticSession *constsession, char const *constfw_path)"
 
 .PP
-Executes a Firmware Download operation to update the firmware on the Kinetic device\&. 
+Executes a \fCFirmware Download\fP operation to update the firmware on the Kinetic device\&. 
 .PP
 \fBParameters:\fP
 .RS 4
@@ -387,9 +417,9 @@ Returns the resulting KineticStatus\&.
 .PP
 
 .PP
-Definition at line 259 of file kinetic_admin_client\&.c\&.
+Definition at line 276 of file kinetic_admin_client\&.c\&.
 .PP
-References KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticController_ExecuteOperation(), and KineticOperation_BuildUpdateFirmware()\&.
+References KINETIC_ASSERT, KINETIC_STATUS_MEMORY_ERROR, KINETIC_STATUS_SUCCESS, KineticAllocator_NewOperation(), KineticBuilder_BuildUpdateFirmware(), and KineticController_ExecuteOperation()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

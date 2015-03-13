@@ -1,8 +1,11 @@
-.TH "bus" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "bus" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 bus \- 
+.PP
+Message bus\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -14,66 +17,85 @@ bus \-
 .ti -1c
 .RI "\fBbus_sink_cb\fP * \fBsink_cb\fP"
 .br
+.RI "\fIIO sink callback\&. \fP"
 .ti -1c
 .RI "\fBbus_unpack_cb\fP * \fBunpack_cb\fP"
 .br
+.RI "\fIMessage unpacking callback\&. \fP"
 .ti -1c
 .RI "\fBbus_unexpected_msg_cb\fP * \fBunexpected_msg_cb\fP"
 .br
 .ti -1c
 .RI "\fBbus_error_cb\fP * \fBerror_cb\fP"
 .br
+.RI "\fIError handling callback\&. \fP"
 .ti -1c
 .RI "void * \fBudata\fP"
 .br
+.RI "\fIUser data for callbacks\&. \fP"
 .ti -1c
 .RI "int \fBlog_level\fP"
 .br
+.RI "\fILog level\&. \fP"
 .ti -1c
 .RI "\fBbus_log_cb\fP * \fBlog_cb\fP"
 .br
-.ti -1c
-.RI "pthread_mutex_t \fBlog_lock\fP"
-.br
+.RI "\fILogging callback\&. \fP"
 .ti -1c
 .RI "uint8_t \fBlistener_count\fP"
 .br
+.RI "\fINumber of listeners\&. \fP"
 .ti -1c
 .RI "struct \fBlistener\fP ** \fBlisteners\fP"
 .br
+.RI "\fIListener array\&. \fP"
 .ti -1c
 .RI "bool * \fBjoined\fP"
 .br
+.RI "\fIWhich threads have joined\&. \fP"
 .ti -1c
 .RI "pthread_t * \fBthreads\fP"
 .br
+.RI "\fIThreads\&. \fP"
 .ti -1c
 .RI "\fBshutdown_state_t\fP \fBshutdown_state\fP"
 .br
+.RI "\fICurrent shutdown state\&. \fP"
 .ti -1c
 .RI "struct \fBthreadpool\fP * \fBthreadpool\fP"
 .br
+.RI "\fIThread pool\&. \fP"
 .ti -1c
 .RI "SSL_CTX * \fBssl_ctx\fP"
 .br
+.RI "\fISSL context\&. \fP"
 .ti -1c
-.RI "struct yacht * \fBfd_set\fP"
+.RI "struct \fByacht\fP * \fBfd_set\fP"
 .br
+.RI "\fILocked hash table for fd -> \fBconnection_info\fP\&. \fP"
 .ti -1c
 .RI "pthread_mutex_t \fBfd_set_lock\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
+Message bus\&. 
+
+
+.PP
 Definition at line 72 of file bus_internal_types\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBbus_sink_cb\fP* bus::sink_cb"
 
 .PP
+IO sink callback\&. 
+.PP
 Definition at line 73 of file bus_internal_types\&.h\&.
 .SS "\fBbus_unpack_cb\fP* bus::unpack_cb"
 
+.PP
+Message unpacking callback\&. 
 .PP
 Definition at line 74 of file bus_internal_types\&.h\&.
 .SS "\fBbus_unexpected_msg_cb\fP* bus::unexpected_msg_cb"
@@ -83,59 +105,79 @@ Definition at line 75 of file bus_internal_types\&.h\&.
 .SS "\fBbus_error_cb\fP* bus::error_cb"
 
 .PP
+Error handling callback\&. 
+.PP
 Definition at line 76 of file bus_internal_types\&.h\&.
 .SS "void* bus::udata"
 
+.PP
+User data for callbacks\&. 
 .PP
 Definition at line 77 of file bus_internal_types\&.h\&.
 .SS "int bus::log_level"
 
 .PP
+Log level\&. 
+.PP
 Definition at line 79 of file bus_internal_types\&.h\&.
 .SS "\fBbus_log_cb\fP* bus::log_cb"
 
 .PP
-Definition at line 80 of file bus_internal_types\&.h\&.
-.SS "pthread_mutex_t bus::log_lock"
-
+Logging callback\&. 
 .PP
-Definition at line 81 of file bus_internal_types\&.h\&.
+Definition at line 80 of file bus_internal_types\&.h\&.
 .SS "uint8_t bus::listener_count"
 
 .PP
-Definition at line 83 of file bus_internal_types\&.h\&.
+Number of listeners\&. 
+.PP
+Definition at line 82 of file bus_internal_types\&.h\&.
 .SS "struct \fBlistener\fP** bus::listeners"
 
 .PP
-Definition at line 84 of file bus_internal_types\&.h\&.
+Listener array\&. 
+.PP
+Definition at line 83 of file bus_internal_types\&.h\&.
 .SS "bool* bus::joined"
 
 .PP
-Definition at line 86 of file bus_internal_types\&.h\&.
+Which threads have joined\&. 
+.PP
+Definition at line 85 of file bus_internal_types\&.h\&.
 .SS "pthread_t* bus::threads"
 
 .PP
-Definition at line 87 of file bus_internal_types\&.h\&.
+Threads\&. 
+.PP
+Definition at line 86 of file bus_internal_types\&.h\&.
 .SS "\fBshutdown_state_t\fP bus::shutdown_state"
 
 .PP
-Definition at line 88 of file bus_internal_types\&.h\&.
+Current shutdown state\&. 
+.PP
+Definition at line 87 of file bus_internal_types\&.h\&.
 .SS "struct \fBthreadpool\fP* bus::threadpool"
 
 .PP
-Definition at line 90 of file bus_internal_types\&.h\&.
+Thread pool\&. 
+.PP
+Definition at line 89 of file bus_internal_types\&.h\&.
 .SS "SSL_CTX* bus::ssl_ctx"
 
 .PP
-Definition at line 91 of file bus_internal_types\&.h\&.
-.SS "struct yacht* bus::fd_set"
+SSL context\&. 
+.PP
+Definition at line 90 of file bus_internal_types\&.h\&.
+.SS "struct \fByacht\fP* bus::fd_set"
 
 .PP
-Definition at line 94 of file bus_internal_types\&.h\&.
+Locked hash table for fd -> \fBconnection_info\fP\&. 
+.PP
+Definition at line 93 of file bus_internal_types\&.h\&.
 .SS "pthread_mutex_t bus::fd_set_lock"
 
 .PP
-Definition at line 95 of file bus_internal_types\&.h\&.
+Definition at line 94 of file bus_internal_types\&.h\&.
 
 .SH "Author"
 .PP 

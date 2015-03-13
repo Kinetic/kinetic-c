@@ -1,4 +1,4 @@
-.TH "KineticSession" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "KineticSession" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,32 +17,131 @@ An instance of a session with a Kinetic device\&.
 .ti -1c
 .RI "\fBKineticSessionConfig\fP \fBconfig\fP"
 .br
+.RI "\fIsession configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession \fP"
 .ti -1c
-.RI "struct \fB_KineticConnection\fP * \fBconnection\fP"
+.RI "bool \fBconnected\fP"
 .br
+.RI "\fIstate of connection \fP"
+.ti -1c
+.RI "\fBKineticStatus\fP \fBterminationStatus\fP"
+.br
+.RI "\fIreported status upon device termination (SUCCESS if not terminated) \fP"
+.ti -1c
+.RI "int \fBsocket\fP"
+.br
+.RI "\fIsocket file descriptor \fP"
+.ti -1c
+.RI "int64_t \fBconnectionID\fP"
+.br
+.RI "\fIinitialized to seconds since epoch \fP"
+.ti -1c
+.RI "int64_t \fBsequence\fP"
+.br
+.RI "\fIincrements for each request in a session \fP"
+.ti -1c
+.RI "struct \fBbus\fP * \fBmessageBus\fP"
+.br
+.RI "\fIpointer to message bus instance \fP"
+.ti -1c
+.RI "socket_info * \fBsi\fP"
+.br
+.RI "\fIpointer to socket information \fP"
+.ti -1c
+.RI "pthread_mutex_t \fBsendMutex\fP"
+.br
+.RI "\fImutex for locking around seq count acquisision, PDU packing, and transfer to threadpool \fP"
+.ti -1c
+.RI "KineticResourceWaiter \fBconnectionReady\fP"
+.br
+.RI "\fIconnection ready status (set to true once connectionID recieved) \fP"
+.ti -1c
+.RI "KineticCountingSemaphore * \fBoutstandingOperations\fP"
+.br
+.RI "\fIcounting semaphore to only allows the configured number of outstanding operation at a given time \fP"
 .ti -1c
 .RI "uint16_t \fBtimeoutSeconds\fP"
 .br
+.RI "\fIDefault response timeout\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 An instance of a session with a Kinetic device\&. 
 .PP
-Definition at line 67 of file kinetic_types_internal\&.h\&.
+Definition at line 94 of file kinetic_types_internal\&.h\&.
 .SH "Field Documentation"
 .PP 
 .SS "\fBKineticSessionConfig\fP KineticSession::config"
 
 .PP
-Definition at line 69 of file kinetic_types_internal\&.h\&.
-.SS "struct \fB_KineticConnection\fP* KineticSession::connection"
+session configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession 
+.PP
+Definition at line 95 of file kinetic_types_internal\&.h\&.
+.SS "bool KineticSession::connected"
 
 .PP
-Definition at line 74 of file kinetic_types_internal\&.h\&.
+state of connection 
+.PP
+Definition at line 96 of file kinetic_types_internal\&.h\&.
+.SS "\fBKineticStatus\fP KineticSession::terminationStatus"
+
+.PP
+reported status upon device termination (SUCCESS if not terminated) 
+.PP
+Definition at line 97 of file kinetic_types_internal\&.h\&.
+.SS "int KineticSession::socket"
+
+.PP
+socket file descriptor 
+.PP
+Definition at line 98 of file kinetic_types_internal\&.h\&.
+.SS "int64_t KineticSession::connectionID"
+
+.PP
+initialized to seconds since epoch 
+.PP
+Definition at line 99 of file kinetic_types_internal\&.h\&.
+.SS "int64_t KineticSession::sequence"
+
+.PP
+increments for each request in a session 
+.PP
+Definition at line 100 of file kinetic_types_internal\&.h\&.
+.SS "struct \fBbus\fP* KineticSession::messageBus"
+
+.PP
+pointer to message bus instance 
+.PP
+Definition at line 101 of file kinetic_types_internal\&.h\&.
+.SS "socket_info* KineticSession::si"
+
+.PP
+pointer to socket information 
+.PP
+Definition at line 102 of file kinetic_types_internal\&.h\&.
+.SS "pthread_mutex_t KineticSession::sendMutex"
+
+.PP
+mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool 
+.PP
+Definition at line 103 of file kinetic_types_internal\&.h\&.
+.SS "KineticResourceWaiter KineticSession::connectionReady"
+
+.PP
+connection ready status (set to true once connectionID recieved) 
+.PP
+Definition at line 104 of file kinetic_types_internal\&.h\&.
+.SS "KineticCountingSemaphore* KineticSession::outstandingOperations"
+
+.PP
+counting semaphore to only allows the configured number of outstanding operation at a given time 
+.PP
+Definition at line 105 of file kinetic_types_internal\&.h\&.
 .SS "uint16_t KineticSession::timeoutSeconds"
 
 .PP
-Definition at line 77 of file kinetic_types_internal\&.h\&.
+Default response timeout\&. 
+.PP
+Definition at line 106 of file kinetic_types_internal\&.h\&.
 
 .SH "Author"
 .PP 

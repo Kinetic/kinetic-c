@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -55,7 +55,7 @@
 <div class="contents">
 <a href="kinetic__socket_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -76,7 +76,7 @@
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__socket_8h.html">kinetic_socket.h</a>&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__logger_8h.html">kinetic_logger.h</a>&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a>&quot;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic__proto_8h.html">kinetic_proto.h</a>&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="kinetic_8pb-c_8h.html">kinetic.pb-c.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;protobuf-c/protobuf-c.h&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
@@ -235,19 +235,19 @@
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;}</div>
 <div class="ttc" id="kinetic__logger_8h_html"><div class="ttname"><a href="kinetic__logger_8h.html">kinetic_logger.h</a></div></div>
 <div class="ttc" id="kinetic__types__internal_8h_html"><div class="ttname"><a href="kinetic__types__internal_8h.html">kinetic_types_internal.h</a></div></div>
-<div class="ttc" id="kinetic__proto_8h_html"><div class="ttname"><a href="kinetic__proto_8h.html">kinetic_proto.h</a></div></div>
 <div class="ttc" id="kinetic__socket_8c_html_a17c513d63b9413c73b8d6db7fbbff20c"><div class="ttname"><a href="kinetic__socket_8c.html#a17c513d63b9413c73b8d6db7fbbff20c">KineticSocket_EnableTCPNoDelay</a></div><div class="ttdeci">void KineticSocket_EnableTCPNoDelay(int socket)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00156">kinetic_socket.c:156</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_a9a550f56f33829d086a2424b61231bc1"><div class="ttname"><a href="kinetic__logger_8h.html#a9a550f56f33829d086a2424b61231bc1">LOGF1</a></div><div class="ttdeci">#define LOGF1(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00059">kinetic_logger.h:59</a></div></div>
-<div class="ttc" id="kinetic__types_8h_html_ab86e624f3e5859f35c94ab24eb6c97d7"><div class="ttname"><a href="kinetic__types_8h.html#ab86e624f3e5859f35c94ab24eb6c97d7">KINETIC_OBJ_SIZE</a></div><div class="ttdeci">#define KINETIC_OBJ_SIZE</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00048">kinetic_types.h:48</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_a9a550f56f33829d086a2424b61231bc1"><div class="ttname"><a href="kinetic__logger_8h.html#a9a550f56f33829d086a2424b61231bc1">LOGF1</a></div><div class="ttdeci">#define LOGF1(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00058">kinetic_logger.h:58</a></div></div>
+<div class="ttc" id="kinetic__types_8h_html_ab86e624f3e5859f35c94ab24eb6c97d7"><div class="ttname"><a href="kinetic__types_8h.html#ab86e624f3e5859f35c94ab24eb6c97d7">KINETIC_OBJ_SIZE</a></div><div class="ttdeci">#define KINETIC_OBJ_SIZE</div><div class="ttdoc">Max object/value size. </div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types_8h_source.html#l00047">kinetic_types.h:47</a></div></div>
 <div class="ttc" id="kinetic__socket_8c_html_a0c7a2dfa5948c6fbab5f24db1bf9a23e"><div class="ttname"><a href="kinetic__socket_8c.html#a0c7a2dfa5948c6fbab5f24db1bf9a23e">KineticSocket_BeginPacket</a></div><div class="ttdeci">void KineticSocket_BeginPacket(int socket)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00162">kinetic_socket.c:162</a></div></div>
 <div class="ttc" id="kinetic__socket_8c_html_af9fb590d8d58c37b2f9b38b13da321cd"><div class="ttname"><a href="kinetic__socket_8c.html#af9fb590d8d58c37b2f9b38b13da321cd">KineticSocket_Connect</a></div><div class="ttdeci">int KineticSocket_Connect(const char *host, int port)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00047">kinetic_socket.c:47</a></div></div>
 <div class="ttc" id="kinetic__types__internal_8h_html_a0bc19e020524d33828e824c007525fcd"><div class="ttname"><a href="kinetic__types__internal_8h.html#a0bc19e020524d33828e824c007525fcd">KINETIC_SOCKET_DESCRIPTOR_INVALID</a></div><div class="ttdeci">#define KINETIC_SOCKET_DESCRIPTOR_INVALID</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__types__internal_8h_source.html#l00037">kinetic_types_internal.h:37</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_aa65b0516ca90f3ef1cda5feab07e239c"><div class="ttname"><a href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a></div><div class="ttdeci">#define LOG0(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00054">kinetic_logger.h:54</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_a244b344cabc53a8d75b918a75e827225"><div class="ttname"><a href="kinetic__logger_8h.html#a244b344cabc53a8d75b918a75e827225">LOG2</a></div><div class="ttdeci">#define LOG2(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00056">kinetic_logger.h:56</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_a7a718ac84225eea733516b978b7aafd4"><div class="ttname"><a href="kinetic__logger_8h.html#a7a718ac84225eea733516b978b7aafd4">LOGF0</a></div><div class="ttdeci">#define LOGF0(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00058">kinetic_logger.h:58</a></div></div>
+<div class="ttc" id="kinetic_8pb-c_8h_html"><div class="ttname"><a href="kinetic_8pb-c_8h.html">kinetic.pb-c.h</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_aa65b0516ca90f3ef1cda5feab07e239c"><div class="ttname"><a href="kinetic__logger_8h.html#aa65b0516ca90f3ef1cda5feab07e239c">LOG0</a></div><div class="ttdeci">#define LOG0(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00053">kinetic_logger.h:53</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_a244b344cabc53a8d75b918a75e827225"><div class="ttname"><a href="kinetic__logger_8h.html#a244b344cabc53a8d75b918a75e827225">LOG2</a></div><div class="ttdeci">#define LOG2(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00055">kinetic_logger.h:55</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_a7a718ac84225eea733516b978b7aafd4"><div class="ttname"><a href="kinetic__logger_8h.html#a7a718ac84225eea733516b978b7aafd4">LOGF0</a></div><div class="ttdeci">#define LOGF0(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00057">kinetic_logger.h:57</a></div></div>
 <div class="ttc" id="kinetic__socket_8c_html_a5d809bbbdae2345672fe0a8364ac7733"><div class="ttname"><a href="kinetic__socket_8c.html#a5d809bbbdae2345672fe0a8364ac7733">KineticSocket_FinishPacket</a></div><div class="ttdeci">void KineticSocket_FinishPacket(int socket)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00172">kinetic_socket.c:172</a></div></div>
 <div class="ttc" id="kinetic__socket_8c_html_a2017c6854e7e85b8d94f382e29f26084"><div class="ttname"><a href="kinetic__socket_8c.html#a2017c6854e7e85b8d94f382e29f26084">KineticSocket_Close</a></div><div class="ttdeci">void KineticSocket_Close(int socket)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__socket_8c_source.html#l00138">kinetic_socket.c:138</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_a29568acb2f080ad18e87c2fbd9439142"><div class="ttname"><a href="kinetic__logger_8h.html#a29568acb2f080ad18e87c2fbd9439142">LOG1</a></div><div class="ttdeci">#define LOG1(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00055">kinetic_logger.h:55</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_a29568acb2f080ad18e87c2fbd9439142"><div class="ttname"><a href="kinetic__logger_8h.html#a29568acb2f080ad18e87c2fbd9439142">LOG1</a></div><div class="ttdeci">#define LOG1(message)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00054">kinetic_logger.h:54</a></div></div>
 <div class="ttc" id="kinetic__socket_8h_html"><div class="ttname"><a href="kinetic__socket_8h.html">kinetic_socket.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

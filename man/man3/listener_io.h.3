@@ -1,4 +1,4 @@
-.TH "listener_io.h" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "listener_io.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,9 +25,9 @@ listener_io.h \-
 .SS "void ListenerIO_AttemptRecv (\fBlistener\fP *l, intavailable)"
 
 .PP
-Definition at line 29 of file listener_io\&.c\&.
+Definition at line 44 of file listener_io\&.c\&.
 .PP
-References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SOCKET_PLAIN, BUS_SOCKET_SSL, connection_info::fd, listener::fd_info, listener::fds, INCOMING_MSG_PIPE, LOG_LISTENER, listener::read_buf_size, RX_ERROR_POLLERR, RX_ERROR_POLLHUP, set_error_for_socket(), socket_read_plain(), socket_read_ssl(), connection_info::to_read_size, listener::tracked_fds, connection_info::type, and bus::udata\&.
+References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, BUS_SOCKET_PLAIN, BUS_SOCKET_SSL, listener::error_occured, connection_info::fd, listener::fd_info, listener::fds, INCOMING_MSG_PIPE, LOG_LISTENER, move_errored_active_sockets_to_end(), listener::read_buf_size, RX_ERROR_POLLERR, RX_ERROR_POLLHUP, set_error_for_socket(), socket_read_plain(), socket_read_ssl(), connection_info::to_read_size, listener::tracked_fds, connection_info::type, and bus::udata\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

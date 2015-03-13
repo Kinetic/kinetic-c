@@ -1,4 +1,4 @@
-.TH "kinetic_device_info.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_device_info.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -28,33 +28,33 @@ kinetic_device_info.c \-
 .RI "static void \fBfree_byte_array\fP (\fBByteArray\fP ba)"
 .br
 .ti -1c
-.RI "static \fBKineticLogInfo_Utilization\fP * \fBKineticLogInfo_GetUtilizations\fP (const KineticProto_Command_GetLog *getLog, size_t *numUtilizations)"
+.RI "static \fBKineticLogInfo_Utilization\fP * \fBKineticLogInfo_GetUtilizations\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog, size_t *numUtilizations)"
 .br
 .ti -1c
-.RI "static \fBKineticLogInfo_Temperature\fP * \fBKineticLogInfo_GetTemperatures\fP (const KineticProto_Command_GetLog *getLog, size_t *numTemperatures)"
+.RI "static \fBKineticLogInfo_Temperature\fP * \fBKineticLogInfo_GetTemperatures\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog, size_t *numTemperatures)"
 .br
 .ti -1c
-.RI "static \fBKineticLogInfo_Capacity\fP * \fBKineticLogInfo_GetCapacity\fP (const KineticProto_Command_GetLog *getLog)"
+.RI "static \fBKineticLogInfo_Capacity\fP * \fBKineticLogInfo_GetCapacity\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)"
 .br
 .ti -1c
 .RI "static 
 .br
-\fBKineticLogInfo_Configuration\fP * \fBKineticLogInfo_GetConfiguration\fP (const KineticProto_Command_GetLog *getLog)"
+\fBKineticLogInfo_Configuration\fP * \fBKineticLogInfo_GetConfiguration\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)"
 .br
 .ti -1c
-.RI "static \fBKineticLogInfo_Statistics\fP * \fBKineticLogInfo_GetStatistics\fP (const KineticProto_Command_GetLog *getLog, size_t *numStatistics)"
+.RI "static \fBKineticLogInfo_Statistics\fP * \fBKineticLogInfo_GetStatistics\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog, size_t *numStatistics)"
 .br
 .ti -1c
-.RI "static \fBByteArray\fP \fBKineticLogInfo_GetMessages\fP (const KineticProto_Command_GetLog *getLog)"
+.RI "static \fBByteArray\fP \fBKineticLogInfo_GetMessages\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)"
 .br
 .ti -1c
-.RI "static \fBKineticLogInfo_Limits\fP * \fBKineticLogInfo_GetLimits\fP (const KineticProto_Command_GetLog *getLog)"
+.RI "static \fBKineticLogInfo_Limits\fP * \fBKineticLogInfo_GetLimits\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)"
 .br
 .ti -1c
-.RI "static \fBKineticLogInfo_Device\fP * \fBKineticLogInfo_GetDevice\fP (const KineticProto_Command_GetLog *getLog)"
+.RI "static \fBKineticLogInfo_Device\fP * \fBKineticLogInfo_GetDevice\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)"
 .br
 .ti -1c
-.RI "\fBKineticLogInfo\fP * \fBKineticLogInfo_Create\fP (const KineticProto_Command_GetLog *getLog)"
+.RI "\fBKineticLogInfo\fP * \fBKineticLogInfo_Create\fP (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)"
 .br
 .ti -1c
 .RI "void \fBKineticLogInfo_Free\fP (\fBKineticLogInfo\fP *kdi)"
@@ -78,55 +78,55 @@ References ByteArray::data, and ByteArray::len\&.
 Definition at line 50 of file kinetic_device_info\&.c\&.
 .PP
 References ByteArray::data\&.
-.SS "static \fBKineticLogInfo_Utilization\fP* KineticLogInfo_GetUtilizations (const KineticProto_Command_GetLog *getLog, size_t *numUtilizations)\fC [static]\fP"
+.SS "static \fBKineticLogInfo_Utilization\fP* KineticLogInfo_GetUtilizations (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog, size_t *numUtilizations)\fC [static]\fP"
 
 .PP
 Definition at line 54 of file kinetic_device_info\&.c\&.
 .PP
 References copy_str(), KineticLogInfo_Utilization::name, and KineticLogInfo_Utilization::value\&.
-.SS "static \fBKineticLogInfo_Temperature\fP* KineticLogInfo_GetTemperatures (const KineticProto_Command_GetLog *getLog, size_t *numTemperatures)\fC [static]\fP"
+.SS "static \fBKineticLogInfo_Temperature\fP* KineticLogInfo_GetTemperatures (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog, size_t *numTemperatures)\fC [static]\fP"
 
 .PP
 Definition at line 80 of file kinetic_device_info\&.c\&.
 .PP
 References copy_str(), KineticLogInfo_Temperature::current, KineticLogInfo_Temperature::maximum, KineticLogInfo_Temperature::minimum, KineticLogInfo_Temperature::name, and KineticLogInfo_Temperature::target\&.
-.SS "static \fBKineticLogInfo_Capacity\fP* KineticLogInfo_GetCapacity (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+.SS "static \fBKineticLogInfo_Capacity\fP* KineticLogInfo_GetCapacity (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)\fC [static]\fP"
 
 .PP
 Definition at line 101 of file kinetic_device_info\&.c\&.
 .PP
 References KineticLogInfo_Capacity::nominalCapacityInBytes, and KineticLogInfo_Capacity::portionFull\&.
-.SS "static \fBKineticLogInfo_Configuration\fP* KineticLogInfo_GetConfiguration (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+.SS "static \fBKineticLogInfo_Configuration\fP* KineticLogInfo_GetConfiguration (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)\fC [static]\fP"
 
 .PP
 Definition at line 112 of file kinetic_device_info\&.c\&.
 .PP
 References KineticLogInfo_Configuration::compilationDate, copy_str(), copy_to_byte_array(), ByteArray::data, free_byte_array(), KineticLogInfo_Configuration::interfaces, KineticLogInfo_Interface::ipv4Address, KineticLogInfo_Interface::ipv6Address, KineticLogInfo_Interface::MAC, KineticLogInfo_Configuration::model, KineticLogInfo_Interface::name, KineticLogInfo_Configuration::numInterfaces, KineticLogInfo_Configuration::protocolCompilationDate, KineticLogInfo_Configuration::protocolSourceHash, KineticLogInfo_Configuration::protocolVersion, KineticLogInfo_Configuration::serialNumber, KineticLogInfo_Configuration::sourceHash, KineticLogInfo_Configuration::vendor, KineticLogInfo_Configuration::version, and KineticLogInfo_Configuration::worldWideName\&.
-.SS "static \fBKineticLogInfo_Statistics\fP* KineticLogInfo_GetStatistics (const KineticProto_Command_GetLog *getLog, size_t *numStatistics)\fC [static]\fP"
+.SS "static \fBKineticLogInfo_Statistics\fP* KineticLogInfo_GetStatistics (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog, size_t *numStatistics)\fC [static]\fP"
 
 .PP
 Definition at line 195 of file kinetic_device_info\&.c\&.
 .PP
 References KineticLogInfo_Statistics::bytes, KineticLogInfo_Statistics::count, and KineticLogInfo_Statistics::messageType\&.
-.SS "static \fBByteArray\fP KineticLogInfo_GetMessages (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+.SS "static \fBByteArray\fP KineticLogInfo_GetMessages (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)\fC [static]\fP"
 
 .PP
 Definition at line 217 of file kinetic_device_info\&.c\&.
 .PP
 References copy_to_byte_array()\&.
-.SS "static \fBKineticLogInfo_Limits\fP* KineticLogInfo_GetLimits (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+.SS "static \fBKineticLogInfo_Limits\fP* KineticLogInfo_GetLimits (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)\fC [static]\fP"
 
 .PP
 Definition at line 224 of file kinetic_device_info\&.c\&.
 .PP
 References KineticLogInfo_Limits::maxConnections, KineticLogInfo_Limits::maxIdentityCount, KineticLogInfo_Limits::maxKeyRangeCount, KineticLogInfo_Limits::maxKeySize, KineticLogInfo_Limits::maxMessageSize, KineticLogInfo_Limits::maxOutstandingReadRequests, KineticLogInfo_Limits::maxOutstandingWriteRequests, KineticLogInfo_Limits::maxPinSize, KineticLogInfo_Limits::maxTagSize, KineticLogInfo_Limits::maxValueSize, and KineticLogInfo_Limits::maxVersionSize\&.
-.SS "static \fBKineticLogInfo_Device\fP* KineticLogInfo_GetDevice (const KineticProto_Command_GetLog *getLog)\fC [static]\fP"
+.SS "static \fBKineticLogInfo_Device\fP* KineticLogInfo_GetDevice (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)\fC [static]\fP"
 
 .PP
 Definition at line 244 of file kinetic_device_info\&.c\&.
 .PP
 References copy_to_byte_array(), and KineticLogInfo_Device::name\&.
-.SS "\fBKineticLogInfo\fP* KineticLogInfo_Create (const KineticProto_Command_GetLog *getLog)"
+.SS "\fBKineticLogInfo\fP* KineticLogInfo_Create (const Com__Seagate__Kinetic__Proto__Command__GetLog *getLog)"
 
 .PP
 Definition at line 257 of file kinetic_device_info\&.c\&.

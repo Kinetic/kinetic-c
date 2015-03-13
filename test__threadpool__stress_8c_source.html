@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="test__threadpool__stress_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -135,7 +135,7 @@
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        .<a class="code" href="structthreadpool__config.html#ad8b8555c2ff4f7f471ddcc35297e7e3f">task_ringbuf_size2</a> = sz2,</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        .max_threads = <a class="code" href="structthreadpool__config.html#a2bd6081206a78be4ae4f714f0a9dfe28">max_threads</a>,</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    };</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">struct </span><a class="code" href="structthreadpool.html">threadpool</a> *t = <a class="code" href="threadpool_8c.html#a9a18a2a6a01f8c9b1f7c191ae999dc87">threadpool_init</a>(&amp;cfg);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keyword">struct </span><a class="code" href="structthreadpool.html">threadpool</a> *t = <a class="code" href="threadpool_8c.html#a9fcf6d5a545e72d8419c1bdf3284840a">Threadpool_Init</a>(&amp;cfg);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    assert(t);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">struct </span><a class="code" href="structthreadpool__task.html">threadpool_task</a> task = {</div>
@@ -154,44 +154,50 @@
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        gettimeofday(&amp;tv, NULL);</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">if</span> (tv.tv_sec &gt; last_sec) {</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            last_sec = tv.tv_sec;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <a class="code" href="threadpool_8c.html#a4557ffcc7c15b5e7287e4ca5cbb32185">threadpool_stats</a>(t, &amp;stats);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            <a class="code" href="threadpool_8c.html#a73246dd432fc3dc13d6dbd8bfe27091a">Threadpool_Stats</a>(t, &amp;stats);</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            ticks++;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <a class="code" href="test__threadpool__stress_8c.html#a602a679191df93c2181c76daa4d20ce0">dump_stats</a>(<span class="stringliteral">&quot;tick...&quot;</span>, &amp;stats, ticks);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        }</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; 1000; i++) {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="threadpool_8c.html#a04602c2dcddbb78c630433294c997fa7">threadpool_schedule</a>(t, &amp;task, &amp;counterpressure)) {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                <span class="keywordtype">size_t</span> msec = i * 1000 * counterpressure;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                usleep(msec &gt;&gt; 12);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            }</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        }</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;}</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="comment">/* Every 16 seconds, pause scheduling for 5 seconds to test</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">         * thread sleep/wake-up alerts. */</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordflow">if</span> ((ticks &amp; 15) == 0) {</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            sleep(5);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; 1000; i++) {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="keywordflow">if</span> (!<a class="code" href="threadpool_8c.html#a85ba3ada0281d56f55a313ba711f088e">Threadpool_Schedule</a>(t, &amp;task, &amp;counterpressure)) {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                <span class="keywordtype">size_t</span> msec = i * 1000 * counterpressure;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                usleep(msec &gt;&gt; 12);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;}</div>
 <div class="ttc" id="threadpool_8h_html"><div class="ttname"><a href="threadpool_8h.html">threadpool.h</a></div></div>
 <div class="ttc" id="test__threadpool__stress_8c_html_a82d8528c0ca5ad4b4e849a66f98f4b58"><div class="ttname"><a href="test__threadpool__stress_8c.html#a82d8528c0ca5ad4b4e849a66f98f4b58">last_count</a></div><div class="ttdeci">static size_t last_count</div><div class="ttdef"><b>Definition:</b> <a href="test__threadpool__stress_8c_source.html#l00033">test_threadpool_stress.c:33</a></div></div>
 <div class="ttc" id="test__threadpool__stress_8c_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="test__threadpool__stress_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="test__threadpool__stress_8c_source.html#l00070">test_threadpool_stress.c:70</a></div></div>
-<div class="ttc" id="threadpool_8c_html_a04602c2dcddbb78c630433294c997fa7"><div class="ttname"><a href="threadpool_8c.html#a04602c2dcddbb78c630433294c997fa7">threadpool_schedule</a></div><div class="ttdeci">bool threadpool_schedule(struct threadpool *t, struct threadpool_task *task, size_t *pushback)</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8c_source.html#l00094">threadpool.c:94</a></div></div>
 <div class="ttc" id="test__threadpool__stress_8c_html_aa63345d9e4f42b4e5939065d8676a4f2"><div class="ttname"><a href="test__threadpool__stress_8c.html#aa63345d9e4f42b4e5939065d8676a4f2">task_count</a></div><div class="ttdeci">static size_t task_count</div><div class="ttdef"><b>Definition:</b> <a href="test__threadpool__stress_8c_source.html#l00032">test_threadpool_stress.c:32</a></div></div>
 <div class="ttc" id="structthreadpool__info_html_ab146e3c2396a31d66017435900961eee"><div class="ttname"><a href="structthreadpool__info.html#ab146e3c2396a31d66017435900961eee">threadpool_info::backlog_size</a></div><div class="ttdeci">size_t backlog_size</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00058">threadpool.h:58</a></div></div>
 <div class="ttc" id="structthreadpool__task_html_a5e7d8e5dededc5d3d883bcdf0cd4db97"><div class="ttname"><a href="structthreadpool__task.html#a5e7d8e5dededc5d3d883bcdf0cd4db97">threadpool_task::task</a></div><div class="ttdeci">threadpool_task_cb * task</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00049">threadpool.h:49</a></div></div>
-<div class="ttc" id="structthreadpool__config_html"><div class="ttname"><a href="structthreadpool__config.html">threadpool_config</a></div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00034">threadpool.h:34</a></div></div>
+<div class="ttc" id="structthreadpool__config_html"><div class="ttname"><a href="structthreadpool__config.html">threadpool_config</a></div><div class="ttdoc">Configuration for thread pool. </div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00034">threadpool.h:34</a></div></div>
 <div class="ttc" id="test__threadpool__stress_8c_html_ad5bb66973f1a007da0717399dcf9b076"><div class="ttname"><a href="test__threadpool__stress_8c.html#ad5bb66973f1a007da0717399dcf9b076">fibs</a></div><div class="ttdeci">static size_t fibs(size_t arg)</div><div class="ttdef"><b>Definition:</b> <a href="test__threadpool__stress_8c_source.html#l00058">test_threadpool_stress.c:58</a></div></div>
-<div class="ttc" id="structthreadpool_html"><div class="ttname"><a href="structthreadpool.html">threadpool</a></div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00064">threadpool_internals.h:64</a></div></div>
+<div class="ttc" id="structthreadpool_html"><div class="ttname"><a href="structthreadpool.html">threadpool</a></div><div class="ttdoc">Internal threadpool state. </div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00066">threadpool_internals.h:66</a></div></div>
 <div class="ttc" id="structthreadpool__info_html_aca746a4c644e763db1831feb0f550b28"><div class="ttname"><a href="structthreadpool__info.html#aca746a4c644e763db1831feb0f550b28">threadpool_info::active_threads</a></div><div class="ttdeci">uint8_t active_threads</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00056">threadpool.h:56</a></div></div>
 <div class="ttc" id="structthreadpool__config_html_ad8b8555c2ff4f7f471ddcc35297e7e3f"><div class="ttname"><a href="structthreadpool__config.html#ad8b8555c2ff4f7f471ddcc35297e7e3f">threadpool_config::task_ringbuf_size2</a></div><div class="ttdeci">uint8_t task_ringbuf_size2</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00035">threadpool.h:35</a></div></div>
 <div class="ttc" id="test__threadpool__stress_8c_html_a82415ab010832f4e05201f3fe3121a3c"><div class="ttname"><a href="test__threadpool__stress_8c.html#a82415ab010832f4e05201f3fe3121a3c">SPIN_ADJ</a></div><div class="ttdeci">#define SPIN_ADJ(F, ADJ)</div><div class="ttdef"><b>Definition:</b> <a href="test__threadpool__stress_8c_source.html#l00048">test_threadpool_stress.c:48</a></div></div>
-<div class="ttc" id="threadpool_8c_html_a4557ffcc7c15b5e7287e4ca5cbb32185"><div class="ttname"><a href="threadpool_8c.html#a4557ffcc7c15b5e7287e4ca5cbb32185">threadpool_stats</a></div><div class="ttdeci">void threadpool_stats(struct threadpool *t, struct threadpool_info *info)</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8c_source.html#l00145">threadpool.c:145</a></div></div>
-<div class="ttc" id="structthreadpool__info_html"><div class="ttname"><a href="structthreadpool__info.html">threadpool_info</a></div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00055">threadpool.h:55</a></div></div>
-<div class="ttc" id="structthreadpool__task_html"><div class="ttname"><a href="structthreadpool__task.html">threadpool_task</a></div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00048">threadpool.h:48</a></div></div>
-<div class="ttc" id="threadpool_8c_html_a9a18a2a6a01f8c9b1f7c191ae999dc87"><div class="ttname"><a href="threadpool_8c.html#a9a18a2a6a01f8c9b1f7c191ae999dc87">threadpool_init</a></div><div class="ttdeci">struct threadpool * threadpool_init(struct threadpool_config *cfg)</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8c_source.html#l00046">threadpool.c:46</a></div></div>
+<div class="ttc" id="threadpool_8c_html_a9fcf6d5a545e72d8419c1bdf3284840a"><div class="ttname"><a href="threadpool_8c.html#a9fcf6d5a545e72d8419c1bdf3284840a">Threadpool_Init</a></div><div class="ttdeci">struct threadpool * Threadpool_Init(struct threadpool_config *cfg)</div><div class="ttdoc">Initialize a threadpool, according to a config. </div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8c_source.html#l00052">threadpool.c:52</a></div></div>
+<div class="ttc" id="structthreadpool__info_html"><div class="ttname"><a href="structthreadpool__info.html">threadpool_info</a></div><div class="ttdoc">Statistics about the current state of the threadpool. </div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00055">threadpool.h:55</a></div></div>
+<div class="ttc" id="structthreadpool__task_html"><div class="ttname"><a href="structthreadpool__task.html">threadpool_task</a></div><div class="ttdoc">A task. </div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00048">threadpool.h:48</a></div></div>
 <div class="ttc" id="test__threadpool__stress_8c_html_ae47cca589331a74cd9872297ad5c35d9"><div class="ttname"><a href="test__threadpool__stress_8c.html#ae47cca589331a74cd9872297ad5c35d9">task_cb</a></div><div class="ttdeci">static void task_cb(void *udata)</div><div class="ttdef"><b>Definition:</b> <a href="test__threadpool__stress_8c_source.html#l00063">test_threadpool_stress.c:63</a></div></div>
 <div class="ttc" id="test__threadpool__stress_8c_html_a602a679191df93c2181c76daa4d20ce0"><div class="ttname"><a href="test__threadpool__stress_8c.html#a602a679191df93c2181c76daa4d20ce0">dump_stats</a></div><div class="ttdeci">static void dump_stats(const char *prefix, struct threadpool_info *stats, size_t ticks)</div><div class="ttdef"><b>Definition:</b> <a href="test__threadpool__stress_8c_source.html#l00035">test_threadpool_stress.c:35</a></div></div>
+<div class="ttc" id="threadpool_8c_html_a73246dd432fc3dc13d6dbd8bfe27091a"><div class="ttname"><a href="threadpool_8c.html#a73246dd432fc3dc13d6dbd8bfe27091a">Threadpool_Stats</a></div><div class="ttdeci">void Threadpool_Stats(struct threadpool *t, struct threadpool_info *info)</div><div class="ttdoc">If TI is non-NULL, fill out some statistics about the operating state of the thread pool...</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8c_source.html#l00149">threadpool.c:149</a></div></div>
 <div class="ttc" id="structthreadpool__info_html_ad3d71644a022662117dd3f3d9db8b905"><div class="ttname"><a href="structthreadpool__info.html#ad3d71644a022662117dd3f3d9db8b905">threadpool_info::dormant_threads</a></div><div class="ttdeci">uint8_t dormant_threads</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00057">threadpool.h:57</a></div></div>
 <div class="ttc" id="structthreadpool__config_html_a2bd6081206a78be4ae4f714f0a9dfe28"><div class="ttname"><a href="structthreadpool__config.html#a2bd6081206a78be4ae4f714f0a9dfe28">threadpool_config::max_threads</a></div><div class="ttdeci">uint8_t max_threads</div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8h_source.html#l00037">threadpool.h:37</a></div></div>
+<div class="ttc" id="threadpool_8c_html_a85ba3ada0281d56f55a313ba711f088e"><div class="ttname"><a href="threadpool_8c.html#a85ba3ada0281d56f55a313ba711f088e">Threadpool_Schedule</a></div><div class="ttdeci">bool Threadpool_Schedule(struct threadpool *t, struct threadpool_task *task, size_t *pushback)</div><div class="ttdoc">Schedule a task in the threadpool. </div><div class="ttdef"><b>Definition:</b> <a href="threadpool_8c_source.html#l00099">threadpool.c:99</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

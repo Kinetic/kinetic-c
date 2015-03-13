@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="kinetic__countingsemaphore_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -92,7 +92,7 @@
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
 <div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="kinetic__countingsemaphore_8h.html#ad266d96cf1de81b93578a5ac8d97c45a">   38</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__countingsemaphore_8c.html#ad266d96cf1de81b93578a5ac8d97c45a">KineticCountingSemaphore_Take</a>(KineticCountingSemaphore * <span class="keyword">const</span> sem) <span class="comment">// WAIT</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    assert(sem != NULL);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(sem != NULL);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    pthread_mutex_lock(&amp;sem-&gt;mutex);</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    sem-&gt;num_waiting++;</div>
@@ -114,7 +114,7 @@
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
 <div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="kinetic__countingsemaphore_8h.html#a1ec34085ec1aa056c673faa2e6e5d369">   60</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__countingsemaphore_8c.html#a1ec34085ec1aa056c673faa2e6e5d369">KineticCountingSemaphore_Give</a>(KineticCountingSemaphore * <span class="keyword">const</span> sem) <span class="comment">// SIGNAL</span></div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;{</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    assert(sem != NULL);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(sem != NULL);</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    pthread_mutex_lock(&amp;sem-&gt;mutex);</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    </div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">if</span> (sem-&gt;count == 0 &amp;&amp; sem-&gt;num_waiting &gt; 0) {</div>
@@ -128,12 +128,12 @@
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    pthread_mutex_unlock(&amp;sem-&gt;mutex);</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    </div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a>(<span class="stringliteral">&quot;Concurrent ops throttle -- GIVE: %u =&gt; %u (waiting=%u)&quot;</span>, before, after, waiting);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    assert(sem-&gt;max &gt;= after);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(sem-&gt;max &gt;= after);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
 <div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="kinetic__countingsemaphore_8h.html#a56c1b8d00894a591c349b867eddf6bba">   79</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="kinetic__countingsemaphore_8c.html#a56c1b8d00894a591c349b867eddf6bba">KineticCountingSemaphore_Destroy</a>(KineticCountingSemaphore * <span class="keyword">const</span> sem)</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;{</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    assert(sem != NULL);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a>(sem != NULL);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    pthread_mutex_destroy(&amp;sem-&gt;mutex);</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    pthread_cond_destroy(&amp;sem-&gt;available);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    free(sem);</div>
@@ -143,7 +143,8 @@
 <div class="ttc" id="kinetic__countingsemaphore_8c_html_ad266d96cf1de81b93578a5ac8d97c45a"><div class="ttname"><a href="kinetic__countingsemaphore_8c.html#ad266d96cf1de81b93578a5ac8d97c45a">KineticCountingSemaphore_Take</a></div><div class="ttdeci">void KineticCountingSemaphore_Take(KineticCountingSemaphore *const sem)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__countingsemaphore_8c_source.html#l00038">kinetic_countingsemaphore.c:38</a></div></div>
 <div class="ttc" id="kinetic__countingsemaphore_8c_html_a1ec34085ec1aa056c673faa2e6e5d369"><div class="ttname"><a href="kinetic__countingsemaphore_8c.html#a1ec34085ec1aa056c673faa2e6e5d369">KineticCountingSemaphore_Give</a></div><div class="ttdeci">void KineticCountingSemaphore_Give(KineticCountingSemaphore *const sem)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__countingsemaphore_8c_source.html#l00060">kinetic_countingsemaphore.c:60</a></div></div>
 <div class="ttc" id="kinetic__countingsemaphore__types_8h_html"><div class="ttname"><a href="kinetic__countingsemaphore__types_8h.html">kinetic_countingsemaphore_types.h</a></div></div>
-<div class="ttc" id="kinetic__logger_8h_html_a698df39f1ec75e686b2b7aff6c347100"><div class="ttname"><a href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a></div><div class="ttdeci">#define LOGF3(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00061">kinetic_logger.h:61</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_acf451e836c95d6e7ad8afacdbfeb5c7f"><div class="ttname"><a href="kinetic__logger_8h.html#acf451e836c95d6e7ad8afacdbfeb5c7f">KINETIC_ASSERT</a></div><div class="ttdeci">#define KINETIC_ASSERT(cond)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00062">kinetic_logger.h:62</a></div></div>
+<div class="ttc" id="kinetic__logger_8h_html_a698df39f1ec75e686b2b7aff6c347100"><div class="ttname"><a href="kinetic__logger_8h.html#a698df39f1ec75e686b2b7aff6c347100">LOGF3</a></div><div class="ttdeci">#define LOGF3(message,...)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__logger_8h_source.html#l00060">kinetic_logger.h:60</a></div></div>
 <div class="ttc" id="kinetic__countingsemaphore_8h_html"><div class="ttname"><a href="kinetic__countingsemaphore_8h.html">kinetic_countingsemaphore.h</a></div></div>
 <div class="ttc" id="kinetic__countingsemaphore_8c_html_af48447276de19051d4f0629156f2aaed"><div class="ttname"><a href="kinetic__countingsemaphore_8c.html#af48447276de19051d4f0629156f2aaed">KineticCountingSemaphore_Create</a></div><div class="ttdeci">KineticCountingSemaphore * KineticCountingSemaphore_Create(uint32_t counts)</div><div class="ttdef"><b>Definition:</b> <a href="kinetic__countingsemaphore_8c_source.html#l00026">kinetic_countingsemaphore.c:26</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

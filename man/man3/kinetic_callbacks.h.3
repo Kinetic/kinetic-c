@@ -1,0 +1,110 @@
+.TH "kinetic_callbacks.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_callbacks.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_types_internal\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_Basic\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_Put\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_Get\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_Delete\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_GetKeyRange\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_P2POperation\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_GetLog\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_SetClusterVersion\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_SetACL\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.ti -1c
+.RI "\fBKineticStatus\fP \fBKineticCallbacks_UpdateFirmware\fP (KineticOperation *const operation, \fBKineticStatus\fP const status)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticStatus\fP KineticCallbacks_Basic (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 43 of file kinetic_callbacks\&.c\&.
+.PP
+References KINETIC_ASSERT\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_Put (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 50 of file kinetic_callbacks\&.c\&.
+.PP
+References ByteBuffer::array, BYTE_BUFFER_NONE, ByteBuffer_Append(), ByteBuffer_Reset(), ByteBuffer::bytesUsed, ByteArray::data, KineticEntry::dbVersion, KINETIC_ASSERT, KINETIC_STATUS_SUCCESS, ByteArray::len, and KineticEntry::newVersion\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_Get (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 80 of file kinetic_callbacks\&.c\&.
+.PP
+References ByteBuffer_AppendArray(), ByteBuffer_IsNull(), Copy_Com__Seagate__Kinetic__Proto__Command__KeyValue_to_KineticEntry(), KINETIC_ASSERT, KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_SUCCESS, and KineticResponse_GetKeyValue()\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_Delete (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 110 of file kinetic_callbacks\&.c\&.
+.PP
+References KINETIC_ASSERT\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_GetKeyRange (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 118 of file kinetic_callbacks\&.c\&.
+.PP
+References Copy_Com__Seagate__Kinetic__Proto__Command__Range_to_ByteBufferArray(), KINETIC_ASSERT, KINETIC_STATUS_BUFFER_OVERRUN, KINETIC_STATUS_SUCCESS, and KineticResponse_GetKeyRange()\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_P2POperation (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 168 of file kinetic_callbacks\&.c\&.
+.PP
+References KINETIC_ASSERT, KINETIC_STATUS_SUCCESS, KineticAllocator_FreeP2PProtobuf(), and populateP2PStatusCodes()\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_GetLog (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 194 of file kinetic_callbacks\&.c\&.
+.PP
+References KINETIC_ASSERT, KINETIC_STATUS_OPERATION_FAILED, KINETIC_STATUS_SUCCESS, and KineticLogInfo_Create()\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_SetClusterVersion (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 215 of file kinetic_callbacks\&.c\&.
+.PP
+References KINETIC_ASSERT, KINETIC_STATUS_SUCCESS, and KineticSession_SetClusterVersion()\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_SetACL (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 226 of file kinetic_callbacks\&.c\&.
+.PP
+References ACL::ACL_count, ACL::ACLs, KINETIC_ASSERT, and KineticACL_Free()\&.
+.SS "\fBKineticStatus\fP KineticCallbacks_UpdateFirmware (KineticOperation *constoperation, \fBKineticStatus\fP conststatus)"
+
+.PP
+Definition at line 244 of file kinetic_callbacks\&.c\&.
+.PP
+References KINETIC_ASSERT\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

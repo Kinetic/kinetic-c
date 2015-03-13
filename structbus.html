@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,47 +52,63 @@
 </div><!--header-->
 <div class="contents">
 
+<p>Message bus.  
+ <a href="structbus.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a3f72ca0a4bdb9978a9e012045623f933"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__types_8h.html#a2869f7812f71d97f451d512754567084">bus_sink_cb</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a3f72ca0a4bdb9978a9e012045623f933">sink_cb</a></td></tr>
+<tr class="memdesc:a3f72ca0a4bdb9978a9e012045623f933"><td class="mdescLeft">&#160;</td><td class="mdescRight">IO sink callback.  <a href="#a3f72ca0a4bdb9978a9e012045623f933">More...</a><br /></td></tr>
 <tr class="separator:a3f72ca0a4bdb9978a9e012045623f933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3baa79892ebffd5a3ef91bbd32f1c37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__types_8h.html#a4e7668d3dd3e076ee17163a6dd5284be">bus_unpack_cb</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#af3baa79892ebffd5a3ef91bbd32f1c37">unpack_cb</a></td></tr>
+<tr class="memdesc:af3baa79892ebffd5a3ef91bbd32f1c37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message unpacking callback.  <a href="#af3baa79892ebffd5a3ef91bbd32f1c37">More...</a><br /></td></tr>
 <tr class="separator:af3baa79892ebffd5a3ef91bbd32f1c37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a451f836d5a7043cb7451273c143f248d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__types_8h.html#a658b605914f4d89fe5e020299b96d897">bus_unexpected_msg_cb</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a451f836d5a7043cb7451273c143f248d">unexpected_msg_cb</a></td></tr>
 <tr class="separator:a451f836d5a7043cb7451273c143f248d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af85273abfc0b94d837b1c3d5698791da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__types_8h.html#adf76fad7cfa121c5eb75eff2db1d1cd6">bus_error_cb</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#af85273abfc0b94d837b1c3d5698791da">error_cb</a></td></tr>
+<tr class="memdesc:af85273abfc0b94d837b1c3d5698791da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Error handling callback.  <a href="#af85273abfc0b94d837b1c3d5698791da">More...</a><br /></td></tr>
 <tr class="separator:af85273abfc0b94d837b1c3d5698791da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1063de7e8411d91e03e156557b87e4d7"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a1063de7e8411d91e03e156557b87e4d7">udata</a></td></tr>
+<tr class="memdesc:a1063de7e8411d91e03e156557b87e4d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">User data for callbacks.  <a href="#a1063de7e8411d91e03e156557b87e4d7">More...</a><br /></td></tr>
 <tr class="separator:a1063de7e8411d91e03e156557b87e4d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ad9f0ac1d3f3f27a2fecb343b8ed2a0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a5ad9f0ac1d3f3f27a2fecb343b8ed2a0">log_level</a></td></tr>
+<tr class="memdesc:a5ad9f0ac1d3f3f27a2fecb343b8ed2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Log level.  <a href="#a5ad9f0ac1d3f3f27a2fecb343b8ed2a0">More...</a><br /></td></tr>
 <tr class="separator:a5ad9f0ac1d3f3f27a2fecb343b8ed2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1160376c92f0c8fce674ca77fa41335a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__types_8h.html#ad2ee1c939e7a462d980c301f088078a3">bus_log_cb</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a1160376c92f0c8fce674ca77fa41335a">log_cb</a></td></tr>
+<tr class="memdesc:a1160376c92f0c8fce674ca77fa41335a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging callback.  <a href="#a1160376c92f0c8fce674ca77fa41335a">More...</a><br /></td></tr>
 <tr class="separator:a1160376c92f0c8fce674ca77fa41335a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace72e36be8085e1cb2935af8b11207b7"><td class="memItemLeft" align="right" valign="top">pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#ace72e36be8085e1cb2935af8b11207b7">log_lock</a></td></tr>
-<tr class="separator:ace72e36be8085e1cb2935af8b11207b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeaebf543f45a2c9d6b3af31826c8af69"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#aeaebf543f45a2c9d6b3af31826c8af69">listener_count</a></td></tr>
+<tr class="memdesc:aeaebf543f45a2c9d6b3af31826c8af69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of listeners.  <a href="#aeaebf543f45a2c9d6b3af31826c8af69">More...</a><br /></td></tr>
 <tr class="separator:aeaebf543f45a2c9d6b3af31826c8af69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63745ef2fca7e862f1301380892f0f22"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structlistener.html">listener</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a63745ef2fca7e862f1301380892f0f22">listeners</a></td></tr>
+<tr class="memdesc:a63745ef2fca7e862f1301380892f0f22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listener array.  <a href="#a63745ef2fca7e862f1301380892f0f22">More...</a><br /></td></tr>
 <tr class="separator:a63745ef2fca7e862f1301380892f0f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4589956d09754001506dab138c33432"><td class="memItemLeft" align="right" valign="top">bool *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#ac4589956d09754001506dab138c33432">joined</a></td></tr>
+<tr class="memdesc:ac4589956d09754001506dab138c33432"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which threads have joined.  <a href="#ac4589956d09754001506dab138c33432">More...</a><br /></td></tr>
 <tr class="separator:ac4589956d09754001506dab138c33432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af44407d0ffd23017d659329d06a2af89"><td class="memItemLeft" align="right" valign="top">pthread_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#af44407d0ffd23017d659329d06a2af89">threads</a></td></tr>
+<tr class="memdesc:af44407d0ffd23017d659329d06a2af89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threads.  <a href="#af44407d0ffd23017d659329d06a2af89">More...</a><br /></td></tr>
 <tr class="separator:af44407d0ffd23017d659329d06a2af89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a873b1c898dbdee192950caea56b37729"><td class="memItemLeft" align="right" valign="top"><a class="el" href="bus__internal__types_8h.html#a6fe4e46ccd8bedd14692b999d7a1bf4e">shutdown_state_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a873b1c898dbdee192950caea56b37729">shutdown_state</a></td></tr>
+<tr class="memdesc:a873b1c898dbdee192950caea56b37729"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current shutdown state.  <a href="#a873b1c898dbdee192950caea56b37729">More...</a><br /></td></tr>
 <tr class="separator:a873b1c898dbdee192950caea56b37729"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d57acc6c3586d4994215fb0efcac63e"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a1d57acc6c3586d4994215fb0efcac63e">threadpool</a></td></tr>
+<tr class="memdesc:a1d57acc6c3586d4994215fb0efcac63e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread pool.  <a href="#a1d57acc6c3586d4994215fb0efcac63e">More...</a><br /></td></tr>
 <tr class="separator:a1d57acc6c3586d4994215fb0efcac63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7feda9eb15cbc6deab2508973acfe85c"><td class="memItemLeft" align="right" valign="top">SSL_CTX *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a7feda9eb15cbc6deab2508973acfe85c">ssl_ctx</a></td></tr>
+<tr class="memdesc:a7feda9eb15cbc6deab2508973acfe85c"><td class="mdescLeft">&#160;</td><td class="mdescRight">SSL context.  <a href="#a7feda9eb15cbc6deab2508973acfe85c">More...</a><br /></td></tr>
 <tr class="separator:a7feda9eb15cbc6deab2508973acfe85c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02b724a103e70fd7eea516e8c4b2556c"><td class="memItemLeft" align="right" valign="top">struct yacht *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a02b724a103e70fd7eea516e8c4b2556c">fd_set</a></td></tr>
+<tr class="memitem:a02b724a103e70fd7eea516e8c4b2556c"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structyacht.html">yacht</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a02b724a103e70fd7eea516e8c4b2556c">fd_set</a></td></tr>
+<tr class="memdesc:a02b724a103e70fd7eea516e8c4b2556c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locked hash table for fd -&gt; <a class="el" href="structconnection__info.html" title="Per-socket connection context. ">connection_info</a>.  <a href="#a02b724a103e70fd7eea516e8c4b2556c">More...</a><br /></td></tr>
 <tr class="separator:a02b724a103e70fd7eea516e8c4b2556c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01464a80aa897f2caa81b063402d1f28"><td class="memItemLeft" align="right" valign="top">pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structbus.html#a01464a80aa897f2caa81b063402d1f28">fd_set_lock</a></td></tr>
 <tr class="separator:a01464a80aa897f2caa81b063402d1f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
+<div class="textblock"><p>Message bus. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00072">72</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a3f72ca0a4bdb9978a9e012045623f933"></a>
@@ -104,6 +120,8 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>IO sink callback. </p>
 
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00073">73</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
@@ -118,6 +136,8 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Message unpacking callback. </p>
 
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00074">74</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
@@ -147,6 +167,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Error handling callback. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00076">76</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
@@ -160,6 +182,8 @@ Data Fields</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>User data for callbacks. </p>
 
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00077">77</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
@@ -175,6 +199,8 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Log level. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00079">79</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
@@ -189,21 +215,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Logging callback. </p>
+
 <p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00080">80</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ace72e36be8085e1cb2935af8b11207b7"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">pthread_mutex_t bus::log_lock</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00081">81</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -217,7 +231,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00083">83</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Number of listeners. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00082">82</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -231,7 +247,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00084">84</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Listener array. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00083">83</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -245,7 +263,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00086">86</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Which threads have joined. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00085">85</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -259,7 +279,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00087">87</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Threads. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00086">86</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -273,7 +295,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00088">88</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Current shutdown state. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00087">87</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -287,7 +311,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00090">90</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Thread pool. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00089">89</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -301,7 +327,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00091">91</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>SSL context. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00090">90</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -310,12 +338,14 @@ Data Fields</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct yacht* bus::fd_set</td>
+          <td class="memname">struct <a class="el" href="structyacht.html">yacht</a>* bus::fd_set</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00094">94</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Locked hash table for fd -&gt; <a class="el" href="structconnection__info.html" title="Per-socket connection context. ">connection_info</a>. </p>
+
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00093">93</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>
@@ -329,7 +359,7 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00095">95</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
+<p>Definition at line <a class="el" href="bus__internal__types_8h_source.html#l00094">94</a> of file <a class="el" href="bus__internal__types_8h_source.html">bus_internal_types.h</a>.</p>
 
 </div>
 </div>

@@ -1,0 +1,76 @@
+.TH "listener_helper.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+listener_helper.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'listener_helper\&.h'\fP
+.br
+\fC#include 'listener_task\&.h'\fP
+.br
+\fC#include 'syscall\&.h'\fP
+.br
+\fC#include 'atomic\&.h'\fP
+.br
+\fC#include <assert\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBlistener_msg\fP * \fBListenerHelper_GetFreeMsg\fP (\fBlistener\fP *l)"
+.br
+.RI "\fIGet a free message from the listener's message pool\&. \fP"
+.ti -1c
+.RI "bool \fBListenerHelper_PushMessage\fP (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg, int *reply_fd)"
+.br
+.RI "\fIPush a message into the listener's message queue\&. \fP"
+.ti -1c
+.RI "\fBrx_info_t\fP * \fBListenerHelper_GetFreeRXInfo\fP (struct \fBlistener\fP *l)"
+.br
+.RI "\fIGet a free RX_INFO record, if any are available\&. \fP"
+.ti -1c
+.RI "\fBrx_info_t\fP * \fBListenerHelper_FindInfoBySequenceID\fP (\fBlistener\fP *l, int fd, int64_t seq_id)"
+.br
+.RI "\fITry to find an RX_INFO record by a <file descriptor, sequence_id> pair\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBlistener_msg\fP* ListenerHelper_GetFreeMsg (\fBlistener\fP *l)"
+
+.PP
+Get a free message from the listener's message pool\&. 
+.PP
+Definition at line 31 of file listener_helper\&.c\&.
+.PP
+References ATOMIC_BOOL_COMPARE_AND_SWAP, listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, listener_msg::id, LOG_LISTENER, MAX_QUEUE_MESSAGES, listener::msg_freelist, MSG_NONE, listener::msgs_in_use, listener_msg::next, listener_msg::type, listener_msg::u, and bus::udata\&.
+.SS "bool ListenerHelper_PushMessage (struct \fBlistener\fP *l, \fBlistener_msg\fP *msg, int *reply_fd)"
+
+.PP
+Push a message into the listener's message queue\&. 
+.PP
+Definition at line 70 of file listener_helper\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, listener::commit_pipe, listener_msg::id, ListenerTask_ReleaseMsg(), LOG_LISTENER, listener_msg::pipes, syscall_write(), and bus::udata\&.
+.SS "\fBrx_info_t\fP* ListenerHelper_GetFreeRXInfo (\fBlistener\fP *l)"
+
+.PP
+Get a free RX_INFO record, if any are available\&. 
+.PP
+Definition at line 100 of file listener_helper\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG, BUS_LOG_SNPRINTF, rx_info_t::id, LOG_LISTENER, LOG_SENDER, MAX_PENDING_MESSAGES, rx_info_t::next, RIS_INACTIVE, listener::rx_info, listener::rx_info_freelist, listener::rx_info_in_use, listener::rx_info_max_used, rx_info_t::state, and bus::udata\&.
+.SS "\fBrx_info_t\fP* ListenerHelper_FindInfoBySequenceID (\fBlistener\fP *l, intfd, int64_tseq_id)"
+
+.PP
+Try to find an RX_INFO record by a <file descriptor, sequence_id> pair\&. 
+.PP
+Definition at line 127 of file listener_helper\&.c\&.
+.PP
+References listener::bus, BUS_ASSERT, BUS_LOG_SNPRINTF, rx_info_t::expect, boxed_msg::fd, rx_info_t::hold, rx_info_t::id, ListenerTask_DumpRXInfoTable(), bus::log_level, LOG_LISTENER, LOG_MEMORY, boxed_msg::out_seq_id, RIS_EXPECT, RIS_HOLD, RIS_INACTIVE, listener::rx_info, listener::rx_info_max_used, rx_info_t::state, rx_info_t::u, and bus::udata\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

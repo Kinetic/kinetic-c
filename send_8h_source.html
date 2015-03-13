@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="send_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -78,21 +78,18 @@
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="bus__types_8h.html">bus_types.h</a>&quot;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="bus__internal__types_8h.html">bus_internal_types.h</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">/* Do a blocking send.</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> * Returning true indicates that the message has been queued up for</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> * delivery, but the request or response may still fail. Those errors</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * are handled by giving an error status code to the callback.</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * Returning false means that the send was rejected outright, and</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * the callback-based error handling will not be used. */</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="send_8h.html#a472ea0cb8ac1873fe772996d75745bc6">send_do_blocking_send</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structboxed__msg.html">boxed_msg</a> *box);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="send_8h.html#a749aa0abf9eb827a7b342288e580fa96">Send_DoBlockingSend</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structboxed__msg.html">boxed_msg</a> *box);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keywordtype">void</span> <a class="code" href="send_8h.html#a91593f7dd060e426a6e3d72be46995b1">Send_HandleFailure</a>(<span class="keyword">struct</span> <a class="code" href="structbus.html">bus</a> *b, <a class="code" href="structboxed__msg.html">boxed_msg</a> *box, <a class="code" href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a> status);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="send_8h_html_a749aa0abf9eb827a7b342288e580fa96"><div class="ttname"><a href="send_8h.html#a749aa0abf9eb827a7b342288e580fa96">Send_DoBlockingSend</a></div><div class="ttdeci">bool Send_DoBlockingSend(struct bus *b, boxed_msg *box)</div><div class="ttdoc">Do a blocking send. </div><div class="ttdef"><b>Definition:</b> <a href="send_8c_source.html#l00059">send.c:59</a></div></div>
 <div class="ttc" id="bus__internal__types_8h_html"><div class="ttname"><a href="bus__internal__types_8h.html">bus_internal_types.h</a></div></div>
-<div class="ttc" id="send_8h_html_a472ea0cb8ac1873fe772996d75745bc6"><div class="ttname"><a href="send_8h.html#a472ea0cb8ac1873fe772996d75745bc6">send_do_blocking_send</a></div><div class="ttdeci">bool send_do_blocking_send(struct bus *b, boxed_msg *box)</div><div class="ttdef"><b>Definition:</b> <a href="send_8c_source.html#l00045">send.c:45</a></div></div>
-<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00072">bus_internal_types.h:72</a></div></div>
+<div class="ttc" id="structbus_html"><div class="ttname"><a href="structbus.html">bus</a></div><div class="ttdoc">Message bus. </div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00072">bus_internal_types.h:72</a></div></div>
 <div class="ttc" id="bus__types_8h_html"><div class="ttname"><a href="bus__types_8h.html">bus_types.h</a></div></div>
+<div class="ttc" id="bus__types_8h_html_a3f10842947032a2f6fc237770d4cf76a"><div class="ttname"><a href="bus__types_8h.html#a3f10842947032a2f6fc237770d4cf76a">bus_send_status_t</a></div><div class="ttdeci">bus_send_status_t</div><div class="ttdef"><b>Definition:</b> <a href="bus__types_8h_source.html#l00193">bus_types.h:193</a></div></div>
 <div class="ttc" id="structboxed__msg_html"><div class="ttname"><a href="structboxed__msg.html">boxed_msg</a></div><div class="ttdef"><b>Definition:</b> <a href="bus__internal__types_8h_source.html#l00036">bus_internal_types.h:36</a></div></div>
+<div class="ttc" id="send_8h_html_a91593f7dd060e426a6e3d72be46995b1"><div class="ttname"><a href="send_8h.html#a91593f7dd060e426a6e3d72be46995b1">Send_HandleFailure</a></div><div class="ttdeci">void Send_HandleFailure(struct bus *b, boxed_msg *box, bus_send_status_t status)</div><div class="ttdef"><b>Definition:</b> <a href="send_8c_source.html#l00208">send.c:208</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

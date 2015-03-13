@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -64,26 +64,34 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a98cbdaeea07cc02d68f1e960e199e87a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#a98cbdaeea07cc02d68f1e960e199e87a">LISTENER_BACKPRESSURE_SHIFT</a>&#160;&#160;&#160;0 /* TODO */</td></tr>
+<tr class="memdesc:a98cbdaeea07cc02d68f1e960e199e87a"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many bits to &gt;&gt; the backpressure value from commands delivered to the listener.  <a href="#a98cbdaeea07cc02d68f1e960e199e87a">More...</a><br /></td></tr>
 <tr class="separator:a98cbdaeea07cc02d68f1e960e199e87a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a142b7ddbed12a525d556a51b76d074ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#a142b7ddbed12a525d556a51b76d074ab">LISTENER_EXPECT_BACKPRESSURE_SHIFT</a>&#160;&#160;&#160;7</td></tr>
+<tr class="memdesc:a142b7ddbed12a525d556a51b76d074ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many bits to &gt;&gt; the backpressure value from the listener when a send has completed.  <a href="#a142b7ddbed12a525d556a51b76d074ab">More...</a><br /></td></tr>
 <tr class="separator:a142b7ddbed12a525d556a51b76d074ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0c3342b1bf0a6cade3e4729f40022ed7"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#a0c3342b1bf0a6cade3e4729f40022ed7">listener_init</a> (struct <a class="el" href="structbus.html">bus</a> *b, struct <a class="el" href="structbus__config.html">bus_config</a> *cfg)</td></tr>
-<tr class="separator:a0c3342b1bf0a6cade3e4729f40022ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab80e1a8ec62bff3ad6a1b69eca150f1d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#ab80e1a8ec62bff3ad6a1b69eca150f1d">listener_add_socket</a> (struct <a class="el" href="structlistener.html">listener</a> *l, <a class="el" href="structconnection__info.html">connection_info</a> *ci, int *notify_fd)</td></tr>
-<tr class="separator:ab80e1a8ec62bff3ad6a1b69eca150f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3f377ca9b433af51d906a103eee304f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#af3f377ca9b433af51d906a103eee304f">listener_remove_socket</a> (struct <a class="el" href="structlistener.html">listener</a> *l, int fd, int *notify_fd)</td></tr>
-<tr class="separator:af3f377ca9b433af51d906a103eee304f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbec5b5b8251c2787ebdb7ec4f73f20b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#acbec5b5b8251c2787ebdb7ec4f73f20b">listener_hold_response</a> (struct <a class="el" href="structlistener.html">listener</a> *l, int fd, int64_t seq_id, int16_t timeout_sec)</td></tr>
-<tr class="separator:acbec5b5b8251c2787ebdb7ec4f73f20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4ca027f622cf5d1ab731f92f9cb66a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#ac4ca027f622cf5d1ab731f92f9cb66a8">listener_expect_response</a> (struct <a class="el" href="structlistener.html">listener</a> *l, <a class="el" href="structboxed__msg.html">boxed_msg</a> *box, uint16_t *backpressure)</td></tr>
-<tr class="separator:ac4ca027f622cf5d1ab731f92f9cb66a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29137171fd3f0a2f878c450544927c56"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#a29137171fd3f0a2f878c450544927c56">listener_shutdown</a> (struct <a class="el" href="structlistener.html">listener</a> *l, int *notify_fd)</td></tr>
-<tr class="separator:a29137171fd3f0a2f878c450544927c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae02746f8c243596cedd386fc1d7630e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#ae02746f8c243596cedd386fc1d7630e5">listener_free</a> (struct <a class="el" href="structlistener.html">listener</a> *l)</td></tr>
-<tr class="separator:ae02746f8c243596cedd386fc1d7630e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3512cb230ac2de689f22bc5ca126851"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#af3512cb230ac2de689f22bc5ca126851">Listener_Init</a> (struct <a class="el" href="structbus.html">bus</a> *b, struct <a class="el" href="structbus__config.html">bus_config</a> *cfg)</td></tr>
+<tr class="memdesc:af3512cb230ac2de689f22bc5ca126851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the listener.  <a href="#af3512cb230ac2de689f22bc5ca126851">More...</a><br /></td></tr>
+<tr class="separator:af3512cb230ac2de689f22bc5ca126851"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af82382287c3478bfb058a1e8d9e0ed37"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#af82382287c3478bfb058a1e8d9e0ed37">Listener_AddSocket</a> (struct <a class="el" href="structlistener.html">listener</a> *l, <a class="el" href="structconnection__info.html">connection_info</a> *ci, int *notify_fd)</td></tr>
+<tr class="memdesc:af82382287c3478bfb058a1e8d9e0ed37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add/remove sockets' metadata from internal info.  <a href="#af82382287c3478bfb058a1e8d9e0ed37">More...</a><br /></td></tr>
+<tr class="separator:af82382287c3478bfb058a1e8d9e0ed37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45972b5ad8e14d23bea44f1f87ba7824"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#a45972b5ad8e14d23bea44f1f87ba7824">Listener_RemoveSocket</a> (struct <a class="el" href="structlistener.html">listener</a> *l, int fd, int *notify_fd)</td></tr>
+<tr class="separator:a45972b5ad8e14d23bea44f1f87ba7824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb0c06626bfe3748c65a996b73cb0b4f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#aeb0c06626bfe3748c65a996b73cb0b4f">Listener_HoldResponse</a> (struct <a class="el" href="structlistener.html">listener</a> *l, int fd, int64_t seq_id, int16_t timeout_sec, int *notify_fd)</td></tr>
+<tr class="memdesc:aeb0c06626bfe3748c65a996b73cb0b4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The client is about to start a write, the listener should hold on to the response (with timeout) if it arrives before receiving further instructions from the client.  <a href="#aeb0c06626bfe3748c65a996b73cb0b4f">More...</a><br /></td></tr>
+<tr class="separator:aeb0c06626bfe3748c65a996b73cb0b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae97da82cff0ed66aba0dc24b413d2732"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#ae97da82cff0ed66aba0dc24b413d2732">Listener_ExpectResponse</a> (struct <a class="el" href="structlistener.html">listener</a> *l, <a class="el" href="structboxed__msg.html">boxed_msg</a> *box, uint16_t *backpressure)</td></tr>
+<tr class="memdesc:ae97da82cff0ed66aba0dc24b413d2732"><td class="mdescLeft">&#160;</td><td class="mdescRight">The client has finished a write, the listener should expect a response.  <a href="#ae97da82cff0ed66aba0dc24b413d2732">More...</a><br /></td></tr>
+<tr class="separator:ae97da82cff0ed66aba0dc24b413d2732"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af80e3d101f8af017f093691d1b1b50b9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#af80e3d101f8af017f093691d1b1b50b9">Listener_Shutdown</a> (struct <a class="el" href="structlistener.html">listener</a> *l, int *notify_fd)</td></tr>
+<tr class="memdesc:af80e3d101f8af017f093691d1b1b50b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shut down the listener.  <a href="#af80e3d101f8af017f093691d1b1b50b9">More...</a><br /></td></tr>
+<tr class="separator:af80e3d101f8af017f093691d1b1b50b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67866e38637966502a09ff5d17a3b88f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="listener_8h.html#a67866e38637966502a09ff5d17a3b88f">Listener_Free</a> (struct <a class="el" href="structlistener.html">listener</a> *l)</td></tr>
+<tr class="memdesc:a67866e38637966502a09ff5d17a3b88f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the listener, which must already be shut down.  <a href="#a67866e38637966502a09ff5d17a3b88f">More...</a><br /></td></tr>
+<tr class="separator:a67866e38637966502a09ff5d17a3b88f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a98cbdaeea07cc02d68f1e960e199e87a"></a>
@@ -95,6 +103,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>How many bits to &gt;&gt; the backpressure value from commands delivered to the listener. </p>
 
 <p>Definition at line <a class="el" href="listener_8h_source.html#l00028">28</a> of file <a class="el" href="listener_8h_source.html">listener.h</a>.</p>
 
@@ -110,17 +120,19 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>How many bits to &gt;&gt; the backpressure value from the listener when a send has completed. </p>
+
 <p>Definition at line <a class="el" href="listener_8h_source.html#l00032">32</a> of file <a class="el" href="listener_8h_source.html">listener.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a0c3342b1bf0a6cade3e4729f40022ed7"></a>
+<a class="anchor" id="af3512cb230ac2de689f22bc5ca126851"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="structlistener.html">listener</a>* listener_init </td>
+          <td class="memname">struct <a class="el" href="structlistener.html">listener</a>* Listener_Init </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structbus.html">bus</a> *&#160;</td>
           <td class="paramname"><em>b</em>, </td>
@@ -139,18 +151,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Initialize the listener. </p>
+
 <p>Definition at line <a class="el" href="listener_8c_source.html#l00039">39</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="listener__internal__types_8h_source.html#l00123">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="listener__internal__types_8h_source.html#l00133">listener::commit_pipe</a>, <a class="el" href="listener__internal__types_8h_source.html#l00151">listener::fds</a>, <a class="el" href="listener__internal__types_8h_source.html#l00043">listener_msg::id</a>, <a class="el" href="listener__internal__types_8h_source.html#l00079">rx_info_t::id</a>, <a class="el" href="listener__internal__types_8h_source.html#l00134">listener::incoming_msg_pipe</a>, <a class="el" href="listener__internal__types_8h_source.html#l00030">INCOMING_MSG_PIPE_ID</a>, <a class="el" href="listener__internal__types_8h_source.html#l00118">LISTENER_NO_FD</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="listener__internal__types_8h_source.html#l00106">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00109">MAX_QUEUE_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00143">listener::msg_freelist</a>, <a class="el" href="listener__internal__types_8h_source.html#l00142">listener::msgs</a>, <a class="el" href="listener__internal__types_8h_source.html#l00045">listener_msg::next</a>, <a class="el" href="listener__internal__types_8h_source.html#l00080">rx_info_t::next</a>, <a class="el" href="listener__internal__types_8h_source.html#l00046">listener_msg::pipes</a>, <a class="el" href="listener__internal__types_8h_source.html#l00074">RIS_INACTIVE</a>, <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::rx_info</a>, <a class="el" href="listener__internal__types_8h_source.html#l00138">listener::rx_info_freelist</a>, <a class="el" href="listener__internal__types_8h_source.html#l00140">listener::rx_info_max_used</a>, <a class="el" href="listener__internal__types_8h_source.html#l00130">listener::shutdown_notify_fd</a>, <a class="el" href="listener__internal__types_8h_source.html#l00082">rx_info_t::state</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
+<p>References <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00045">BUS_LOG</a>, <a class="el" href="listener__internal__types_8h_source.html#l00147">listener::commit_pipe</a>, <a class="el" href="listener__internal__types_8h_source.html#l00175">listener::fds</a>, <a class="el" href="listener__internal__types_8h_source.html#l00052">listener_msg::id</a>, <a class="el" href="listener__internal__types_8h_source.html#l00093">rx_info_t::id</a>, <a class="el" href="listener__internal__types_8h_source.html#l00148">listener::incoming_msg_pipe</a>, <a class="el" href="listener__internal__types_8h_source.html#l00035">INCOMING_MSG_PIPE_ID</a>, <a class="el" href="listener__internal__types_8h_source.html#l00132">LISTENER_NO_FD</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_LISTENER</a>, <a class="el" href="listener__internal__types_8h_source.html#l00122">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00125">MAX_QUEUE_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00157">listener::msg_freelist</a>, <a class="el" href="listener__internal__types_8h_source.html#l00156">listener::msgs</a>, <a class="el" href="listener__internal__types_8h_source.html#l00054">listener_msg::next</a>, <a class="el" href="listener__internal__types_8h_source.html#l00094">rx_info_t::next</a>, <a class="el" href="listener__internal__types_8h_source.html#l00055">listener_msg::pipes</a>, <a class="el" href="listener__internal__types_8h_source.html#l00088">RIS_INACTIVE</a>, <a class="el" href="listener__internal__types_8h_source.html#l00151">listener::rx_info</a>, <a class="el" href="listener__internal__types_8h_source.html#l00152">listener::rx_info_freelist</a>, <a class="el" href="listener__internal__types_8h_source.html#l00154">listener::rx_info_max_used</a>, <a class="el" href="listener__internal__types_8h_source.html#l00144">listener::shutdown_notify_fd</a>, <a class="el" href="listener__internal__types_8h_source.html#l00096">rx_info_t::state</a>, <a class="el" href="syscall_8c_source.html#l00031">syscall_close()</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab80e1a8ec62bff3ad6a1b69eca150f1d"></a>
+<a class="anchor" id="af82382287c3478bfb058a1e8d9e0ed37"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool listener_add_socket </td>
+          <td class="memname">bool Listener_AddSocket </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td>
           <td class="paramname"><em>l</em>, </td>
@@ -175,18 +189,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00099">99</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Add/remove sockets' metadata from internal info. </p>
+<p>Blocking. </p>
 
-<p>References <a class="el" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027">listener_msg::add_socket</a>, <a class="el" href="listener_8c_source.html#l00270">get_free_msg()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00034">MSG_ADD_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00046">listener_msg::pipes</a>, <a class="el" href="listener_8c_source.html#l00243">push_message()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00094">94</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+
+<p>References <a class="el" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027">listener_msg::add_socket</a>, <a class="el" href="listener__helper_8c_source.html#l00031">ListenerHelper_GetFreeMsg()</a>, <a class="el" href="listener__helper_8c_source.html#l00070">ListenerHelper_PushMessage()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00043">MSG_ADD_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00055">listener_msg::pipes</a>, <a class="el" href="listener__internal__types_8h_source.html#l00053">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="af3f377ca9b433af51d906a103eee304f"></a>
+<a class="anchor" id="a45972b5ad8e14d23bea44f1f87ba7824"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool listener_remove_socket </td>
+          <td class="memname">bool Listener_RemoveSocket </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td>
           <td class="paramname"><em>l</em>, </td>
@@ -211,18 +228,18 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00110">110</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00105">105</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
 
-<p>References <a class="el" href="listener_8c_source.html#l00270">get_free_msg()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00035">MSG_REMOVE_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00046">listener_msg::pipes</a>, <a class="el" href="listener_8c_source.html#l00243">push_message()</a>, <a class="el" href="structlistener__msg.html#a518c6e850864a64eb162d4482c6c3294">listener_msg::remove_socket</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
+<p>References <a class="el" href="listener__helper_8c_source.html#l00031">ListenerHelper_GetFreeMsg()</a>, <a class="el" href="listener__helper_8c_source.html#l00070">ListenerHelper_PushMessage()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">MSG_REMOVE_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00055">listener_msg::pipes</a>, <a class="el" href="structlistener__msg.html#a518c6e850864a64eb162d4482c6c3294">listener_msg::remove_socket</a>, <a class="el" href="listener__internal__types_8h_source.html#l00053">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="acbec5b5b8251c2787ebdb7ec4f73f20b"></a>
+<a class="anchor" id="aeb0c06626bfe3748c65a996b73cb0b4f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool listener_hold_response </td>
+          <td class="memname">bool Listener_HoldResponse </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td>
           <td class="paramname"><em>l</em>, </td>
@@ -243,7 +260,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int16_t&#160;</td>
-          <td class="paramname"><em>timeout_sec</em>&#160;</td>
+          <td class="paramname"><em>timeout_sec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>notify_fd</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -253,18 +276,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00120">120</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>The client is about to start a write, the listener should hold on to the response (with timeout) if it arrives before receiving further instructions from the client. </p>
 
-<p>References <a class="el" href="listener__internal__types_8h_source.html#l00123">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00041">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener_8c_source.html#l00270">get_free_msg()</a>, <a class="el" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4">listener_msg::hold</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="listener__internal__types_8h_source.html#l00036">MSG_HOLD_RESPONSE</a>, <a class="el" href="listener_8c_source.html#l00243">push_message()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00115">115</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+
+<p>References <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00045">BUS_LOG</a>, <a class="el" href="bus__types_8h_source.html#l00059">BUS_LOG_SNPRINTF</a>, <a class="el" href="structlistener__msg.html#aae1fb46c0c504e5c23bec35163a21cf4">listener_msg::hold</a>, <a class="el" href="listener__helper_8c_source.html#l00031">ListenerHelper_GetFreeMsg()</a>, <a class="el" href="listener__helper_8c_source.html#l00070">ListenerHelper_PushMessage()</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_LISTENER</a>, <a class="el" href="bus__types_8h_source.html#l00103">LOG_MEMORY</a>, <a class="el" href="listener__internal__types_8h_source.html#l00045">MSG_HOLD_RESPONSE</a>, <a class="el" href="listener__internal__types_8h_source.html#l00055">listener_msg::pipes</a>, <a class="el" href="listener__internal__types_8h_source.html#l00053">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac4ca027f622cf5d1ab731f92f9cb66a8"></a>
+<a class="anchor" id="ae97da82cff0ed66aba0dc24b413d2732"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool listener_expect_response </td>
+          <td class="memname">bool Listener_ExpectResponse </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td>
           <td class="paramname"><em>l</em>, </td>
@@ -289,18 +314,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00147">147</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>The client has finished a write, the listener should expect a response. </p>
 
-<p>References <a class="el" href="listener__internal__types_8h_source.html#l00123">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be">listener_msg::expect</a>, <a class="el" href="listener_8c_source.html#l00270">get_free_msg()</a>, <a class="el" href="listener__task_8c_source.html#l00491">ListenerTask_GetBackpressure()</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_MEMORY</a>, <a class="el" href="listener__internal__types_8h_source.html#l00037">MSG_EXPECT_RESPONSE</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="listener_8c_source.html#l00243">push_message()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00143">143</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+
+<p>References <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00083">BUS_ASSERT</a>, <a class="el" href="bus__types_8h_source.html#l00059">BUS_LOG_SNPRINTF</a>, <a class="el" href="bus__types_8h_source.html#l00194">BUS_SEND_UNDEFINED</a>, <a class="el" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be">listener_msg::expect</a>, <a class="el" href="listener__helper_8c_source.html#l00031">ListenerHelper_GetFreeMsg()</a>, <a class="el" href="listener__helper_8c_source.html#l00070">ListenerHelper_PushMessage()</a>, <a class="el" href="listener__task_8c_source.html#l00531">ListenerTask_GetBackpressure()</a>, <a class="el" href="bus__types_8h_source.html#l00103">LOG_MEMORY</a>, <a class="el" href="listener__internal__types_8h_source.html#l00046">MSG_EXPECT_RESPONSE</a>, <a class="el" href="bus__internal__types_8h_source.html#l00056">boxed_msg::out_seq_id</a>, <a class="el" href="bus__internal__types_8h_source.html#l00040">boxed_msg::result</a>, <a class="el" href="bus__types_8h_source.html#l00216">bus_msg_result_t::status</a>, <a class="el" href="listener__internal__types_8h_source.html#l00053">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a29137171fd3f0a2f878c450544927c56"></a>
+<a class="anchor" id="af80e3d101f8af017f093691d1b1b50b9"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool listener_shutdown </td>
+          <td class="memname">bool Listener_Shutdown </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td>
           <td class="paramname"><em>l</em>, </td>
@@ -319,18 +346,21 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00173">173</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Shut down the listener. </p>
+<p>Blocking. </p>
 
-<p>References <a class="el" href="listener_8c_source.html#l00270">get_free_msg()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00038">MSG_SHUTDOWN</a>, <a class="el" href="listener__internal__types_8h_source.html#l00046">listener_msg::pipes</a>, <a class="el" href="listener_8c_source.html#l00243">push_message()</a>, <a class="el" href="structlistener__msg.html#a6d465300533fe5aa78e626247ee36d09">listener_msg::shutdown</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00170">170</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+
+<p>References <a class="el" href="listener__helper_8c_source.html#l00031">ListenerHelper_GetFreeMsg()</a>, <a class="el" href="listener__helper_8c_source.html#l00070">ListenerHelper_PushMessage()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00047">MSG_SHUTDOWN</a>, <a class="el" href="listener__internal__types_8h_source.html#l00055">listener_msg::pipes</a>, <a class="el" href="structlistener__msg.html#a6d465300533fe5aa78e626247ee36d09">listener_msg::shutdown</a>, <a class="el" href="listener__internal__types_8h_source.html#l00053">listener_msg::type</a>, and <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ae02746f8c243596cedd386fc1d7630e5"></a>
+<a class="anchor" id="a67866e38637966502a09ff5d17a3b88f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void listener_free </td>
+          <td class="memname">void Listener_Free </td>
           <td>(</td>
           <td class="paramtype">struct <a class="el" href="structlistener.html">listener</a> *&#160;</td>
           <td class="paramname"><em>l</em></td><td>)</td>
@@ -339,9 +369,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="listener_8c_source.html#l00182">182</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+<p>Free the listener, which must already be shut down. </p>
 
-<p>References <a class="el" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027">listener_msg::add_socket</a>, <a class="el" href="listener__internal__types_8h_source.html#l00123">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00082">BUS_ASSERT</a>, <a class="el" href="bus__types_8h_source.html#l00057">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener__internal__types_8h_source.html#l00133">listener::commit_pipe</a>, <a class="el" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be">listener_msg::expect</a>, <a class="el" href="structrx__info__t.html#a7aa7c18547fd393ad4b22a9ea6eb7267">rx_info_t::expect</a>, <a class="el" href="listener__internal__types_8h_source.html#l00134">listener::incoming_msg_pipe</a>, <a class="el" href="listener__internal__types_8h_source.html#l00119">LISTENER_SHUTDOWN_COMPLETE_FD</a>, <a class="el" href="listener__cmd_8c_source.html#l00029">ListenerCmd_NotifyCaller()</a>, <a class="el" href="bus__types_8h_source.html#l00101">LOG_LISTENER</a>, <a class="el" href="listener__internal__types_8h_source.html#l00106">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00109">MAX_QUEUE_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00034">MSG_ADD_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00037">MSG_EXPECT_RESPONSE</a>, <a class="el" href="listener__internal__types_8h_source.html#l00035">MSG_REMOVE_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00142">listener::msgs</a>, <a class="el" href="listener__internal__types_8h_source.html#l00046">listener_msg::pipes</a>, <a class="el" href="listener__internal__types_8h_source.html#l00156">listener::read_buf</a>, <a class="el" href="structlistener__msg.html#a518c6e850864a64eb162d4482c6c3294">listener_msg::remove_socket</a>, <a class="el" href="listener__internal__types_8h_source.html#l00073">RIS_EXPECT</a>, <a class="el" href="listener__internal__types_8h_source.html#l00072">RIS_HOLD</a>, <a class="el" href="listener__internal__types_8h_source.html#l00074">RIS_INACTIVE</a>, <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::rx_info</a>, <a class="el" href="listener__internal__types_8h_source.html#l00130">listener::shutdown_notify_fd</a>, <a class="el" href="listener__internal__types_8h_source.html#l00082">rx_info_t::state</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, <a class="el" href="structrx__info__t.html#a92273c68b1cc0dd89592e5cd1e6ecd7b">rx_info_t::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
+<p>Definition at line <a class="el" href="listener_8c_source.html#l00179">179</a> of file <a class="el" href="listener_8c_source.html">listener.c</a>.</p>
+
+<p>References <a class="el" href="structlistener__msg.html#a18244c9393b766e48521820d9c3ee027">listener_msg::add_socket</a>, <a class="el" href="listener__internal__types_8h_source.html#l00137">listener::bus</a>, <a class="el" href="bus__types_8h_source.html#l00083">BUS_ASSERT</a>, <a class="el" href="bus__types_8h_source.html#l00059">BUS_LOG_SNPRINTF</a>, <a class="el" href="listener__internal__types_8h_source.html#l00147">listener::commit_pipe</a>, <a class="el" href="structlistener__msg.html#a4e8b879b5eb0f27d01eef5a0e4e296be">listener_msg::expect</a>, <a class="el" href="structrx__info__t.html#a7aa7c18547fd393ad4b22a9ea6eb7267">rx_info_t::expect</a>, <a class="el" href="listener__internal__types_8h_source.html#l00148">listener::incoming_msg_pipe</a>, <a class="el" href="listener__internal__types_8h_source.html#l00133">LISTENER_SHUTDOWN_COMPLETE_FD</a>, <a class="el" href="listener__cmd_8c_source.html#l00042">ListenerCmd_NotifyCaller()</a>, <a class="el" href="bus__types_8h_source.html#l00102">LOG_LISTENER</a>, <a class="el" href="listener__internal__types_8h_source.html#l00122">MAX_PENDING_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00125">MAX_QUEUE_MESSAGES</a>, <a class="el" href="listener__internal__types_8h_source.html#l00043">MSG_ADD_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00046">MSG_EXPECT_RESPONSE</a>, <a class="el" href="listener__internal__types_8h_source.html#l00044">MSG_REMOVE_SOCKET</a>, <a class="el" href="listener__internal__types_8h_source.html#l00156">listener::msgs</a>, <a class="el" href="listener__internal__types_8h_source.html#l00055">listener_msg::pipes</a>, <a class="el" href="listener__internal__types_8h_source.html#l00186">listener::read_buf</a>, <a class="el" href="structlistener__msg.html#a518c6e850864a64eb162d4482c6c3294">listener_msg::remove_socket</a>, <a class="el" href="listener__internal__types_8h_source.html#l00087">RIS_EXPECT</a>, <a class="el" href="listener__internal__types_8h_source.html#l00086">RIS_HOLD</a>, <a class="el" href="listener__internal__types_8h_source.html#l00088">RIS_INACTIVE</a>, <a class="el" href="listener__internal__types_8h_source.html#l00151">listener::rx_info</a>, <a class="el" href="listener__internal__types_8h_source.html#l00144">listener::shutdown_notify_fd</a>, <a class="el" href="listener__internal__types_8h_source.html#l00096">rx_info_t::state</a>, <a class="el" href="syscall_8c_source.html#l00031">syscall_close()</a>, <a class="el" href="listener__internal__types_8h_source.html#l00053">listener_msg::type</a>, <a class="el" href="structlistener__msg.html#a240d43b579902bc9d783cd86e41302bb">listener_msg::u</a>, <a class="el" href="structrx__info__t.html#a92273c68b1cc0dd89592e5cd1e6ecd7b">rx_info_t::u</a>, and <a class="el" href="bus__internal__types_8h_source.html#l00077">bus::udata</a>.</p>
 
 </div>
 </div>

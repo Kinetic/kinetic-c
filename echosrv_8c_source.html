@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,8 +54,8 @@
 </div><!--header-->
 <div class="contents">
 <a href="echosrv_8c.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c-client</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2014 Seagate Technology.</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">* kinetic-c</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">* Copyright (C) 2015 Seagate Technology.</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">*</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">* This program is free software; you can redistribute it and/or</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">* modify it under the terms of the GNU General Public License</span></div>
@@ -253,7 +253,7 @@
 <div class="line"><a name="l00198"></a><span class="lineno"><a class="line" href="echosrv_8c.html#a49d58a2175f08ad7c1bd27ca146cad86">  198</a></span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="echosrv_8c.html#a49d58a2175f08ad7c1bd27ca146cad86">listen_loop_poll</a>(config *cfg) {</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">struct </span>timeval tv;</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a>(&amp;tv, <span class="keyword">true</span>)) { assert(<span class="keyword">false</span>); }</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keywordflow">if</span> (!<a class="code" href="util_8c.html#ab8571807c46e133d0026df811bf0c6df">Util_Timestamp</a>(&amp;tv, <span class="keyword">true</span>)) { assert(<span class="keyword">false</span>); }</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    cfg-&gt;last_second = tv.tv_sec;</div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    assert(cfg-&gt;client_fds[0].fd == <a class="code" href="echosrv_8c.html#ab1c2bdfea442df58c67f91a05b1bc18e">NO_CLIENT</a>);</div>
@@ -261,7 +261,7 @@
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keywordtype">int</span> delay = 1;</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordflow">for</span> (;;) {</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a>(&amp;tv, <span class="keyword">true</span>)) { assert(<span class="keyword">false</span>); }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="util_8c.html#ab8571807c46e133d0026df811bf0c6df">Util_Timestamp</a>(&amp;tv, <span class="keyword">true</span>)) { assert(<span class="keyword">false</span>); }</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordflow">if</span> (tv.tv_sec != cfg-&gt;last_second) {</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            <a class="code" href="echosrv_8c.html#a5aff199498ee47e70b8162fe5bfd4f2a">tick_handler</a>(cfg);</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            cfg-&gt;last_second = tv.tv_sec;</div>
@@ -284,7 +284,7 @@
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <a class="code" href="echosrv_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>((res == 0 ? 6 : 3), <span class="stringliteral">&quot;accept poll res %d\n&quot;</span>, res);</div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            </div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            <span class="keywordflow">if</span> (res == -1) {</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a>(errno)) {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#ad60510cf3104c93a0c31dd81066ecf23">Util_IsResumableIOError</a>(errno)) {</div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                    errno = 0;</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                    err(1, <span class="stringliteral">&quot;poll&quot;</span>);</div>
@@ -303,7 +303,7 @@
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            <a class="code" href="echosrv_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a>((res == 0 ? 6 : 3), <span class="stringliteral">&quot;client poll res %d\n&quot;</span>, res);</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="comment">/* Read / write to clients */</span></div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordflow">if</span> (res == -1) {</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a>(errno)) {</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#ad60510cf3104c93a0c31dd81066ecf23">Util_IsResumableIOError</a>(errno)) {</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                    errno = 0;</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;                } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;                    err(1, <span class="stringliteral">&quot;poll&quot;</span>);</div>
@@ -402,7 +402,7 @@
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            <span class="keywordtype">size_t</span> wr_size = buf-&gt;out_bytes - buf-&gt;written_bytes;</div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            ssize_t wres = write(buf-&gt;fd, &amp;buf-&gt;buf[buf-&gt;written_bytes], wr_size);</div>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            <span class="keywordflow">if</span> (wres == -1) {</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a>(errno)) {</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#ad60510cf3104c93a0c31dd81066ecf23">Util_IsResumableIOError</a>(errno)) {</div>
 <div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                    errno = 0;</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (errno == EPIPE) {</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;                    <a class="code" href="echosrv_8c.html#a2700fdb6c0374b394629bb76f5102bcd">disconnect_client</a>(cfg, fd-&gt;fd);</div>
@@ -425,7 +425,7 @@
 <div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;            ssize_t rres = read(buf-&gt;fd, <a class="code" href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a>, <a class="code" href="echosrv_8c.html#a4962f06eca1fdb2c29f4496e090bdaf4">BUF_SZ</a> - 1);</div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;</div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            <span class="keywordflow">if</span> (rres == -1) {</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a>(errno)) {</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                <span class="keywordflow">if</span> (<a class="code" href="util_8c.html#ad60510cf3104c93a0c31dd81066ecf23">Util_IsResumableIOError</a>(errno)) {</div>
 <div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                    errno = 0;</div>
 <div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (errno == EPIPE) {</div>
 <div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                    <a class="code" href="echosrv_8c.html#a2700fdb6c0374b394629bb76f5102bcd">disconnect_client</a>(cfg, fd-&gt;fd);</div>
@@ -484,24 +484,24 @@
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    assert(<span class="keyword">false</span>);              <span class="comment">/* not found */</span></div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;}</div>
 <div class="ttc" id="echosrv_8c_html_a2700fdb6c0374b394629bb76f5102bcd"><div class="ttname"><a href="echosrv_8c.html#a2700fdb6c0374b394629bb76f5102bcd">disconnect_client</a></div><div class="ttdeci">static void disconnect_client(config *cfg, int fd)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00416">echosrv.c:416</a></div></div>
+<div class="ttc" id="util_8c_html_ad60510cf3104c93a0c31dd81066ecf23"><div class="ttname"><a href="util_8c.html#ad60510cf3104c93a0c31dd81066ecf23">Util_IsResumableIOError</a></div><div class="ttdeci">bool Util_IsResumableIOError(int errno_)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00026">util.c:26</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a6c98d175934c997f2653cd4f97d08164"><div class="ttname"><a href="echosrv_8c.html#a6c98d175934c997f2653cd4f97d08164">register_client</a></div><div class="ttdeci">static void register_client(config *cfg, int cfd, struct sockaddr *addr, socklen_t addr_len)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00304">echosrv.c:304</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a49d58a2175f08ad7c1bd27ca146cad86"><div class="ttname"><a href="echosrv_8c.html#a49d58a2175f08ad7c1bd27ca146cad86">listen_loop_poll</a></div><div class="ttdeci">static void listen_loop_poll(config *cfg)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00198">echosrv.c:198</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a981084675f7732309de1d3a29a10d6f7"><div class="ttname"><a href="echosrv_8c.html#a981084675f7732309de1d3a29a10d6f7">read_buf</a></div><div class="ttdeci">static uint8_t read_buf[(2 *1024L *1024)]</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00044">echosrv.c:44</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a5aff199498ee47e70b8162fe5bfd4f2a"><div class="ttname"><a href="echosrv_8c.html#a5aff199498ee47e70b8162fe5bfd4f2a">tick_handler</a></div><div class="ttdeci">static void tick_handler(config *cfg)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00189">echosrv.c:189</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a72466c7fd977973c0e9d95501dc5ebc3"><div class="ttname"><a href="echosrv_8c.html#a72466c7fd977973c0e9d95501dc5ebc3">handle_client_io</a></div><div class="ttdeci">static void handle_client_io(config *cfg, int available)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00332">echosrv.c:332</a></div></div>
 <div class="ttc" id="echosrv_8c_html_ad96d407a911fbb914fa8e4cfbf2faf0f"><div class="ttname"><a href="echosrv_8c.html#ad96d407a911fbb914fa8e4cfbf2faf0f">usage</a></div><div class="ttdeci">static void usage(void)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00091">echosrv.c:91</a></div></div>
-<div class="ttc" id="util_8c_html_a160b252716d51078cec50bc9f27bc2bc"><div class="ttname"><a href="util_8c.html#a160b252716d51078cec50bc9f27bc2bc">util_is_resumable_io_error</a></div><div class="ttdeci">bool util_is_resumable_io_error(int errno_)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00026">util.c:26</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a2c4f28acc72fce4e47a86b351fb8d569"><div class="ttname"><a href="echosrv_8c.html#a2c4f28acc72fce4e47a86b351fb8d569">handle_incoming_connections</a></div><div class="ttdeci">static void handle_incoming_connections(config *cfg, int available)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00275">echosrv.c:275</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a9e3cf1ca951044b5255114218ab4dea5"><div class="ttname"><a href="echosrv_8c.html#a9e3cf1ca951044b5255114218ab4dea5">enqueue_write</a></div><div class="ttdeci">static void enqueue_write(config *cfg, int fd, uint8_t *buf, size_t write_size)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00392">echosrv.c:392</a></div></div>
 <div class="ttc" id="util_8h_html"><div class="ttname"><a href="util_8h.html">util.h</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a3c04138a5bfe5d72780bb7e82a18e627"><div class="ttname"><a href="echosrv_8c.html#a3c04138a5bfe5d72780bb7e82a18e627">main</a></div><div class="ttdeci">int main(int argc, char **argv)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00125">echosrv.c:125</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a3d153aa38c7a8217cb76a7a39f1f735f"><div class="ttname"><a href="echosrv_8c.html#a3d153aa38c7a8217cb76a7a39f1f735f">parse_args</a></div><div class="ttdeci">static void parse_args(int argc, char **argv, config *cfg)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00099">echosrv.c:99</a></div></div>
-<div class="ttc" id="util_8c_html_ad63ab11f5adebc0730d970d7742ccfd9"><div class="ttname"><a href="util_8c.html#ad63ab11f5adebc0730d970d7742ccfd9">util_timestamp</a></div><div class="ttdeci">bool util_timestamp(struct timeval *tv, bool relative)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00030">util.c:30</a></div></div>
 <div class="ttc" id="echosrv_8c_html_af9dfa04c3b2b4bf7b65a1e2052ca735a"><div class="ttname"><a href="echosrv_8c.html#af9dfa04c3b2b4bf7b65a1e2052ca735a">LOG</a></div><div class="ttdeci">#define LOG(VERBOSITY,...)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00046">echosrv.c:46</a></div></div>
 <div class="ttc" id="echosrv_8c_html_adb506c2def512366e3c2c3c842c3f4fd"><div class="ttname"><a href="echosrv_8c.html#adb506c2def512366e3c2c3c842c3f4fd">open_ports</a></div><div class="ttdeci">static void open_ports(config *cfg)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00162">echosrv.c:162</a></div></div>
 <div class="ttc" id="echosrv_8c_html_abffccc9f03c9953bf7c64c1c0aa9c1d4"><div class="ttname"><a href="echosrv_8c.html#abffccc9f03c9953bf7c64c1c0aa9c1d4">init_polling</a></div><div class="ttdeci">static void init_polling(config *cfg)</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00137">echosrv.c:137</a></div></div>
 <div class="ttc" id="echosrv_8c_html_ab1c2bdfea442df58c67f91a05b1bc18e"><div class="ttname"><a href="echosrv_8c.html#ab1c2bdfea442df58c67f91a05b1bc18e">NO_CLIENT</a></div><div class="ttdeci">#define NO_CLIENT</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00042">echosrv.c:42</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a85fda3522e69a1bf85f7dcd97b6023a1"><div class="ttname"><a href="echosrv_8c.html#a85fda3522e69a1bf85f7dcd97b6023a1">MAX_TIMEOUT</a></div><div class="ttdeci">#define MAX_TIMEOUT</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00187">echosrv.c:187</a></div></div>
+<div class="ttc" id="util_8c_html_ab8571807c46e133d0026df811bf0c6df"><div class="ttname"><a href="util_8c.html#ab8571807c46e133d0026df811bf0c6df">Util_Timestamp</a></div><div class="ttdeci">bool Util_Timestamp(struct timeval *tv, bool relative)</div><div class="ttdef"><b>Definition:</b> <a href="util_8c_source.html#l00030">util.c:30</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a4962f06eca1fdb2c29f4496e090bdaf4"><div class="ttname"><a href="echosrv_8c.html#a4962f06eca1fdb2c29f4496e090bdaf4">BUF_SZ</a></div><div class="ttdeci">#define BUF_SZ</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00039">echosrv.c:39</a></div></div>
 <div class="ttc" id="echosrv_8c_html_a0a8f91f93d75a07f0ae45077db45b3eb"><div class="ttname"><a href="echosrv_8c.html#a0a8f91f93d75a07f0ae45077db45b3eb">MAX_CLIENTS</a></div><div class="ttdeci">#define MAX_CLIENTS</div><div class="ttdef"><b>Definition:</b> <a href="echosrv_8c_source.html#l00040">echosrv.c:40</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

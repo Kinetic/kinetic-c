@@ -1,4 +1,4 @@
-.TH "blocking_getkeyrange.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "blocking_getkeyrange.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -33,7 +33,7 @@ blocking_getkeyrange.c \-
 
 .in +1c
 .ti -1c
-.RI "static void \fBdo_put_and_getkeyrange\fP (KineticSession *session)"
+.RI "static void \fBdo_put_and_getkeyrange\fP (KineticSession *const session)"
 .br
 .ti -1c
 .RI "int \fBmain\fP (int argc, char **argv)"
@@ -41,7 +41,7 @@ blocking_getkeyrange.c \-
 .in -1c
 .SH "Function Documentation"
 .PP 
-.SS "static void do_put_and_getkeyrange (KineticSession *session)\fC [static]\fP"
+.SS "static void do_put_and_getkeyrange (KineticSession *constsession)\fC [static]\fP"
 
 .PP
 Definition at line 34 of file blocking_getkeyrange\&.c\&.

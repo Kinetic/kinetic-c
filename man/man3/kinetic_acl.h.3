@@ -1,0 +1,49 @@
+.TH "kinetic_acl.h" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_acl.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'kinetic_acl_types\&.h'\fP
+.br
+\fC#include 'kinetic\&.pb-c\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBKineticACLLoadResult\fP \fBKineticACL_LoadFromFile\fP (const char *path, struct \fBACL\fP **instance)"
+.br
+.ti -1c
+.RI "void \fBKineticACL_Print\fP (FILE *f, struct \fBACL\fP *acl)"
+.br
+.ti -1c
+.RI "void \fBKineticACL_Free\fP (struct \fBACL\fP *acl)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBKineticACLLoadResult\fP KineticACL_LoadFromFile (const char *path, struct \fBACL\fP **instance)"
+
+.PP
+Definition at line 74 of file kinetic_acl\&.c\&.
+.PP
+References ACL_ERROR_BAD_JSON, ACL_ERROR_JSON_FILE, ACL_ERROR_MEMORY, ACL_ERROR_NULL, acl_of_string(), LOGF0, and LOGF2\&.
+.SS "void KineticACL_Print (FILE *f, struct \fBACL\fP *acl)"
+
+.PP
+Definition at line 388 of file kinetic_acl\&.c\&.
+.PP
+References ACL::ACL_count, ACL::ACLs, and str_of_permission()\&.
+.SS "void KineticACL_Free (struct \fBACL\fP *acl)"
+
+.PP
+Definition at line 436 of file kinetic_acl\&.c\&.
+.PP
+References ACL::ACL_count, and ACL::ACLs\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

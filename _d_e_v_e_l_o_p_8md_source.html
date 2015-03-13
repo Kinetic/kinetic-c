@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -54,41 +54,117 @@
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;Prerequisites</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;-------------</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;* [Ruby](https://www.ruby-lang.org) (v1.9.3 or higher) scripting language</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;* [RubyGems](http://rubygems.org) (installed w/ `bundle install)</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    * [bundler](http://bundler.io) (v1.3.5 or higher) environment/dependency manager for Ruby projects</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;* [CppCheck](http://cppcheck.sourceforge.net/) for static analysis of source code</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;* [Valgrind](http://valgrind.org/) for validation of memory usage/management</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;* [Doxygen](https://github.com/doxygen) and [GraphViz](http://www.graphviz.org/) for generating API documentation</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;API Documentation</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;=================</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;[Kinetic-C API](http://seagate.github.io/kinetic-c/) (generated with Doxygen)</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;* [Ruby](https://www.ruby-lang.org) (v1.9.3 or higher) scripting language</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;* [RubyGems](http://rubygems.org) (installed w/ `bundle install)</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    * [bundler](http://bundler.io) (v1.3.5 or higher) environment/dependency manager for Ruby projects</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    * Managed gems (installed w/ `bundle install`)</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        * [rake](https://rubygems.org/gems/rake) Make-like build system</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        * [ceedling](https://github.com/ThrowTheSwitch/Ceedling) Build system which extends rake to add support for interaction-based testing</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;            * [unity](https://github.com/ThrowTheSwitch/Unity) Unity C test framework (bundled w/ Ceedling)</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            * [cmock](https://github.com/ThrowTheSwitch/CMock) CMock auto mock/fake module generator for C (bundle w/ Ceedling)</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;* [Valgrind](http://valgrind.org/) for validation of memory usage/management</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;* [Doxygen](https://github.com/doxygen)</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    * [GraphViz](http://www.graphviz.org/) used by Doxygen for generating visualizations/graphs</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;Common Developer Tasks</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;----------------------</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;**NOTE: Prefix the following commands with `bundle exec` so that they execute in the context of the bundle environment setup via `bundle install`.**</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;* List available Rake tasks w/descriptions</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    * `rake -T`</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;* Run all tests and build the library and examples</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    * `rake`</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;* Build the library</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    * `rake release`</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;* Run all unit/integration/system/example tests</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    * `rake test_all`</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;* Analyze code</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    * `rake cppcheck`</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;* Generate documentation</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    * `rake doxygen:gen`</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;* Apply license to source files (skips already licensed files)</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    * `rake apply_license`</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;* Build/install Google Protocol Buffers support for the Kinetic-Protocol</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    * `rake proto`</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;* Enable verbose output (for current Rake run)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    * `rake verbose &lt;task_A&gt; &lt;task_B&gt;`</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;API Documentation</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;-----------------</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;[Kinetic-C API Documentation](http://seagate.github.io/kinetic-c/) (generated with Doxygen)</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;* [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;* [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;* [ByteArray API](http://seagate.github.io/kinetic-c/byte__array_8h.html)</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        * e.g. object keys, object value data, etc.</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;There are also some additional [architectural notes](docs) and time-sequence diagrams.</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;[docs]: https://github.com/Seagate/kinetic-c/blob/master/docs/sequence_diagrams/arch_docs.md</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;Common Developer Tasks</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;----------------------</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;* Build the library</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    * `make`</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;* Start kinteic-java simulator(s)</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    * `make [NUM_SIMS=N] start_sims # defaults to starting 2 simulators, if NUM_SIMS unspecified`</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;* Stop all running kinetic-java simulator(s)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    * `make stop_sims`</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;* Run all tests and build the library and examples</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    * `make all`</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;* Run all unit/integration tests</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    * `make test`</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;* Run all system tests</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    * `make system_tests`</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;* Run a particular system test</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    * make test_system_&lt;module&gt;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    * Will expect at least 2 simulators running by default (see above)</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    * Uses the following environment vars, which are loaded dynamically at runtime</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        * `KINTEIC_HOST[1|2]` - Configures the host name/IP for the specified device (default: `localhost`)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        * `KINTEIC_PORT[1|2]` - Configures the primary port for the specified device (default: `8124`, `8124`)</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        * `KINTEIC_TLS_PORT[1|2]` - Configures the TLS port for the specified device (default: `8443`, `8444`)</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;* Apply license to source files (skips already licensed files)</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    * `make apply_license`</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;Developer Tasks via Rake</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;------------------------</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;* List rake tasks w/ descriptions</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    * `rake -T`</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;* Test a single module (via Ceedling)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    * `rake test:&lt;module_name&gt;`</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;* Generate API documentation locally</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    * `rake doxygen:gen`</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;* Generate and publish public API documentation</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    * `rake doxygen:update_public_api`</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;* Build/install Google Protocol Buffers support for the Kinetic-Protocol</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    * `rake proto`</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;Automated Tests</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;---------------</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;All test sources are located in `test/`, which are additionally broken up into:</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    * `test/unit` - test suites for individual modules</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    * `test/integration` - test suites which integrate multiple modules</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    * `test/system` - system tests whick link against the kinetic-c release library</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        * These tests require at least 2 simulator/drives to run against</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;Adding a new unit/integration test</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;----------------------------------</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;* Create a file named `test_&lt;name&gt;.c` in either `test/unit` or `test/integration`</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    * These files will automatically be picked up by the Ceedling and added to the regression suite</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    * Build targets for each module will be generated according to what header files are included in the test suite source.</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        * e.g.</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            * `#include &quot;kinetic_session.h&quot;` will link `kinetic_session.o` into the test target.</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            * `#include &quot;mock_kinetic_session.h&quot;` will create a CMock mock of `kinetic_session.h` and link `mock_kinetic_session.o` into the test target.</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            * `#include &lt;some_lib.h&gt;` will simply include the specified header, assuming it is already available in to the linker.</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;Adding a new system test</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;------------------------</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;* Create a file named `test_system_&lt;name&gt;.c` in `test/system`</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    * This will create a new system test target invokable via: `make test_system_&lt;name&gt;`</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    * System tests link/run against the full kinetic-c static library.</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    * A generic test fixure is provided and linked into each system test from: `test/support/system_test_fixture.h/c`</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        * See details above for runtime configuration of the system test kinetic devices for running remote simulators or kinetic device hardware.</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;Future development notes</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;------------------------</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;* epoll(2) could be used internally, in place of poll(2) and multiple</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;  listener threads. This only matters in a case where there is a large</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  amount of idle listener connections. When there is a small number of</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;  file descriptors, it will add overhead, and epoll is only available</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;  on Linux.</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;* The listener can potentially leak memory on shutdown, in the case</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  where responses have been partially received. This has been a low priority. </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;* There is room for tuning the total number of messages-in-flight</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  in the listener (controlled by `MAX_PENDING_MESSAGES`), how the</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  backpressure is calculated (in `ListenerTask_GetBackpressure`), and the</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  bit shift applied to the backpressure unit (the third argument to</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  `bus_backpressure_delay`, e.g. `LISTENER_BACKPRESSURE_SHIFT`). These</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  derive the feedback that pushes against actions that overload the</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  system. The current setup has worked well with system/integration</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  tests and a stress test program that attempts to overload the message</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  bus over a loopback connection, but other workloads may have different</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  performance trade-offs.</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

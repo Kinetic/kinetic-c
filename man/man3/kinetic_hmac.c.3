@@ -1,4 +1,4 @@
-.TH "kinetic_hmac.c" 3 "Tue Mar 3 2015" "Version v0.12.0-beta" "kinetic-c" \" -*- nroff -*-
+.TH "kinetic_hmac.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -28,16 +28,16 @@ kinetic_hmac.c \-
 
 .in +1c
 .ti -1c
-.RI "static void \fBKineticHMAC_Compute\fP (\fBKineticHMAC\fP *hmac, const KineticProto_Message *proto, const \fBByteArray\fP key)"
+.RI "static void \fBKineticHMAC_Compute\fP (\fBKineticHMAC\fP *hmac, const Com__Seagate__Kinetic__Proto__Message *proto, const \fBByteArray\fP key)"
 .br
 .ti -1c
-.RI "void \fBKineticHMAC_Init\fP (\fBKineticHMAC\fP *hmac, \fBKineticProto_Command_Security_ACL_HMACAlgorithm\fP algorithm)"
+.RI "void \fBKineticHMAC_Init\fP (\fBKineticHMAC\fP *hmac, \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm\fP algorithm)"
 .br
 .ti -1c
-.RI "void \fBKineticHMAC_Populate\fP (\fBKineticHMAC\fP *hmac, KineticProto_Message *msg, const \fBByteArray\fP key)"
+.RI "void \fBKineticHMAC_Populate\fP (\fBKineticHMAC\fP *hmac, Com__Seagate__Kinetic__Proto__Message *msg, const \fBByteArray\fP key)"
 .br
 .ti -1c
-.RI "bool \fBKineticHMAC_Validate\fP (const KineticProto_Message *msg, const \fBByteArray\fP key)"
+.RI "bool \fBKineticHMAC_Validate\fP (const Com__Seagate__Kinetic__Proto__Message *msg, const \fBByteArray\fP key)"
 .br
 .in -1c
 .SH "Macro Definition Documentation"
@@ -48,30 +48,30 @@ kinetic_hmac.c \-
 Definition at line 110 of file kinetic_hmac\&.c\&.
 .SH "Function Documentation"
 .PP 
-.SS "static void KineticHMAC_Compute (\fBKineticHMAC\fP *hmac, const KineticProto_Message *proto, const \fBByteArray\fPkey)\fC [static]\fP"
+.SS "static void KineticHMAC_Compute (\fBKineticHMAC\fP *hmac, const Com__Seagate__Kinetic__Proto__Message *proto, const \fBByteArray\fPkey)\fC [static]\fP"
 
 .PP
 Definition at line 112 of file kinetic_hmac\&.c\&.
 .PP
 References ByteArray::data, KineticHMAC::data, KINETIC_ASSERT, KineticNBO_FromHostU32(), ByteArray::len, and KineticHMAC::len\&.
-.SS "void KineticHMAC_Init (\fBKineticHMAC\fP *hmac, \fBKineticProto_Command_Security_ACL_HMACAlgorithm\fPalgorithm)"
+.SS "void KineticHMAC_Init (\fBKineticHMAC\fP *hmac, \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__HMACAlgorithm\fPalgorithm)"
 
 .PP
 Definition at line 31 of file kinetic_hmac\&.c\&.
 .PP
-References KineticHMAC::algorithm, KINETIC_HMAC_MAX_LEN, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, and KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_INVALID_HMAC_ALGORITHM\&.
-.SS "void KineticHMAC_Populate (\fBKineticHMAC\fP *hmac, KineticProto_Message *msg, const \fBByteArray\fPkey)"
+References KineticHMAC::algorithm, COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1, COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__INVALID_HMAC_ALGORITHM, and KINETIC_HMAC_MAX_LEN\&.
+.SS "void KineticHMAC_Populate (\fBKineticHMAC\fP *hmac, Com__Seagate__Kinetic__Proto__Message *msg, const \fBByteArray\fPkey)"
 
 .PP
 Definition at line 47 of file kinetic_hmac\&.c\&.
 .PP
-References ByteArray::data, KineticHMAC::data, KINETIC_ASSERT, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KineticHMAC_Compute(), KineticHMAC_Init(), ByteArray::len, and KineticHMAC::len\&.
-.SS "bool KineticHMAC_Validate (const KineticProto_Message *msg, const \fBByteArray\fPkey)"
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1, ByteArray::data, KineticHMAC::data, KINETIC_ASSERT, KineticHMAC_Compute(), KineticHMAC_Init(), ByteArray::len, and KineticHMAC::len\&.
+.SS "bool KineticHMAC_Validate (const Com__Seagate__Kinetic__Proto__Message *msg, const \fBByteArray\fPkey)"
 
 .PP
 Definition at line 67 of file kinetic_hmac\&.c\&.
 .PP
-References ByteArray::data, KineticHMAC::data, KINETIC_ASSERT, KINETIC_PROTO_COMMAND_SECURITY_ACL_HMACALGORITHM_HmacSHA1, KINETIC_PROTO_MESSAGE_AUTH_TYPE_HMACAUTH, KineticHMAC_Compute(), KineticHMAC_Init(), KineticLogger_LogByteArray(), ByteArray::len, KineticHMAC::len, and LOG0\&.
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1, COM__SEAGATE__KINETIC__PROTO__MESSAGE__AUTH_TYPE__HMACAUTH, ByteArray::data, KineticHMAC::data, KINETIC_ASSERT, KineticHMAC_Compute(), KineticHMAC_Init(), KineticLogger_LogByteArray(), ByteArray::len, KineticHMAC::len, and LOG0\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for kinetic-c from the source code\&.

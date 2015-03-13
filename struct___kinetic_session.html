@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -60,16 +60,46 @@
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
 <tr class="memitem:a45587886059c9f68db0fb36a6b692b7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_kinetic_session_config.html">KineticSessionConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a45587886059c9f68db0fb36a6b692b7d">config</a></td></tr>
+<tr class="memdesc:a45587886059c9f68db0fb36a6b692b7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">session configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession  <a href="#a45587886059c9f68db0fb36a6b692b7d">More...</a><br /></td></tr>
 <tr class="separator:a45587886059c9f68db0fb36a6b692b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57d1d01861409e3f9a3651cad67138d2"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct___kinetic_connection.html">_KineticConnection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a57d1d01861409e3f9a3651cad67138d2">connection</a></td></tr>
-<tr class="separator:a57d1d01861409e3f9a3651cad67138d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab87f8f1d98dab6c3edd25484e8a1cf5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#aab87f8f1d98dab6c3edd25484e8a1cf5">connected</a></td></tr>
+<tr class="memdesc:aab87f8f1d98dab6c3edd25484e8a1cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">state of connection  <a href="#aab87f8f1d98dab6c3edd25484e8a1cf5">More...</a><br /></td></tr>
+<tr class="separator:aab87f8f1d98dab6c3edd25484e8a1cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c787224f455b58840bc4da47ee47829"><td class="memItemLeft" align="right" valign="top"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a4c787224f455b58840bc4da47ee47829">terminationStatus</a></td></tr>
+<tr class="memdesc:a4c787224f455b58840bc4da47ee47829"><td class="mdescLeft">&#160;</td><td class="mdescRight">reported status upon device termination (SUCCESS if not terminated)  <a href="#a4c787224f455b58840bc4da47ee47829">More...</a><br /></td></tr>
+<tr class="separator:a4c787224f455b58840bc4da47ee47829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6093772bffe6345a2b7579c8c267b2d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a6093772bffe6345a2b7579c8c267b2d6">socket</a></td></tr>
+<tr class="memdesc:a6093772bffe6345a2b7579c8c267b2d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">socket file descriptor  <a href="#a6093772bffe6345a2b7579c8c267b2d6">More...</a><br /></td></tr>
+<tr class="separator:a6093772bffe6345a2b7579c8c267b2d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b924ad9d3e09c1de6173ee0d18fbc7b"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a8b924ad9d3e09c1de6173ee0d18fbc7b">connectionID</a></td></tr>
+<tr class="memdesc:a8b924ad9d3e09c1de6173ee0d18fbc7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialized to seconds since epoch  <a href="#a8b924ad9d3e09c1de6173ee0d18fbc7b">More...</a><br /></td></tr>
+<tr class="separator:a8b924ad9d3e09c1de6173ee0d18fbc7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b523440b01b830ce66c2048cbe52e8d"><td class="memItemLeft" align="right" valign="top">int64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a9b523440b01b830ce66c2048cbe52e8d">sequence</a></td></tr>
+<tr class="memdesc:a9b523440b01b830ce66c2048cbe52e8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">increments for each request in a session  <a href="#a9b523440b01b830ce66c2048cbe52e8d">More...</a><br /></td></tr>
+<tr class="separator:a9b523440b01b830ce66c2048cbe52e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c909544d56d4ebc1e3b4b35c2f39b9b"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structbus.html">bus</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a5c909544d56d4ebc1e3b4b35c2f39b9b">messageBus</a></td></tr>
+<tr class="memdesc:a5c909544d56d4ebc1e3b4b35c2f39b9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to message bus instance  <a href="#a5c909544d56d4ebc1e3b4b35c2f39b9b">More...</a><br /></td></tr>
+<tr class="separator:a5c909544d56d4ebc1e3b4b35c2f39b9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a542ead045804b38daa9d23b84b55efd0"><td class="memItemLeft" align="right" valign="top">socket_info *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a542ead045804b38daa9d23b84b55efd0">si</a></td></tr>
+<tr class="memdesc:a542ead045804b38daa9d23b84b55efd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to socket information  <a href="#a542ead045804b38daa9d23b84b55efd0">More...</a><br /></td></tr>
+<tr class="separator:a542ead045804b38daa9d23b84b55efd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9723e234e10ef886d5f0ac10747a31b"><td class="memItemLeft" align="right" valign="top">pthread_mutex_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#af9723e234e10ef886d5f0ac10747a31b">sendMutex</a></td></tr>
+<tr class="memdesc:af9723e234e10ef886d5f0ac10747a31b"><td class="mdescLeft">&#160;</td><td class="mdescRight">mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool  <a href="#af9723e234e10ef886d5f0ac10747a31b">More...</a><br /></td></tr>
+<tr class="separator:af9723e234e10ef886d5f0ac10747a31b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8445f8a19201613e7498b80b8db03631"><td class="memItemLeft" align="right" valign="top">KineticResourceWaiter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a8445f8a19201613e7498b80b8db03631">connectionReady</a></td></tr>
+<tr class="memdesc:a8445f8a19201613e7498b80b8db03631"><td class="mdescLeft">&#160;</td><td class="mdescRight">connection ready status (set to true once connectionID recieved)  <a href="#a8445f8a19201613e7498b80b8db03631">More...</a><br /></td></tr>
+<tr class="separator:a8445f8a19201613e7498b80b8db03631"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afda88799cfb71698c50dd16738b3042f"><td class="memItemLeft" align="right" valign="top">KineticCountingSemaphore *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#afda88799cfb71698c50dd16738b3042f">outstandingOperations</a></td></tr>
+<tr class="memdesc:afda88799cfb71698c50dd16738b3042f"><td class="mdescLeft">&#160;</td><td class="mdescRight">counting semaphore to only allows the configured number of outstanding operation at a given time  <a href="#afda88799cfb71698c50dd16738b3042f">More...</a><br /></td></tr>
+<tr class="separator:afda88799cfb71698c50dd16738b3042f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30cc8eedbe6e2db2145753df594100e7"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct___kinetic_session.html#a30cc8eedbe6e2db2145753df594100e7">timeoutSeconds</a></td></tr>
+<tr class="memdesc:a30cc8eedbe6e2db2145753df594100e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default response timeout.  <a href="#a30cc8eedbe6e2db2145753df594100e7">More...</a><br /></td></tr>
 <tr class="separator:a30cc8eedbe6e2db2145753df594100e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An instance of a session with a Kinetic device. </p>
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00067">67</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00094">94</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="a45587886059c9f68db0fb36a6b692b7d"></a>
 <div class="memitem">
@@ -81,21 +111,169 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00069">69</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>session configuration which is a deep copy of client configuration supplied to KienticClient_CreateSession </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00095">95</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a57d1d01861409e3f9a3651cad67138d2"></a>
+<a class="anchor" id="aab87f8f1d98dab6c3edd25484e8a1cf5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">struct <a class="el" href="struct___kinetic_connection.html">_KineticConnection</a>* KineticSession::connection</td>
+          <td class="memname">bool KineticSession::connected</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00074">74</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>state of connection </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00096">96</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4c787224f455b58840bc4da47ee47829"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="kinetic__types_8h.html#a455d29140e6816c61eba35e8f52b0d57">KineticStatus</a> KineticSession::terminationStatus</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>reported status upon device termination (SUCCESS if not terminated) </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00097">97</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6093772bffe6345a2b7579c8c267b2d6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int KineticSession::socket</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>socket file descriptor </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00098">98</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8b924ad9d3e09c1de6173ee0d18fbc7b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t KineticSession::connectionID</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>initialized to seconds since epoch </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00099">99</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9b523440b01b830ce66c2048cbe52e8d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t KineticSession::sequence</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>increments for each request in a session </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00100">100</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5c909544d56d4ebc1e3b4b35c2f39b9b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structbus.html">bus</a>* KineticSession::messageBus</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>pointer to message bus instance </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00101">101</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a542ead045804b38daa9d23b84b55efd0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">socket_info* KineticSession::si</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>pointer to socket information </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00102">102</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af9723e234e10ef886d5f0ac10747a31b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pthread_mutex_t KineticSession::sendMutex</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>mutex for locking around seq count acquisision, PDU packing, and transfer to threadpool </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00103">103</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8445f8a19201613e7498b80b8db03631"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KineticResourceWaiter KineticSession::connectionReady</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>connection ready status (set to true once connectionID recieved) </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00104">104</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afda88799cfb71698c50dd16738b3042f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">KineticCountingSemaphore* KineticSession::outstandingOperations</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>counting semaphore to only allows the configured number of outstanding operation at a given time </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00105">105</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>
@@ -109,7 +287,9 @@ Data Fields</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00077">77</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
+<p>Default response timeout. </p>
+
+<p>Definition at line <a class="el" href="kinetic__types__internal_8h_source.html#l00106">106</a> of file <a class="el" href="kinetic__types__internal_8h_source.html">kinetic_types_internal.h</a>.</p>
 
 </div>
 </div>

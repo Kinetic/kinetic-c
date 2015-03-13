@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -52,25 +52,29 @@
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">threadpool_internals.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="threadpool_8h_source.html">threadpool.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;pthread.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="threadpool_8h_source.html">threadpool.h</a>&quot;</code><br />
 </div>
 <p><a href="threadpool__internals_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthread__info.html">thread_info</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Info retained by a thread while working.  <a href="structthread__info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthread__context.html">thread_context</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread_info, plus pointer back to main threadpool manager.  <a href="structthread__context.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmarked__task.html">marked_task</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A task, with an additional mark.  <a href="structmarked__task.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structthreadpool.html">threadpool</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal threadpool state.  <a href="structthreadpool.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
@@ -87,22 +91,8 @@ Macros</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ac528c02d3cccfb103d539b26ccdba6b2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2">thread_status_t</a> </td></tr>
+<tr class="memdesc:ac528c02d3cccfb103d539b26ccdba6b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current status of a worker thread.  <a href="threadpool__internals_8h.html#ac528c02d3cccfb103d539b26ccdba6b2">More...</a><br /></td></tr>
 <tr class="separator:ac528c02d3cccfb103d539b26ccdba6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:af4e3146387f15306dbf72ebc78c303ea"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool__internals_8h.html#af4e3146387f15306dbf72ebc78c303ea">notify_new_task</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t)</td></tr>
-<tr class="separator:af4e3146387f15306dbf72ebc78c303ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06dc58a119a1759cfbc8b83b31743d9d"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool__internals_8h.html#a06dc58a119a1759cfbc8b83b31743d9d">notify_shutdown</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t)</td></tr>
-<tr class="separator:a06dc58a119a1759cfbc8b83b31743d9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4397bb8f5f8bd5319e041f69500112f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool__internals_8h.html#ac4397bb8f5f8bd5319e041f69500112f">spawn</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t)</td></tr>
-<tr class="separator:ac4397bb8f5f8bd5319e041f69500112f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3895b9bfe18d1f62bd5eba2a2c0e24f"><td class="memItemLeft" align="right" valign="top">static void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool__internals_8h.html#ae3895b9bfe18d1f62bd5eba2a2c0e24f">thread_task</a> (void *<a class="el" href="structthread__info.html">thread_info</a>)</td></tr>
-<tr class="separator:ae3895b9bfe18d1f62bd5eba2a2c0e24f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a300c822bbb69efa66c33324dfb0db2dc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool__internals_8h.html#a300c822bbb69efa66c33324dfb0db2dc">commit_current_task</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, struct <a class="el" href="structmarked__task.html">marked_task</a> *task, size_t wh)</td></tr>
-<tr class="separator:a300c822bbb69efa66c33324dfb0db2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac12d38ecab7aa12950b224065abb6c0e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="threadpool__internals_8h.html#ac12d38ecab7aa12950b224065abb6c0e">release_current_task</a> (struct <a class="el" href="structthreadpool.html">threadpool</a> *t, struct <a class="el" href="structmarked__task.html">marked_task</a> *task, size_t rh)</td></tr>
-<tr class="separator:ac12d38ecab7aa12950b224065abb6c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="ac670f7588d6db0cf09e0a61540133489"></a>
@@ -135,7 +125,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00085">85</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00090">90</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -149,7 +139,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00088">88</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00094">94</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -163,7 +153,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00089">89</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00095">95</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -198,9 +188,9 @@ Functions</h2></td></tr>
 <div class="line">            }                                                           \</div>
 <div class="line">        }                                                               \</div>
 <div class="line">    } <span class="keywordflow">while</span> (0)</div>
-<div class="ttc" id="threadpool__internals_8h_html_ac670f7588d6db0cf09e0a61540133489"><div class="ttname"><a href="threadpool__internals_8h.html#ac670f7588d6db0cf09e0a61540133489">ATOMIC_BOOL_COMPARE_AND_SWAP</a></div><div class="ttdeci">#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)</div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00085">threadpool_internals.h:85</a></div></div>
+<div class="ttc" id="threadpool__internals_8h_html_ac670f7588d6db0cf09e0a61540133489"><div class="ttname"><a href="threadpool__internals_8h.html#ac670f7588d6db0cf09e0a61540133489">ATOMIC_BOOL_COMPARE_AND_SWAP</a></div><div class="ttdeci">#define ATOMIC_BOOL_COMPARE_AND_SWAP(PTR, OLD, NEW)</div><div class="ttdef"><b>Definition:</b> <a href="threadpool__internals_8h_source.html#l00090">threadpool_internals.h:90</a></div></div>
 </div><!-- fragment -->
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00092">92</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00098">98</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>
@@ -214,6 +204,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Current status of a worker thread. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ac528c02d3cccfb103d539b26ccdba6b2aa7ff6fbf30c889d48bea1d98b74dc408"></a>STATUS_NONE&#160;</td><td class="fielddoc">
 </td></tr>
@@ -227,184 +219,7 @@ Functions</h2></td></tr>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00025">25</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="af4e3146387f15306dbf72ebc78c303ea"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void notify_new_task </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a06dc58a119a1759cfbc8b83b31743d9d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool notify_shutdown </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac4397bb8f5f8bd5319e041f69500112f"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool spawn </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae3895b9bfe18d1f62bd5eba2a2c0e24f"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void* thread_task </td>
-          <td>(</td>
-          <td class="paramtype">void *&#160;</td>
-          <td class="paramname"><em>thread_info</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a300c822bbb69efa66c33324dfb0db2dc"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void commit_current_task </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
-          <td class="paramname"><em>t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">struct <a class="el" href="structmarked__task.html">marked_task</a> *&#160;</td>
-          <td class="paramname"><em>task</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>wh</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac12d38ecab7aa12950b224065abb6c0e"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void release_current_task </td>
-          <td>(</td>
-          <td class="paramtype">struct <a class="el" href="structthreadpool.html">threadpool</a> *&#160;</td>
-          <td class="paramname"><em>t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">struct <a class="el" href="structmarked__task.html">marked_task</a> *&#160;</td>
-          <td class="paramname"><em>task</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>rh</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Definition at line <a class="el" href="threadpool__internals_8h_source.html#l00027">27</a> of file <a class="el" href="threadpool__internals_8h_source.html">threadpool_internals.h</a>.</p>
 
 </div>
 </div>

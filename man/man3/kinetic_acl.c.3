@@ -1,0 +1,146 @@
+.TH "kinetic_acl.c" 3 "Fri Mar 13 2015" "Version v0.12.0" "kinetic-c" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+kinetic_acl.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <fcntl\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include 'kinetic_logger\&.h'\fP
+.br
+\fC#include 'kinetic_acl\&.h'\fP
+.br
+\fC#include 'json\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBPERM_TABLE_ROWS\fP   (sizeof(\fBpermission_table\fP)/sizeof(\fBpermission_table\fP)[0])"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBKineticACLLoadResult\fP \fBread_next_ACL\fP (const char *buf, size_t buf_size, size_t offset, size_t *new_offset, struct json_tokener *tokener, Com__Seagate__Kinetic__Proto__Command__Security__ACL **instance)"
+.br
+.ti -1c
+.RI "static \fBKineticACLLoadResult\fP \fBunpack_scopes\fP (Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl, int scope_count, json_object *scopes)"
+.br
+.ti -1c
+.RI "static \fBKineticACLLoadResult\fP \fBacl_of_string\fP (const char *buf, size_t buf_size, struct \fBACL\fP **instance)"
+.br
+.ti -1c
+.RI "static const char * \fBstr_of_permission\fP (\fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Permission\fP perm)"
+.br
+.ti -1c
+.RI "static 
+.br
+\fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Permission\fP \fBpermission_of_str\fP (const char *str)"
+.br
+.ti -1c
+.RI "\fBKineticACLLoadResult\fP \fBKineticACL_LoadFromFile\fP (const char *path, struct \fBACL\fP **instance)"
+.br
+.ti -1c
+.RI "void \fBKineticACL_Print\fP (FILE *f, struct \fBACL\fP *ACLs)"
+.br
+.ti -1c
+.RI "void \fBKineticACL_Free\fP (struct \fBACL\fP *ACLs)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static permission_pair \fBpermission_table\fP []"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define PERM_TABLE_ROWS   (sizeof(\fBpermission_table\fP)/sizeof(\fBpermission_table\fP)[0])"
+
+.PP
+Definition at line 46 of file kinetic_acl\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "static \fBKineticACLLoadResult\fP read_next_ACL (const char *buf, size_tbuf_size, size_toffset, size_t *new_offset, struct json_tokener *tokener, Com__Seagate__Kinetic__Proto__Command__Security__ACL **instance)\fC [static]\fP"
+
+.PP
+Definition at line 198 of file kinetic_acl\&.c\&.
+.PP
+References ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_ERROR_MISSING_FIELD, ACL_OK, COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__HMACALGORITHM__HmacSHA1, com__seagate__kinetic__proto__command__security__acl__init(), LOGF2, and unpack_scopes()\&.
+.SS "static \fBKineticACLLoadResult\fP unpack_scopes (Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl, intscope_count, json_object *scopes)\fC [static]\fP"
+
+.PP
+Definition at line 286 of file kinetic_acl\&.c\&.
+.PP
+References ACL_ERROR_INVALID_FIELD, ACL_ERROR_MEMORY, ACL_MAX_PERMISSIONS, ACL_OK, COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION, com__seagate__kinetic__proto__command__security__acl__scope__init(), and permission_of_str()\&.
+.SS "static \fBKineticACLLoadResult\fP acl_of_string (const char *buf, size_tbuf_size, struct \fBACL\fP **instance)\fC [static]\fP"
+
+.PP
+Definition at line 130 of file kinetic_acl\&.c\&.
+.PP
+References ACL::ACL_ceil, ACL::ACL_count, ACL_END_OF_STREAM, ACL_ERROR_BAD_JSON, ACL_ERROR_MEMORY, ACL_OK, ACL::ACLs, LOG2, LOGF2, and read_next_ACL()\&.
+.SS "static const char* str_of_permission (\fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Permission\fPperm)\fC [static]\fP"
+
+.PP
+Definition at line 55 of file kinetic_acl\&.c\&.
+.PP
+References PERM_TABLE_ROWS, and permission_table\&.
+.SS "static \fBCom__Seagate__Kinetic__Proto__Command__Security__ACL__Permission\fP permission_of_str (const char *str)\fC [static]\fP"
+
+.PP
+Definition at line 64 of file kinetic_acl\&.c\&.
+.PP
+References COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION, PERM_TABLE_ROWS, and permission_table\&.
+.SS "\fBKineticACLLoadResult\fP KineticACL_LoadFromFile (const char *path, struct \fBACL\fP **instance)"
+
+.PP
+Definition at line 74 of file kinetic_acl\&.c\&.
+.PP
+References ACL_ERROR_BAD_JSON, ACL_ERROR_JSON_FILE, ACL_ERROR_MEMORY, ACL_ERROR_NULL, acl_of_string(), LOGF0, and LOGF2\&.
+.SS "void KineticACL_Print (FILE *f, struct \fBACL\fP *ACLs)"
+
+.PP
+Definition at line 388 of file kinetic_acl\&.c\&.
+.PP
+References ACL::ACL_count, ACL::ACLs, and str_of_permission()\&.
+.SS "void KineticACL_Free (struct \fBACL\fP *ACLs)"
+
+.PP
+Definition at line 436 of file kinetic_acl\&.c\&.
+.PP
+References ACL::ACL_count, and ACL::ACLs\&.
+.SH "Variable Documentation"
+.PP 
+.SS "permission_pair permission_table[]\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__INVALID_PERMISSION, "INVALID" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__READ, "READ" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__WRITE, "WRITE" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__DELETE, "DELETE" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__RANGE, "RANGE" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SETUP, "SETUP" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__P2POP, "P2POP" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__GETLOG, "GETLOG" },
+    { COM__SEAGATE__KINETIC__PROTO__COMMAND__SECURITY__ACL__PERMISSION__SECURITY, "SECURITY" },
+}
+.fi
+.PP
+Definition at line 34 of file kinetic_acl\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for kinetic-c from the source code\&.

@@ -19,7 +19,7 @@
   <td id="projectlogo"><img alt="Logo" src="seagate-logo-w-title-sm.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">kinetic-c
-   &#160;<span id="projectnumber">v0.12.0-beta</span>
+   &#160;<span id="projectnumber">v0.12.0</span>
    </div>
    <div id="projectbrief">Seagate Kinetic Protocol Client Library for C</div>
   </td>
@@ -48,7 +48,12 @@
 <p>Reference code is included as part of the <a href="src/utility">kinetic-c client library test utility (`kinetic-c-util`)</a>, which builds and links against the installed <code>kinetic-c-client</code> static library. <a href="src/examples">Additional examples</a> are included for the various types of I/O operations (e.g. blocking/non-blocking, single/multi-threaded). See below for more details.</p>
 <p>The [project Makefile](Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.</p>
 <h2>Kinetic Protocol Support </h2>
-<p>Built using <a href="https://github.com/Seagate/kinetic-protocol/tree/3.0.5">Kinetic Protocol v3.0.5</a></p>
+<p>Built using:</p>
+<ul>
+<li><a href="https://github.com/Seagate/kinetic-protocol/tree/3.0.5">Kinetic Protocol v3.0.5</a></li>
+<li><a href="https://github.com/protobuf-c/protobuf-c">ProtoBuf-C v1.1.0</a></li>
+<li><a href="https://developers.google.com/protocol-buffers/docs/downloads">Google ProtoBuf v2.6.0</a></li>
+</ul>
 <h2>Prerequisites </h2>
 <ul>
 <li><a href="https://www.openssl.org/">Open SSL</a> for security and encryption<ul>
@@ -131,24 +136,25 @@
 <h2>Usage </h2>
 <pre class="fragment">$ cd bin
 $ ./kinetic-c-util --help
-Usage: ./kinetic-c-util --&lt;cmd&gt; [options...]
-./kinetic-c-util --help
-./kinetic-c-util --noop [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --put [--key &lt;key&gt;] [--value &lt;value&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --get [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --getnext [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --getprevious [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --delete [--key &lt;key&gt;] [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --setclusterversion &lt;--newclusterversion &lt;newclusterversion&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --seterasepin &lt;--pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newerasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --instanterase &lt;--pin &lt;erasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --secureerase &lt;--pin &lt;erasepin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --setlockpin &lt;--pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --lockdevice &lt;--pin &lt;lockpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --unlockdevice &lt;--pin &lt;lockpin&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --setacl &lt;--file &lt;acl_json_file&gt;&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --getlog [--type &lt;utilization|temperature|capacity|configuration|message|statistic|limits&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
-./kinetic-c-util --updatefirmware &lt;--file &lt;file&gt;&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;] [--pin &lt;pin&gt;]
+Usage: ./bin/kinetic-c-util --&lt;cmd&gt; [options...]
+./bin/kinetic-c-util --help
+./bin/kinetic-c-util --noop [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --put --key &lt;key&gt; --value &lt;value&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --get --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --getnext --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --getprevious --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --delete --key &lt;key&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --getlog --logtype &lt;utilizations|temperatures|capacities|configuration|statistics|messages|limits&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --getdevicespecificlog --devicelogname &lt;name|ID&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --setclusterversion --newclusterversion &lt;newclusterversion&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --seterasepin --pin &lt;oldpin&gt; --newpin &lt;newerasepin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --instanterase --pin &lt;erasepin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --secureerase --pin &lt;erasepin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --setlockpin --pin &lt;oldpin&gt;&gt; &lt;--newpin &lt;newpin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --lockdevice --pin &lt;lockpin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --unlockdevice --pin &lt;lockpin&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --setacl --file &lt;acl_json_file&gt; [--host &lt;ip|hostname&gt;] [--tlsport &lt;tlsport&gt;] [--clusterversion &lt;clusterversion&gt;]
+./bin/kinetic-c-util --updatefirmware --file &lt;file&gt; --pin &lt;pin&gt; [--host &lt;ip|hostname&gt;] [--port &lt;port&gt;] [--clusterversion &lt;clusterversion&gt;]
 </pre><h1>Kinetic C Client I/O Examples </h1>
 <ul>
 <li><a href="src/examples/blocking_put_get.c">`blocking_put_get`</a> - Blocking put w/get.</li>
