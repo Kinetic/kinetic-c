@@ -54,13 +54,14 @@ static KineticStatus send_request_in_lock(KineticOperation* const op);
 
 KineticStatus KineticOperation_SendRequest(KineticOperation* const op)
 {
+    KineticSession *session = op->session;
     KineticOperation_ValidateOperation(op);
     
-    if (!KineticRequest_LockSend(op->session)) {
+    if (!KineticRequest_LockSend(session)) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
     KineticStatus status = send_request_in_lock(op);
-    KineticRequest_UnlockSend(op->session);
+    KineticRequest_UnlockSend(session);
     return status;
 }
 

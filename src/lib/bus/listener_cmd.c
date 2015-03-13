@@ -144,6 +144,20 @@ static void msg_handler(listener *l, listener_msg *pmsg) {
     ListenerTask_ReleaseMsg(l, pmsg);
 }
 
+/* Swap poll and connection info for tracked sockets, by array offset. */
+static void swap(listener *l, int a, int b) {
+    struct pollfd a_pfd = l->fds[a + INCOMING_MSG_PIPE];
+    struct pollfd b_pfd = l->fds[b + INCOMING_MSG_PIPE];
+    connection_info *a_ci = l->fd_info[a];
+    connection_info *b_ci = l->fd_info[b];
+
+    l->fds[b + INCOMING_MSG_PIPE] = a_pfd;
+    l->fds[a + INCOMING_MSG_PIPE] = b_pfd;
+
+    l->fd_info[a] = b_ci;
+    l->fd_info[b] = a_ci;
+}
+
 static void add_socket(listener *l, connection_info *ci, int notify_fd) {
     /* TODO: if epoll, just register with the OS. */
     struct bus *b = l->bus;
@@ -167,7 +181,24 @@ static void add_socket(listener *l, connection_info *ci, int notify_fd) {
     l->fd_info[id] = ci;
     l->fds[id + INCOMING_MSG_PIPE].fd = ci->fd;
     l->fds[id + INCOMING_MSG_PIPE].events = POLLIN;
+
+    /* If there are any inactive FDs, we need to swap the new last FD
+     * and the first inactive FD so that the active and inactive FDs
+     * remain contiguous. */
+    if (l->inactive_fds > 0) {
+        int first_inactive = l->tracked_fds - l->inactive_fds;
+        swap(l, id, first_inactive);
+    }
+
     l->tracked_fds++;
+
+    for (int i = 0; i < l->tracked_fds; i++) {
+        if (l->fds[i + INCOMING_MSG_PIPE].events & POLLIN) {
+            assert(i < l->tracked_fds - l->inactive_fds);
+        } else {
+            assert(i >= l->tracked_fds - l->inactive_fds);
+        }
+    }
 
     /* Prime the pump by sinking 0 bytes and getting a size to expect. */
     bus_sink_cb_res_t sink_res = b->sink_cb(l->read_buf, 0, ci->udata);
@@ -191,18 +222,33 @@ static void remove_socket(listener *l, int fd, int notify_fd) {
 
     /* Don't really close it, just drop info about it in the listener.
      * The client thread will actually free the structure, close SSL, etc. */
-    for (int i = 0; i < l->tracked_fds; i++) {
-        if (l->fds[i + INCOMING_MSG_PIPE].fd == fd) {
+    for (int id = 0; id < l->tracked_fds; id++) {
+        struct pollfd removing_pfd = l->fds[id + INCOMING_MSG_PIPE];
+        if (removing_pfd.fd == fd) {
+            bool is_active = (removing_pfd.events & POLLIN) > 0;
             if (l->tracked_fds > 1) {
-                /* Swap pollfd CI and last ones. */
-                struct pollfd pfd = l->fds[i + INCOMING_MSG_PIPE];
-                l->fds[i + INCOMING_MSG_PIPE] = l->fds[l->tracked_fds - 1 + INCOMING_MSG_PIPE];
-                l->fds[l->tracked_fds - 1 + INCOMING_MSG_PIPE] = pfd;
-                connection_info *ci = l->fd_info[i];
-                l->fd_info[i] = l->fd_info[l->tracked_fds - 1];
-                l->fd_info[l->tracked_fds - 1] = ci;
+                int last_active = l->tracked_fds - l->inactive_fds - 1;
+
+                /* If removing active node and it isn't the last active one, swap them */
+                if (is_active && id != last_active) {
+                    assert(id < last_active);
+                    swap(l, id, last_active);
+                    id = last_active;
+                }
+
+                /* If node (which is either last active node or inactive) is not at the end,
+                 * and there are inactive nodes, swap it with the last.*/
+                int last = l->tracked_fds - 1;
+                if (id < last) {
+                    swap(l, id, last);
+                    id = last;
+                }
+
+                /* The node is now at the end of the array. */
             }
+            
             l->tracked_fds--;
+            if (!is_active) { l->inactive_fds--; }
         }
     }
     /* CI will be freed by the client thread. */

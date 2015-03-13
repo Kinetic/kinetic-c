@@ -1,0 +1,43 @@
+title Kinetic C message handling, full request response cycle
+
+User -> Client: KineticClient_Put (command)
+
+Client -> Client: KineticOperation_SendRequest
+note over Client: lock
+
+Client -> Client: Reserve sequence ID
+Client -> Client: Pack command & message
+Client -> Client: Send request
+note over Client: unlock
+
+Client -> Client: pack request
+activate Client
+
+Client -> Listener: hold responses for <FD, SEQ_ID>
+activate Listener
+
+Client -> Drive: send request
+activate Drive
+
+Client -> Listener: expect response for <FD, SEQ_ID>
+Listener -> Client: acknowledgement with backpressure
+
+parallel {
+    Client -> Client: backpressure
+    deactivate Client
+    Listener -> Listener: wait
+}
+
+Drive -> Listener: response
+deactivate Drive
+
+Listener -> Listener: unpack response
+
+Listener -> Threadpool: Transfer callback with result code
+activate Threadpool
+deactivate Listener
+
+Threadpool -->> Client: callback(status)
+deactivate Threadpool
+
+Client -> User: status

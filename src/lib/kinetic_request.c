@@ -156,6 +156,5 @@ bool KineticRequest_LockSend(KineticSession* session)
 bool KineticRequest_UnlockSend(KineticSession* session)
 {
     KINETIC_ASSERT(session);
-    KINETIC_ASSERT(session);
     return 0 == pthread_mutex_unlock(&session->sendMutex);
 }
