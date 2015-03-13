@@ -174,6 +174,11 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_ADD_SOCKET_co
     int res = 1;
 
     l->tracked_fds = 3;
+    for (int i = 0; i < l->tracked_fds; i++) {
+        l->fds[i + INCOMING_MSG_PIPE].fd = i;
+        l->fds[i + INCOMING_MSG_PIPE].events = POLLIN;
+    }
+
     expect_notify_caller(l, 7);
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
@@ -183,6 +188,45 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_ADD_SOCKET_co
     TEST_ASSERT_EQUAL(31, ci->to_read_size);
     TEST_ASSERT_EQUAL(POLLIN, l->fds[3 + INCOMING_MSG_PIPE].events);
     TEST_ASSERT_EQUAL(4, l->tracked_fds);
+}
+
+void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_ADD_SOCKET_command_correctly_with_inactive_sockets(void) {
+    connection_info *ci = calloc(1, sizeof(*ci));
+    *(int *)&ci->fd = 91;
+
+    listener_msg msg = {
+        .type = MSG_ADD_SOCKET,
+        .u.add_socket = {
+            .info = ci,
+            .notify_fd = 7,
+        },
+    };
+
+    setup_command(&msg, NULL);
+    int res = 1;
+
+    l->tracked_fds = 3;  // [0 1 | 2]
+    l->inactive_fds = 1;
+    for (int i = 0; i < l->tracked_fds; i++) {
+        l->fds[i + INCOMING_MSG_PIPE].fd = i;
+        if (i < l->tracked_fds - l->inactive_fds) {
+            l->fds[i + INCOMING_MSG_PIPE].events = POLLIN;
+        } else {
+            l->fds[i + INCOMING_MSG_PIPE].events = 0;
+        }
+    }
+    expect_notify_caller(l, 7);
+    ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
+    ListenerCmd_CheckIncomingMessages(l, &res);
+
+    TEST_ASSERT_EQUAL(4, l->tracked_fds);
+    TEST_ASSERT_EQUAL(ci, l->fd_info[2]);
+    TEST_ASSERT_EQUAL(ci->fd, l->fds[2 + INCOMING_MSG_PIPE].fd);
+    TEST_ASSERT_EQUAL(31, ci->to_read_size);
+    TEST_ASSERT_EQUAL(POLLIN, l->fds[2 + INCOMING_MSG_PIPE].events);
+
+    TEST_ASSERT_EQUAL(0, l->fds[3 + INCOMING_MSG_PIPE].events);
+    TEST_ASSERT_EQUAL(2, l->fds[3 + INCOMING_MSG_PIPE].fd);
 }
 
 void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_REMOVE_SOCKET_command_freeing_single_fd(void) {
