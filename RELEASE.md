@@ -22,9 +22,17 @@ v0.12.0 (kinetic-protocol 3.0.5)
         * `KINETIC_STATUS_ACL_ERROR`
         * `KINETIC_STATUS_NOT_AUTHORIZED`
         * `KINETIC_STATUS_INVALID_FILE`
+        * `KINTEIC_STATUS_DEVICE_NAME_REQUIRED`
         * `KINETIC_STATUS_INVALID_LOG_TYPE`
+        * `KINTEIC_STATUS_HMAC_FAILURE`
+        * `KINETIC_STATUS_SESSION_TERMINATED`
 * Set larger timeouts for operations that tend to take approx. 10 seconds, to prevent non-deterministic failures.
 * API change: Eliminated KineticClientConfig.writerThreads, since sender threads are gone.
+* Changed to use stock protobuf-c 1.1.0 which also necessitated upgade to protobuf-2.6.0.
+* Added auto-generated version info which is prepended to log and can be queried via `KineticClient_Version()`
+* Added support to gracefully handle remote hangup.
+    * The session will be shutdown.
+    * All pending/new operations will return `KINETIC_STATUS_SESSION_TERMINATED` and termination reason can be queried on the given session via `KineticClient_GetTerminationStatus(session)`.
 
 v0.11.2 (kinetic-protocol 3.0.5)
 --------------------------------
