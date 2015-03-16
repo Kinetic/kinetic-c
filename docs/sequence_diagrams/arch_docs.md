@@ -24,12 +24,12 @@ A message going through the message bus, with no errors.
 
 A message going through the message bus, with no reply (a time-out error).
 
-![](msg_handling-no_reply.wsd?raw=true)
+![](msg_handling-no_reply.png?raw=true)
 
 
 A message going through the message bus, with a hang-up error while sending.
 
-![](msg_handling-send_error.wsd?raw=true)
+![](msg_handling-send_error.png?raw=true)
 
 
 # Entities

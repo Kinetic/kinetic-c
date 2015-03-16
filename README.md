@@ -72,6 +72,7 @@ Getting Started
 
     > make start_sims # starts bundled kinetic-java simulators for testing
     > make all # this is what Travis-CI build does does for regression testing
+    > make stop_sims # stops all locally running simulators
 
 API Documentation
 =================
@@ -85,13 +86,14 @@ API Documentation
 
 **NOTE: Configuration structures `KineticClientConfig` and `KineticSessionConfig` should be initialized per C99 struct initialization or memset to 0 prior to use in order to ensure forward/backward compatibility upon changes to these structure definitions!**
 
+[Developer Documentation](DEVELOP.md)
+
 Client Test Utility
 ===========================
 
 Code examples are included for reference as part of a test utility. The source code for the utility is used to build both a static and dynamically linked verion of the kinetic-c-client library.
 
 * `kinetic-c-util` builds/links against Kinetic C static library (.a)
-* `kinetic-c-util.x.y.z` builds/links against Kinetic C dynamic library (.so)
 
 Usage
 ----------

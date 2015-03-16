@@ -26,7 +26,7 @@ API Documentation
 
 There are also some additional [architectural notes](docs) and time-sequence diagrams.
 
-[docs]: https://github.com/Seagate/kinetic-c/blob/master/docs/sequence_diagrams/arch_docs.md
+[Architectural Document](docs/sequence_diagrams/arch_docs.md)
 
 Common Developer Tasks
 ----------------------
