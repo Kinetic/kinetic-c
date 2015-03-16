@@ -358,6 +358,25 @@ KineticStatus KineticBuilder_BuildErase(KineticOperation* const op, bool secure_
     return KINETIC_STATUS_SUCCESS;
 }
 
+KineticStatus KineticBuilder_BuildPowerUpPowerDown(KineticOperation* const op, bool power_down)
+{
+    KineticOperation_ValidateOperation(op);
+
+    op->request->message.command.header->messagetype = COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__SETUP;
+    op->request->message.command.header->has_messagetype = true;
+    op->request->command->body = &op->request->message.body;
+
+    op->request->command->body->setup = &op->request->message.setup;
+    op->request->command->body->setup->drivepowerdown = power_down;
+    op->request->command->body->setup->has_drivepowerdown = true;
+    op->opCallback = &KineticCallbacks_Basic;
+    op->timeoutSeconds = KineticOperation_TimeoutErase;
+
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
+
 KineticStatus KineticBuilder_BuildLockUnlock(KineticOperation* const op, bool lock, ByteArray* pin)
 {
     KineticOperation_ValidateOperation(op);

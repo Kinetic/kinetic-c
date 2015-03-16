@@ -83,6 +83,10 @@ KineticStatus KineticProtoStatusCode_to_KineticStatus(
         status = KINETIC_STATUS_DEVICE_LOCKED;
         break;
 
+    case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__DRIVE_POWER_DOWN:
+        status = KINETIC_STATUS_DEVICE_POWER_DOWN;
+        break;
+
     default:
     case COM__SEAGATE__KINETIC__PROTO__COMMAND__STATUS__STATUS_CODE__INVALID_STATUS_CODE:
         status = KINETIC_STATUS_INVALID;

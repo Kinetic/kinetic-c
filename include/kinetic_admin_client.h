@@ -236,4 +236,25 @@ KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
 KineticStatus KineticAdminClient_UpdateFirmware(KineticSession * const session,
     char const * const fw_path);
 
+/**
+ * @brief Executes a "Power Down" operation  to power down the device.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_PowerDown(KineticSession * const session);
+
+
+/**
+ * @brief Executes a "Power Up" operation  to power up the device.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_PowerUp(KineticSession * const session);
+
+
+
 #endif // _KINETIC_ADMIN_CLIENT_H

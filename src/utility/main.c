@@ -65,6 +65,8 @@ typedef enum OptionID {
     OPT_SETCLUSTERVERSION          = 314,
     OPT_SETACL                     = 315,
     OPT_UPDATEFIRMWARE             = 316,
+    OPT_POWERUP                    = 317,
+    OPT_POWERDOWN                  = 318,
 
     OPT_MAX
 } OptionID;
@@ -155,6 +157,10 @@ void PrintUsage(const char* exec)
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
     printf("%s --unlockdevice --pin <lockpin>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
+    printf("%s --powerup"
+           " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
+    printf("%s --powerdown"
+           " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
     printf("%s --setacl --file <acl_json_file>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
     printf("%s --updatefirmware --file <file> --pin <pin>"
@@ -399,6 +405,10 @@ static const char* GetOptString(OptionID opt_id)
             str = "setacl"; break;
         case OPT_UPDATEFIRMWARE:
             str = "updatefirmware"; break;
+        case OPT_POWERDOWN:
+            str = "powerdown"; break;
+        case OPT_POWERUP:
+            str = "powerup"; break;
 
         default:
             str = "<UNKNOWN OPTION>"; break;
@@ -569,6 +579,21 @@ KineticStatus ExecuteOperation(
                 printf("SecureErase executed successfully.\n"
                        "The kinetic device has been restored to empty status!\n"); }
             break;
+    case OPT_POWERDOWN:
+        status = KineticAdminClient_PowerDown(cfg->adminSession);
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("PowerDown executed successfully.\n"
+                   "The kinetic device has been pewered down!\n");
+        }
+        break;
+    case OPT_POWERUP:
+        status = KineticAdminClient_PowerUp(cfg->adminSession);
+        if (status == KINETIC_STATUS_SUCCESS) {
+            printf("PowerUp executed successfully.\n"
+                   "The kinetic device has been powered up!\n");
+        }
+        break;
+
 
         default:
             fprintf(stderr, "Specified operation '%d' is invalid!\n",
@@ -665,6 +690,8 @@ int ParseOptions(
         {"setclusterversion",           no_argument,       0, OPT_SETCLUSTERVERSION},
         {"setacl",                      no_argument,       0, OPT_SETACL},
         {"updatefirmware",              no_argument,       0, OPT_UPDATEFIRMWARE},
+        {"powerdown",                   no_argument,       0, OPT_POWERDOWN},
+        {"powerup",                     no_argument,       0, OPT_POWERUP},
 
         // Options
         {"loglevel",                    required_argument, 0, OPT_LOGLEVEL},
@@ -759,6 +786,8 @@ int ParseOptions(
             case OPT_SETCLUSTERVERSION:
             case OPT_SETACL:
             case OPT_UPDATEFIRMWARE:
+            case OPT_POWERUP:
+            case OPT_POWERDOWN:
                 if ((int)opts.opID == 0) {
                     opts.opID = option;
                     break;

@@ -49,6 +49,7 @@ STATIC const char* KineticStatusDescriptor[] = {
     "MISSING_PIN",
     "SSL_REQUIRED",
     "DEVICE_LOCKED",
+    "DEVICE_POWER_DOWN",
     "ACL_ERROR",
     "NOT_AUTHORIZED",
     "INVALID_FILE",

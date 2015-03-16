@@ -11,7 +11,7 @@ Kinetic Protocol Support
 ------------------------
 Built using:
 
-* [Kinetic Protocol v3.0.5](https://github.com/Seagate/kinetic-protocol/tree/3.0.5)
+* [Kinetic Protocol branch features/device-power-down](https://github.com/Seagate/kinetic-protocol/tree/features/device-power-down)
 * [ProtoBuf-C v1.1.0](https://github.com/protobuf-c/protobuf-c)
 * [Google ProtoBuf v2.6.0](https://developers.google.com/protocol-buffers/docs/downloads)
 
@@ -115,6 +115,8 @@ Usage
     ./bin/kinetic-c-util --setlockpin --pin <oldpin>> <--newpin <newpin> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
     ./bin/kinetic-c-util --lockdevice --pin <lockpin> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
     ./bin/kinetic-c-util --unlockdevice --pin <lockpin> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./bin/kinetic-c-util --powerup [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
+    ./bin/kinetic-c-util --powerdown [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
     ./bin/kinetic-c-util --setacl --file <acl_json_file> [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]
     ./bin/kinetic-c-util --updatefirmware --file <file> --pin <pin> [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]
 

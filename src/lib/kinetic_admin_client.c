@@ -138,6 +138,33 @@ KineticStatus KineticAdminClient_SetLockPin(KineticSession * const session,
     return KineticController_ExecuteOperation(operation, NULL);
 }
 
+KineticStatus KineticAdminClient_PowerUp(KineticSession * const session)
+{
+    KineticStatus status;
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticBuilder_BuildPowerUpPowerDown(operation, false);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_PowerDown(KineticSession * const session)
+{
+    KineticStatus status;
+    status = KineticAuth_EnsureSslEnabled(&session->config);
+    if (status != KINETIC_STATUS_SUCCESS) {return status;}
+
+    KineticOperation* operation = KineticAllocator_NewOperation(session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticBuilder_BuildPowerUpPowerDown(operation, true);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+
 KineticStatus KineticAdminClient_LockDevice(KineticSession * const session,
     ByteArray pin)
 {

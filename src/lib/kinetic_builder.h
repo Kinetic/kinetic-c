@@ -62,6 +62,9 @@ KineticStatus KineticBuilder_BuildErase(KineticOperation* const op,
     bool secure_erase, ByteArray* pin);
 KineticStatus KineticBuilder_BuildLockUnlock(KineticOperation* const op,
     bool lock, ByteArray* pin);
+KineticStatus KineticBuilder_BuildPowerUpPowerDown(KineticOperation* const op,
+        bool power_down);
+
 KineticStatus KineticBuilder_BuildSetACL(KineticOperation* const op,
     struct ACL *ACLs);
 KineticStatus KineticBuilder_BuildSetClusterVersion(KineticOperation* const op,
