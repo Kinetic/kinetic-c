@@ -125,7 +125,7 @@ clean: makedirs
 
 # Setup version info generation and corresponding dependencies
 $(VERSION_INFO): $(VERSION_FILE)
-	@ruby scripts/generate_version_info.rb
+	sh scripts/generate_version_info.sh
 $(OUT_DIR)/kinetic_logger.o: $(VERSION_INFO)
 $(OUT_DIR)/kinetic_client.o: $(VERSION_INFO)
 
