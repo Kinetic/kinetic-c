@@ -30,6 +30,7 @@ KineticStatus KineticSession_Disconnect(KineticSession * const session);
 KineticStatus KineticSession_GetTerminationStatus(KineticSession const * const session);
 void KineticSession_SetTerminationStatus(KineticSession * const session, KineticStatus status);
 int64_t KineticSession_GetNextSequenceCount(KineticSession * const session);
+uint32_t KineticSession_GetNextBatchIdSequenceCount(KineticSession * const session);
 int64_t KineticSession_GetClusterVersion(KineticSession const * const session);
 void KineticSession_SetClusterVersion(KineticSession * const session, int64_t cluster_version);
 int64_t KineticSession_GetConnectionID(KineticSession const * const session);

@@ -332,3 +332,102 @@ KineticStatus KineticClient_P2POperation(KineticSession* const session,
     // Execute the operation
     return KineticController_ExecuteOperation(operation, closure);
 }
+
+KineticBatch_Operation * KineticClient_InitBatchOperation(KineticSession* const session){
+	KineticBatch_Operation * batchOp = KineticCalloc(1, sizeof(*batchOp));
+	if (batchOp == NULL) { return NULL; }
+
+	batchOp->session = session;
+	batchOp->batchId = KineticSession_GetNextBatchIdSequenceCount(session);
+
+	return batchOp;
+}
+
+KineticStatus KineticClient_BatchPut(KineticBatch_Operation* const batchOp,
+                                     KineticEntry* const entry,
+                                     KineticCompletionClosure* closure){
+	KINETIC_ASSERT(batchOp);
+	KINETIC_ASSERT(batchOp->session);
+
+	// Assert non-NULL value upon non-zero length
+    if (entry->value.array.len > 0) {
+        KINETIC_ASSERT(entry->value.array.data);
+    }
+
+	if (closure == NULL)
+	{
+		return KINETIC_STATUS_OPERATION_INVALID;
+	}
+
+    KineticOperation* operation = KineticAllocator_NewOperation(batchOp->session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // Initialize request
+    KineticStatus status = KineticBuilder_BuildBatchPut(operation, batchOp, entry);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        KineticAllocator_FreeOperation(operation);
+        return status;
+    }
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticClient_BatchDelete(KineticBatch_Operation* const batchOp,
+                                        KineticEntry* const entry,
+                                        KineticCompletionClosure* closure){
+    KINETIC_ASSERT(batchOp);
+   	KINETIC_ASSERT(batchOp->session);
+   	KINETIC_ASSERT(entry);
+
+   	if (closure == NULL)
+   	{
+   		return KINETIC_STATUS_OPERATION_INVALID;
+   	}
+
+   	KineticOperation* operation = KineticAllocator_NewOperation(batchOp->session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // Initialize request
+    KineticStatus status = KineticBuilder_BuildBatchDelete(operation, batchOp, entry);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        KineticAllocator_FreeOperation(operation);
+        return status;
+    }
+
+    // Execute the operation
+    return KineticController_ExecuteOperation(operation, closure);
+}
+
+KineticStatus KineticClient_BatchStart(KineticBatch_Operation* const batchOp){
+    KINETIC_ASSERT(batchOp);
+    KINETIC_ASSERT(batchOp->session);
+
+    KineticOperation* operation = KineticAllocator_NewOperation(batchOp->session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticBuilder_BuildBatchStart(operation,batchOp);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticClient_BatchEnd(KineticBatch_Operation* const batchOp){
+    KINETIC_ASSERT(batchOp);
+    KINETIC_ASSERT(batchOp->session);
+
+    KineticOperation* operation = KineticAllocator_NewOperation(batchOp->session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticBuilder_BuildBatchEnd(operation,batchOp);
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticClient_BatchAbort(KineticBatch_Operation* const batchOp){
+	KINETIC_ASSERT(batchOp);
+	KINETIC_ASSERT(batchOp->session);
+
+    KineticOperation* operation = KineticAllocator_NewOperation(batchOp->session);
+    if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    KineticBuilder_BuildBatchAbort(operation,batchOp);
+    return KineticController_ExecuteOperation(operation, NULL);
+}

@@ -149,6 +149,12 @@ typedef struct _KineticSessionConfig {
  */
 typedef struct _KineticSession KineticSession;
 
+
+typedef struct {
+	uint32_t batchId;
+	KineticSession* session;
+} KineticBatch_Operation;
+
 /**
 * @brief Kinetic status codes.
 */

@@ -104,6 +104,7 @@ struct _KineticSession {
     KineticResourceWaiter connectionReady;              ///< connection ready status (set to true once connectionID recieved)
     KineticCountingSemaphore * outstandingOperations;   ///< counting semaphore to only allows the configured number of outstanding operation at a given time
     uint16_t timeoutSeconds;                            ///< Default response timeout
+    uint32_t batchIdSequence;                           ///< increments for each batch operation in a session
 };
 
 // Kinetic Message HMAC

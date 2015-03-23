@@ -1,7 +1,7 @@
 [submodule "kinetic-protocol"]
 	path = vendor/kinetic-protocol
 	url = https://github.com/Seagate/kinetic-protocol.git
-	branch = 3.0.5
+	branch = features/batch-operation
 [submodule "socket99"]
 	path = vendor/socket99
 	url = https://github.com/silentbicycle/socket99.git

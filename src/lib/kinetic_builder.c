@@ -74,6 +74,73 @@ KineticStatus KineticBuilder_BuildPut(KineticOperation* const op,
     return KINETIC_STATUS_SUCCESS;
 }
 
+static KineticStatus build_batch_control_command(KineticOperation* const op,
+		                                KineticBatch_Operation * batchOp,
+										Com__Seagate__Kinetic__Proto__Command__MessageType commandId)
+{
+	KineticOperation_ValidateOperation(op);
+	op->request->message.command.header->messagetype = commandId;
+	op->request->message.command.header->has_messagetype = true;
+	op->request->message.command.header->has_batchid = true;
+	op->request->message.command.header->batchid = batchOp->batchId;
+	op->opCallback = &KineticCallbacks_Basic;
+
+	return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticBuilder_BuildBatchStart(KineticOperation* const op,
+                                    KineticBatch_Operation * batchOp)
+{
+    return build_batch_control_command(op,batchOp,
+    		COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__START_BATCH);
+}
+
+KineticStatus KineticBuilder_BuildBatchEnd(KineticOperation* const op,
+                                  KineticBatch_Operation * batchOp)
+{
+	return build_batch_control_command(op,batchOp,
+			COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__END_BATCH);
+}
+
+KineticStatus KineticBuilder_BuildBatchAbort(KineticOperation* const op,
+                                    KineticBatch_Operation * batchOp)
+{
+	return build_batch_control_command(op,batchOp,
+			COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__ABORT_BATCH);
+}
+
+KineticStatus KineticBuilder_BuildBatchDelete(KineticOperation* const op,
+                                              KineticBatch_Operation * batchOp,
+                                              KineticEntry* const entry)
+{
+	KineticStatus status = KineticBuilder_BuildDelete(op,entry);
+    if (status != KINETIC_STATUS_SUCCESS)
+    {
+    	return status;
+    }
+
+    op->request->message.command.header->has_batchid = true;
+    op->request->message.command.header->batchid = batchOp->batchId;
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticBuilder_BuildBatchPut(KineticOperation* const op,
+                                              KineticBatch_Operation * batchOp,
+                                              KineticEntry* const entry)
+{
+	KineticStatus status = KineticBuilder_BuildPut(op,entry);
+    if (status != KINETIC_STATUS_SUCCESS)
+    {
+    	return status;
+    }
+
+    op->request->message.command.header->has_batchid = true;
+    op->request->message.command.header->batchid = batchOp->batchId;
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
 static void build_get_command(KineticOperation* const op,
                               KineticEntry* const entry,
                               KineticOperationCallback cb,

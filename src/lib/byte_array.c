@@ -272,5 +272,7 @@ ByteBuffer ByteBuffer_MallocAndAppend(const void* data, size_t len)
 void ByteBuffer_Free(ByteBuffer buffer)
 {
     assert(buffer.array.data != NULL);
+    buffer.bytesUsed = 0;
+    buffer.array.len = 0;
     free(buffer.array.data);
 }

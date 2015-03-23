@@ -172,6 +172,13 @@ int64_t KineticSession_GetNextSequenceCount(KineticSession * const session)
     return seq_cnt;
 }
 
+uint32_t KineticSession_GetNextBatchIdSequenceCount(KineticSession * const session)
+{
+    KINETIC_ASSERT(session);
+    uint32_t batch_id_seq_cnt = ATOMIC_FETCH_AND_INCREMENT(&session->batchIdSequence);
+    return batch_id_seq_cnt + 1;
+}
+
 int64_t KineticSession_GetClusterVersion(KineticSession const * const session)
 {
     KINETIC_ASSERT(session);

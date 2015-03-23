@@ -50,6 +50,16 @@ KineticStatus KineticBuilder_BuildGetKeyRange(KineticOperation* const op,
     KineticKeyRange* range, ByteBufferArray* buffers);
 KineticStatus KineticBuilder_BuildP2POperation(KineticOperation* const op,
     KineticP2P_Operation* const p2pOp);
+KineticStatus KineticBuilder_BuildBatchStart(KineticOperation* const op,
+    KineticBatch_Operation * batchOp);
+KineticStatus KineticBuilder_BuildBatchEnd(KineticOperation* const op,
+    KineticBatch_Operation * batchOp);
+KineticStatus KineticBuilder_BuildBatchAbort(KineticOperation* const op,
+    KineticBatch_Operation * batchOp);
+KineticStatus KineticBuilder_BuildBatchPut(KineticOperation* const op,
+    KineticBatch_Operation * batchOp,KineticEntry* const entry);
+KineticStatus KineticBuilder_BuildBatchDelete(KineticOperation* const op,
+    KineticBatch_Operation * batchOp,KineticEntry* const entry);
 
 /*******************************************************************************
  * Admin Client Operations
