@@ -28,7 +28,7 @@
  * 
  * @return Returns a pointer to static version info
  */
-KineticVersionInfo KineticClient_Version(void);
+const KineticVersionInfo * KineticClient_Version(void);
 
 /**
  * Initializes the Kinetic API and configures logging.
