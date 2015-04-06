@@ -124,11 +124,16 @@ KineticStatus ExecuteOperation(
     }
 
     else if (strcmp("put", operation) == 0) {
+      for (int i = 0; i < 1000; i++) {
         status = KineticClient_Put(session, entry, NULL);
         if (status == KINETIC_STATUS_SUCCESS) {
             printf("\nPut operation completed successfully."
                    " Your data has been stored!\n\n");
-        }
+        
+	}
+	else
+	printf("\n Put error ");
+      }
     }
 
     else if (strcmp("get", operation) == 0) {
