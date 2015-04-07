@@ -28,8 +28,9 @@
 #include <errno.h>
 #include <pthread.h>
 #include <time.h>
+#include <sys/time.h>
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 2048
 #define BUFFER_MAX_STRLEN (BUFFER_SIZE-2)
 
 STATIC int KineticLogLevel = -1;
@@ -100,10 +101,14 @@ void KineticLogger_LogPrintf(int log_level, const char* format, ...)
 
     char* buffer = NULL;
     buffer = get_buffer();
-
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    struct tm *tim = localtime(&tv.tv_sec);
+    int len = strftime(buffer, BUFFER_MAX_STRLEN,"%Y-%m-%d::%H:%M:%S:",  tim);
+    len += sprintf(&buffer[len], "%ld:\t", tv.tv_usec/1000);
     va_list arg_ptr;
     va_start(arg_ptr, format);
-    int len = vsnprintf(buffer, BUFFER_MAX_STRLEN, format, arg_ptr);
+    len += vsnprintf(&buffer[len], BUFFER_MAX_STRLEN - len, format, arg_ptr);
     va_end(arg_ptr);
 
     if (len > BUFFER_MAX_STRLEN) {
