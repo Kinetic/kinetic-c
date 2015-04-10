@@ -24,6 +24,8 @@
 #include "kinetic_admin_client.h"
 
 SystemTestFixture Fixture = {.connected = false};
+static char InitPinData[8];
+static ByteArray InitPin;
 
 static void LoadConfiguration(void)
 {
@@ -158,10 +160,17 @@ int GetSystemTestTlsPort2(void)
     return Fixture.tlsPort2;
 }
 
-void SystemTestSetup(int log_level)
+void SystemTestSetup(int log_level, bool secure_erase)
 {
     const uint8_t *key = (const uint8_t *)SESSION_HMAC_KEY;
     SystemTestSetupWithIdentity(log_level, SESSION_IDENTITY, key, strlen((const char*)key));
+
+    if (secure_erase)
+    {
+        InitPin = ByteArray_Create(InitPinData, 0);
+        KineticStatus status = KineticAdminClient_SecureErase(Fixture.adminSession, InitPin);
+    	TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
+    }
 }
 
 void SystemTestSetupWithIdentity(int log_level, int64_t identity,

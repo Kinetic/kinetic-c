@@ -20,8 +20,6 @@
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
-static bool SuiteInitialized = false;
-
 static bool add_keys(int count)
 {
     static const ssize_t sz = 10;
@@ -47,10 +45,8 @@ static bool add_keys(int count)
 
 void setUp(void)
 {
-    SystemTestSetup(1);
-    if (!SuiteInitialized) {
-        SuiteInitialized = add_keys(3);
-    }
+    SystemTestSetup(1, true);
+    assert(add_keys(3));
 }
 
 void tearDown(void)

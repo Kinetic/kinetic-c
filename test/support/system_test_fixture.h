@@ -61,7 +61,7 @@ typedef struct _SystemTestFixture {
 
 extern SystemTestFixture Fixture;
 
-void SystemTestSetup(int log_level);
+void SystemTestSetup(int log_level, bool secure_erase);
 void SystemTestSetupWithIdentity(int log_level, int64_t identity,
     const uint8_t *key, size_t key_size);
 void SystemTestShutDown(void);
