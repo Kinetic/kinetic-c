@@ -30,13 +30,13 @@ static const char VALUE_PREFIX[] = "my_value";
 ByteBuffer generate_entry_key_by_index(uint32_t index)
 {
 	char* key = malloc(MAX_SIZE);
-	return ByteBuffer_CreateAndAppendFormattedCString(key, MAX_SIZE, "%s%d",KEY_PREFIX, index);
+	return ByteBuffer_CreateAndAppendFormattedCString(key, MAX_SIZE, "%s%10d",KEY_PREFIX, index);
 }
 
 ByteBuffer generate_entry_value_by_index(uint32_t index)
 {
 	char* value = malloc(MAX_SIZE);
-	return ByteBuffer_CreateAndAppendFormattedCString(value, MAX_SIZE, "%s%d",VALUE_PREFIX, index);
+	return ByteBuffer_CreateAndAppendFormattedCString(value, MAX_SIZE, "%s%10d",VALUE_PREFIX, index);
 }
 
 ByteBuffer get_generated_value_by_key(ByteBuffer* key)
