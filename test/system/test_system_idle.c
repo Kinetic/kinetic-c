@@ -28,7 +28,7 @@
 #define IDLE_SECONDS 10
 
 static void child_task(void) {
-    SystemTestSetup(0);
+    SystemTestSetup(0, false);
 
     sleep(IDLE_SECONDS);
 

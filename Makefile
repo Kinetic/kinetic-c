@@ -377,7 +377,7 @@ $(SYSTEST_OUT)/run_%: $(SYSTEST_SRC)/%.c $(SYSTEST_OUT)/%_runner.c $(KINETIC_LIB
 	@echo ================================================================================
 	@echo System test: '$<'
 	@echo --------------------------------------------------------------------------------
-	$(CC) -o $@ $< $(word 2,$^) ./test/support/system_test_fixture.c $(UNITY_SRC) $(SYSTEST_CFLAGS) $(LIB_INCS) -I$(UNITY_INC) -I./test/support $(SYSTEST_LDFLAGS) $(KINETIC_LIB)
+	$(CC) -o $@ $< $(word 2,$^) ./test/support/system_test_fixture.c ./test/support/system_test_kv_generate.c $(UNITY_SRC) $(SYSTEST_CFLAGS) $(LIB_INCS) -I$(UNITY_INC) -I./test/support $(SYSTEST_LDFLAGS) $(KINETIC_LIB)
 
 $(SYSTEST_OUT)/%.testpass : $(SYSTEST_OUT)/run_%
 	./scripts/runSystemTest.sh $*

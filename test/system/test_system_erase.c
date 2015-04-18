@@ -40,7 +40,7 @@ static bool failing = false;
 
 void setUp(void)
 {
-    SystemTestSetup(0);
+    SystemTestSetup(0, true);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), strKey);
     ExpectedKeyBuffer = ByteBuffer_CreateAndAppendCString(ExpectedKeyData, sizeof(ExpectedKeyData), strKey);
