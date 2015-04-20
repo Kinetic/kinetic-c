@@ -29,7 +29,7 @@ STATIC const char* KineticStatusDescriptor[] = {
     "SESSION_INVALID",
     "HOST_EMPTY",
     "HMAC_REQUIRED",
-    "NO_PDUS_AVAVILABLE",
+    "NO_PDUS_AVAILABLE",
     "DEVICE_BUSY",
     "CONNECTION_ERROR",
     "INVALID_REQUEST",
