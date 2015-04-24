@@ -170,9 +170,13 @@ static const char *bus_error_string(bus_send_status_t t) {
     case BUS_SEND_BAD_RESPONSE:
         return "bad_response";
     case BUS_SEND_UNREGISTERED_SOCKET:
-        return "unregistered socket";
+        return "unregistered_socket";
     case BUS_SEND_RX_TIMEOUT_EXPECT:
-        return "internal timeout";
+        return "internal_timeout";
+    case BUS_SEND_TX_TIMEOUT_NOTIFYING_LISTENER:
+        return "notifying_timeout";
+    case BUS_SEND_TIMESTAMP_ERROR:
+        return "timestamp_error";
     }
 }
 
