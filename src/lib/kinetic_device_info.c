@@ -317,6 +317,7 @@ cleanup:
     if (statistics) { free(statistics); }
     if (limits) { free(limits); }
     if (device) { free(device); }
+    if (messages.data) { free(messages.data); }
     return NULL;
 }
 
