@@ -68,6 +68,8 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
         };
     };
 
+    printf("Waiting for put finish\n");
+
     struct timeval start_time;
     gettimeofday(&start_time, NULL);
 
@@ -100,8 +102,6 @@ void test_kinetic_client_should_store_a_binary_object_split_across_entries_via_o
             TEST_FAIL();
         }
     }
-
-    printf("Waiting for put finish\n");
 
     for (size_t i = 0; i < NUM_PUTS; i++)
     {
