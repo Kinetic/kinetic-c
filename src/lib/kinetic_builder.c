@@ -462,9 +462,9 @@ KineticStatus KineticBuilder_BuildUpdateFirmware(KineticOperation* const op, con
         goto cleanup;
     }
 
-    size_t read = fread(op->value.data, 1, len, fp);
-    if ((long)read != len) {
-        LOGF0("ERROR: Expected to read %ld bytes from FW file, but read %zu", len, read);
+    size_t read_size = fread(op->value.data, 1, len, fp);
+    if ((long)read_size != len) {
+        LOGF0("ERROR: Expected to read %ld bytes from FW file, but read %zu", len, read_size);
         status = KINETIC_STATUS_INVALID_FILE;
         goto cleanup;
     }

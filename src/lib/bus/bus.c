@@ -91,7 +91,7 @@ bool Bus_Init(bus_config *config, struct bus_result *res) {
     struct threadpool *tp = NULL;
     bool *joined = NULL;
     pthread_t *threads = NULL;
-    struct yacht *fd_set = NULL;
+    struct yacht *fds = NULL;
 
     bus *b = calloc(1, sizeof(*b));
     if (b == NULL) { goto cleanup; }
@@ -145,8 +145,8 @@ bool Bus_Init(bus_config *config, struct bus_result *res) {
         goto cleanup;
     }
 
-    fd_set = Yacht_Init(DEF_FD_SET_SIZE2);
-    if (fd_set == NULL) {
+    fds = Yacht_Init(DEF_FD_SET_SIZE2);
+    if (fds == NULL) {
         goto cleanup;
     }
 
@@ -165,7 +165,7 @@ bool Bus_Init(bus_config *config, struct bus_result *res) {
         }
     }
 
-    b->fd_set = fd_set;
+    b->fd_set = fds;
     res->bus = b;
     BUS_LOG(b, 2, LOG_INITIALIZATION, "initialized", config->bus_udata);
     return true;
@@ -187,7 +187,7 @@ cleanup:
     }
 
     if (threads) { free(threads); }
-    if (fd_set) { Yacht_Free(fd_set, NULL, NULL); }
+    if (fds) { Yacht_Free(fds, NULL, NULL); }
 
     return false;
 }
