@@ -135,45 +135,45 @@ int KineticSocket_Connect(const char* host, int port)
     }
 }
 
-void KineticSocket_Close(int socket)
+void KineticSocket_Close(int fd)
 {
-    if (socket == -1) {
+    if (fd == -1) {
         LOG1("Not connected so no cleanup needed");
     }
     else {
-        LOGF0("Closing socket with fd=%d", socket);
-        if (close(socket) == 0) {
+        LOGF0("Closing socket with fd=%d", fd);
+        if (close(fd) == 0) {
             LOG2("Socket closed successfully");
         }
         else {
             LOGF0("Error closing socket file descriptor!"
                  " (fd=%d, errno=%d, desc='%s')",
-                 socket, errno, strerror(errno));
+                 fd, errno, strerror(errno));
         }
     }
 }
 
-void KineticSocket_EnableTCPNoDelay(int socket)
+void KineticSocket_EnableTCPNoDelay(int fd)
 {
     int on = 1;
-    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));
+    setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));
 }
 
-void KineticSocket_BeginPacket(int socket)
+void KineticSocket_BeginPacket(int fd)
 {
 #if !defined(__APPLE__) /* TCP_CORK is NOT available on OSX */
     int on = 1;
-    setsockopt(socket, IPPROTO_TCP, TCP_CORK, &on, sizeof(on));
+    setsockopt(fd, IPPROTO_TCP, TCP_CORK, &on, sizeof(on));
 #else
     (void)socket;
 #endif
 }
 
-void KineticSocket_FinishPacket(int socket)
+void KineticSocket_FinishPacket(int fd)
 {
 #if !defined(__APPLE__) /* TCP_CORK is NOT available on OSX */
     int off = 0;
-    setsockopt(socket, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));
+    setsockopt(fd, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));
 #else
     (void)socket;
 #endif
