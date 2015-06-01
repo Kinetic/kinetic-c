@@ -117,6 +117,12 @@ void   com__seagate__kinetic__proto__command__body__init
   static Com__Seagate__Kinetic__Proto__Command__Body init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__BODY__INIT;
   *message = init_value;
 }
+void   com__seagate__kinetic__proto__command__batch__init
+                     (Com__Seagate__Kinetic__Proto__Command__Batch         *message)
+{
+  static Com__Seagate__Kinetic__Proto__Command__Batch init_value = COM__SEAGATE__KINETIC__PROTO__COMMAND__BATCH__INIT;
+  *message = init_value;
+}
 void   com__seagate__kinetic__proto__command__status__init
                      (Com__Seagate__Kinetic__Proto__Command__Status         *message)
 {
@@ -676,7 +682,7 @@ const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__header__
   (ProtobufCMessageInit) com__seagate__kinetic__proto__command__header__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
-static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__body__field_descriptors[7] =
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__body__field_descriptors[8] =
 {
   {
     "keyValue",
@@ -762,8 +768,21 @@ static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__bod
     0,             /* flags */
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
+  {
+    "batch",
+    9,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_MESSAGE,
+    0,   /* quantifier_offset */
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Body, batch),
+    &com__seagate__kinetic__proto__command__batch__descriptor,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
 };
 static const unsigned com__seagate__kinetic__proto__command__body__field_indices_by_name[] = {
+  7,   /* field[7] = batch */
   4,   /* field[4] = getLog */
   0,   /* field[0] = keyValue */
   3,   /* field[3] = p2pOperation */
@@ -776,7 +795,7 @@ static const ProtobufCIntRange com__seagate__kinetic__proto__command__body__numb
 {
   { 1, 0 },
   { 6, 4 },
-  { 0, 7 }
+  { 0, 8 }
 };
 const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__body__descriptor =
 {
@@ -786,11 +805,75 @@ const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__body__de
   "Com__Seagate__Kinetic__Proto__Command__Body",
   "com.seagate.kinetic.proto",
   sizeof(Com__Seagate__Kinetic__Proto__Command__Body),
-  7,
+  8,
   com__seagate__kinetic__proto__command__body__field_descriptors,
   com__seagate__kinetic__proto__command__body__field_indices_by_name,
   2,  com__seagate__kinetic__proto__command__body__number_ranges,
   (ProtobufCMessageInit) com__seagate__kinetic__proto__command__body__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__batch__field_descriptors[3] =
+{
+  {
+    "count",
+    1,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_INT32,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Batch, has_count),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Batch, count),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "sequence",
+    2,
+    PROTOBUF_C_LABEL_REPEATED,
+    PROTOBUF_C_TYPE_INT64,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Batch, n_sequence),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Batch, sequence),
+    NULL,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_PACKED,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "failedSequence",
+    3,
+    PROTOBUF_C_LABEL_OPTIONAL,
+    PROTOBUF_C_TYPE_INT64,
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Batch, has_failedsequence),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__Batch, failedsequence),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned com__seagate__kinetic__proto__command__batch__field_indices_by_name[] = {
+  0,   /* field[0] = count */
+  2,   /* field[2] = failedSequence */
+  1,   /* field[1] = sequence */
+};
+static const ProtobufCIntRange com__seagate__kinetic__proto__command__batch__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 3 }
+};
+const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__batch__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "com.seagate.kinetic.proto.Command.Batch",
+  "Batch",
+  "Com__Seagate__Kinetic__Proto__Command__Batch",
+  "com.seagate.kinetic.proto",
+  sizeof(Com__Seagate__Kinetic__Proto__Command__Batch),
+  3,
+  com__seagate__kinetic__proto__command__batch__field_descriptors,
+  com__seagate__kinetic__proto__command__batch__field_indices_by_name,
+  1,  com__seagate__kinetic__proto__command__batch__number_ranges,
+  (ProtobufCMessageInit) com__seagate__kinetic__proto__command__batch__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
 const ProtobufCEnumValue com__seagate__kinetic__proto__command__status__status_code__enum_values_by_number[23] =
@@ -2131,12 +2214,12 @@ static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get
     0,NULL,NULL    /* reserved1,reserved2, etc */
   },
   {
-    "maxBatchCountPerConnection",
+    "maxBatchCountPerDevice",
     13,
     PROTOBUF_C_LABEL_OPTIONAL,
     PROTOBUF_C_TYPE_UINT32,
-    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxbatchcountperconnection),
-    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxbatchcountperconnection),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, has_maxbatchcountperdevice),
+    offsetof(Com__Seagate__Kinetic__Proto__Command__GetLog__Limits, maxbatchcountperdevice),
     NULL,
     NULL,
     0,             /* flags */
@@ -2144,7 +2227,7 @@ static const ProtobufCFieldDescriptor com__seagate__kinetic__proto__command__get
   },
 };
 static const unsigned com__seagate__kinetic__proto__command__get_log__limits__field_indices_by_name[] = {
-  12,   /* field[12] = maxBatchCountPerConnection */
+  12,   /* field[12] = maxBatchCountPerDevice */
   4,   /* field[4] = maxConnections */
   9,   /* field[9] = maxIdentityCount */
   8,   /* field[8] = maxKeyRangeCount */

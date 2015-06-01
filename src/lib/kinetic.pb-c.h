@@ -22,6 +22,7 @@ typedef struct _Com__Seagate__Kinetic__Proto__Message__PINauth Com__Seagate__Kin
 typedef struct _Com__Seagate__Kinetic__Proto__Command Com__Seagate__Kinetic__Proto__Command;
 typedef struct _Com__Seagate__Kinetic__Proto__Command__Header Com__Seagate__Kinetic__Proto__Command__Header;
 typedef struct _Com__Seagate__Kinetic__Proto__Command__Body Com__Seagate__Kinetic__Proto__Command__Body;
+typedef struct _Com__Seagate__Kinetic__Proto__Command__Batch Com__Seagate__Kinetic__Proto__Command__Batch;
 typedef struct _Com__Seagate__Kinetic__Proto__Command__Status Com__Seagate__Kinetic__Proto__Command__Status;
 typedef struct _Com__Seagate__Kinetic__Proto__Command__KeyValue Com__Seagate__Kinetic__Proto__Command__KeyValue;
 typedef struct _Com__Seagate__Kinetic__Proto__Command__Range Com__Seagate__Kinetic__Proto__Command__Range;
@@ -598,10 +599,47 @@ struct  _Com__Seagate__Kinetic__Proto__Command__Body
    * Perform Pin-based operations
    */
   Com__Seagate__Kinetic__Proto__Command__PinOperation *pinop;
+  /*
+   * batch operation
+   * This is included in the END_BATCH and END_BATCH_RESPONSE.
+   */
+  Com__Seagate__Kinetic__Proto__Command__Batch *batch;
 };
 #define COM__SEAGATE__KINETIC__PROTO__COMMAND__BODY__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__body__descriptor) \
-    , NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+    , NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
+
+
+/*
+ * This is included in the END_BATCH and END_BATCH_RESPONSE.
+ */
+struct  _Com__Seagate__Kinetic__Proto__Command__Batch
+{
+  ProtobufCMessage base;
+  /*
+   * set by the client library in END_BATCH request message.
+   * the total number of operations in the batch
+   */
+  protobuf_c_boolean has_count;
+  int32_t count;
+  /*
+   * set by the drive in END_BATCH_RESPONSE message.
+   * If a batch is committed successfully, all sequence Ids of those
+   * commands (PUT/DELETE) performed in the batch are
+   * added in the END_BATCH_RESPONSE message.
+   */
+  size_t n_sequence;
+  int64_t *sequence;
+  /*
+   * This field is set by the drive if a batch commit failed.
+   * The first failed operation sequence in the batch is set as value.
+   */
+  protobuf_c_boolean has_failedsequence;
+  int64_t failedsequence;
+};
+#define COM__SEAGATE__KINETIC__PROTO__COMMAND__BATCH__INIT \
+ { PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__batch__descriptor) \
+    , 0,0, 0,NULL, 0,0 }
 
 
 /*
@@ -1038,8 +1076,8 @@ struct  _Com__Seagate__Kinetic__Proto__Command__GetLog__Limits
   uint32_t maxpinsize;
   protobuf_c_boolean has_maxoperationcountperbatch;
   uint32_t maxoperationcountperbatch;
-  protobuf_c_boolean has_maxbatchcountperconnection;
-  uint32_t maxbatchcountperconnection;
+  protobuf_c_boolean has_maxbatchcountperdevice;
+  uint32_t maxbatchcountperdevice;
 };
 #define COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__LIMITS__INIT \
  { PROTOBUF_C_MESSAGE_INIT (&com__seagate__kinetic__proto__command__get_log__limits__descriptor) \
@@ -1267,6 +1305,9 @@ void   com__seagate__kinetic__proto__command__header__init
 /* Com__Seagate__Kinetic__Proto__Command__Body methods */
 void   com__seagate__kinetic__proto__command__body__init
                      (Com__Seagate__Kinetic__Proto__Command__Body         *message);
+/* Com__Seagate__Kinetic__Proto__Command__Batch methods */
+void   com__seagate__kinetic__proto__command__batch__init
+                     (Com__Seagate__Kinetic__Proto__Command__Batch         *message);
 /* Com__Seagate__Kinetic__Proto__Command__Status methods */
 void   com__seagate__kinetic__proto__command__status__init
                      (Com__Seagate__Kinetic__Proto__Command__Status         *message);
@@ -1366,6 +1407,9 @@ typedef void (*Com__Seagate__Kinetic__Proto__Command__Header_Closure)
 typedef void (*Com__Seagate__Kinetic__Proto__Command__Body_Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__Body *message,
                   void *closure_data);
+typedef void (*Com__Seagate__Kinetic__Proto__Command__Batch_Closure)
+                 (const Com__Seagate__Kinetic__Proto__Command__Batch *message,
+                  void *closure_data);
 typedef void (*Com__Seagate__Kinetic__Proto__Command__Status_Closure)
                  (const Com__Seagate__Kinetic__Proto__Command__Status *message,
                   void *closure_data);
@@ -1443,6 +1487,7 @@ extern const ProtobufCEnumDescriptor    com__seagate__kinetic__proto__message__a
 extern const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__descriptor;
 extern const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__header__descriptor;
 extern const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__body__descriptor;
+extern const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__batch__descriptor;
 extern const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__status__descriptor;
 extern const ProtobufCEnumDescriptor    com__seagate__kinetic__proto__command__status__status_code__descriptor;
 extern const ProtobufCMessageDescriptor com__seagate__kinetic__proto__command__key_value__descriptor;
