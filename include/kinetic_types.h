@@ -166,7 +166,7 @@ typedef enum {
     KINETIC_STATUS_SESSION_INVALID,         ///< Session configuration was invalid or NULL
     KINETIC_STATUS_HOST_EMPTY,              ///< Host was empty in request
     KINETIC_STATUS_HMAC_REQUIRED,           ///< HMAC key is empty or NULL
-    KINETIC_STATUS_NO_PDUS_AVAVILABLE,      ///< All PDUs for the session have been allocated
+    KINETIC_STATUS_NO_PDUS_AVAILABLE,      ///< All PDUs for the session have been allocated
     KINETIC_STATUS_DEVICE_BUSY,             ///< Device busy (retry later)
     KINETIC_STATUS_CONNECTION_ERROR,        ///< No connection/disconnected
     KINETIC_STATUS_INVALID_REQUEST,         ///< Something about the request is invalid

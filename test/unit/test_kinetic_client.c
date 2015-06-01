@@ -59,10 +59,10 @@ void tearDown(void)
 
 void test_KineticClient_Version_should_return_pointer_to_static_version_info(void)
 {
-    KineticVersionInfo info = KineticClient_Version();
-    TEST_ASSERT_EQUAL_STRING(KINETIC_C_VERSION, info.version);
-    TEST_ASSERT_EQUAL_STRING(KINETIC_C_PROTOCOL_VERSION, info.protocolVersion);
-    TEST_ASSERT_EQUAL_STRING(KINETIC_C_REPO_HASH, info.repoCommitHash);
+    KineticVersionInfo *info = (KineticVersionInfo *) KineticClient_Version();
+    TEST_ASSERT_EQUAL_STRING(KINETIC_C_VERSION, info->version);
+    TEST_ASSERT_EQUAL_STRING(KINETIC_C_PROTOCOL_VERSION, info->protocolVersion);
+    TEST_ASSERT_EQUAL_STRING(KINETIC_C_REPO_HASH, info->repoCommitHash);
 }
 
 void test_KineticClient_Init_should_initialize_the_message_bus_and_return_a_new_client(void)

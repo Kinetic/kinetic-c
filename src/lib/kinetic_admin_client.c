@@ -222,7 +222,7 @@ KineticStatus KineticAdminClient_GetDeviceSpecificLog(KineticSession * const ses
     return KineticController_ExecuteOperation(operation, closure);
 }
 
-void KineticClient_FreeLogInfo(KineticSession * const session,
+void KineticAdminClient_FreeLogInfo(KineticSession * const session,
                                   KineticLogInfo* info)
 {
     KINETIC_ASSERT(session != NULL);

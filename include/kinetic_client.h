@@ -28,17 +28,17 @@
  * 
  * @return Returns a pointer to static version info
  */
-KineticVersionInfo KineticClient_Version(void);
+const KineticVersionInfo * KineticClient_Version(void);
 
 /**
- * @brief Initializes the Kinetic API and configures logging.
+ * Initializes the Kinetic API and configures logging.
  *
  * @param config A configuration struct.
  *
  * @return          Returns a pointer to a KineticClient. You need to pass 
  *                  this pointer to KineticClient_CreateSession() to create 
  *                  new connections. 
- *                  Once you are finished with the KineticClient, and there
+ *                  Once you are finished will the KineticClient, and there
  *                  are no active connections. The pointer should be release
  *                  with KineticClient_Shutdown()
  */

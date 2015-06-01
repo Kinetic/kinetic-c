@@ -39,9 +39,9 @@ static const KineticVersionInfo VersionInfo = {
     .repoCommitHash = KINETIC_C_REPO_HASH,
 };
 
-KineticVersionInfo KineticClient_Version(void)
+const KineticVersionInfo * KineticClient_Version(void)
 {
-    return VersionInfo;
+    return &VersionInfo;
 }
 
 KineticClient * KineticClient_Init(KineticClientConfig *config)

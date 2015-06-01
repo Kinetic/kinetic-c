@@ -30,7 +30,7 @@ static ByteBuffer ValueBuffer;
 
 void setUp(void)
 {
-    SystemTestSetup(1);
+    SystemTestSetup(1, true);
 
     KeyBuffer = ByteBuffer_CreateAndAppendCString(KeyData, sizeof(KeyData), "DELETE test key");
     TagBuffer = ByteBuffer_CreateAndAppendCString(TagData, sizeof(TagData), "SomeTagValue");

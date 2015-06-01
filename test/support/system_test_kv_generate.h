@@ -17,27 +17,14 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 *
 */
-#include "system_test_fixture.h"
-#include "kinetic_client.h"
+#ifndef _SYSTEM_TEST_KV_GENERATE
+#define _SYSTEM_TEST_KV_GENERATE
 
-void setUp(void)
-{
-    SystemTestSetup(3, true);
-}
+#include <stdint.h>
+#include "byte_array.h"
 
-void tearDown(void)
-{
-    SystemTestShutDown();
-}
+ByteBuffer generate_entry_key_by_index(uint32_t index);
+ByteBuffer generate_entry_value_by_index(uint32_t index);
+ByteBuffer get_generated_value_by_key(ByteBuffer* key);
 
-void test_NoOp_should_succeed(void)
-{
-    KineticStatus status = KineticClient_NoOp(Fixture.session);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-}
-
-void test_NoOp_should_succeed_again(void)
-{
-    KineticStatus status = KineticClient_NoOp(Fixture.session);
-    TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
-}
+#endif  //_UNITY_KV_GENERATE

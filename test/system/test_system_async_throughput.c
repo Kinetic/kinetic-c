@@ -27,7 +27,7 @@
 
 void setUp(void)
 {
-    SystemTestSetup(1);
+    SystemTestSetup(1, true);
 }
 
 void tearDown(void)
