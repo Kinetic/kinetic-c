@@ -169,6 +169,11 @@ KineticStatus KineticClient_Put(KineticSession* const session,
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
     KINETIC_ASSERT(operation->session == session);
 
+    // If synchronization field was not set, use write through as default
+    if (entry->synchronization <= 0) {
+        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
+    }
+
     // Initialize request
     KineticStatus status = KineticBuilder_BuildPut(operation, entry);
     if (status != KINETIC_STATUS_SUCCESS) {
@@ -280,6 +285,11 @@ KineticStatus KineticClient_Delete(KineticSession* const session,
 
     KineticOperation* operation = KineticAllocator_NewOperation(session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+    // If synchronization field was not set, use write through as default
+    if (entry->synchronization <= 0) {
+        entry->synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH;
+    }
 
     // Initialize request
     KineticBuilder_BuildDelete(operation, entry);

@@ -41,7 +41,7 @@ KineticBatch_Operation * batchOp;
 
 void setUp(void)
 {
-    SystemTestSetup(1);
+    SystemTestSetup(1, true);
 
     foo_value = ByteBuffer_MallocAndAppend(foo_value_data, sizeof(foo_value_data));
     foo_key = ByteBuffer_MallocAndAppend(foo_key_data, sizeof(foo_key_data));
