@@ -22,12 +22,6 @@
 #include <stdlib.h>
 #include <openssl/sha.h>
 
-static void put_delete_finished(KineticCompletionData* kinetic_data, void* client_data)
-{
-	assert(kinetic_data->status == KINETIC_STATUS_SUCCESS);
-	assert(client_data == NULL);
-}
-
 int main(int argc, char** argv)
 {
     (void)argc;
@@ -102,10 +96,7 @@ int main(int argc, char** argv)
         exit(1);
     }
 
-    status = KineticClient_BatchDelete(batchOp, &delete_foo_entry, &(KineticCompletionClosure) {
-        .callback = put_delete_finished,
-        .clientData = NULL,
-    });
+    status = KineticClient_BatchDelete(batchOp, &delete_foo_entry);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Batch delete failed w/status: %s\n", Kinetic_GetStatusDescription(status));
         exit(1);
@@ -118,10 +109,7 @@ int main(int argc, char** argv)
         .value = bar_value,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_BatchPut(batchOp, &put_bar_entry, &(KineticCompletionClosure) {
-        .callback = put_delete_finished,
-        .clientData = NULL,
-    });
+    status = KineticClient_BatchPut(batchOp, &put_bar_entry);
     if (status != KINETIC_STATUS_SUCCESS) {
         fprintf(stderr, "Batch put failed w/status: %s\n", Kinetic_GetStatusDescription(status));
         exit(1);

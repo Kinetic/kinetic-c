@@ -84,12 +84,6 @@ void tearDown(void)
     SystemTestShutDown();
 }
 
-static void put_delete_finished(KineticCompletionData* kinetic_data,void* client_data)
-{
-	TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, kinetic_data->status);
-	TEST_ASSERT_NULL(client_data);
-}
-
 void test_batch_put_delete_should_put_delete_objects_after_batch_end(void)
 {
     KineticEntry put_foo_entry = {
@@ -112,10 +106,7 @@ void test_batch_put_delete_should_put_delete_objects_after_batch_end(void)
     status = KineticClient_BatchStart(batchOp);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    status = KineticClient_BatchDelete(batchOp, &delete_foo_entry, &(KineticCompletionClosure) {
-        .callback = put_delete_finished,
-        .clientData = NULL,
-    });
+    status = KineticClient_BatchDelete(batchOp, &delete_foo_entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     KineticEntry put_bar_entry = {
@@ -125,10 +116,7 @@ void test_batch_put_delete_should_put_delete_objects_after_batch_end(void)
         .value = bar_value,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_BatchPut(batchOp, &put_bar_entry, &(KineticCompletionClosure) {
-        .callback = put_delete_finished,
-        .clientData = NULL,
-    });
+    status = KineticClient_BatchPut(batchOp, &put_bar_entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Commit the batch
@@ -190,10 +178,7 @@ void test_batch_put_delete_should_not_put_delete_objects_after_batch_abort(void)
     status = KineticClient_BatchStart(batchOp);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
-    status = KineticClient_BatchDelete(batchOp, &delete_foo_entry, &(KineticCompletionClosure) {
-        .callback = put_delete_finished,
-        .clientData = NULL,
-    });
+    status = KineticClient_BatchDelete(batchOp, &delete_foo_entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     KineticEntry put_bar_entry = {
@@ -203,10 +188,7 @@ void test_batch_put_delete_should_not_put_delete_objects_after_batch_abort(void)
         .value = bar_value,
         .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
-    status = KineticClient_BatchPut(batchOp, &put_bar_entry, &(KineticCompletionClosure) {
-        .callback = put_delete_finished,
-        .clientData = NULL,
-    });
+    status = KineticClient_BatchPut(batchOp, &put_bar_entry);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 
     // Abort the batch

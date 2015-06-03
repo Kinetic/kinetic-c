@@ -119,15 +119,18 @@ static bool create_entries(KineticSession * const session, const int count)
     static const ssize_t sz = 20;
     char key_buf[sz];
     char value_buf[sz];
+    char tag_buf[sz];
 
     for (int i = 0; i < count; i++) {
 
         ByteBuffer KeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "key_prefix_%02d", i);
         ByteBuffer ValueBuffer = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%02d", i);
+        ByteBuffer TagBuffer = ByteBuffer_CreateAndAppendFormattedCString(tag_buf, sz, "tag_%02d", i);
 
         KineticEntry entry = {
             .key = KeyBuffer,
             .value = ValueBuffer,
+			.tag = TagBuffer,
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .force = true,
         };

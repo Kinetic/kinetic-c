@@ -292,8 +292,7 @@ KineticBatch_Operation * KineticClient_InitBatchOperation(KineticSession* const 
  * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_BatchPut(KineticBatch_Operation* const batchOp,
-                                     KineticEntry* const entry,
-                                     KineticCompletionClosure* closure);
+                                     KineticEntry* const entry);
 
 /**
  * @brief Executes a `DELETE` operation to delete an entry from the Kinetic Device.
@@ -309,8 +308,7 @@ KineticStatus KineticClient_BatchPut(KineticBatch_Operation* const batchOp,
  * @return              Returns the resulting KineticStatus.
  */
 KineticStatus KineticClient_BatchDelete(KineticBatch_Operation* const batchOp,
-                                        KineticEntry* const entry,
-                                        KineticCompletionClosure* closure);
+                                        KineticEntry* const entry);
 
 /**
  * @brief Start the batch operation.

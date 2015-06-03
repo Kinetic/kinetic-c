@@ -44,6 +44,18 @@ const KineticVersionInfo * KineticClient_Version(void)
     return &VersionInfo;
 }
 
+static void put_delete_finished(KineticCompletionData* kinetic_data, void* client_data)
+{
+	free(kinetic_data);
+	free(client_data);
+	// Do nothing, actually, batch put and deletion does not have any responses
+}
+
+static KineticCompletionClosure do_nothing_closure = {
+        .callback = put_delete_finished,
+        .clientData = NULL,
+};
+
 KineticClient * KineticClient_Init(KineticClientConfig *config)
 {
     KineticLogger_Init(config->logFile, config->logLevel);
@@ -354,8 +366,7 @@ KineticBatch_Operation * KineticClient_InitBatchOperation(KineticSession* const 
 }
 
 KineticStatus KineticClient_BatchPut(KineticBatch_Operation* const batchOp,
-                                     KineticEntry* const entry,
-                                     KineticCompletionClosure* closure){
+                                     KineticEntry* const entry){
 	KINETIC_ASSERT(batchOp);
 	KINETIC_ASSERT(batchOp->session);
 
@@ -363,11 +374,6 @@ KineticStatus KineticClient_BatchPut(KineticBatch_Operation* const batchOp,
     if (entry->value.array.len > 0) {
         KINETIC_ASSERT(entry->value.array.data);
     }
-
-	if (closure == NULL)
-	{
-		return KINETIC_STATUS_OPERATION_INVALID;
-	}
 
     KineticOperation* operation = KineticAllocator_NewOperation(batchOp->session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -380,20 +386,14 @@ KineticStatus KineticClient_BatchPut(KineticBatch_Operation* const batchOp,
     }
 
     // Execute the operation
-    return KineticController_ExecuteOperation(operation, closure);
+    return KineticController_ExecuteOperation(operation, &do_nothing_closure);
 }
 
 KineticStatus KineticClient_BatchDelete(KineticBatch_Operation* const batchOp,
-                                        KineticEntry* const entry,
-                                        KineticCompletionClosure* closure){
+                                        KineticEntry* const entry){
     KINETIC_ASSERT(batchOp);
    	KINETIC_ASSERT(batchOp->session);
    	KINETIC_ASSERT(entry);
-
-   	if (closure == NULL)
-   	{
-   		return KINETIC_STATUS_OPERATION_INVALID;
-   	}
 
    	KineticOperation* operation = KineticAllocator_NewOperation(batchOp->session);
     if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
@@ -406,7 +406,7 @@ KineticStatus KineticClient_BatchDelete(KineticBatch_Operation* const batchOp,
     }
 
     // Execute the operation
-    return KineticController_ExecuteOperation(operation, closure);
+    return KineticController_ExecuteOperation(operation, &do_nothing_closure);
 }
 
 KineticStatus KineticClient_BatchStart(KineticBatch_Operation* const batchOp){
