@@ -143,6 +143,7 @@ bool KineticRequest_SendRequest(KineticOperation *operation,
         .cb       = KineticController_HandleResult,
         .udata    = operation,
         .timeout_sec = operation->timeoutSeconds,
+		.no_response = operation->no_response,
     };
     return Bus_SendRequest(operation->session->messageBus, &bus_msg);
 }

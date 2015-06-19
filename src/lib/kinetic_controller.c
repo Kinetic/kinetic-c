@@ -247,38 +247,41 @@ void KineticController_HandleResult(bus_msg_result_t *res, void *udata)
     KINETIC_ASSERT(op);
     KINETIC_ASSERT(op->session);
 
+
     KineticStatus status = bus_to_kinetic_status(res->status);
 
-    if (status == KINETIC_STATUS_SUCCESS) {
-        KineticResponse * response = res->u.response.opaque_msg;
+    if (!op->no_response)
+    {
+        if (status == KINETIC_STATUS_SUCCESS) {
+            KineticResponse * response = res->u.response.opaque_msg;
 
-        status = KineticResponse_GetStatus(response);
+            status = KineticResponse_GetStatus(response);
 
-        LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
-            "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
-            (void*)response,
-            (void*)op->session, (void*)op->session->messageBus,
-            op->session->socket, response->command->header->acksequence,
-            KineticResponse_GetProtobufLength(response),
-            KineticResponse_GetValueLength(response),
-            (void*)op,
-            Kinetic_GetStatusDescription(status));
-        KineticLogger_LogHeader(3, &response->header);
-        KineticLogger_LogProtobuf(3, response->proto);
-
-        if (op->response == NULL) {
-            op->response = response;
+            LOGF2("[PDU RX] pdu: %p, session: %p, bus: %p, "
+                "fd: %6d, seq: %8lld, protoLen: %8u, valueLen: %8u, op: %p, status: %s",
+                (void*)response,
+                (void*)op->session, (void*)op->session->messageBus,
+                op->session->socket, response->command->header->acksequence,
+                KineticResponse_GetProtobufLength(response),
+                KineticResponse_GetValueLength(response),
+                (void*)op,
+                Kinetic_GetStatusDescription(status));
+            KineticLogger_LogHeader(3, &response->header);
+            KineticLogger_LogProtobuf(3, response->proto);
+    	        if (op->response == NULL) {
+   	            op->response = response;
+            }
+        } else {
+            LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
+            if (res->status == BUS_SEND_RX_TIMEOUT) {
+                LOG0("RX_TIMEOUT");
+            }
         }
-    } else {
-        LOGF0("Error receiving response, got message bus error: %s", bus_error_string(res->status));
-        if (res->status == BUS_SEND_RX_TIMEOUT) {
-            LOG0("RX_TIMEOUT");
-        }
-    }
 
-    // Call operation-specific callback, if configured
-    if (op->opCallback != NULL) {
-        status = op->opCallback(op, status);
+        // Call operation-specific callback, if configured
+        if (op->opCallback != NULL) {
+            status = op->opCallback(op, status);
+        }
     }
 
     KineticOperation_Complete(op, status);

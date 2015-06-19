@@ -42,6 +42,8 @@ typedef struct boxed_msg {
     /** Message send timeout. */
     time_t timeout_sec;
 
+    bool no_response;
+
     /** Callback and userdata to which the bus_msg_result_t above will be sunk. */
     bus_msg_cb *cb;
     void *udata;

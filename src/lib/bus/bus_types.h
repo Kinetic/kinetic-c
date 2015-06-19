@@ -241,7 +241,7 @@ typedef struct {
     uint8_t *msg;
     size_t msg_size;
     uint16_t timeout_sec;
-
+    bool no_response;
     bus_msg_cb *cb;
     void *udata;
 } bus_user_msg;

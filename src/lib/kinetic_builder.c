@@ -119,6 +119,7 @@ KineticStatus KineticBuilder_BuildBatchDelete(KineticOperation* const op,
     	return status;
     }
 
+    op->no_response = true;
     op->request->message.command.header->has_batchid = true;
     op->request->message.command.header->batchid = batchOp->batchId;
 
@@ -135,6 +136,7 @@ KineticStatus KineticBuilder_BuildBatchPut(KineticOperation* const op,
     	return status;
     }
 
+    op->no_response = true;
     op->request->message.command.header->has_batchid = true;
     op->request->message.command.header->batchid = batchOp->batchId;
 

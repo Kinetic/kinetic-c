@@ -46,9 +46,8 @@ const KineticVersionInfo * KineticClient_Version(void)
 
 static void put_delete_finished(KineticCompletionData* kinetic_data, void* client_data)
 {
-	free(kinetic_data);
-	free(client_data);
-	// Do nothing, actually, batch put and deletion does not have any responses
+	assert(kinetic_data == NULL);
+	assert(client_data == NULL);
 }
 
 static KineticCompletionClosure do_nothing_closure = {

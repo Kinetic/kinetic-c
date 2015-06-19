@@ -131,7 +131,9 @@ static void tick_handler(listener *l) {
         }
     }
     
-    if (b->log_level > 5 || 0) { ListenerTask_DumpRXInfoTable(l); }
+    if (b->log_level > 5 || 0) {
+        ListenerTask_DumpRXInfoTable(l);
+    }
 
     for (int i = 0; i <= l->rx_info_max_used; i++) {
         rx_info_t *info = &l->rx_info[i];
@@ -168,6 +170,13 @@ static void tick_handler(listener *l) {
             }
             break;
         case RIS_EXPECT:
+        	if (info->u.expect.box->no_response)
+        	{
+                info->u.expect.error = RX_ERROR_DONE;
+                info->u.expect.box->result.status = BUS_SEND_SUCCESS;
+                clean_up_completed_info(l, info);
+        	}
+
             any_work = true;
             if (info->u.expect.error == RX_ERROR_READY_FOR_DELIVERY) {
                 BUS_LOG(b, 4, LOG_LISTENER,

@@ -33,7 +33,7 @@
 #include <time.h>
 #include <pthread.h>
 
-#define KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION (10)
+#define KINETIC_MAX_OUTSTANDING_OPERATIONS_PER_SESSION (100)
 #define KINETIC_SOCKET_DESCRIPTOR_INVALID (-1)
 #define KINETIC_CONNECTION_TIMEOUT_SECS (30) /* Java simulator may take longer than 10 seconds to respond */
 #define KINETIC_OPERATION_TIMEOUT_SECS (20)
@@ -190,6 +190,7 @@ struct _KineticOperation {
     KineticOperationCallback opCallback;
     KineticCompletionClosure closure;
     ByteArray value;
+    bool no_response;
 };
 
 

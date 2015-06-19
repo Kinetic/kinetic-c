@@ -93,6 +93,8 @@ KineticOperation* KineticAllocator_NewOperation(KineticSession* const session)
         LOGF0("Failed allocating new operation on session %p", (void*)session);
         return NULL;
     }
+
+    newOperation->no_response = false;
     newOperation->session = session;
     newOperation->timeoutSeconds = session->timeoutSeconds; // TODO: use timeout in config throughput
     newOperation->request = (KineticRequest*)KineticCalloc(1, sizeof(KineticRequest));

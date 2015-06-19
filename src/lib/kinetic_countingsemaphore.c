@@ -73,7 +73,11 @@ void KineticCountingSemaphore_Give(KineticCountingSemaphore * const sem) // SIGN
     pthread_mutex_unlock(&sem->mutex);
     
     LOGF3("Concurrent ops throttle -- GIVE: %u => %u (waiting=%u)", before, after, waiting);
-    KINETIC_ASSERT(sem->max >= after);
+#define FLOW_CONTROL_WAIT_TIME 1
+    if (sem->max < after)
+    {
+    	sleep(FLOW_CONTROL_WAIT_TIME);
+    }
 }
 
 void KineticCountingSemaphore_Destroy(KineticCountingSemaphore * const sem)
