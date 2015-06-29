@@ -7,6 +7,8 @@ Reference code is included as part of the [kinetic-c client library test utility
 
 The [project Makefile](Makefile) can be used as a reference for developing a Makefile-based project for building for a custom Kinetic Storage C client driver and/or a high-level C library.
 
+The C library currently does not support Windows at this time because of existing library requirements. If you need Windows please post an issue.
+
 Kinetic Protocol Support
 ------------------------
 Built using:
