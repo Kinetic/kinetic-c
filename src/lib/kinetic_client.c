@@ -48,7 +48,10 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
 {
     KineticLogger_Init(config->logFile, config->logLevel);
     KineticClient * client = KineticCalloc(1, sizeof(*client));
-    if (client == NULL) { return NULL; }
+    if (client == NULL) { 
+        KineticLogger_Close();
+        return NULL; 
+    }
 
     /* Use defaults if set to 0. */
     if (config->readerThreads == 0) {
@@ -61,6 +64,7 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
     bool success = KineticBus_Init(client, config);
     if (!success) {
         KineticFree(client);
+        KineticLogger_Close();
         return NULL;
     }
     return client;
