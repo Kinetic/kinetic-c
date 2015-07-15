@@ -133,6 +133,7 @@ void test_Flush_should_flush_pending_PUTs_and_DELETEs(void)
     // Do an async DELETE so we can flush to complete it
     KineticEntry deleteEntry = {
         .key = keyBuffer1,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
     KineticCompletionClosure no_op_closure = {
         .callback = &no_op_callback,

@@ -79,6 +79,7 @@ void test_Delete_should_delete_an_object_from_device(void)
     // Delete the object
     KineticEntry deleteEntry = {
         .key = KeyBuffer,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
     status = KineticClient_Delete(Fixture.session, &deleteEntry, NULL);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
