@@ -26,6 +26,8 @@
 /* Operations with non-standard timeouts. */
 typedef enum {
     KineticOperation_TimeoutSetACL = 30,
+	KineticOperation_TimeoutMediaScan = 30,
+	KineticOperation_TimeoutMediaOptimize = 30,
     KineticOperation_TimeoutSetPin = 30,
     KineticOperation_TimeoutLockUnlock = 30,
     KineticOperation_TimeoutErase = 180,
@@ -66,6 +68,10 @@ KineticStatus KineticBuilder_BuildSetACL(KineticOperation* const op,
     struct ACL *ACLs);
 KineticStatus KineticBuilder_BuildSetClusterVersion(KineticOperation* const op,
     int64_t new_cluster_version);
+KineticStatus KineticBuilder_BuildMediaScan(KineticOperation* const op,
+	const KineticMediaScan_Operation* mediascan_operation, KineticCommand_Priority priority);
+KineticStatus KineticBuilder_BuildMediaOptimize(KineticOperation* const op,
+	const KineticMediaOptimize_Operation* mediaoptimize_operation, KineticCommand_Priority priority);
 KineticStatus KineticBuilder_BuildUpdateFirmware(KineticOperation* const op,
     const char* fw_path);
 

@@ -30,6 +30,7 @@
 #include "kinetic_request.h"
 #include "kinetic_acl.h"
 #include "kinetic_callbacks.h"
+#include "kinetic_types_internal.h"
 
 #include <stdlib.h>
 #include <errno.h>
@@ -413,6 +414,80 @@ KineticStatus KineticBuilder_BuildSetACL(KineticOperation* const op,
 
     op->opCallback = &KineticCallbacks_SetACL;
     op->timeoutSeconds = KineticOperation_TimeoutSetACL;
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
+static void initRangeAndPriority(KineticOperation* const op,
+		const struct KineticMedia_Operation* media_operation, KineticCommand_Priority priority)
+{
+    op->request->message.command.header->has_messagetype = true;
+    op->request->command->body = &op->request->message.body;
+    op->request->command->body->security = &op->request->message.security;
+    op->request->command->body->range = &op->request->message.keyRange;
+
+    char *data = media_operation->start_key == NULL ? "" : media_operation->start_key;
+    op->request->command->body->range->has_startkey = true;
+    op->request->command->body->range->startkey = (ProtobufCBinaryData) {
+        .data = (uint8_t *)data,
+        .len = strlen(data),
+    };
+
+    data = media_operation->end_key == NULL ? "" : media_operation->end_key;
+    op->request->command->body->range->has_endkey = true;
+    op->request->command->body->range->endkey = (ProtobufCBinaryData) {
+        .data = (uint8_t *)data,
+        .len = strlen(data),
+    };
+
+    op->request->command->body->range->startkeyinclusive = media_operation->start_key_inclusive;
+    op->request->command->body->range->endkeyinclusive = media_operation->end_key_inclusive;
+    op->request->command->body->range->has_startkeyinclusive = true;
+    op->request->command->body->range->has_endkeyinclusive = true;
+
+    switch(priority)
+    {
+    case PRIORITY_NORMAL:
+    	op->request->command->header->priority = COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__NORMAL;
+    	break;
+    case PRIORITY_LOWEST:
+    	op->request->command->header->priority = COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__LOWEST;
+    	break;
+    case PRIORITY_LOWER:
+    	op->request->command->header->priority = COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__LOWER;
+    	break;
+    case PRIORITY_HIGHER:
+    	op->request->command->header->priority = COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__HIGHER;
+    	break;
+    case PRIORITY_HIGHEST:
+    	op->request->command->header->priority = COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__HIGHEST;
+    	break;
+    default:
+    	op->request->command->header->priority = COM__SEAGATE__KINETIC__PROTO__COMMAND__PRIORITY__NORMAL;
+    	break;
+    }
+}
+
+KineticStatus KineticBuilder_BuildMediaScan(KineticOperation* const op,
+	const KineticMediaScan_Operation* mediascan_operation, KineticCommand_Priority priority)
+{
+    KineticOperation_ValidateOperation(op);
+
+    op->request->message.command.header->messagetype = COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIASCAN;
+    initRangeAndPriority(op, mediascan_operation, priority);
+    op->timeoutSeconds = KineticOperation_TimeoutMediaScan;
+
+    return KINETIC_STATUS_SUCCESS;
+}
+
+KineticStatus KineticBuilder_BuildMediaOptimize(KineticOperation* const op,
+	const KineticMediaOptimize_Operation* mediaoptimize_operation, KineticCommand_Priority priority)
+{
+    KineticOperation_ValidateOperation(op);
+
+    op->request->message.command.header->messagetype = COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIASCAN;
+    initRangeAndPriority(op, mediaoptimize_operation, priority);
+    op->timeoutSeconds = KineticOperation_TimeoutMediaOptimize;
 
     return KINETIC_STATUS_SUCCESS;
 }
