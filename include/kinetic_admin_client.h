@@ -236,4 +236,26 @@ KineticStatus KineticAdminClient_SetACL(KineticSession * const session,
 KineticStatus KineticAdminClient_UpdateFirmware(KineticSession * const session,
     char const * const fw_path);
 
+/**
+ * @brief Executes a `Media Scan` operation to perform media scan operation to the Kinetic drive.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ * @param operation     KineticMediaScan_Operation pointer..
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_MediaScan(KineticSession * const session,
+	const KineticMediaScan_Operation* operation, KineticCommand_Priority priority);
+
+/**
+ * @brief Executes a `Media Optimize` operation to perform media optimize operation to the Kinetic drive.
+ *
+ * @param session       The connected KineticSession to use for the operation.
+ * @param operation     KineticMediaOptimize_Operation pointer..
+ *
+ * @return              Returns the resulting KineticStatus.
+ */
+KineticStatus KineticAdminClient_MediaOptimize(KineticSession * const session,
+	const KineticMediaOptimize_Operation* operation, KineticCommand_Priority priority);
+
 #endif // _KINETIC_ADMIN_CLIENT_H

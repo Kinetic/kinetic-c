@@ -288,3 +288,35 @@ KineticStatus KineticAdminClient_UpdateFirmware(KineticSession * const session,
     
     return KineticController_ExecuteOperation(operation, NULL);
 }
+
+KineticStatus KineticAdminClient_MediaScan(KineticSession * const session,
+	const KineticMediaScan_Operation* mediascan_operation, KineticCommand_Priority priority) {
+	KINETIC_ASSERT(session != NULL);
+
+	KineticOperation* operation = KineticAllocator_NewOperation(session);
+	if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+
+	KineticStatus status = KineticBuilder_BuildMediaScan(operation, mediascan_operation, priority);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        return status;
+    }
+
+    return KineticController_ExecuteOperation(operation, NULL);
+}
+
+KineticStatus KineticAdminClient_MediaOptimize(KineticSession * const session,
+	const KineticMediaOptimize_Operation* mediaoptimize_operation, KineticCommand_Priority priority) {
+	KINETIC_ASSERT(session != NULL);
+
+	KineticOperation* operation = KineticAllocator_NewOperation(session);
+	if (operation == NULL) {return KINETIC_STATUS_MEMORY_ERROR;}
+
+
+	KineticStatus status = KineticBuilder_BuildMediaOptimize(operation, mediaoptimize_operation, priority);
+    if (status != KINETIC_STATUS_SUCCESS) {
+        return status;
+    }
+
+    return KineticController_ExecuteOperation(operation, NULL);
+}

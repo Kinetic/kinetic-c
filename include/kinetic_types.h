@@ -473,6 +473,21 @@ struct _KineticP2P_Operation {
     KineticP2P_OperationData* operations; ///> Pointer to operations array which must remain valid until operations complete
 };
 
+typedef struct KineticMedia_Operation{
+	char* start_key;
+	char* end_key;
+	bool start_key_inclusive;
+	bool end_key_inclusive;
+}KineticMediaScan_Operation, KineticMediaOptimize_Operation;
+
+typedef enum _KineticCommand_Priority{
+    PRIORITY_NORMAL,
+    PRIORITY_LOWEST,
+    PRIORITY_LOWER,
+    PRIORITY_HIGHER,
+    PRIORITY_HIGHEST
+} KineticCommand_Priority;
+
 /**
  * @brief Limit for P2P operations.
  */
