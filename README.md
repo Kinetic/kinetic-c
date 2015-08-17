@@ -9,6 +9,8 @@ The [project Makefile](Makefile) can be used as a reference for developing a Mak
 
 The C library currently does not support Windows at this time because of existing library requirements. If you need Windows please post an issue.
 
+> The library has been tested in OSX and Linux, currently it does **not** have support for Windows (see [#23](https://github.com/Seagate/kinetic-c/issues/23)).
+
 Kinetic Protocol Support
 ------------------------
 Built using:
