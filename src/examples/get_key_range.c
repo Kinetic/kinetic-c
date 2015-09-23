@@ -27,6 +27,7 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <sys/file.h>
+#include <openssl/sha.h>
 
 static bool create_entries(KineticSession * const session, const int count);
 
@@ -124,12 +125,20 @@ static bool create_entries(KineticSession * const session, const int count)
 
         ByteBuffer KeyBuffer = ByteBuffer_CreateAndAppendFormattedCString(key_buf, sz, "key_prefix_%02d", i);
         ByteBuffer ValueBuffer = ByteBuffer_CreateAndAppendFormattedCString(value_buf, sz, "val_%02d", i);
-
+        
+        /* Populate tag with SHA1 of value */
+        ByteBuffer put_tag_buf = ByteBuffer_Malloc(20);
+        uint8_t sha1[20];
+        SHA1(ValueBuffer.array.data, ValueBuffer.bytesUsed, &sha1[0]);
+        ByteBuffer_Append(&put_tag_buf, sha1, sizeof(sha1));
+        
         KineticEntry entry = {
             .key = KeyBuffer,
             .value = ValueBuffer,
+            .tag = put_tag_buf,
             .algorithm = KINETIC_ALGORITHM_SHA1,
             .force = true,
+            .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         };
 
         KineticStatus status = KineticClient_Put(session, &entry, NULL);
