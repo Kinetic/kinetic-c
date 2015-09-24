@@ -165,7 +165,7 @@ void KineticSocket_BeginPacket(int fd)
     int on = 1;
     setsockopt(fd, IPPROTO_TCP, TCP_CORK, &on, sizeof(on));
 #else
-    (void)socket;
+    (void)fd;
 #endif
 }
 
@@ -175,6 +175,6 @@ void KineticSocket_FinishPacket(int fd)
     int off = 0;
     setsockopt(fd, IPPROTO_TCP, TCP_CORK, &off, sizeof(off));
 #else
-    (void)socket;
+    (void)fd;
 #endif
 }
