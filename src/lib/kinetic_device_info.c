@@ -153,6 +153,11 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
         cfg->protocolSourceHash = copy_str(gcfg->protocolsourcehash);
         if (cfg->protocolSourceHash == NULL) { goto cleanup; }
 
+	if (gcfg->has_port)
+		cfg->port = gcfg->port;
+	if (gcfg->has_tlsport)
+		cfg->tlsPort = gcfg->tlsport;
+
         cfg->numInterfaces = gcfg->n_interface;
         cfg->interfaces = calloc(cfg->numInterfaces, sizeof(*cfg->interfaces));
         if (cfg->interfaces == NULL) { goto cleanup; }
