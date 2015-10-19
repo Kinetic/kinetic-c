@@ -1,7 +1,7 @@
-[![Build Status](http://travis-ci.org/Seagate/kinetic-c.png?branch=master)](http://travis-ci.org/Seagate/kinetic-c)
+[![Build Status](http://travis-ci.org/Kinetic/kinetic-c.png?branch=master)](http://travis-ci.org/Kinetic/kinetic-c)
 Kinetic C Client Library
 ========================
-The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
+The [Github kinetic-c Git repository](https://github.com/Kinetic/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
 
 Reference code is included as part of the [kinetic-c client library test utility (`kinetic-c-util`)](src/utility), which builds and links against the installed `kinetic-c-client` static library. [Additional examples](src/examples) are included for the various types of I/O operations (e.g. blocking/non-blocking, single/multi-threaded). See below for more details.
 
@@ -9,13 +9,13 @@ The [project Makefile](Makefile) can be used as a reference for developing a Mak
 
 The C library currently does not support Windows at this time because of existing library requirements. If you need Windows please post an issue.
 
-> The library has been tested in OSX and Linux, currently it does **not** have support for Windows (see [#23](https://github.com/Seagate/kinetic-c/issues/23)).
+> The library has been tested in OSX and Linux, currently it does **not** have support for Windows (see [#23](https://github.com/Kinetic/kinetic-c/issues/23)).
 
 Kinetic Protocol Support
 ------------------------
 Built using:
 
-* [Kinetic Protocol v3.0.5](https://github.com/Seagate/kinetic-protocol/tree/3.0.5)
+* [Kinetic Protocol v3.0.5](https://github.com/Kinetic/kinetic-protocol/tree/3.0.5)
 * [ProtoBuf-C v1.1.0](https://github.com/protobuf-c/protobuf-c)
 * [Google ProtoBuf v2.6.0](https://developers.google.com/protocol-buffers/docs/downloads)
 
@@ -54,7 +54,7 @@ Getting Started
 
 **Clone the repo**
 
-    > git clone --recursive https://github.com/seagate/kinetic-c.git
+    > git clone --recursive https://github.com/Kinetic/kinetic-c.git
     > cd kinetic-c
 
 **Update to the latest version (previously cloned)**
