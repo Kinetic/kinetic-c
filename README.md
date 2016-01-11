@@ -1,7 +1,7 @@
-[![Build Status](http://travis-ci.org/Seagate/kinetic-c.png?branch=master)](http://travis-ci.org/Seagate/kinetic-c)
+[![Build Status](http://travis-ci.org/Kinetic/kinetic-c.png?branch=master)](http://travis-ci.org/Kinetic/kinetic-c)
 Kinetic C Client Library
 ========================
-The [Github kinetic-c Git repository](https://github.com/Seagate/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
+The [Github kinetic-c Git repository](https://github.com/Kinetic/kinetic-c) contains code for producing Kinetic C clients for interacting with Kinetic storage object-based storage. The library uses the cross-platform Seagate Kinetic protocol for standardizing interaces between the Java simulator and Kinetic Device storage clusters.
 
 Reference code is included as part of the [kinetic-c client library test utility (`kinetic-c-util`)](src/utility), which builds and links against the installed `kinetic-c-client` static library. [Additional examples](src/examples) are included for the various types of I/O operations (e.g. blocking/non-blocking, single/multi-threaded). See below for more details.
 
@@ -11,7 +11,7 @@ Kinetic Protocol Support
 ------------------------
 Built using:
 
-* [Kinetic Protocol branch features/batch-operation](https://github.com/Seagate/kinetic-protocol/tree/features/batch-operation)
+* [Kinetic Protocol branch features/batch-operation](https://github.com/Kinetic/kinetic-protocol/tree/features/batch-operation)
 * [ProtoBuf-C v1.1.0](https://github.com/protobuf-c/protobuf-c)
 * [Google ProtoBuf v2.6.0](https://developers.google.com/protocol-buffers/docs/downloads)
 
@@ -50,7 +50,7 @@ Getting Started
 
 **Clone the repo**
 
-    > git clone --recursive https://github.com/seagate/kinetic-c.git
+    > git clone --recursive https://github.com/kinetic/kinetic-c.git
     > cd kinetic-c
 
 **Update to the latest version (previously cloned)**
@@ -77,10 +77,10 @@ Getting Started
 API Documentation
 =================
 
-[Kinetic-C API Documentation](http://seagate.github.io/kinetic-c/) (generated with Doxygen)
-* [Kinetic-C API](http://seagate.github.io/kinetic-c/kinetic__client_8h.html)
-* [Kinetic-C types](http://seagate.github.io/kinetic-c/kinetic__types_8h.html)
-* [ByteArray API](http://seagate.github.io/kinetic-c/byte__array_8h.html)
+[Kinetic-C API Documentation](http://kinetic.github.io/kinetic-c/) (generated with Doxygen)
+* [Kinetic-C API](http://kinetic.github.io/kinetic-c/kinetic__client_8h.html)
+* [Kinetic-C types](http://kinetic.github.io/kinetic-c/kinetic__types_8h.html)
+* [ByteArray API](http://kinetic.github.io/kinetic-c/byte__array_8h.html)
     * The ByteArray and ByteBuffer types are used for exchanging variable length byte-arrays with kinetic-c
         * e.g. object keys, object value data, etc.
 
