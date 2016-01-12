@@ -113,14 +113,27 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
 
     KineticLogInfo_Configuration *cfg = calloc(1, sizeof(*cfg));
     if (cfg) {
-        if (gcfg->has_serialnumber) {
+        
+	if (gcfg->has_serialnumber) {
+              cfg->serialNumber = copy_to_byte_array((uint8_t *)gcfg->serialnumber.data,
+                    gcfg->serialnumber.len);
+               if (cfg->serialNumber.data  == NULL) { goto cleanup; }
+        }
+        else {
             cfg->serialNumber = (ByteArray){0, 0};
         }
+
         if (gcfg->has_worldwidename) {
+            cfg->worldWideName  = copy_to_byte_array((uint8_t *)gcfg->worldwidename.data,
+                    gcfg->worldwidename.len);
+            if (cfg->worldWideName.data == NULL) { goto cleanup; }
+        }
+        else {
             cfg->worldWideName = (ByteArray){0, 0};
         }
 
         cfg->vendor = copy_str(gcfg->vendor);
+        
         if (cfg->vendor == NULL) { goto cleanup; }
         cfg->model = copy_str(gcfg->model);
         if (cfg->model == NULL) { goto cleanup; }
@@ -171,6 +184,9 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
     }
     return cfg;
 cleanup:
+    
+    free_byte_array(cfg->serialNumber);
+    free_byte_array(cfg->worldWideName);
     if (cfg->vendor) { free(cfg->vendor); }
     if (cfg->model) { free(cfg->model); }
     if (cfg->version) { free(cfg->version); }
