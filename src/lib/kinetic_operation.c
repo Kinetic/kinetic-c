@@ -99,7 +99,7 @@ static KineticStatus send_request_in_lock(KineticOperation* const op)
     }
     uint8_t * commandData = request->message.message.commandbytes.data;
 
-    log_request_seq_id(op->session->socket, seq_id, request->message.header.messagetype);
+    log_request_seq_id(op->session->socket, seq_id, (KineticMessageType)request->message.header.messagetype);
 
     KineticSession *session = op->session;
     KineticStatus status = KineticRequest_PopulateAuthentication(&session->config,

@@ -203,7 +203,7 @@ static KineticLogInfo_Statistics *KineticLogInfo_GetStatistics(
     *numStatistics = 0;
     if (stats) {
         for (size_t i = 0; i < num_stats; i++) {
-            stats[i].messageType = getLog->statistics[i]->messagetype;
+            stats[i].messageType = (KineticMessageType)getLog->statistics[i]->messagetype;
             if (getLog->statistics[i]->has_count) {
                 stats[i].count = getLog->statistics[i]->count;
             }
