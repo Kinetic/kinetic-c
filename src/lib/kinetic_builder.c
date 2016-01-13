@@ -482,7 +482,7 @@ KineticStatus KineticBuilder_BuildMediaOptimize(KineticOperation* const op,
 {
     KineticOperation_ValidateOperation(op);
 
-    op->request->message.command.header->messagetype = COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIASCAN;
+    op->request->message.command.header->messagetype = COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__MEDIAOPTIMIZE;
     initRangeAndPriority(op, mediaoptimize_operation, priority);
     op->timeoutSeconds = KineticOperation_TimeoutMediaOptimize;
 
