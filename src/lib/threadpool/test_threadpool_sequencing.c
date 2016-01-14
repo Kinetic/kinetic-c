@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
         printf("too many threads\n");
         exit(1);
     }
-    
+
     struct threadpool_config cfg = {
         .task_ringbuf_size2 = sz2,
         .max_threads = max_threads,
@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
     struct threadpool_task tasks[MAX_TASKS];
     env envs[MAX_TASKS];
     memset(&tasks, 0, sizeof(tasks));
-    
+
     for (int i = 0; i < max_threads; i++) {
         envs[i] = (env){ .t = t, .task = &tasks[i], .count = 0, };
         tasks[i] = (struct threadpool_task){ .task = task_cb, .udata = &envs[i], };
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
             if (Threadpool_Schedule(t, &tasks[i], &counterpressure)) {
                 break;
             }
-        }        
+        }
     }
 
     printf("waiting...\n");

@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -63,7 +63,7 @@ void test_KineticLogInfo_Create_should_allocate_and_populate_device_info_with_ut
     Com__Seagate__Kinetic__Proto__Command__GetLog getLog = COM__SEAGATE__KINETIC__PROTO__COMMAND__GET_LOG__INIT;
     getLog.n_utilizations = numUtilizations;
     char* names[] = {"fo", "shizzle"};
-    
+
     utilizations[0].name = names[0];
     utilizations[0].has_value = true;
     utilizations[0].value = 1.7f;

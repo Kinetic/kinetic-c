@@ -17,7 +17,7 @@
 {
     "identity": 2,
     "key": "13010b8d8acdbe6abc005840aad1dc5dedb4345e681ed4e3c4645d891241d6b2",
-    "HMACAlgorithm": "HmacSHA1", 
+    "HMACAlgorithm": "HmacSHA1",
 
     "scope": [
         {

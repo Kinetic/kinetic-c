@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -156,7 +156,7 @@ static int put_chunk_of_file(FileTransferProgress* transfer)
         fprintf(stderr, "Failed reading data from file!\n");
         REPORT_ERRNO(bytesRead, "read");
     }
-    
+
     return bytesRead;
 }
 
@@ -201,7 +201,7 @@ FileTransferProgress * start_file_transfer(KineticSession* session,
     pthread_mutex_init(&transferState->transferMutex, NULL);
     pthread_mutex_init(&transferState->completeMutex, NULL);
     pthread_cond_init(&transferState->completeCond, NULL);
-        
+
     // Start max overlapped PUT operations
     for (size_t i = 0; i < transferState->maxOverlappedChunks; i++) {
         put_chunk_of_file(transferState);

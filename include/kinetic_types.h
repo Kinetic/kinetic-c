@@ -34,7 +34,7 @@
 
 
 #define KINETIC_SOCKET_INVALID  (-1)                    ///< Invalid socket file descriptor value
-#define KINETIC_PORT            (8123)                  ///< Default kinetic port 
+#define KINETIC_PORT            (8123)                  ///< Default kinetic port
 #define KINETIC_TLS_PORT        (8443)                  ///< Default kinetic TLS port
 #define KINETIC_HMAC_SHA1_LEN   (SHA_DIGEST_LENGTH)     ///< HMAC secure hash length
 #define KINETIC_HMAC_MAX_LEN    (KINETIC_HMAC_SHA1_LEN) ///< HMAC max length
@@ -93,8 +93,8 @@ typedef enum _KineticSynchronization {
     /// or when a subsequent FLUSH is sent to the drive.
     KINETIC_SYNCHRONIZATION_WRITEBACK = 2,
 
-    /// All pending information that has not been written is 
-    /// pushed to the disk and the command that specifies 
+    /// All pending information that has not been written is
+    /// pushed to the disk and the command that specifies
     /// FLUSH is written last and then returned. All WRITEBACK writes
     /// that have received ending status will be guaranteed to be
     /// written before the FLUSH operation is returned completed.
@@ -190,9 +190,9 @@ typedef enum {
 
 /**
  * @brief Provides a string representation for a KineticStatus code.
- * 
+ *
  * @param status    The status enumeration value.
- * 
+ *
  * @return          Pointer to the appropriate string representation for the specified status.
  */
 const char* Kinetic_GetStatusDescription(KineticStatus status);
@@ -209,7 +209,7 @@ typedef struct _KineticCompletionData {
 
 /**
  * @brief Operation completion callback function prototype.
- * 
+ *
  * @param kinetic_data  KineticCompletionData provided by kinetic-c.
  * @param client_data   Optional pointer to arbitrary client-supplied data.
  */
@@ -230,7 +230,7 @@ typedef struct _KineticCompletionClosure {
  * The ByteBuffer attributes must be allocated and freed by the client, if used.
  */
 typedef struct _KineticEntry {
-    ByteBuffer key;             ///< Key associated with the object stored on disk 
+    ByteBuffer key;             ///< Key associated with the object stored on disk
     ByteBuffer value;           ///< Value data associated with the key
 
     // Metadata
@@ -248,7 +248,7 @@ typedef struct _KineticEntry {
 
 /**
  * @brief Kinetic Key Range request structure
- */ 
+ */
 typedef struct _KineticKeyRange {
 
     /// Required bytes, the beginning of the requested range
@@ -518,9 +518,9 @@ typedef struct {
 
 /**
  * @brief Provides a string representation for a Kinetic message type.
- * 
+ *
  * @param type  The message type value.
- * 
+ *
  * @return      Pointer to the appropriate string representation for the specified type.
  */
 const char* KineticMessageType_GetName(KineticMessageType type);

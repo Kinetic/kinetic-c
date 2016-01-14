@@ -26,9 +26,9 @@
  *
  * @param config A configuration struct.
  *
- * @return          Returns a pointer to a KineticClient. You need to pass 
- *                  this pointer to KineticClient_CreateSession() to create 
- *                  new connections. 
+ * @return          Returns a pointer to a KineticClient. You need to pass
+ *                  this pointer to KineticClient_CreateSession() to create
+ *                  new connections.
  *                  Once you are finished will the KineticClient, and there
  *                  are no active connections. The pointer should be released
  *                  with KineticClient_Shutdown()

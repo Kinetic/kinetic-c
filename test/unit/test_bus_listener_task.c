@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -314,7 +314,7 @@ void test_ListenerTask_MainLoop_should_check_commands(void) {
         -1, poll_res);
     ListenerCmd_CheckIncomingMessages_Expect(l, &poll_res);
     ListenerIO_AttemptRecv_Expect(l, poll_res);
-    
+
     ListenerTask_MainLoop((void *)l);
 }
 
@@ -343,7 +343,7 @@ void test_ListenerTask_GrowReadBuf_should_grow_the_listeners_read_buffer(void)
     TEST_ASSERT_EQUAL(200, l->read_buf_size);
     TEST_ASSERT(l->read_buf);
     memset(&l->read_buf[0], 0xFF, 200);  // write to notify valgrind
-    
+
     free(l->read_buf);
 }
 

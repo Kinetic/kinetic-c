@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -40,7 +40,7 @@ static bus_sink_cb_res_t reset_transfer(socket_info *si) {
     bus_sink_cb_res_t res = { /* prime pump with header size */
         .next_read = sizeof(KineticPDUHeader),
     };
-    
+
     si->state = STATE_AWAITING_HEADER;
     si->accumulated = 0;
     si->unpack_status = UNPACK_ERROR_UNDEFINED;
@@ -124,7 +124,7 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
             return res;
         }
         break;
-    } 
+    }
     case STATE_AWAITING_BODY:
     {
         memcpy(&si->buf[si->accumulated], read_buf, read_size);
@@ -137,7 +137,7 @@ STATIC bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
             si->accumulated = 0;
             bus_sink_cb_res_t res = {
                 .next_read = sizeof(KineticPDUHeader),
-                // returning the whole si, because we need access to the pdu header as well 
+                // returning the whole si, because we need access to the pdu header as well
                 //  as the protobuf and value bytes
                 .full_msg_buffer = si,
             };
@@ -170,7 +170,7 @@ static void log_response_seq_id(int fd, int64_t seq_id) {
 STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
     KineticSession * session = (KineticSession*)socket_udata;
     KINETIC_ASSERT(session);
-    
+
     /* just got .full_msg_buffer from sink_cb -- pass it along as-is */
     socket_info *si = (socket_info *)msg;
 
@@ -192,7 +192,7 @@ STATIC bus_unpack_cb_res_t unpack_cb(void *msg, void *socket_udata) {
         return res;
     } else {
         response->header = si->header;
-        
+
         response->proto = KineticPDU_unpack_message(NULL, si->header.protobufLength, si->buf);
         if (response->proto->has_commandbytes &&
             response->proto->commandbytes.data != NULL &&

@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -59,7 +59,7 @@ KineticStatus KineticController_ExecuteOperation(KineticOperation* operation, Ki
     KINETIC_ASSERT(operation->session != NULL);
     KineticStatus status = KINETIC_STATUS_INVALID;
     KineticSession *session = operation->session;
- 
+
     if (KineticSession_GetTerminationStatus(operation->session) != KINETIC_STATUS_SUCCESS) {
         return KINETIC_STATUS_SESSION_TERMINATED;
     }
@@ -143,7 +143,7 @@ KineticStatus bus_to_kinetic_status(bus_send_status_t const status)
             return KINETIC_STATUS_INVALID;
         }
     }
-    
+
     LOGF3("bus_to_kinetic_status: mapping status %d => %d",
         status, res);
     return res;
@@ -208,7 +208,7 @@ void KineticController_HandleUnexpectedResponse(void *msg,
         else {
             LOG0("WARNING: Unsolicited status received. Connection being terminated by remote!");
             logTag = statusTag;
-            logAtLevel = 0; 
+            logAtLevel = 0;
             protoLogAtLevel = 0;
             KineticStatus status = KineticResponse_GetStatus(response);
             KineticSession_SetTerminationStatus(session, status);

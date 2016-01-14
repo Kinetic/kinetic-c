@@ -404,7 +404,7 @@ public class GeneratedMessageTest extends TestCase {
       // We expect this exception.
     }
   }
-  
+
   public void testRepeatedAppendIterateOnlyOnce() throws Exception {
     // Create a Iterable that can only be iterated once.
     Iterable<String> stringIterable = new Iterable<String>() {
@@ -1166,7 +1166,7 @@ public class GeneratedMessageTest extends TestCase {
     FieldDescriptor fieldDescriptor =
         descriptor.findFieldByName("optional_nested_message");
 
-    // Before setting field, builder is initialized by default value. 
+    // Before setting field, builder is initialized by default value.
     TestAllTypes.Builder builder = TestAllTypes.newBuilder();
     NestedMessage.Builder fieldBuilder =
         (NestedMessage.Builder) builder.getFieldBuilder(fieldDescriptor);

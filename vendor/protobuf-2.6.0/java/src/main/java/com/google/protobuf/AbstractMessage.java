@@ -123,7 +123,7 @@ public abstract class AbstractMessage extends AbstractMessageLite
     }
     return hash;
   }
-  
+
   private static ByteString toByteString(Object value) {
     if (value instanceof byte[]) {
       return ByteString.copyFrom((byte[]) value);
@@ -131,7 +131,7 @@ public abstract class AbstractMessage extends AbstractMessageLite
       return (ByteString) value;
     }
   }
- 
+
   /**
    * Compares two bytes fields. The parameters must be either a byte array or a
    * ByteString object. They can be of different type though.
@@ -142,7 +142,7 @@ public abstract class AbstractMessage extends AbstractMessageLite
     }
     return toByteString(a).equals(toByteString(b));
   }
-  
+
   /**
    * Compares two set of fields.
    * This method is used to implement {@link AbstractMessage#equals(Object)}

@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -42,7 +42,7 @@ void KineticSemaphore_Signal(KineticSemaphore * sem)
     pthread_mutex_lock(&sem->mutex);
     sem->signaled = true;
     pthread_cond_signal(&sem->complete);
-    pthread_mutex_unlock(&sem->mutex); 
+    pthread_mutex_unlock(&sem->mutex);
 }
 
 bool KineticSemaphore_CheckSignaled(KineticSemaphore * sem)
@@ -69,7 +69,7 @@ void KineticSemaphore_WaitForSignalAndDestroy(KineticSemaphore * sem)
     if (!sem->signaled) {
         pthread_cond_wait(&sem->complete, &sem->mutex);
     }
-    pthread_mutex_unlock(&sem->mutex); 
+    pthread_mutex_unlock(&sem->mutex);
 
     pthread_mutex_destroy(&sem->mutex);
     pthread_cond_destroy(&sem->complete);

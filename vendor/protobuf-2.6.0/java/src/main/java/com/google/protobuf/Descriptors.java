@@ -234,7 +234,7 @@ public final class Descriptors {
                                     throws DescriptorValidationException {
       return buildFrom(proto, dependencies, false);
     }
-    
+
 
     /**
      * Construct a {@code FileDescriptor}.
@@ -473,9 +473,9 @@ public final class Descriptors {
           proto.getExtension(i), this, null, i, true);
       }
     }
-    
+
     /**
-     * Create a placeholder FileDescriptor for a message Descriptor. 
+     * Create a placeholder FileDescriptor for a message Descriptor.
      */
     FileDescriptor(String packageName, Descriptor message)
         throws DescriptorValidationException {
@@ -719,7 +719,7 @@ public final class Descriptors {
       this.fields = new FieldDescriptor[0];
       this.extensions = new FieldDescriptor[0];
       this.oneofs = new OneofDescriptor[0];
-      
+
       // Create a placeholder FileDescriptor to hold this message.
       this.file = new FileDescriptor(packageName, this);
     }
@@ -1297,8 +1297,8 @@ public final class Descriptors {
                 "Message type had default value.");
           }
         } catch (NumberFormatException e) {
-          throw new DescriptorValidationException(this, 
-              "Could not parse default value: \"" + 
+          throw new DescriptorValidationException(this,
+              "Could not parse default value: \"" +
               proto.getDefaultValue() + '\"', e);
         }
       } else {
@@ -1489,7 +1489,7 @@ public final class Descriptors {
 
     /** Get the value's number. */
     public int getNumber() { return proto.getNumber(); }
-    
+
     @Override
     public String toString() { return proto.getName(); }
 
@@ -1815,13 +1815,13 @@ public final class Descriptors {
    * descriptors defined in a particular file.
    */
   private static final class DescriptorPool {
-    
-    /** Defines what subclass of descriptors to search in the descriptor pool. 
+
+    /** Defines what subclass of descriptors to search in the descriptor pool.
      */
     enum SearchFilter {
       TYPES_ONLY, AGGREGATES_ONLY, ALL_SYMBOLS
     }
-    
+
     DescriptorPool(final FileDescriptor[] dependencies,
         boolean allowUnknownDependencies) {
       this.dependencies = new HashSet<FileDescriptor>();
@@ -1867,9 +1867,9 @@ public final class Descriptors {
     GenericDescriptor findSymbol(final String fullName) {
       return findSymbol(fullName, SearchFilter.ALL_SYMBOLS);
     }
-    
-    /** Find a descriptor by fully-qualified name and given option to only 
-     * search valid field type descriptors. 
+
+    /** Find a descriptor by fully-qualified name and given option to only
+     * search valid field type descriptors.
      */
     GenericDescriptor findSymbol(final String fullName,
                                  final SearchFilter filter) {
@@ -1898,18 +1898,18 @@ public final class Descriptors {
 
     /** Checks if the descriptor is a valid type for a message field. */
     boolean isType(GenericDescriptor descriptor) {
-      return (descriptor instanceof Descriptor) || 
+      return (descriptor instanceof Descriptor) ||
         (descriptor instanceof EnumDescriptor);
     }
-    
+
     /** Checks if the descriptor is a valid namespace type. */
     boolean isAggregate(GenericDescriptor descriptor) {
-      return (descriptor instanceof Descriptor) || 
-        (descriptor instanceof EnumDescriptor) || 
-        (descriptor instanceof PackageDescriptor) || 
+      return (descriptor instanceof Descriptor) ||
+        (descriptor instanceof EnumDescriptor) ||
+        (descriptor instanceof PackageDescriptor) ||
         (descriptor instanceof ServiceDescriptor);
     }
-       
+
     /**
      * Look up a type descriptor by name, relative to some other descriptor.
      * The name may be fully-qualified (with a leading '.'),
@@ -1967,7 +1967,7 @@ public final class Descriptors {
 
             // Append firstPart and try to find
             scopeToTry.append(firstPart);
-            result = findSymbol(scopeToTry.toString(), 
+            result = findSymbol(scopeToTry.toString(),
                 DescriptorPool.SearchFilter.AGGREGATES_ONLY);
 
             if (result != null) {

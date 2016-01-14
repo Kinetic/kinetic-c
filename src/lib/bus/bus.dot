@@ -14,7 +14,7 @@ digraph {
 
         // asynchronously flushes outgoing messages to drives
         sender [peripheries=2]    // many
-        
+
         drives [shape=box, peripheries=2]
         sender -> drives [label="write"]
 

@@ -116,7 +116,7 @@ class BoundedByteString extends LiteralByteString {
   // ByteString -> byte[]
 
   @Override
-  protected void copyToInternal(byte[] target, int sourceOffset, 
+  protected void copyToInternal(byte[] target, int sourceOffset,
       int targetOffset, int numberToCopy) {
     System.arraycopy(bytes, getOffsetIntoBytes() + sourceOffset, target,
         targetOffset, numberToCopy);

@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -118,7 +118,7 @@ void PrintUsage(const char* exec)
 {
     printf("Usage: %s --<cmd> [options...]\n", exec);
     printf("%s --help\n", exec);
-    
+
     // Standard API operations
     printf("%s --noop"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
@@ -132,7 +132,7 @@ void PrintUsage(const char* exec)
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
     printf("%s --delete --key <key>"
       " [--host <ip|hostname>] [--port <port>] [--clusterversion <clusterversion>]\n", exec);
-    
+
     // Admin API operations
     printf("%s --getlog --logtype <utilizations|temperatures|capacities|configuration|statistics|messages|limits>"
       " [--host <ip|hostname>] [--tlsport <tlsport>] [--clusterversion <clusterversion>]\n", exec);
@@ -241,13 +241,13 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
                     info->utilizations[i].value * 100.0f);
             }
             break;
-        
+
         case KINETIC_DEVICE_INFO_TYPE_CAPACITIES:
             printf("Device Capacities:\n");
             printf("  nominalCapacity: %.3f MB\n", info->capacity->nominalCapacityInBytes / (1024.0f * 1024.0f));
             printf("  portionFull:     %.2f %%\n", info->capacity->portionFull * 100.0f);
             break;
-        
+
         case KINETIC_DEVICE_INFO_TYPE_TEMPERATURES:
             printf("Device Temperatures:\n");
             for (i = 0; i < info->numTemperatures; i++) {
@@ -257,7 +257,7 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
                     info->temperatures[i].maximum, info->temperatures[i].target);
             }
             break;
-        
+
         case KINETIC_DEVICE_INFO_TYPE_CONFIGURATION:
             printf("Device Configuration:\n");
             printf("  vendor: %s\n", info->configuration->vendor);
@@ -287,7 +287,7 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
             printf("  port: %d\n", info->configuration->port);
             printf("  tlsPort: %d\n", info->configuration->tlsPort);
             break;
-        
+
         case KINETIC_DEVICE_INFO_TYPE_STATISTICS:
             printf("Device Statistics:\n");
             for (i = 0; i < info->numStatistics; i++) {
@@ -297,7 +297,7 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
                     (long long)info->statistics[i].bytes);
             }
             break;
-        
+
         case KINETIC_DEVICE_INFO_TYPE_MESSAGES:
             printf("Device Log Messages:\n"); {
                 char* msgs = calloc(1, info->messages.len + 1);
@@ -306,7 +306,7 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
                 free(msgs);
             }
             break;
-        
+
         case KINETIC_DEVICE_INFO_TYPE_LIMITS:
             printf("Device Limits:\n");
             printf("  maxKeySize: %u\n",                  info->limits->maxKeySize);
@@ -321,7 +321,7 @@ static void PrintLogInfo(KineticLogInfo_Type type, KineticLogInfo* info)
             printf("  maxIdentityCount: %u\n",            info->limits->maxIdentityCount);
             printf("  maxPinSize: %u\n",                  info->limits->maxPinSize);
             break;
-        
+
         default:
             fprintf(stderr, "Unknown log type! (%d)\n", type);
             break;

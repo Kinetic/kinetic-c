@@ -102,7 +102,7 @@ Future development notes
   on Linux.
 
 * The listener can potentially leak memory on shutdown, in the case
-  where responses have been partially received. This has been a low priority. 
+  where responses have been partially received. This has been a low priority.
 
 * There is room for tuning the total number of messages-in-flight
   in the listener (controlled by `MAX_PENDING_MESSAGES`), how the

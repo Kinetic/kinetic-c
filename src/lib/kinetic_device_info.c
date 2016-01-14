@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -113,7 +113,7 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
 
     KineticLogInfo_Configuration *cfg = calloc(1, sizeof(*cfg));
     if (cfg) {
-        
+
 	if (gcfg->has_serialnumber) {
               cfg->serialNumber = copy_to_byte_array((uint8_t *)gcfg->serialnumber.data,
                     gcfg->serialnumber.len);
@@ -133,7 +133,7 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
         }
 
         cfg->vendor = copy_str(gcfg->vendor);
-        
+
         if (cfg->vendor == NULL) { goto cleanup; }
         cfg->model = copy_str(gcfg->model);
         if (cfg->model == NULL) { goto cleanup; }
@@ -184,7 +184,7 @@ static KineticLogInfo_Configuration * KineticLogInfo_GetConfiguration(
     }
     return cfg;
 cleanup:
-    
+
     free_byte_array(cfg->serialNumber);
     free_byte_array(cfg->worldWideName);
     if (cfg->vendor) { free(cfg->vendor); }
@@ -287,7 +287,7 @@ KineticLogInfo* KineticLogInfo_Create(const Com__Seagate__Kinetic__Proto__Comman
     KineticLogInfo_Configuration* configuration = NULL;
     KineticLogInfo_Statistics* statistics = NULL;
     KineticLogInfo_Limits* limits = NULL;
-    KineticLogInfo_Device* device = NULL;    
+    KineticLogInfo_Device* device = NULL;
 
     utilizations = KineticLogInfo_GetUtilizations(getLog, &info->numUtilizations);
     if (utilizations == NULL) { goto cleanup; }
@@ -347,16 +347,16 @@ void KineticLogInfo_Free(KineticLogInfo* kdi) {
             }
             free(kdi->utilizations);
         }
-        
+
         if (kdi->temperatures) {
             for (size_t i = 0; i < kdi->numTemperatures; i++) {
                 free(kdi->temperatures[i].name);
             }
             free(kdi->temperatures);
         }
-        
+
         if (kdi->capacity) { free(kdi->capacity); }
-        
+
         if (kdi->configuration) {
             KineticLogInfo_Configuration *cfg = kdi->configuration;
 
@@ -384,10 +384,10 @@ void KineticLogInfo_Free(KineticLogInfo* kdi) {
             }
             free(cfg);
         }
-        
+
         if (kdi->statistics) { free(kdi->statistics); }
         if (kdi->limits) { free(kdi->limits); }
-        
+
         if (kdi->device) {
             if (kdi->device->name.data) { free(kdi->device->name.data); }
             free(kdi->device);

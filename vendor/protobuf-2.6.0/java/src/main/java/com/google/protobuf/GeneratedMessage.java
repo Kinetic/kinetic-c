@@ -1256,7 +1256,7 @@ public abstract class GeneratedMessage extends AbstractMessage
       implements ExtensionDescriptorRetriever {
     private volatile FieldDescriptor descriptor;
     protected abstract FieldDescriptor loadDescriptor();
-    
+
     public FieldDescriptor getDescriptor() {
       if (descriptor == null) {
         synchronized (this) {
@@ -1799,7 +1799,7 @@ public abstract class GeneratedMessage extends AbstractMessage
         invokeOrDie(clearMethod, builder);
       }
     }
-    
+
     private static boolean supportFieldPresence(FileDescriptor file) {
       return true;
     }
@@ -1846,11 +1846,11 @@ public abstract class GeneratedMessage extends AbstractMessage
       protected final FieldDescriptor field;
       protected final boolean isOneofField;
       protected final boolean hasHasMethod;
-      
+
       private int getOneofFieldNumber(final GeneratedMessage message) {
         return ((Internal.EnumLite) invokeOrDie(caseMethod, message)).getNumber();
       }
-      
+
       private int getOneofFieldNumber(final GeneratedMessage.Builder builder) {
         return ((Internal.EnumLite) invokeOrDie(caseMethodBuilder, builder)).getNumber();
       }

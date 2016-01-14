@@ -22,7 +22,7 @@ OPTIMIZE = -O3
 KINETIC_HOST1 ?= localhost
 SESSION_HMAC_KEY ?= asdfasdf
 SESSION_PIN ?= 1234
-WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic 
+WARN = -Wall -Wextra -Wstrict-prototypes -Wcast-align -pedantic
 WARN += -Wno-missing-field-initializers -Werror=strict-prototypes -Wshadow
 WARN += -Werror
 CDEFS += -D_POSIX_C_SOURCE=199309L -D_C99_SOURCE=1
@@ -174,7 +174,7 @@ $(OUT_DIR)/%.o: ${LIB_DIR}/bus/%.c ${LIB_DIR}/bus/%.h
 ${OUT_DIR}/*.o: src/lib/kinetic_types_internal.h
 
 ci: stop_sims start_sims all stop_sims
-	@echo 
+	@echo
 	@echo --------------------------------------------------------------------------------
 	@echo Testing install/uninstall of kinetic-c
 	@echo --------------------------------------------------------------------------------

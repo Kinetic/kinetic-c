@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -45,9 +45,9 @@ KineticClient * KineticClient_Init(KineticClientConfig *config)
 {
     KineticLogger_Init(config->logFile, config->logLevel);
     KineticClient * client = KineticCalloc(1, sizeof(*client));
-    if (client == NULL) { 
+    if (client == NULL) {
         KineticLogger_Close();
-        return NULL; 
+        return NULL;
     }
 
     /* Use defaults if set to 0. */

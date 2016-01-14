@@ -106,7 +106,7 @@ public class Internal {
    * Helper called by generated code to construct default values for bytes
    * fields.
    * <p>
-   * This is like {@link #bytesDefaultValue}, but returns a byte array. 
+   * This is like {@link #bytesDefaultValue}, but returns a byte array.
    */
   public static byte[] byteArrayDefaultValue(String bytes) {
     try {
@@ -123,7 +123,7 @@ public class Internal {
    * Helper called by generated code to construct default values for bytes
    * fields.
    * <p>
-   * This is like {@link #bytesDefaultValue}, but returns a ByteBuffer. 
+   * This is like {@link #bytesDefaultValue}, but returns a ByteBuffer.
    */
   public static ByteBuffer byteBufferDefaultValue(String bytes) {
     return ByteBuffer.wrap(byteArrayDefaultValue(bytes));
@@ -179,7 +179,7 @@ public class Internal {
   public static boolean isValidUtf8(ByteString byteString) {
     return byteString.isValidUtf8();
   }
-  
+
   /**
    * Like {@link #isValidUtf8(ByteString)} but for byte arrays.
    */
@@ -197,7 +197,7 @@ public class Internal {
       throw new RuntimeException("UTF-8 not supported?", e);
     }
   }
-  
+
   /**
    * Helper method to convert a byte array to a string using UTF-8 encoding.
    */
@@ -268,7 +268,7 @@ public class Internal {
     }
     return hash;
   }
-  
+
   /**
    * Helper method for implementing {@link MessageLite#equals()} for bytes field.
    */
@@ -292,7 +292,7 @@ public class Internal {
     }
     return hash;
   }
-  
+
   /**
    * Helper method for implementing {@link MessageLite#hashCode()} for bytes field.
    */
@@ -303,7 +303,7 @@ public class Internal {
     // based hashCode() method.
     return LiteralByteString.hashCode(bytes);
   }
-  
+
   /**
    * Helper method for implementing {@link MessageLite#equals()} for bytes
    * field.
@@ -316,7 +316,7 @@ public class Internal {
     // compare all the content.
     return a.duplicate().clear().equals(b.duplicate().clear());
   }
-  
+
   /**
    * Helper method for implementing {@link MessageLite#equals()} for bytes
    * field.
@@ -345,9 +345,9 @@ public class Internal {
     }
     return hash;
   }
-  
+
   private static final int DEFAULT_BUFFER_SIZE = 4096;
-  
+
   /**
    * Helper method for implementing {@link MessageLite#hashCode()} for bytes
    * field.
@@ -376,12 +376,12 @@ public class Internal {
       return h == 0 ? 1 : h;
     }
   }
-  
+
   /**
    * An empty byte array constant used in generated code.
    */
   public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
-  
+
   /**
    * An empty byte array constant used in generated code.
    */
