@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_client.h"
 #include "kinetic_types.h"
 #include "byte_array.h"

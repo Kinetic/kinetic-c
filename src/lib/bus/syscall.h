@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef SYSCALL_H
 #define SYSCALL_H
 

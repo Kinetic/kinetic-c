@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"

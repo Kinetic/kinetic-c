@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include <string.h>
 #include <stdio.h>
 #include <fcntl.h>

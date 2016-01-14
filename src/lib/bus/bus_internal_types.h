@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef BUS_INTERNAL_TYPES_H
 #define BUS_INTERNAL_TYPES_H
 

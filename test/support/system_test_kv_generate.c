@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "system_test_kv_generate.h"
 #include <stdlib.h>
 #include <string.h>

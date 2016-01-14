@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef LISTENER_HELPER_H
 #define LISTENER_HELPER_H
 

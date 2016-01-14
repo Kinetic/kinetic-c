@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_memory.h"
 
 #include <stdlib.h>

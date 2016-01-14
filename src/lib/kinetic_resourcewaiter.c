@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_resourcewaiter.h"
 #include "kinetic_resourcewaiter_types.h"
 #include "kinetic_logger.h"

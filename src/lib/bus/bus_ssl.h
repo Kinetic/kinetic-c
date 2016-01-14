@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef BUS_SSL_H
 #define BUS_SSL_H
 

@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef YACHT_INTERNALS_H
 #define YACHT_INTERNALS_H
 

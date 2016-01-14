@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef ATOMIC_H
 #define ATOMIC_H
 

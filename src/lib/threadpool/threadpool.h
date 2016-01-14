@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef THREADPOOL_H
 #define THREADPOOL_H
 

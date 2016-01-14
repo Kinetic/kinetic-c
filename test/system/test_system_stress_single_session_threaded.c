@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 #include "kinetic_semaphore.h"

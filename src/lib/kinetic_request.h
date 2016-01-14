@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef KINETIC_REQUEST_H
 #define KINETIC_REQUEST_H
 

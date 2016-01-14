@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_request.h"
 #include <pthread.h>
 

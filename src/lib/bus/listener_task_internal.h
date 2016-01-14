@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef LISTENER_TASK_INTERNAL_H
 #define LISTENER_TASK_INTERNAL_H
 

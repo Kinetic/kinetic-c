@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity_helper.h"
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"

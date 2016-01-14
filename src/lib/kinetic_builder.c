@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_builder.h"
 #include "kinetic_operation.h"
 #include "kinetic_controller.h"

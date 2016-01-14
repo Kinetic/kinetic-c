@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef _KINETIC_RESOURCEWAITER_TYPES_H
 #define _KINETIC_RESOURCEWAITER_TYPES_H
 

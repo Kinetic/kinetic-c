@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef BUS_INWARD_H
 #define BUS_INWARD_H
 

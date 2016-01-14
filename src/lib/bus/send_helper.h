@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef SEND_HELPER_H
 #define SEND_HELPER_H
 

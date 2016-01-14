@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include <stdbool.h>
 #include <errno.h>
 #include <time.h>

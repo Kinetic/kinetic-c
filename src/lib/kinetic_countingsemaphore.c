@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_countingsemaphore.h"
 #include "kinetic_countingsemaphore_types.h"
 #include "kinetic_logger.h"

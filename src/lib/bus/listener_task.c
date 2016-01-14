@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "listener_task.h"
 #include "listener_task_internal.h"
 #include "util.h"

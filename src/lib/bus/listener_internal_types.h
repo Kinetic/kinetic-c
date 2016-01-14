@@ -14,6 +14,7 @@
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef LISTENER_INTERNAL_TYPES_H
 #define LISTENER_INTERNAL_TYPES_H
 
