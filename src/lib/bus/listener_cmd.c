@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include <unistd.h>
 #include <err.h>
 #include <assert.h>
@@ -53,7 +54,7 @@ void ListenerCmd_NotifyCaller(listener *l, int fd) {
         BUS_LOG_SNPRINTF(b, 6, LOG_LISTENER, b->udata, 128,
             "NotifyCaller on %d with backpressure %u",
             fd, backpressure);;
-        
+
         ssize_t wres = syscall_write(fd, reply_buf, sizeof(reply_buf));
         if (wres == sizeof(reply_buf)) { break; }
         if (wres == -1) {
@@ -243,7 +244,7 @@ static void remove_socket(listener *l, int fd, int notify_fd) {
 
                 /* The node is now at the end of the array. */
             }
-            
+
             l->tracked_fds--;
             if (!is_active) { l->inactive_fds--; }
         }
@@ -255,7 +256,7 @@ static void remove_socket(listener *l, int fd, int notify_fd) {
 static void hold_response(listener *l, int fd, int64_t seq_id,
         int16_t timeout_sec, int notify_fd) {
     struct bus *b = l->bus;
-    
+
     BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 128,
         "hold_response <fd:%d, seq_id:%lld>", fd, (long long)seq_id);
 
@@ -313,7 +314,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
         } else if (info->u.hold.error != RX_ERROR_NONE) {
             BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 256,
                 "info %p (%d) with <box:%p, fd:%d, seq_id:%lld> has error %d",
-                (void *)info, info->id, 
+                (void *)info, info->id,
                 (void *)box, info->u.hold.fd, (long long)info->u.hold.seq_id, info->u.hold.error);
             rx_error_t error = info->u.hold.error;
             bus_unpack_cb_res_t result = info->u.hold.result;
@@ -337,7 +338,7 @@ static void expect_response(listener *l, struct boxed_msg *box) {
     } else if (info && info->state == RIS_EXPECT) {
         /* Multiple identical EXPECTs should never happen, outside of
          * memory corruption in the queue. */
-        assert(false);          
+        assert(false);
     } else {
         /* should never happen; just drop the message */
     }

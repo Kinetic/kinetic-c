@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include <string.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -73,7 +74,7 @@ KineticACL_LoadFromFile(const char *path, struct ACL **instance)
     if (path == NULL || instance == NULL) {
         return ACL_ERROR_NULL;
     }
-    
+
     int fd = open(path, O_RDONLY);
     if (fd == -1) {
 #ifndef TEST
@@ -176,7 +177,7 @@ static KineticACLLoadResult acl_of_string(const char *buf, size_t buf_size, stru
 
 cleanup:
     if (tokener) { json_tokener_free(tokener); }
-    
+
     if (res == ACL_END_OF_STREAM || res == ACL_OK) {
         if (acl_group && acl_group->ACL_count == 0) {
             LOG2("Failed to read any JSON objects");
@@ -206,9 +207,9 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
             return ACL_ERROR_BAD_JSON;
         }
     }
-    
+
     *new_offset = tokener->char_offset;
-    
+
     KineticACLLoadResult res = ACL_ERROR_MEMORY;
     Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl = NULL;
     uint8_t *data = NULL;
@@ -221,12 +222,12 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         res = ACL_ERROR_MISSING_FIELD;
         goto cleanup;
     }
-    
+
     size_t alloc_sz = sizeof(*acl);
     acl = calloc(1, alloc_sz);
     if (acl == NULL) { goto cleanup; }
 
-    com__seagate__kinetic__proto__command__security__acl__init(acl);    
+    com__seagate__kinetic__proto__command__security__acl__init(acl);
 
     /* Copy fields */
     if (json_object_object_get_ex(obj, "identity", &val)) {
@@ -235,7 +236,7 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
     } else {
         acl->has_identity = false;
     }
-    
+
     if (json_object_object_get_ex(obj, "key", &val)) {
         const char *key = json_object_get_string(val);
         size_t len = strlen(key);
@@ -252,7 +253,7 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
         data = NULL;
         acl->has_key = true;
     }
-    
+
     if (json_object_object_get_ex(obj, "HMACAlgorithm", &val)) {
         const char *hmac = json_object_get_string(val);
         if (0 != strcmp(hmac, "HmacSHA1")) {
@@ -262,13 +263,13 @@ static KineticACLLoadResult read_next_ACL(const char *buf, size_t buf_size,
             // acl->key->type is already set to HMAC_SHA1.
         }
     }
-    
+
     struct json_object *scopes = NULL;
     if (json_object_object_get_ex(obj, "scope", &scopes)) {
         res = unpack_scopes(acl, scope_count, scopes);
         if (res != ACL_OK) { goto cleanup; }
     }
-    
+
     /* Decrement JSON object refcount, freeing it. */
     json_object_put(obj);
     *instance = acl;
@@ -300,7 +301,7 @@ static KineticACLLoadResult unpack_scopes(Com__Seagate__Kinetic__Proto__Command_
             scope = calloc(1, sizeof(*scope));
             if (scope == NULL) { goto cleanup; }
             com__seagate__kinetic__proto__command__security__acl__scope__init(scope);
-    
+
             struct json_object *val = NULL;
             if (json_object_object_get_ex(cur_scope, "offset", &val)) {
                 scope->offset = json_object_get_int64(val);
@@ -390,7 +391,7 @@ void KineticACL_Print(FILE *f, struct ACL *ACLs)
     }
 
     fprintf(f, "ACLs [%zd]:\n", ACLs->ACL_count);
-    
+
     for (size_t ai = 0; ai < ACLs->ACL_count; ai++) {
         Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl = ACLs->ACLs[ai];
         if (acl == NULL) { continue; }
@@ -406,7 +407,7 @@ void KineticACL_Print(FILE *f, struct ACL *ACLs)
         }
 
         fprintf(f, "  scopes: (%zd)\n", acl->n_scope);
-        
+
         for (size_t si = 0; si < acl->n_scope; si++) {
             Com__Seagate__Kinetic__Proto__Command__Security__ACL__Scope *scope = acl->scope[si];
             if (si > 0) { fprintf(f, "\n"); }
@@ -443,7 +444,7 @@ void KineticACL_Free(struct ACL *ACLs) {
 
                     if (scope->n_permission > 0) {
                         free(scope->permission);
-                    }                    
+                    }
                     free(scope);
                 }
                 free(acl->scope);

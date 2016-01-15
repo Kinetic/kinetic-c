@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -73,7 +74,7 @@ typedef struct {
     size_t sent_msgs;
     size_t completed_deliveries;
     size_t max_seq_id;
-    
+
     socket_info *info[MAX_SOCKETS];
 } example_state;
 
@@ -100,7 +101,7 @@ static bus_sink_cb_res_t reset_transfer(socket_info *si) {
     bus_sink_cb_res_t res = { /* prime pump with header size */
         .next_read = sizeof(prot_header_t),
     };
-    
+
     si->state = STATE_AWAITING_HEADER;
     si->used = 0;
     return res;
@@ -173,7 +174,7 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf,
             assert(false);
             return reset_transfer(si);
         }
-        
+
         break;
     }
     case STATE_AWAITING_BODY:
@@ -327,7 +328,7 @@ static void parse_args(int argc, char **argv, example_state *s) {
             fprintf(stderr, "illegal option: -- %c\n", a);
             usage();
         }
-    } 
+    }
 
     if (s->port_low == 0) { s->port_low = s->port_high; }
     if (s->port_high == 0) { s->port_high = s->port_low; }
@@ -497,7 +498,7 @@ static void run_bus(example_state *s, struct bus *b) {
                 .cb = completion_cb,
                 .udata = s->info[cur_socket_i],
             };
-            
+
             s->sent_msgs++;
             payload_size++;
             if (!Bus_SendRequest(b, &msg)) {
@@ -508,7 +509,7 @@ static void run_bus(example_state *s, struct bus *b) {
                     loop_flag = false;
                 }
             }
-            
+
             cur_socket_i++;
             if (cur_socket_i == s->sockets_used) {
                 cur_socket_i = 0;

@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity.h"
 #include "listener.h"
 #include "listener_internal.h"
@@ -188,7 +189,7 @@ void test_Listener_Free_should_unblock_pending_callers_and_close_file_handles(vo
     nl->incoming_msg_pipe = 149;
     nl->shutdown_notify_fd = LISTENER_SHUTDOWN_COMPLETE_FD;
     nl->read_buf = calloc(32, sizeof(uint32_t));
-    
+
     for (int i = 0; i < MAX_PENDING_MESSAGES; i++) {
         nl->rx_info[i].state = RIS_INACTIVE;
     }

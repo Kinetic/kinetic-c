@@ -92,7 +92,7 @@ public class UnmodifiableLazyStringList extends AbstractList<String>
   public void add(byte[] element) {
     throw new UnsupportedOperationException();
   }
-  
+
   //@Override (Java 1.6 override semantics, but we must support 1.5)
   public void set(int index, byte[] element) {
     throw new UnsupportedOperationException();

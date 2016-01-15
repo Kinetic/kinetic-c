@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 
@@ -145,7 +146,7 @@ void test_GetKeyRange_should_retrieve_a_range_of_keys_from_device_with_start_and
     ByteBufferArray keys = {.buffers = &keyBuff[0], .count = numKeys};
 
     KineticStatus status = KineticClient_GetKeyRange(Fixture.session, &range, &keys, NULL);
-    
+
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     TEST_ASSERT_EQUAL(1, keys.used);
     TEST_ASSERT_EQUAL_STRING("mykey_01", keyBuff[0].array.data);

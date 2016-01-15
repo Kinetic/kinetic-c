@@ -11,14 +11,14 @@ LDFLAGS +=	-lpthread
 TEST_CFLAGS = 	${CFLAGS}
 TEST_LDFLAGS += ${LDFLAGS} -L. -lthreadpool
 
-all: test_${PROJECT} 
+all: test_${PROJECT}
 all: test_${PROJECT}_stress
 all: test_${PROJECT}_sequencing
 all: lib${PROJECT}.a
 
 OBJS=		threadpool.o
 
-TEST_OBJS=	
+TEST_OBJS=
 
 # Basic targets
 

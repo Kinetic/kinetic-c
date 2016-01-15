@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 #include "kinetic_semaphore.h"
@@ -299,7 +300,7 @@ static void* test_thread(void* test_params)
 
 void run_tests(KineticClient * client)
 {
-    TestParams params[] = { 
+    TestParams params[] = {
         { .client = client, .num_ops = 100, .obj_size = KINETIC_OBJ_SIZE, .thread_iters = 2 },
         { .client = client, .num_ops = 1000, .obj_size = 120, .thread_iters = 2 },
         // { .client = client, .num_ops = 500, .obj_size = 70000, .thread_iters = 2 },

@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "listener_io.h"
 #include "listener_helper.h"
 
@@ -43,13 +44,13 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
     struct bus *b = l->bus;
     int read_from = 0;
     BUS_LOG(b, 3, LOG_LISTENER, "attempting receive", b->udata);
-    
+
     for (int i = 0; i < l->tracked_fds; i++) {
         if (read_from == available) { break; }
         struct pollfd *fd = &l->fds[i + INCOMING_MSG_PIPE];
         connection_info *ci = l->fd_info[i];
         BUS_ASSERT(b, b->udata, ci->fd == fd->fd);
-        
+
         BUS_LOG_SNPRINTF(b, 1, LOG_LISTENER, b->udata, 64,
             "poll: l->fds[%d]->revents: 0x%04x",  // NOCOMMIT
             i + INCOMING_MSG_PIPE, fd->revents);
@@ -72,7 +73,7 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
                     "reading %zd bytes from socket (buf is %zd)",
                     ci->to_read_size, l->read_buf_size);
                 BUS_ASSERT(b, b->udata, l->read_buf_size >= to_read);
-                
+
                 switch (ci->type) {
                 case BUS_SOCKET_PLAIN:
                     cur_read = socket_read_plain(b, l, i, ci);
@@ -107,9 +108,9 @@ void ListenerIO_AttemptRecv(listener *l, int available) {
          * or skipping any individual file descriptors. */
         move_errored_active_sockets_to_end(l);
         l->error_occured = false;
-    }        
+    }
 }
-    
+
 static ssize_t socket_read_plain(struct bus *b, listener *l, int pfd_i, connection_info *ci) {
     ssize_t accum = 0;
     while (ci->to_read_size > 0) {
@@ -131,7 +132,7 @@ static ssize_t socket_read_plain(struct bus *b, listener *l, int pfd_i, connecti
                 return -1;
             }
         }
-        
+
         if (size > 0) {
             BUS_LOG_SNPRINTF(b, 5, LOG_LISTENER, b->udata, 64,
                 "read: %zd", size);
@@ -163,7 +164,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
     while (ci->to_read_size > 0) {
         // ssize_t pending = SSL_pending(ci->ssl);
         ssize_t size = (ssize_t)syscall_SSL_read(ci->ssl, l->read_buf, ci->to_read_size);
-        
+
         if (size == -1) {
             int reason = syscall_SSL_get_error(ci->ssl, size);
             switch (reason) {
@@ -171,7 +172,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
                 BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
                     "SSL_read fd %d: WANT_READ", ci->fd);
                 return accum;
-                
+
             case SSL_ERROR_WANT_WRITE:
                 BUS_ASSERT(b, b->udata, false);
 
@@ -199,7 +200,7 @@ static ssize_t socket_read_ssl(struct bus *b, listener *l, int pfd_i, connection
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_POLLHUP);
                 return -1;
             }
-            
+
             default:
                 print_SSL_error(b, ci, 1, "SSL_ERROR UNKNOWN");
                 set_error_for_socket(l, pfd_i, ci->fd, RX_ERROR_READ_FAILURE);
@@ -222,7 +223,7 @@ static bool sink_socket_read(struct bus *b,
         listener *l, connection_info *ci, ssize_t size) {
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
         "read %zd bytes, calling sink CB", size);
-    
+
 #if DUMP_READ
     printf("\n");
     for (int i = 0; i < size; i++) {
@@ -231,7 +232,7 @@ static bool sink_socket_read(struct bus *b,
     }
     printf("\n\n");
 #endif
-    
+
     bus_sink_cb_res_t sres = b->sink_cb(l->read_buf, size, ci->udata);
     if (sres.full_msg_buffer) {
         BUS_LOG(b, 3, LOG_LISTENER, "calling unpack CB", b->udata);
@@ -241,12 +242,12 @@ static bool sink_socket_read(struct bus *b,
             ures.ok, (long long)ures.u.success.seq_id);
         process_unpacked_message(l, ci, ures);
     }
-    
+
     ci->to_read_size = sres.next_read;
-    
+
     BUS_LOG_SNPRINTF(b, 3, LOG_LISTENER, b->udata, 64,
         "expecting next read to have %zd bytes", ci->to_read_size);
-    
+
     /* Grow read buffer if necessary. */
     if (ci->to_read_size > l->read_buf_size) {
         if (!ListenerTask_GrowReadBuf(l, ci->to_read_size)) {

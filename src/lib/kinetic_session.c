@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -45,7 +45,7 @@ KineticStatus KineticSession_Create(KineticSession * const session, KineticClien
 
     session->connected = false;
     session->socket = KINETIC_SOCKET_INVALID;
-    
+
     // initialize session send mutex
     if (pthread_mutex_init(&session->sendMutex, NULL) != 0) {
         LOG0("Failed initializing session send mutex!");
@@ -133,7 +133,7 @@ KineticStatus KineticSession_Disconnect(KineticSession * const session)
     if (!session->connected || session->socket < 0) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
-    
+
     // Close the connection
     KineticSocket_Close(session->socket);
     Bus_ReleaseSocket(session->messageBus, session->socket, NULL);

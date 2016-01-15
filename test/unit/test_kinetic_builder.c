@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity_helper.h"
 #include "protobuf-c/protobuf-c.h"
 #include "byte_array.h"
@@ -473,7 +474,7 @@ void test_KineticBuilder_BuildP2POperation_should_build_a_P2POperation_request(v
     TEST_ASSERT_EQUAL(COM__SEAGATE__KINETIC__PROTO__COMMAND__MESSAGE_TYPE__PEER2PEERPUSH,
         Request.message.command.header->messagetype);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
-    
+
     TEST_ASSERT_NOT_NULL(Request.command->body->p2poperation);
 
     TEST_ASSERT_EQUAL("hostname",
@@ -847,7 +848,7 @@ void test_KineticBuilder_BuildSetACL_should_build_a_SECURITY_operation(void)
         Request.message.command.header->messagetype);
     TEST_ASSERT_TRUE(Request.message.command.header->has_messagetype);
     TEST_ASSERT_EQUAL_PTR(&Request.message.body, Request.command->body);
-    
+
     TEST_ASSERT_FALSE(Request.command->body->security->has_oldlockpin);
     TEST_ASSERT_FALSE(Request.command->body->security->has_newlockpin);
     TEST_ASSERT_FALSE(Request.command->body->security->has_olderasepin);

@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef BUS_TYPES_H
 #define BUS_TYPES_H
 
@@ -139,11 +140,11 @@ typedef struct {
         struct {
             uintptr_t opaque_error_id;
         } error;
-    } u;    
+    } u;
 } bus_unpack_cb_res_t;
 
 /* Unpack a message that has been gradually accumulated via bus_sink_cb.
- * 
+ *
  * Note that the udata pointer is socket-specific, NOT client-specific. */
 typedef bus_unpack_cb_res_t (bus_unpack_cb)(void *msg, void *socket_udata);
 
@@ -170,7 +171,7 @@ typedef struct bus_config {
 
     int log_level;
     bus_log_cb *log_cb;         /* optional */
-    
+
     void *bus_udata;
 } bus_config;
 

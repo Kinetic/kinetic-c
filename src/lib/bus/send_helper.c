@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "send_helper.h"
 #include "send_internal.h"
 
@@ -97,7 +98,7 @@ static ssize_t write_plain(struct bus *b, boxed_msg *box) {
     size_t msg_size = box->out_msg_size;
     size_t sent_size = box->out_sent_size;
     size_t rem = msg_size - sent_size;
-    
+
     BUS_LOG_SNPRINTF(b, 10, LOG_SENDER, b->udata, 64,
         "write %p to %d, %zd bytes",
         (void*)&msg[sent_size], fd, rem);
@@ -152,13 +153,13 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
                 BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 64,
                     "SSL_write: socket %d: WANT_WRITE", fd);
                 return 0;
-                
+
             case SSL_ERROR_WANT_READ:
                 BUS_LOG_SNPRINTF(b, 0, LOG_SENDER, b->udata, 64,
                     "SSL_write: socket %d: WANT_READ", fd);
                 assert(false);  // shouldn't get this; we're writing.
                 break;
-                
+
             case SSL_ERROR_SYSCALL:
             {
                 if (Util_IsResumableIOError(errno)) {
@@ -172,7 +173,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
                     BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
                         "SSL_write on fd %d: SSL_ERROR_SYSCALL -- %s",
                         fd, strerror(errno));
-                    errno = 0;                    
+                    errno = 0;
                     return -1;
                 }
             }
@@ -189,7 +190,7 @@ static ssize_t write_ssl(struct bus *b, boxed_msg *box, SSL *ssl) {
                         "SSL_write error: %s",
                         ERR_error_string(e, NULL));
                 }
-                return -1;                
+                return -1;
             default:
             {
                 BUS_LOG_SNPRINTF(b, 1, LOG_SENDER, b->udata, 64,
@@ -215,7 +216,7 @@ static bool enqueue_EXPECT_message_to_listener(bus *b, boxed_msg *box) {
     BUS_LOG_SNPRINTF(b, 3, LOG_SENDER, b->udata, 128,
         "telling listener to EXPECT sent response, with box %p, seq_id %lld",
         (void *)box, (long long)box->out_seq_id);
-    
+
     if (box->result.status == BUS_SEND_UNDEFINED) {
         box->result.status = BUS_SEND_REQUEST_COMPLETE;
     }

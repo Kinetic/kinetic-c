@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -62,7 +62,7 @@ void KineticLogger_Init(const char* log_file, int log_level)
     }
     else {
         KineticLogLevel = log_level;
-        
+
         if (strncmp(log_file, "stdout", 4) == 0 || strncmp(log_file, "STDOUT", 4) == 0) {
             if (log_level > 0) {
                 printf("Logging kinetic-c output to console (stdout) w/ log_level=%d\n", KineticLogLevel);
@@ -113,7 +113,7 @@ void KineticLogger_LogPrintf(int log_level, const char* format, ...)
         fprintf(KineticLoggerHandle, "%08lld.%06lld  ",
             (long long)tv.tv_sec, (long long)tv.tv_usec);
     }
-    
+
     va_list arg_ptr;
     va_start(arg_ptr, format);
     int len = vsnprintf(buffer, BUFFER_MAX_STRLEN, format, arg_ptr);
@@ -123,7 +123,7 @@ void KineticLogger_LogPrintf(int log_level, const char* format, ...)
         Buffer[BUFFER_MAX_STRLEN] = '\0';
     }
     strcat(Buffer, "\n");
-    
+
     finish_buffer();
 }
 
@@ -166,7 +166,7 @@ void KineticLogger_LogHeader(int log_level, const KineticPDUHeader* header)
 static char indent[64] = LOG_INDENT;
 static const size_t max_indent = sizeof(indent)-3;
 static int indent_overflow = 0;
-    
+
 
 static void log_proto_level_start(const char* name)
 {
@@ -381,10 +381,10 @@ static void log_protobuf_message(int log_level, ProtobufCMessage const * msg, ch
                 protobuf_c_boolean const * quantifier = (protobuf_c_boolean const *)(void*)&pMsg[fieldDesc->quantifier_offset];
                 if ((*quantifier) &&  // only print out if it's there
                     // and a special case: if this is a message, don't show it if the message is NULL
-                    (PROTOBUF_C_TYPE_MESSAGE != fieldDesc->type || ((ProtobufCMessage**)(void*)&pMsg[fieldDesc->offset])[0] != NULL)) 
+                    (PROTOBUF_C_TYPE_MESSAGE != fieldDesc->type || ((ProtobufCMessage**)(void*)&pMsg[fieldDesc->offset])[0] != NULL))
                 {
                     // special case for nested command packed into commandBytes field
-                    if ((protobuf_c_message_descriptor_get_field_by_name(desc, "commandBytes") == fieldDesc ) && 
+                    if ((protobuf_c_message_descriptor_get_field_by_name(desc, "commandBytes") == fieldDesc ) &&
                         (PROTOBUF_C_TYPE_BYTES == fieldDesc->type))
                     {
                         ProtobufCBinaryData* value = (ProtobufCBinaryData*)(void*)&pMsg[fieldDesc->offset];

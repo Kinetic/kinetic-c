@@ -368,7 +368,7 @@ public final class UnknownFieldSet implements MessageLite {
       reinitialize();
       return this;
     }
-    
+
     /** Clear fields from the set with a given field number. */
     public Builder clearField(final int number) {
       if (number == 0) {

@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef THREADPOOL_INTERNALS_H
 #define THREADPOOL_INTERNALS_H
 
@@ -50,7 +51,7 @@ struct marked_task {
     void *udata;
     /* This mark is used to indicate which tasks can have the commit_head
      * and release_head counters advanced past them.
-     * 
+     *
      * mark == (task_commit_head that points at tast): commit
      * mark == ~(task_release_head that points at tast): release
      *

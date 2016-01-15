@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_request.h"
 #include <pthread.h>
 
@@ -113,7 +114,7 @@ KineticStatus KineticRequest_PackMessage(KineticOperation *operation,
     KineticLogger_LogHeader(3, &header);
     KineticLogger_LogProtobuf(3, proto);
     #endif
-    
+
     // Pack value payload, if supplied
     if (header.valueLength > 0) {
         memcpy(&msg[offset], operation->value.data, operation->value.len);

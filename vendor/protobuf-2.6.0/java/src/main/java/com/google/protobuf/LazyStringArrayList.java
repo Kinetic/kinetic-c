@@ -174,7 +174,7 @@ public class LazyStringArrayList extends AbstractList<String>
     list.add(element);
     modCount++;
   }
-  
+
   // @Override
   public void add(byte[] element) {
     list.add(element);
@@ -190,7 +190,7 @@ public class LazyStringArrayList extends AbstractList<String>
     }
     return b;
   }
-  
+
   // @Override
   public byte[] getByteArray(int index) {
     Object o = list.get(index);
@@ -221,7 +221,7 @@ public class LazyStringArrayList extends AbstractList<String>
       return Internal.toStringUtf8((byte[]) o);
     }
   }
-  
+
   private static ByteString asByteString(Object o) {
     if (o instanceof ByteString) {
       return (ByteString) o;
@@ -231,7 +231,7 @@ public class LazyStringArrayList extends AbstractList<String>
       return ByteString.copyFrom((byte[]) o);
     }
   }
-  
+
   private static byte[] asByteArray(Object o) {
     if (o instanceof byte[]) {
       return (byte[]) o;
@@ -264,11 +264,11 @@ public class LazyStringArrayList extends AbstractList<String>
   private static class ByteArrayListView extends AbstractList<byte[]>
       implements RandomAccess {
     private final List<Object> list;
-    
+
     ByteArrayListView(List<Object> list) {
       this.list = list;
     }
-    
+
     @Override
     public byte[] get(int index) {
       Object o = list.get(index);
@@ -304,7 +304,7 @@ public class LazyStringArrayList extends AbstractList<String>
       return asByteArray(o);
     }
   }
-  
+
   // @Override
   public List<byte[]> asByteArrayList() {
     return new ByteArrayListView(list);

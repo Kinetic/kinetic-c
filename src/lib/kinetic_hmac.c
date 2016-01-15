@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -127,7 +127,7 @@ static void KineticHMAC_Compute(KineticHMAC* hmac,
     for (size_t i = 0; i < sizeof(uint32_t); i++) {
         fprintf(stderr, "%02x", ((uint8_t *)&lenNBO)[i]);
     }
-    
+
     fprintf(stderr, "' on data: \n");
     for (size_t i = 0; i < msg->commandbytes.len; i++) {
         fprintf(stderr, "%02x", msg->commandbytes.data[i]);

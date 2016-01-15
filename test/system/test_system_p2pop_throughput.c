@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 #include "kinetic_semaphore.h"
@@ -43,7 +44,7 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    strncpy(config1.host, GetSystemTestHost1(), sizeof(config1.host)-1); 
+    strncpy(config1.host, GetSystemTestHost1(), sizeof(config1.host)-1);
     config1.port = GetSystemTestPort1();
     KineticStatus status = KineticClient_CreateSession(&config1, client, &session1);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -84,7 +85,7 @@ void run_p2p_throughput_test(KineticClient * client, size_t num_ops, size_t valu
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    strncpy(config2.host, GetSystemTestHost2(), sizeof(config2.host)-1); 
+    strncpy(config2.host, GetSystemTestHost2(), sizeof(config2.host)-1);
     config2.port = GetSystemTestPort2();
 
     // P2P copy to another drive
@@ -190,5 +191,5 @@ void test_p2p_throughput(void)
     };
     KineticClient * client = KineticClient_Init(&config);
     run_p2p_throughput_test(client, 50, KINETIC_OBJ_SIZE);
-    KineticClient_Shutdown(client);   
+    KineticClient_Shutdown(client);
 }

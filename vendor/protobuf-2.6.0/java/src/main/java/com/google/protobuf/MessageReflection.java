@@ -340,7 +340,7 @@ class MessageReflection {
         ByteString bytes, ExtensionRegistryLite registry,
         Descriptors.FieldDescriptor descriptor, Message defaultInstance)
         throws IOException;
-    
+
     /**
      * Read a primitive field from input. Note that builders and mutable
      * messages may use different Java types to represent a primtive field.
@@ -513,7 +513,7 @@ class MessageReflection {
         return new BuilderAdapter(builder.newBuilderForField(field));
       }
     }
-    
+
     public Object readPrimitiveField(
         CodedInputStream input, WireFormat.FieldType type,
         boolean checkUtf8) throws IOException {
@@ -651,7 +651,7 @@ class MessageReflection {
       throw new UnsupportedOperationException(
           "newMergeTargetForField() called on FieldSet object");
     }
-    
+
     public Object readPrimitiveField(
         CodedInputStream input, WireFormat.FieldType type,
         boolean checkUtf8) throws IOException {

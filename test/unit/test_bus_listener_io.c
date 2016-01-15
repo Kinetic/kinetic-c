@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity.h"
 #include "listener_io.h"
 #include "listener_internal.h"
@@ -101,7 +102,7 @@ void test_ListenerIO_AttemptRecv_should_handle_hangups_single_fd(void) {
     l->rx_info_max_used = 1;
 
     ListenerIO_AttemptRecv(l, 1);
-    
+
     // socket with error (5) should get moved to end
     TEST_ASSERT_EQUAL(5, l->fds[0 + INCOMING_MSG_PIPE].fd);
     TEST_ASSERT_EQUAL(1, l->inactive_fds);
@@ -145,7 +146,7 @@ void test_ListenerIO_AttemptRecv_should_handle_hangups(void) {
     l->rx_info_max_used = 2;
 
     ListenerIO_AttemptRecv(l, 1);
-    
+
     // socket with error (5) should get moved to end
     TEST_ASSERT_EQUAL(100, l->fds[0 + INCOMING_MSG_PIPE].fd);
     TEST_ASSERT_EQUAL(5, l->fds[1 + INCOMING_MSG_PIPE].fd);
@@ -196,8 +197,8 @@ void test_ListenerIO_AttemptRecv_should_handle_socket_errors(void) {
     TEST_ASSERT_EQUAL(100, l->fds[0 + INCOMING_MSG_PIPE].fd);
     TEST_ASSERT_EQUAL(5, l->fds[1 + INCOMING_MSG_PIPE].fd);
 
-    TEST_ASSERT_EQUAL(1, l->inactive_fds);    
-    
+    TEST_ASSERT_EQUAL(1, l->inactive_fds);
+
     // should no longer attempt to read socket; timeout will close it
     TEST_ASSERT_EQUAL(0, l->fds[1 + INCOMING_MSG_PIPE].events);
 
@@ -275,20 +276,20 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 
     l->read_buf = calloc(256, sizeof(uint8_t));
     l->read_buf_size = 256;
-    
+
     rx_info_t *info = &l->rx_info[0];
     info->state = RIS_EXPECT;
     box->fd = 5;
     info->u.expect.box = box;
 
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, ci.to_read_size);
-    
+
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
     ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
-    
+
     ListenerIO_AttemptRecv(l, 1);
 
     TEST_ASSERT_EQUAL(RX_ERROR_READY_FOR_DELIVERY, unpack_res_info.u.expect.error);
@@ -317,13 +318,13 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 
     l->read_buf = calloc(256, sizeof(uint8_t));
     l->read_buf_size = 256;
-    
+
     rx_info_t *info = &l->rx_info[0];
     info->state = RIS_HOLD;
     box->fd = 5;
 
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, ci.to_read_size);
-    
+
     rx_info_t unpack_res_info = {
         .state = RIS_HOLD,
     };
@@ -356,7 +357,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 
     l->read_buf = calloc(256, sizeof(uint8_t));
     l->read_buf_size = 256;
-    
+
     rx_info_t *info = &l->rx_info[0];
     info->state = RIS_EXPECT;
     box->fd = 5;
@@ -370,7 +371,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     };
     ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
-    
+
     ListenerIO_AttemptRecv(l, 1);
 
     TEST_ASSERT_EQUAL(RX_ERROR_READY_FOR_DELIVERY, unpack_res_info.u.expect.error);
@@ -399,7 +400,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 
     l->read_buf = calloc(256, sizeof(uint8_t));
     l->read_buf_size = 256;
-    
+
     rx_info_t *info = &l->rx_info[0];
     info->state = RIS_EXPECT;
     box->fd = 5;
@@ -410,13 +411,13 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     Util_IsResumableIOError_ExpectAndReturn(EINTR, true);
 
     syscall_read_ExpectAndReturn(ci.fd, l->read_buf, ci.to_read_size, ci.to_read_size);
-    
+
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
     ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
-    
+
     ListenerIO_AttemptRecv(l, 1);
 
     TEST_ASSERT_EQUAL(RX_ERROR_READY_FOR_DELIVERY, unpack_res_info.u.expect.error);
@@ -446,7 +447,7 @@ void test_ListenerIO_AttemptRecv_should_handle_socket_hangup_during_read(void) {
 
     l->read_buf = calloc(256, sizeof(uint8_t));
     l->read_buf_size = 256;
-    
+
     rx_info_t *info = &l->rx_info[0];
     info->state = RIS_EXPECT;
     box->fd = 5;
@@ -483,20 +484,20 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 
     l->read_buf = calloc(256, sizeof(uint8_t));
     l->read_buf_size = 256;
-    
+
     rx_info_t *info = &l->rx_info[0];
     info->state = RIS_EXPECT;
     box->fd = 5;
     info->u.expect.box = box;
 
     syscall_SSL_read_ExpectAndReturn(ci.ssl, l->read_buf, ci.to_read_size, ci.to_read_size);
-    
+
     rx_info_t unpack_res_info = {
         .state = RIS_EXPECT,
     };
     ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
-    
+
     ListenerIO_AttemptRecv(l, 1);
 
     TEST_ASSERT_EQUAL(RX_ERROR_READY_FOR_DELIVERY, unpack_res_info.u.expect.error);
@@ -527,7 +528,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
 
     l->read_buf = calloc(256, sizeof(uint8_t));
     l->read_buf_size = 256;
-    
+
     rx_info_t *info = &l->rx_info[0];
     info->state = RIS_EXPECT;
     box->fd = 5;
@@ -542,7 +543,7 @@ void test_ListenerIO_AttemptRecv_should_handle_successful_socket_read_and_unpack
     };
     ListenerHelper_FindInfoBySequenceID_ExpectAndReturn(l, ci.fd, 12345, &unpack_res_info);
     ListenerTask_AttemptDelivery_Expect(l, &unpack_res_info);
-    
+
     ListenerIO_AttemptRecv(l, 1);
 
     TEST_ASSERT_EQUAL(RX_ERROR_READY_FOR_DELIVERY, unpack_res_info.u.expect.error);

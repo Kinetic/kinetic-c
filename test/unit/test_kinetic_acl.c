@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity.h"
 #include "kinetic_acl.h"
 
@@ -45,7 +46,7 @@ void test_acl_of_nonexistent_file_should_fail(void)
 void test_KineticACL_LoadFromFile_ex1_should_parse_file_as_expected(void)
 {
     struct ACL *acls = NULL;
-    
+
     KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex1.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
 
@@ -171,7 +172,7 @@ void test_KineticACL_LoadFromFile_should_handle_multiple_permissions(void)
     struct ACL *acls = NULL;
     KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex-multi-permission.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
-    
+
     Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl = acls->ACLs[0];
 
     TEST_ASSERT_EQUAL(3, acl->scope[0]->n_permission);
@@ -187,7 +188,7 @@ void test_acl_should_handle_multiple_JSON_objects(void)
     struct ACL *acls = NULL;
     KineticACLLoadResult res = KineticACL_LoadFromFile(TEST_DIR("ex_multi.json"), &acls);
     TEST_ASSERT_EQUAL(ACL_OK, res);
-    
+
     Com__Seagate__Kinetic__Proto__Command__Security__ACL *acl = acls->ACLs[0];
     TEST_ASSERT_TRUE(acl->has_identity);
     TEST_ASSERT_EQUAL(1, acl->identity);

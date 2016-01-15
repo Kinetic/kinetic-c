@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity.h"
 #include "listener_helper.h"
 #include "listener_internal.h"
@@ -103,7 +104,7 @@ void test_ListenerHelper_PushMessage_should_add_a_message_to_the_listeners_comma
     msg->pipes[0] = 23;
 
     syscall_write_ExpectAndReturn(l->commit_pipe, msg_buf, sizeof(msg_buf), sizeof(msg_buf));
-    
+
     int reply_fd = -1;
     TEST_ASSERT_TRUE(ListenerHelper_PushMessage(l, msg, &reply_fd));
     TEST_ASSERT_EQUAL(23, reply_fd);
@@ -119,7 +120,7 @@ void test_ListenerHelper_PushMessage_should_retry_and_add_a_message_to_the_liste
     errno = EINTR;
     syscall_write_ExpectAndReturn(l->commit_pipe, msg_buf, sizeof(msg_buf), -1);
     syscall_write_ExpectAndReturn(l->commit_pipe, msg_buf, sizeof(msg_buf), sizeof(msg_buf));
-    
+
     int reply_fd = -1;
     TEST_ASSERT_TRUE(ListenerHelper_PushMessage(l, msg, &reply_fd));
     TEST_ASSERT_EQUAL(23, reply_fd);
@@ -134,7 +135,7 @@ void test_ListenerHelper_PushMessage_should_expose_errors(void)
 
     errno = EIO;
     syscall_write_ExpectAndReturn(l->commit_pipe, msg_buf, sizeof(msg_buf), -1);
-    
+
     int reply_fd = -1;
     ListenerTask_ReleaseMsg_Expect(l, msg);
     TEST_ASSERT_FALSE(ListenerHelper_PushMessage(l, msg, &reply_fd));

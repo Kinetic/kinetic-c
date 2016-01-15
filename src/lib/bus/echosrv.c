@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -95,7 +96,7 @@ static void usage(void) {
 
 static void parse_args(int argc, char **argv, config *cfg) {
     int a = 0;
-    
+
     while ((a = getopt(argc, argv, "l:h:v")) != -1) {
         switch (a) {
         case 'l':               /* low port */
@@ -111,7 +112,7 @@ static void parse_args(int argc, char **argv, config *cfg) {
             fprintf(stderr, "illegal option: -- %c\n", a);
             usage();
         }
-    } 
+    }
 
     if (cfg->port_low == 0) { cfg->port_low = cfg->port_high; }
     if (cfg->port_high == 0) { cfg->port_high = cfg->port_low; }
@@ -123,7 +124,7 @@ int main(int argc, char **argv) {
     config cfg;
     memset(&cfg, 0, sizeof(cfg));
     parse_args(argc, argv, &cfg);
-        
+
     init_polling(&cfg);
     open_ports(&cfg);
     listen_loop_poll(&cfg);
@@ -133,7 +134,7 @@ int main(int argc, char **argv) {
 
 static void init_polling(config *cfg) {
     cfg->port_count = cfg->port_high - cfg->port_low + 1;
-    
+
     size_t accept_fds_sz = cfg->port_count * sizeof(struct pollfd);
     struct pollfd *accept_fds = malloc(accept_fds_sz);
     assert(accept_fds);
@@ -208,7 +209,7 @@ static void listen_loop_poll(config *cfg) {
             tick_handler(cfg);
             cfg->last_second = tv.tv_sec;
         }
-        
+
         int accept_delay = 0;
         int client_delay = 0;
 
@@ -224,7 +225,7 @@ static void listen_loop_poll(config *cfg) {
             /* Listen for incoming connections */
             int res = poll(cfg->accept_fds, cfg->port_count, accept_delay);
             LOG((res == 0 ? 6 : 3), "accept poll res %d\n", res);
-            
+
             if (res == -1) {
                 if (Util_IsResumableIOError(errno)) {
                     errno = 0;
@@ -333,7 +334,7 @@ static void handle_client_io(config *cfg, int available) {
         struct pollfd *fd = &cfg->client_fds[i];
 
         LOG(4, "fd[%d]->events 0x%08x ==> revents: 0x%08x\n", i, fd->events, fd->revents);
-        
+
         if ((fd->revents & POLLERR) || (fd->revents & POLLHUP)) {
             LOG(3, "Disconnecting client %d\n", fd->fd);
             disconnect_client(cfg, fd->fd);

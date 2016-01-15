@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "listener_task.h"
 #include "listener_task_internal.h"
 #include "util.h"
@@ -99,12 +100,12 @@ void *ListenerTask_MainLoop(void *arg) {
     /* (This will always be true, except when testing.) */
     if (self->shutdown_notify_fd != LISTENER_NO_FD) {
         BUS_LOG(b, 3, LOG_LISTENER, "shutting down", b->udata);
-        
+
         if (self->tracked_fds > 0) {
             BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 64,
                 "%d connections still open!", self->tracked_fds);
         }
-        
+
         ListenerCmd_NotifyCaller(self, self->shutdown_notify_fd);
         self->shutdown_notify_fd = LISTENER_SHUTDOWN_COMPLETE_FD;
     }
@@ -127,7 +128,7 @@ static void tick_handler(listener *l) {
             printf(" -- msg %d: type %d\n", i, l->msgs[i].type);
         }
     }
-    
+
     if (b->log_level > 5 || 0) { ListenerTask_DumpRXInfoTable(l); }
 
     for (int i = 0; i <= l->rx_info_max_used; i++) {
@@ -193,8 +194,8 @@ static void tick_handler(listener *l) {
                     "notifying of rx failure -- timeout (info %p) -- "
                     "<fd:%d, seq_id:%lld>, from time (queued:%ld.%ld) to (sent:%ld.%ld) to (now:%ld.%ld)",
                     (void*)info, box->fd, (long long)box->out_seq_id,
-                    (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec, 
-                    (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec, 
+                    (long)box->tv_send_start.tv_sec, (long)box->tv_send_start.tv_usec,
+                    (long)box->tv_send_done.tv_sec, (long)box->tv_send_done.tv_usec,
                     (long)cur.tv_sec, (long)cur.tv_usec);
                 (void)box;
 
@@ -218,7 +219,7 @@ static void tick_handler(listener *l) {
 void ListenerTask_DumpRXInfoTable(listener *l) {
     for (int i = 0; i <= l->rx_info_max_used; i++) {
         rx_info_t *info = &l->rx_info[i];
-        
+
         printf(" -- state: %d, info[%d]: timeout %ld",
             info->state, info->id, info->timeout_sec);
         switch (l->rx_info[i].state) {
@@ -321,10 +322,10 @@ void ListenerTask_NotifyMessageFailure(listener *l,
     struct bus *b = l->bus;
     BUS_ASSERT(b, b->udata, info->state == RIS_EXPECT);
     BUS_ASSERT(b, b->udata, info->u.expect.box);
-    
+
     BUS_ASSERT(b, b->udata, status != BUS_SEND_UNDEFINED);
     info->u.expect.box->result.status = status;
-    
+
     boxed_msg *box = info->u.expect.box;
     info->u.expect.box = NULL;
     BUS_LOG_SNPRINTF(b, 3, LOG_MEMORY, b->udata, 128,
@@ -383,7 +384,7 @@ void ListenerTask_ReleaseRXInfo(struct listener *l, rx_info_t *info) {
                 } else {
                     BUS_LOG_SNPRINTF(b, 0, LOG_LISTENER, b->udata, 128,
                         "LEAKING RESULT %p", (void *)&info->u.hold.result);
-                }                
+                }
             }
         }
         break;
@@ -415,7 +416,7 @@ void ListenerTask_ReleaseRXInfo(struct listener *l, rx_info_t *info) {
             l->rx_info_max_used--;
             if (l->rx_info_max_used == 0) { break; }
         }
-        BUS_ASSERT(b, b->udata, l->rx_info_max_used < MAX_PENDING_MESSAGES); 
+        BUS_ASSERT(b, b->udata, l->rx_info_max_used < MAX_PENDING_MESSAGES);
     }
 
     l->rx_info_in_use--;
@@ -441,7 +442,7 @@ void ListenerTask_ReleaseMsg(struct listener *l, listener_msg *msg) {
         }
     }
 }
- 
+
 bool ListenerTask_GrowReadBuf(listener *l, size_t nsize) {
     if (nsize < l->read_buf_size) { return true; }
 
@@ -527,7 +528,7 @@ static void observe_backpressure(listener *l, size_t backpressure) {
 
 uint16_t ListenerTask_GetBackpressure(struct listener *l) {
     uint16_t msg_fill_pressure = 0;
-    
+
     if (l->msgs_in_use < 0.25 * MAX_QUEUE_MESSAGES) {
         msg_fill_pressure = 0;
     } else if (l->msgs_in_use < 0.5 * MAX_QUEUE_MESSAGES) {
@@ -548,7 +549,7 @@ uint16_t ListenerTask_GetBackpressure(struct listener *l) {
     } else {
         rx_info_fill_pressure = RX_INFO_BP_3QTR * l->rx_info_in_use;
     }
-    
+
     uint16_t threadpool_fill_pressure = THREADPOOL_BP * l->upstream_backpressure;
 
     struct bus *b = l->bus;

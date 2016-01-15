@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -124,7 +124,7 @@ void test_sink_cb_should_reset_uninitialized_socket_state(void)
         .accumulated = 0xFFFFFFFF,
     };
     Session.si = si;
-    
+
     bus_sink_cb_res_t res = sink_cb(NULL, 0, &Session);
 
     TEST_ASSERT_EQUAL(0, si->accumulated);
@@ -151,7 +151,7 @@ void test_sink_cb_should_expose_invalid_header_error(void)
     TEST_ASSERT_EQUAL(sizeof(KineticPDUHeader), res.next_read);
     TEST_ASSERT_EQUAL(UNPACK_ERROR_INVALID_HEADER, si->unpack_status);
     TEST_ASSERT_EQUAL(si, res.full_msg_buffer);
-    
+
     TEST_ASSERT_EQUAL(0, si->accumulated);
     TEST_ASSERT_EQUAL(STATE_AWAITING_HEADER, si->state);
 }
@@ -200,7 +200,7 @@ void test_sink_cb_should_accumulate_partially_recieved_header(void)
     TEST_ASSERT_EQUAL(5, si->accumulated);
 
     res = sink_cb(read_buf2, sizeof(read_buf2), &Session);
-    
+
     TEST_ASSERT_EQUAL(123 + 456, res.next_read);
     TEST_ASSERT_EQUAL(NULL, res.full_msg_buffer);
     TEST_ASSERT_EQUAL(STATE_AWAITING_BODY, si->state);
@@ -253,7 +253,7 @@ void test_unpack_cb_should_expose_error_codes(void)
         .accumulated = 0,
         .unpack_status = UNPACK_ERROR_UNDEFINED,
     };
-    
+
     enum unpack_error error_states[] = {
         UNPACK_ERROR_UNDEFINED,
         UNPACK_ERROR_INVALID_HEADER,
@@ -279,7 +279,7 @@ void test_unpack_cb_should_expose_alloc_failure(void)
             .valueLength = 8,
         },
     };
-    
+
     KineticAllocator_NewKineticResponse_ExpectAndReturn(8, NULL);
     bus_unpack_cb_res_t res = unpack_cb((void*)&si, &Session);
     TEST_ASSERT_FALSE(res.ok);

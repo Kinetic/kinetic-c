@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "system_test_fixture.h"
 #include "kinetic_admin_client.h"
 #include "kinetic_device_info.h"
@@ -79,7 +80,7 @@ void test_GetLog_should_retrieve_temeratures_from_device(void)
 void test_GetLog_should_retrieve_configuration_from_device(void)
 {
     char buf[1024];
-    
+
     Status = KineticAdminClient_GetLog(Fixture.session, KINETIC_DEVICE_INFO_TYPE_CONFIGURATION, &Info, NULL);
 
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, Status);
@@ -156,7 +157,7 @@ void test_GetLog_should_retrieve_limits_from_device(void)
     TEST_ASSERT_NOT_NULL(Info->limits);
 
     LOG0("Device Limits:");
-    LOGF0("  maxKeySize: %u",                  Info->limits->maxKeySize);    
+    LOGF0("  maxKeySize: %u",                  Info->limits->maxKeySize);
     LOGF0("  maxValueSize: %u",                Info->limits->maxValueSize);
     LOGF0("  maxVersionSize: %u",              Info->limits->maxVersionSize);
     LOGF0("  maxTagSize: %u",                  Info->limits->maxTagSize);

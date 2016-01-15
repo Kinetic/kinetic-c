@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "byte_array.h"
 #include "unity.h"
 #include "unity_helper.h"
@@ -51,7 +52,7 @@ static bus_sink_cb_res_t reset_transfer(socket_info *si) {
     bus_sink_cb_res_t res = { /* prime pump with header size */
         .next_read = sizeof(KineticPDUHeader),
     };
-    
+
     si->state = STATE_AWAITING_HEADER;
     si->accumulated = 0;
     si->unpack_status = UNPACK_ERROR_UNDEFINED;
@@ -66,7 +67,7 @@ static bool unpack_header(uint8_t const * const read_buf, size_t const read_size
         return false;
         // TODO this will fail if we don't get all of the header bytes in one read
         // we should fix this
-    } 
+    }
     KineticPDUHeader const * const buf_header = (KineticPDUHeader const * const)read_buf;
     uint32_t protobufLength = KineticNBO_ToHostU32(buf_header->protobufLength);
     uint32_t valueLength = KineticNBO_ToHostU32(buf_header->valueLength);
@@ -119,7 +120,7 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *sock
             return res;
         }
         break;
-    } 
+    }
     case STATE_AWAITING_BODY:
     {
         memcpy(&si->buf[si->accumulated], read_buf, read_size);
@@ -131,7 +132,7 @@ static bus_sink_cb_res_t sink_cb(uint8_t *read_buf, size_t read_size, void *sock
             si->state = STATE_AWAITING_HEADER;
             bus_sink_cb_res_t res = {
                 .next_read = sizeof(KineticPDUHeader),
-                // returning the whole si, because we need access to the pdu header as well 
+                // returning the whole si, because we need access to the pdu header as well
                 //  as the protobuf and value bytes
                 .full_msg_buffer = si,
             };

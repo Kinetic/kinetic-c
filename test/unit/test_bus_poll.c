@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity.h"
 #include "atomic.h"
 
@@ -51,7 +52,7 @@ void tearDown(void) {
 void test_BusPoll_OnCompletion_should_return_true_on_successful_case(void)
 {
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLIN;
 
     syscall_read_ExpectAndReturn(5, read_buf, sizeof(read_buf), sizeof(read_buf));
@@ -68,7 +69,7 @@ void test_BusPoll_OnCompletion_should_retry_on_EINTR(void)
     syscall_poll_ExpectAndReturn(fds, 1, -1, -1);
     poll_errno = EINTR;
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLIN;
 
     syscall_read_ExpectAndReturn(5, read_buf, sizeof(read_buf), sizeof(read_buf));
@@ -90,7 +91,7 @@ void test_BusPoll_OnCompletion_should_expose_poll_IO_error(void)
 void test_BusPoll_OnCompletion_should_expose_POLLHUP(void)
 {
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLHUP;
 
     TEST_ASSERT_FALSE(BusPoll_OnCompletion(b, 5));
@@ -100,7 +101,7 @@ void test_BusPoll_OnCompletion_should_expose_POLLHUP(void)
 void test_BusPoll_OnCompletion_should_expose_POLLERR(void)
 {
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLERR;
 
     TEST_ASSERT_FALSE(BusPoll_OnCompletion(b, 5));
@@ -110,7 +111,7 @@ void test_BusPoll_OnCompletion_should_expose_POLLERR(void)
 void test_BusPoll_OnCompletion_should_expose_POLLNVAL(void)
 {
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLNVAL;
 
     TEST_ASSERT_FALSE(BusPoll_OnCompletion(b, 5));
@@ -120,14 +121,14 @@ void test_BusPoll_OnCompletion_should_expose_POLLNVAL(void)
 void test_BusPoll_OnCompletion_should_retry_on_read_EINTR(void)
 {
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLIN;
 
     syscall_read_ExpectAndReturn(5, read_buf, sizeof(read_buf), -1);
     read_errno = EINTR;
 
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLIN;
 
     syscall_read_ExpectAndReturn(5, read_buf, sizeof(read_buf), sizeof(read_buf));
@@ -143,7 +144,7 @@ void test_BusPoll_OnCompletion_should_retry_on_read_EINTR(void)
 void test_BusPoll_OnCompletion_should_expose_read_IO_error(void)
 {
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLNVAL;
 
     read_errno = EIO;
@@ -153,7 +154,7 @@ void test_BusPoll_OnCompletion_should_expose_read_IO_error(void)
 void test_BusPoll_OnCompletion_should_handle_incorrect_read_size(void)
 {
     syscall_poll_ExpectAndReturn(fds, 1, -1, 1);
-    
+
     fds[0].revents |= POLLIN;
 
     syscall_read_ExpectAndReturn(5, read_buf, sizeof(read_buf), sizeof(read_buf) - 1);

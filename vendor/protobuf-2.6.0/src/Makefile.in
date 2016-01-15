@@ -550,11 +550,11 @@ target_vendor = @target_vendor@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-@HAVE_ZLIB_FALSE@GZCHECKPROGRAMS = 
+@HAVE_ZLIB_FALSE@GZCHECKPROGRAMS =
 @HAVE_ZLIB_TRUE@GZCHECKPROGRAMS = zcgzip zcgunzip
-@HAVE_ZLIB_FALSE@GZHEADERS = 
+@HAVE_ZLIB_FALSE@GZHEADERS =
 @HAVE_ZLIB_TRUE@GZHEADERS = google/protobuf/io/gzip_stream.h
-@HAVE_ZLIB_FALSE@GZTESTS = 
+@HAVE_ZLIB_FALSE@GZTESTS =
 @HAVE_ZLIB_TRUE@GZTESTS = google/protobuf/io/gzip_stream_unittest.sh
 @GCC_FALSE@NO_OPT_CXXFLAGS = $(PTHREAD_CFLAGS)
 
@@ -1050,7 +1050,7 @@ google/protobuf/io/zero_copy_stream.lo:  \
 google/protobuf/io/zero_copy_stream_impl_lite.lo:  \
 	google/protobuf/io/$(am__dirstamp) \
 	google/protobuf/io/$(DEPDIR)/$(am__dirstamp)
-libprotobuf-lite.la: $(libprotobuf_lite_la_OBJECTS) $(libprotobuf_lite_la_DEPENDENCIES) $(EXTRA_libprotobuf_lite_la_DEPENDENCIES) 
+libprotobuf-lite.la: $(libprotobuf_lite_la_OBJECTS) $(libprotobuf_lite_la_DEPENDENCIES) $(EXTRA_libprotobuf_lite_la_DEPENDENCIES)
 	$(libprotobuf_lite_la_LINK) -rpath $(libdir) $(libprotobuf_lite_la_OBJECTS) $(libprotobuf_lite_la_LIBADD) $(LIBS)
 google/protobuf/stubs/strutil.lo:  \
 	google/protobuf/stubs/$(am__dirstamp) \
@@ -1111,7 +1111,7 @@ google/protobuf/compiler/importer.lo:  \
 google/protobuf/compiler/parser.lo:  \
 	google/protobuf/compiler/$(am__dirstamp) \
 	google/protobuf/compiler/$(DEPDIR)/$(am__dirstamp)
-libprotobuf.la: $(libprotobuf_la_OBJECTS) $(libprotobuf_la_DEPENDENCIES) $(EXTRA_libprotobuf_la_DEPENDENCIES) 
+libprotobuf.la: $(libprotobuf_la_OBJECTS) $(libprotobuf_la_DEPENDENCIES) $(EXTRA_libprotobuf_la_DEPENDENCIES)
 	$(libprotobuf_la_LINK) -rpath $(libdir) $(libprotobuf_la_OBJECTS) $(libprotobuf_la_LIBADD) $(LIBS)
 google/protobuf/compiler/code_generator.lo:  \
 	google/protobuf/compiler/$(am__dirstamp) \
@@ -1242,7 +1242,7 @@ google/protobuf/compiler/python/$(DEPDIR)/$(am__dirstamp):
 google/protobuf/compiler/python/python_generator.lo:  \
 	google/protobuf/compiler/python/$(am__dirstamp) \
 	google/protobuf/compiler/python/$(DEPDIR)/$(am__dirstamp)
-libprotoc.la: $(libprotoc_la_OBJECTS) $(libprotoc_la_DEPENDENCIES) $(EXTRA_libprotoc_la_DEPENDENCIES) 
+libprotoc.la: $(libprotoc_la_OBJECTS) $(libprotoc_la_DEPENDENCIES) $(EXTRA_libprotoc_la_DEPENDENCIES)
 	$(libprotoc_la_LINK) -rpath $(libdir) $(libprotoc_la_OBJECTS) $(libprotoc_la_LIBADD) $(LIBS)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -1356,7 +1356,7 @@ google/protobuf/protobuf_lazy_descriptor_test-unittest_no_generic_services.pb.$(
 google/protobuf/compiler/cpp/protobuf_lazy_descriptor_test-cpp_test_bad_identifiers.pb.$(OBJEXT):  \
 	google/protobuf/compiler/cpp/$(am__dirstamp) \
 	google/protobuf/compiler/cpp/$(DEPDIR)/$(am__dirstamp)
-protobuf-lazy-descriptor-test$(EXEEXT): $(protobuf_lazy_descriptor_test_OBJECTS) $(protobuf_lazy_descriptor_test_DEPENDENCIES) $(EXTRA_protobuf_lazy_descriptor_test_DEPENDENCIES) 
+protobuf-lazy-descriptor-test$(EXEEXT): $(protobuf_lazy_descriptor_test_OBJECTS) $(protobuf_lazy_descriptor_test_DEPENDENCIES) $(EXTRA_protobuf_lazy_descriptor_test_DEPENDENCIES)
 	@rm -f protobuf-lazy-descriptor-test$(EXEEXT)
 	$(protobuf_lazy_descriptor_test_LINK) $(protobuf_lazy_descriptor_test_OBJECTS) $(protobuf_lazy_descriptor_test_LDADD) $(LIBS)
 google/protobuf/protobuf_lite_test-lite_unittest.$(OBJEXT):  \
@@ -1374,7 +1374,7 @@ google/protobuf/protobuf_lite_test-unittest_import_lite.pb.$(OBJEXT):  \
 google/protobuf/protobuf_lite_test-unittest_import_public_lite.pb.$(OBJEXT):  \
 	google/protobuf/$(am__dirstamp) \
 	google/protobuf/$(DEPDIR)/$(am__dirstamp)
-protobuf-lite-test$(EXEEXT): $(protobuf_lite_test_OBJECTS) $(protobuf_lite_test_DEPENDENCIES) $(EXTRA_protobuf_lite_test_DEPENDENCIES) 
+protobuf-lite-test$(EXEEXT): $(protobuf_lite_test_OBJECTS) $(protobuf_lite_test_DEPENDENCIES) $(EXTRA_protobuf_lite_test_DEPENDENCIES)
 	@rm -f protobuf-lite-test$(EXEEXT)
 	$(protobuf_lite_test_LINK) $(protobuf_lite_test_OBJECTS) $(protobuf_lite_test_LDADD) $(LIBS)
 google/protobuf/stubs/protobuf_test-common_unittest.$(OBJEXT):  \
@@ -1527,13 +1527,13 @@ google/protobuf/protobuf_test-unittest_no_generic_services.pb.$(OBJEXT):  \
 google/protobuf/compiler/cpp/protobuf_test-cpp_test_bad_identifiers.pb.$(OBJEXT):  \
 	google/protobuf/compiler/cpp/$(am__dirstamp) \
 	google/protobuf/compiler/cpp/$(DEPDIR)/$(am__dirstamp)
-protobuf-test$(EXEEXT): $(protobuf_test_OBJECTS) $(protobuf_test_DEPENDENCIES) $(EXTRA_protobuf_test_DEPENDENCIES) 
+protobuf-test$(EXEEXT): $(protobuf_test_OBJECTS) $(protobuf_test_DEPENDENCIES) $(EXTRA_protobuf_test_DEPENDENCIES)
 	@rm -f protobuf-test$(EXEEXT)
 	$(protobuf_test_LINK) $(protobuf_test_OBJECTS) $(protobuf_test_LDADD) $(LIBS)
 google/protobuf/compiler/main.$(OBJEXT):  \
 	google/protobuf/compiler/$(am__dirstamp) \
 	google/protobuf/compiler/$(DEPDIR)/$(am__dirstamp)
-protoc$(EXEEXT): $(protoc_OBJECTS) $(protoc_DEPENDENCIES) $(EXTRA_protoc_DEPENDENCIES) 
+protoc$(EXEEXT): $(protoc_OBJECTS) $(protoc_DEPENDENCIES) $(EXTRA_protoc_DEPENDENCIES)
 	@rm -f protoc$(EXEEXT)
 	$(CXXLINK) $(protoc_OBJECTS) $(protoc_LDADD) $(LIBS)
 google/protobuf/compiler/test_plugin-mock_code_generator.$(OBJEXT):  \
@@ -1545,19 +1545,19 @@ google/protobuf/testing/test_plugin-file.$(OBJEXT):  \
 google/protobuf/compiler/test_plugin-test_plugin.$(OBJEXT):  \
 	google/protobuf/compiler/$(am__dirstamp) \
 	google/protobuf/compiler/$(DEPDIR)/$(am__dirstamp)
-test_plugin$(EXEEXT): $(test_plugin_OBJECTS) $(test_plugin_DEPENDENCIES) $(EXTRA_test_plugin_DEPENDENCIES) 
+test_plugin$(EXEEXT): $(test_plugin_OBJECTS) $(test_plugin_DEPENDENCIES) $(EXTRA_test_plugin_DEPENDENCIES)
 	@rm -f test_plugin$(EXEEXT)
 	$(CXXLINK) $(test_plugin_OBJECTS) $(test_plugin_LDADD) $(LIBS)
 google/protobuf/testing/zcgunzip.$(OBJEXT):  \
 	google/protobuf/testing/$(am__dirstamp) \
 	google/protobuf/testing/$(DEPDIR)/$(am__dirstamp)
-zcgunzip$(EXEEXT): $(zcgunzip_OBJECTS) $(zcgunzip_DEPENDENCIES) $(EXTRA_zcgunzip_DEPENDENCIES) 
+zcgunzip$(EXEEXT): $(zcgunzip_OBJECTS) $(zcgunzip_DEPENDENCIES) $(EXTRA_zcgunzip_DEPENDENCIES)
 	@rm -f zcgunzip$(EXEEXT)
 	$(CXXLINK) $(zcgunzip_OBJECTS) $(zcgunzip_LDADD) $(LIBS)
 google/protobuf/testing/zcgzip.$(OBJEXT):  \
 	google/protobuf/testing/$(am__dirstamp) \
 	google/protobuf/testing/$(DEPDIR)/$(am__dirstamp)
-zcgzip$(EXEEXT): $(zcgzip_OBJECTS) $(zcgzip_DEPENDENCIES) $(EXTRA_zcgzip_DEPENDENCIES) 
+zcgzip$(EXEEXT): $(zcgzip_OBJECTS) $(zcgzip_DEPENDENCIES) $(EXTRA_zcgzip_DEPENDENCIES)
 	@rm -f zcgzip$(EXEEXT)
 	$(CXXLINK) $(zcgzip_OBJECTS) $(zcgzip_LDADD) $(LIBS)
 

@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "unity.h"
 #include "listener_cmd.h"
 #include "listener_cmd_internal.h"
@@ -111,7 +112,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_redundant_ADD_SOCKET_c
     l->read_buf = malloc(256);
 
     connection_info *ci = calloc(1, sizeof(*ci));
-    *(int *)&ci->fd = 5;    
+    *(int *)&ci->fd = 5;
 
     listener_msg *msg = &l->msgs[0];
     msg->type = MSG_ADD_SOCKET;
@@ -129,7 +130,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_redundant_ADD_SOCKET_c
 
     ListenerTask_ReleaseMsg_Expect(l, msg);
     ListenerCmd_CheckIncomingMessages(l, &res);
-    
+
     TEST_ASSERT_EQUAL(0, res);
 }
 
@@ -149,7 +150,7 @@ static void setup_command(listener_msg *pmsg, rx_info_t *info) {
     if (pmsg->type == MSG_ADD_SOCKET) {
         ListenerTask_GrowReadBuf_ExpectAndReturn(l, 31, true);
     }
-    
+
     if (info) {
         ListenerHelper_GetFreeRXInfo_ExpectAndReturn(l, info == NULL_INFO ? NULL : info);
     }
@@ -244,7 +245,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_REMOVE_SOCKET
     l->fds[0 + INCOMING_MSG_PIPE].events = POLLIN;
     connection_info *ci0 = calloc(1, sizeof(*ci0));
     l->fd_info[0] = ci0;
-    
+
     int res = 1;
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
@@ -272,7 +273,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_REMOVE_SOCKET
     l->fds[0 + INCOMING_MSG_PIPE].events = 0;  // no POLLIN -> inactive
     connection_info *ci0 = calloc(1, sizeof(*ci0));
     l->fd_info[0] = ci0;
-    
+
     int res = 1;
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
@@ -305,7 +306,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_REMOVE_SOCKET
     l->fds[1 + INCOMING_MSG_PIPE].events = POLLIN;
     connection_info *ci1 = calloc(1, sizeof(*ci1));
     l->fd_info[1] = ci1;
-    
+
     int res = 1;
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
@@ -339,7 +340,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_REMOVE_SOCKET
     l->fds[1 + INCOMING_MSG_PIPE].events = POLLIN;
     connection_info *ci1 = calloc(1, sizeof(*ci1));
     l->fd_info[1] = ci1;
-    
+
     int res = 1;
     ListenerTask_ReleaseMsg_Expect(l, &l->msgs[0]);
     ListenerCmd_CheckIncomingMessages(l, &res);
@@ -571,7 +572,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_immediately_fail_incoming_EXP
     TEST_ASSERT_EQUAL(RIS_EXPECT, hold_info.state);
     TEST_ASSERT_EQUAL(box, hold_info.u.expect.box);
     TEST_ASSERT_EQUAL(RX_ERROR_POLLHUP, hold_info.u.expect.error);
-    
+
 }
 
 void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_EXPECT_command_when_no_result_is_saved(void) {
@@ -604,7 +605,7 @@ void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_EXPECT_comman
     TEST_ASSERT_EQUAL(false, hold_info.u.expect.has_result);
     TEST_ASSERT_EQUAL(11, hold_info.timeout_sec);
 }
-    
+
 void test_ListenerCmd_CheckIncomingMessages_should_handle_incoming_SHUTDOWN_command(void) {
     listener_msg msg = {
         .id = 1,

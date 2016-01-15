@@ -42,7 +42,7 @@ Prerequisites
         * via Git submodule (from bundled source)
             * `> make json`
             * `> sudo make install_json`
-            
+
 A release of OpenSSL that provides TLS 1.1 or newer is required.
 
 If the OpenSSL installation is not found, the `OPENSSL_PATH` environment

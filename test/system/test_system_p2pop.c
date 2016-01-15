@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "system_test_fixture.h"
 #include "kinetic_client.h"
 #include "kinetic_admin_client.h"
@@ -72,8 +73,8 @@ void setUp(void)
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    strncpy(sessionConfig.host, GetSystemTestHost1(), sizeof(sessionConfig.host)-1); 
-    sessionConfig.port = GetSystemTestPort1(); 
+    strncpy(sessionConfig.host, GetSystemTestHost1(), sizeof(sessionConfig.host)-1);
+    sessionConfig.port = GetSystemTestPort1();
     KineticStatus status = KineticClient_CreateSession(&sessionConfig, client, &session);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     KineticSessionConfig adminSessionConfig = {
@@ -82,7 +83,7 @@ void setUp(void)
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
         .useSsl = true,
     };
-    strncpy(adminSessionConfig.host, GetSystemTestHost1(), sizeof(adminSessionConfig.host)-1); 
+    strncpy(adminSessionConfig.host, GetSystemTestHost1(), sizeof(adminSessionConfig.host)-1);
     adminSessionConfig.port = GetSystemTestTlsPort1();
     status = KineticAdminClient_CreateSession(&adminSessionConfig, client, &adminSession);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
@@ -93,8 +94,8 @@ void setUp(void)
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    strncpy(peerConfig.host, GetSystemTestHost2(), sizeof(peerConfig.host)-1); 
-    peerConfig.port = GetSystemTestPort2(); 
+    strncpy(peerConfig.host, GetSystemTestHost2(), sizeof(peerConfig.host)-1);
+    peerConfig.port = GetSystemTestPort2();
     status = KineticClient_CreateSession(&peerConfig, client, &peerSession);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
     KineticSessionConfig peerAdminConfig = {
@@ -103,8 +104,8 @@ void setUp(void)
         .identity = 1,
         .hmacKey = ByteArray_CreateWithCString(HmacKeyString),
     };
-    strncpy(peerAdminConfig.host, GetSystemTestHost2(), sizeof(peerAdminConfig.host)-1); 
-    peerAdminConfig.port = GetSystemTestTlsPort2(); 
+    strncpy(peerAdminConfig.host, GetSystemTestHost2(), sizeof(peerAdminConfig.host)-1);
+    peerAdminConfig.port = GetSystemTestTlsPort2();
     status = KineticAdminClient_CreateSession(&peerAdminConfig, client, &peerAdminSession);
     TEST_ASSERT_EQUAL_KineticStatus(KINETIC_STATUS_SUCCESS, status);
 

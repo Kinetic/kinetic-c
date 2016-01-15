@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -34,7 +34,7 @@ static void do_put_and_get(KineticSession *session) {
 
     const uint8_t value[] = "value\x01\x02\x03\x04";
     ByteBuffer put_value_buf = ByteBuffer_MallocAndAppend(value, sizeof(value));
-    
+
     /* Populate tag with SHA1 of value */
     ByteBuffer put_tag_buf = ByteBuffer_Malloc(20);
     uint8_t sha1[20];
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     }
 
     do_put_and_get(session);
-    
+
     // Shutdown client connection and cleanup
     KineticClient_DestroySession(session);
     KineticClient_Shutdown(client);

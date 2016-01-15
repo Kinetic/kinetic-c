@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #ifndef LISTENER_INTERNAL_TYPES_H
 #define LISTENER_INTERNAL_TYPES_H
 
@@ -50,7 +51,7 @@ typedef struct listener_msg {
     MSG_TYPE type;
     struct listener_msg *next;
     int pipes[2];
-    
+
     union {                     /* keyed by .type */
         struct {
             connection_info *info;
@@ -163,7 +164,7 @@ typedef struct listener {
     uint16_t inactive_fds;
 
     /** Tracked file descriptors, for polling.
-     * 
+     *
      * fds[INCOMING_MSG_PIPE_ID (0)] is the incoming_msg_pipe, so the
      * listener's poll is awakened by incoming commands. fds[1] through
      * fds[l->tracked_fds - l->inactive_fds] are the file descriptors

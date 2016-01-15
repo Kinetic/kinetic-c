@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -70,7 +70,7 @@ const char* Kinetic_GetStatusDescription(KineticStatus status)
 }
 
 const char* KineticMessageTypeNames[33] =
-{  
+{
     "<UNKNOWN>",
     "GET_RESPONSE",
     "GET",
@@ -128,7 +128,7 @@ const char* KineticMessageType_GetName(KineticMessageType type)
 	return "DELETE";
 	break;
     case KINETIC_MESSAGE_TYPE_GETNEXT_RESPONSE:
-	return "GETNEXT_RESPONSE";    
+	return "GETNEXT_RESPONSE";
 	break;
     case KINETIC_MESSAGE_TYPE_GETNEXT:
 	return  "GETNEXT";
@@ -143,7 +143,7 @@ const char* KineticMessageType_GetName(KineticMessageType type)
 	return "GETKEYRANGE_RESPONSE";
 	break;
     case KINETIC_MESSAGE_TYPE_GETKEYRANGE:
-	return "GETKEYRANGE";    
+	return "GETKEYRANGE";
 	break;
     case KINETIC_MESSAGE_TYPE_GETVERSION_RESPONSE:
 	return "GETVERSION_RESPONSE";

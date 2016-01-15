@@ -5,11 +5,11 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
@@ -50,7 +50,7 @@ void test_KineticClient_Put_should_execute_PUT_operation(void)
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
     operation.session = &Session;
-    
+
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
@@ -67,7 +67,7 @@ void test_KineticClient_Put_should_allow_NULL_pointer_to_value_data_if_length_is
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
     operation.session = &Session;
-    
+
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
     KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_SUCCESS);
     KineticController_ExecuteOperation_ExpectAndReturn(&operation, NULL, KINETIC_STATUS_VERSION_MISMATCH);
@@ -83,7 +83,7 @@ void test_KineticClient_Put_should_return_BUFFER_OVERRUN_if_object_value_too_lon
     KineticEntry entry = {.value = ByteBuffer_CreateWithArray(value)};
     KineticOperation operation;
     operation.session = &Session;
-    
+
     KineticAllocator_NewOperation_ExpectAndReturn(&Session, &operation);
 
     KineticBuilder_BuildPut_ExpectAndReturn(&operation, &entry, KINETIC_STATUS_BUFFER_OVERRUN);

@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include "kinetic_operation.h"
 #include "kinetic_controller.h"
 #include "kinetic_session.h"
@@ -53,7 +54,7 @@ KineticStatus KineticOperation_SendRequest(KineticOperation* const op)
 {
     KineticSession *session = op->session;
     KineticOperation_ValidateOperation(op);
-    
+
     if (!KineticRequest_LockSend(session)) {
         return KINETIC_STATUS_CONNECTION_ERROR;
     }
@@ -106,7 +107,7 @@ static KineticStatus send_request_in_lock(KineticOperation* const op)
         op->request, op->pin);
     if (status != KINETIC_STATUS_SUCCESS) {
         if (commandData) { free(commandData); }
-        return status;        
+        return status;
     }
 
     #ifndef TEST

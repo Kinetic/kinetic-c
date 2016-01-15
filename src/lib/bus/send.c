@@ -5,15 +5,16 @@
  * Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at
  * https://mozilla.org/MP:/2.0/.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but is provided AS-IS, WITHOUT ANY WARRANTY; including without 
- * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or 
- * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public 
+ * but is provided AS-IS, WITHOUT ANY WARRANTY; including without
+ * the implied warranty of MERCHANTABILITY, NON-INFRINGEMENT or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the Mozilla Public
  * License for more details.
  *
  * See www.openkinetic.org for more project information
  */
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -65,7 +66,7 @@ bool Send_DoBlockingSend(bus *b, boxed_msg *box) {
         "doing blocking send of box %p, with <fd:%d, seq_id %lld>, msg[%zd]: %p",
         (void *)box, box->fd, (long long)box->out_seq_id,
         box->out_msg_size, (void *)box->out_msg);
-    
+
     int timeout_msec = box->timeout_sec * 1000;
 
 #ifndef TEST
@@ -211,7 +212,7 @@ void Send_HandleFailure(struct bus *b, boxed_msg *box, bus_send_status_t status)
     box->result = (bus_msg_result_t){
         .status = status,
     };
-    
+
     #ifndef TEST
     size_t backpressure = 0;
     #endif
