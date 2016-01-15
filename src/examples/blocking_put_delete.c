@@ -64,6 +64,7 @@ static void do_put_and_delete(KineticSession *session) {
         .key = put_key_buf,
         .tag = delete_tag_buf,
         .algorithm = KINETIC_ALGORITHM_SHA1,
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
     };
 
     status = KineticClient_Delete(session, &delete_entry, NULL);
