@@ -83,7 +83,7 @@ static void do_put_and_getkeyrange(KineticSession * const session) {
 
     ByteBuffer key_buffers[max_key_count];
     for (size_t i = 0; i < max_key_count; i++) {
-        key_buffers[i] = ByteBuffer_Create(&key_buffers[i], max_key_length, 0);
+        key_buffers[i] = ByteBuffer_Create(&key_mem[i], max_key_length, 0);
     }
     ByteBufferArray keys = {
         .buffers = key_buffers,
