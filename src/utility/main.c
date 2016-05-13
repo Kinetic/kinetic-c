@@ -595,6 +595,7 @@ void ConfigureEntry(struct UtilConfig * cfg, const char* key, const char* tag,
         .dbVersion = ByteBuffer_Create(cfg->versionData, sizeof(cfg->versionData), 0),
         .algorithm = algorithm,
         .value = ByteBuffer_CreateAndAppendCString(cfg->valueData, sizeof(cfg->valueData), value),
+        .synchronization = KINETIC_SYNCHRONIZATION_WRITETHROUGH,
         .force = force,
     };
 }
